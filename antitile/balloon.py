@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Spherical tiling of the henagonal hosohedron. 
+Spherical tiling of the henagonal hosohedron.
 Vaguely resembles a peeled coconut.
 """
 
@@ -20,29 +20,38 @@ def balloon(a, b, shape, proj = projection.lambert, margin=1E-12):
                         [-0.5, -np.sqrt(3)/2]])
         sqc = projection.tri_naive_slerp(bkdn.coord, abc)
     #find vertices outside or on the unit circle and merge them
-    print(np.linalg.norm(sqc, axis=-1))
-    goodverts = np.linalg.norm(sqc, axis=-1) < 1-margin
-    #assign one vertex on the unit circle                              
-    base_ind = np.nonzero(~goodverts)[0].min() 
+    goodverts = bkdn.group < 0#np.linalg.norm(sqc, axis=-1) < 1-margin
+    #assign one vertex on the unit circle
+    base_ind = np.nonzero(~goodverts)[0].min()
     goodverts[base_ind] = True
     sqc[base_ind] = [1, 0]
     index = xmath.renumber(goodverts, base_ind)
     faces = index[bkdn.faces]
     vertices = sqc[goodverts]
-    #get rid of 1- and 2-vertex faces, and reduce 3-vertex arrays
-    count = np.array([len(np.unique(i)) for i in faces])
-    faces = faces[count >= 3]
-    facelist = faces.tolist()
-    if shape == 'q':
-        facelist = [list(set(x)) if len(set(x)) == 3 else x for x in facelist]
     phi, theta = proj(vertices)
     sph_3d = projection.spherical_to_xyz(phi, theta)
-    return sph_3d, facelist
+    return sph_3d, faces
+
+def strip_ev(faces):
+    """Strip 1- and 2-vertex "faces" from the facelist"""
+    count = np.array([len(np.unique(i)) for i in faces])
+    index = count >= 3
+    if index.sum() == 0:
+        index = count >= 2
+    return faces[index]
+
+def clean_triangles(faces):
+    """Restate degenerate polygons as triangles or whatever"""
+    facelist = faces.tolist()
+    facelist = [list(set(x)) if len(set(x)) <= 3 else x for x in facelist]
+    return facelist
 
 if __name__ == "__main__":
-    a, b = 2, 1
-    shape = 't'
+    a, b = 10, 0
+    shape = 'q'
     v, f = balloon(a, b, shape)
+    f = clean_triangles(strip_ev(f))
+    f = {tuple(x) for x in f}
     result = off.write_off(v, f)
     with open('test.off', 'w') as file:
         file.write(result)

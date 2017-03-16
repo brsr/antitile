@@ -98,7 +98,7 @@ class Breakdown(flat.FlatTiling):
         mat = np.array([[a+b, b],
                         [-b, a]])/anorm
         coords = vertices[:, :2].dot(mat.T)
-        l1 = coords.sum(axis=-1, keepdims=True)
+        l1 = 1-coords.sum(axis=-1, keepdims=True)
         self.coord = np.concatenate([l1, coords], axis=1)
 #        mat = np.array([[   -a, -b - a, 1],
 #                        [a + b,      b, 0],

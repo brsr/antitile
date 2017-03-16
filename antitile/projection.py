@@ -135,14 +135,6 @@ def tri_areal(beta, triangle):
     h = np.sin(area_i)*(1 + np.sum(triangle_iplus1*triangle_iplus2, axis=-1))
     return np.linalg.solve(L, h)
 
-def tri_intersections(lindex, abc, freq, normalize=True):
-    """Transforms a triangle to a spherical triangle using the method of
-    intersections"""
-    ptx = triangles_method2(lindex, abc, freq)
-    if normalize:
-        ptx = xmath.normalize(ptx)
-    return xmath.normalize(ptx.sum(axis=1))
-
 def triangles_method2(lindex, base_pts, freq):
     # this could probably be more vectorized
     n, m = freq
@@ -165,11 +157,28 @@ def triangles_method2(lindex, base_pts, freq):
 #    group = vertices.group
 #    for i in range(3):
 #        result[group == i] = base_pts[i]
-    result[(lindex[:,0] == b)     & (lindex[:,1] == 0)] = abcd[0]
-    result[(lindex[:,0] == a + b) & (lindex[:,1] == b)] = abcd[1]
-    result[(lindex[:,0] == 0)     & (lindex[:,1] == a + b)] = abcd[2]
 
     return result
+
+def tri_intersections(lindex, base_pts, freq, normalize=True):
+    """Transforms a triangle to a spherical triangle using the method of
+    intersections"""
+    pts = triangles_method2(lindex, base_pts, freq)
+    if normalize:
+        pts = xmath.normalize(pts)
+    result = pts.mean(axis=1)
+    result[(lindex[:,0] == 0) &
+           (lindex[:,1] == a) &
+           (lindex[:,2] == a + b )] = base_pts[0]
+    result[(lindex[:,0] == a + b) &
+           (lindex[:,1] == 0) &
+           (lindex[:,2] == a )] = base_pts[1]
+    result[(lindex[:,0] == a) &
+           (lindex[:,1] == a + b) &
+           (lindex[:,2] == 0 )] = base_pts[2]
+    return result
+
+
 
 #squares -> spherical quadrilateral
 def square_slerp(xy, abcd):
@@ -215,14 +224,14 @@ def square_intersections(lindex, abcd, freq):
     result[(lindex[:,0] == a + b) & (lindex[:,1] == b)] = abcd[1]
     result[(lindex[:,0] == a)     & (lindex[:,1] == a + b)] = abcd[2]
     result[(lindex[:,0] == 0)     & (lindex[:,1] == a)] = abcd[3]
-    
+
     return result
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from matplotlib.collections import PolyCollection, LineCollection
 
-    a, b = 4, 2
+    a, b = 2, 1
     bkdn = breakdown.Breakdown(a, b, 'q')
     abcd = xmath.normalize(np.array([[1,1,1],
                                      [1,-1,1],
@@ -231,20 +240,19 @@ if __name__ == "__main__":
     borders = xmath.slerp(abcd[:, np.newaxis],
                           np.roll(abcd,-1,axis=0)[:, np.newaxis],
                           np.linspace(0,1)[:, np.newaxis]).reshape((-1,3))
-    bkdn_q = breakdown.Breakdown(a, b, 'q')
 
-    sq1 = xmath.normalize(square_to_quad(bkdn_q.coord[:, np.newaxis], abcd))
-    sqslerp = xmath.normalize(square_slerp(bkdn_q.coord[:, np.newaxis], abcd))
-    sq2 = xmath.normalize(square_intersections(bkdn_q.lindex, abcd, (a,b)))
+    sq1 = xmath.normalize(square_to_quad(bkdn.coord[:, np.newaxis], abcd))
+    sqslerp = xmath.normalize(square_slerp(bkdn.coord[:, np.newaxis], abcd))
+    sq2 = xmath.normalize(square_intersections(bkdn.lindex, abcd, (a,b)))
     badsq2 = np.linalg.norm(sq2, axis=-1) < 1E-6
     sq2[badsq2] = sq1[badsq2]
     #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
     #y = np.stack([sqslerp[:,1],sq2[:,1]],axis=-1)
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2,2, sharex=True, sharey=True)
-    fig.set_size_inches(10, 10)
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True, sharey=True)
+    fig.set_size_inches(8, 2)
     plt.axis('equal')
     #ax1.plot(x, y, c='g')
-    ax1.plot(borders[..., 0], borders[..., 1], c='b')   
+    ax1.plot(borders[..., 0], borders[..., 1], c='b')
     for ax in (ax1, ax2, ax3, ax4):
         circle = plt.Circle((0, 0), 1, color='k', fill=False, zorder=3)
         ax.add_artist(circle)
@@ -255,4 +263,34 @@ if __name__ == "__main__":
         ptx = pts[bkdn.faces] [..., :2]
         pc = PolyCollection(ptx, edgecolors='grey')
         ax.add_collection(pc)
-        
+
+    bkdn = breakdown.Breakdown(a, b, 't')
+    abc = xmath.normalize(np.array([[0, 1, 1],
+                        [ np.sqrt(3)/2, -0.5, 1],
+                        [-np.sqrt(3)/2, -0.5, 1]]))
+    borders = xmath.slerp(abc[:, np.newaxis],
+                          np.roll(abc,-1,axis=0)[:, np.newaxis],
+                          np.linspace(0,1)[:, np.newaxis]).reshape((-1,3))
+
+    tr1 = xmath.normalize(tri_bary(bkdn.coord, abc))
+    trslerp = xmath.normalize(tri_naive_slerp(bkdn.coord, abc))
+    tr2 = xmath.normalize(tri_intersections(bkdn.lindex, abc, (a,b)))
+    badtr2 = np.linalg.norm(tr2, axis=-1) < 1E-6
+    tr2[badtr2] = tr1[badtr2]
+    #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
+    #y = np.stack([sqslerp[:,1],sq2[:,1]],axis=-1)
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True, sharey=True)
+    fig.set_size_inches(8, 2)
+    plt.axis('equal')
+    #ax1.plot(x, y, c='g')
+    ax1.plot(borders[..., 0], borders[..., 1], c='b')
+    for ax in (ax1, ax2, ax3, ax4):
+        circle = plt.Circle((0, 0), 1, color='k', fill=False, zorder=3)
+        ax.add_artist(circle)
+    ax1.scatter(tr1[..., 0], tr1[..., 1])
+    ax1.scatter(trslerp[..., 0], trslerp[..., 1])
+    ax1.scatter(tr2[..., 0], tr2[..., 1])
+    for ax, pts in [(ax2, tr1), (ax3, trslerp), (ax4, tr2)]:
+        ptx = pts[bkdn.faces] [..., :2]
+        pc = PolyCollection(ptx, edgecolors='grey')
+        ax.add_collection(pc)
