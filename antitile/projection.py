@@ -4,8 +4,7 @@ Transformations from the breakdowns to 3-space (sometimes 2-space)
 """
 
 import numpy as np
-import xmath
-import breakdown
+from . import xmath, breakdown
 
 #generic methods, valid on any-d, any shape
 def square_to_quad(xy, abcd):

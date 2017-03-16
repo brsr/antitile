@@ -5,6 +5,7 @@ unitile2d does these, but there's a note in its docs saying it
 may change in the future, so shouldn't rely on it.
 """
 import numpy as np
+from . import tiling
 
 def project_skew(coords):
     """
@@ -24,7 +25,7 @@ def project_skew(coords):
     y = coords[..., 1] * np.sqrt(3) / 2
     return np.stack([x, y], axis=-1)
 
-class FlatTiling:
+class FlatTiling(tiling.Tiling):
     """Info about the geometry of a flat square {4,4} and triangular
     tiling {3,6}
     Attributes:

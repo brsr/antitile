@@ -3,8 +3,7 @@
 
 """
 import numpy as np
-import flat
-import xmath
+from . import flat, xmath
 
 class Breakdown(flat.FlatTiling):
     """
@@ -94,19 +93,13 @@ class Breakdown(flat.FlatTiling):
         group[(group == 126) & (side3 < 0)] = 102
 
         # barycentric coordinates
-        #FIXME
-        mat = np.array([[a+b, b],
-                        [-b, a]])/anorm
-        coords = vertices[:, :2].dot(mat.T)
-        l1 = 1-coords.sum(axis=-1, keepdims=True)
-        self.coord = np.concatenate([l1, coords], axis=1)
-#        mat = np.array([[   -a, -b - a, 1],
-#                        [a + b,      b, 0],
-#                        [   -b,      a, 0]]) / anorm
-#
-#        coords = vertices.copy()
-#        coords[:, 2] = 1  # the ol' affine matrix trick
-#        self.coord = coords.dot(mat.T)
+        mat = np.array([[   -a, -b - a, anorm],
+                        [a + b,      b, 0],
+                        [   -b,      a, 0]]) / anorm
+
+        coords = vertices.copy()
+        coords[:, 2] = 1  # the ol' affine matrix trick
+        self.coord = coords.dot(mat.T)
 
         # linear index coordinates
         u = x + y
@@ -256,3 +249,18 @@ if __name__ == "__main__":
     #x = np.stack([li[:,0],pts_2d[:,0]],axis=-1)
     #y = np.stack([li[:,1],pts_2d[:,1]],axis=-1)
     #ax.plot(x, y, c='g')
+
+    anorm = a**2 + a*b+ b**2
+    vertices = bkdn.vertices
+    mat = np.array([[a+b, b],
+                    [-b, a]])/anorm
+    coords1 = vertices[:, :2].dot(mat.T)
+    l1 = 1-coords1.sum(axis=-1, keepdims=True)
+    coord1 = np.concatenate([l1, coords1], axis=1)
+    mat2 = np.array([[   -a, -b - a, anorm],
+                    [a + b,      b, 0],
+                    [   -b,      a, 0]]) / anorm
+
+    coords = vertices.copy()
+    coords[:, 2] = 1  # the ol' affine matrix trick
+    coord2 = coords.dot(mat2.T)
