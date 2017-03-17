@@ -8,28 +8,28 @@ import numpy as np
 from antitile import off, tiling, breakdown, projection
 
 def subdiv(base, freq={'t': (2,0), 'q': (2,0)}, proj='flat'):
-    bkdns = {shape: breakdown.Breakdown(*freq, shape) 
+    bkdns = {shape: breakdown.Breakdown(*freq, shape)
                 for (shape, freq) in freq.items()}
     newverts = []
+    base.orient_faces()
     for face in base.faces:
         face_n = len(face)
+        face_pts = base.vertices[face]
         if face_n > 4:
             raise ValueError("Tiling contains at least one face with more than"
-                             " 4 sides. Try triangulating that face first.")
+                             " 4 sides. Try triangulating those faces first.")
         elif face_n < 2:
             #just ignore any edges or vertices that show up in the face list
             continue
         elif face_n == 3:
-            proj = projection.tri_bary
             bkdn = bkdns['t']
+            newvert = projection.tri_bary(bkdn.coord, face_pts)
         elif face_n == 4:
-            proj = projection.square_to_quad
-            bkdn = bkdns['q']            
-        face_pts = base.vertices[face]
-        newvert = proj(bkdn.coord, face_pts)
+            bkdn = bkdns['q']
+            newvert = projection.square_to_quad(bkdn.coord[:, np.newaxis], face_pts)
         newverts.append(newvert)
     return np.concatenate(newverts, axis=0)
-        
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=

@@ -25,7 +25,8 @@ setup(name='antitile',
         'Topic :: Multimedia :: Graphics :: 3D Modeling',
         'Topic :: Scientific/Engineering :: Mathematics'
       ],
-      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/subtile.py'],
+      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/subtile.py',
+                 'bin/face_orient.py'],
       include_package_data=True,
       zip_safe=True,
       test_suite='tests')
