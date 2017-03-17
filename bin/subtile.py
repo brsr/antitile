@@ -11,7 +11,7 @@ def subdiv(base, freq={'t': (2,0), 'q': (2,0)}, proj='flat'):
     bkdns = {shape: breakdown.Breakdown(*freq, shape)
                 for (shape, freq) in freq.items()}
     newverts = []
-    base.orient_faces()
+    #base.orient_faces()
     for face in base.faces:
         face_n = len(face)
         face_pts = base.vertices[face]

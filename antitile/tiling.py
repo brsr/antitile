@@ -20,40 +20,40 @@ class Tiling:
     def face_size(self):
         return np.array([len(x) for x in self.faces])
 
-    @property
-    def face_orientation(self):
-        """Returns the orientation of the points in each face in the
-        tiling with respect to (0,0,0). 1 is counterclockwise, -1 is
-        clockwise, 0 means it's mixed (probably some sort of weird
-        self-intersecting thing) or lies on a plane through the origin."""
-        lens = self.face_size
-        min_len = lens.min()
-        max_len = lens.max()
-        orientation = np.zeros(lens.shape, dtype=np.int8)
-        for i in range(min_len, max_len+1):
-            index = lens == i
-            i_faces = np.array([self.faces[i] for i in np.nonzero(index)[0]])
-            i_pts = self.vertices[i_faces]
-            if i == 3:
-                dets = np.linalg.det(i_pts)
-                cclock = dets > 0
-                clock = dets < 0
-            else:
-                det_index = circulant(np.arange(4))[:, :3]
-                dets_ind = np.linalg.det(i_pts[..., det_index, :])
-                cclock = np.all(dets_ind > 0, axis=-1)
-                clock =  np.all(dets_ind < 0, axis=-1)
-            ix = np.nonzero(index)[0]
-            orientation[ix[cclock]] = 1
-            orientation[ix[clock]] = -1
-        return orientation
-
-    def orient_faces(self):
-        """Orient faces of tiling in counterclockwise order with
-        respect (0,0,0)"""
-        for face, o in zip(self.faces, self.face_orientation):
-            if o == -1:
-                face.reverse()
+#    @property
+#    def face_orientation(self):
+#        """Returns the orientation of the points in each face in the
+#        tiling with respect to (0,0,0). 1 is counterclockwise, -1 is
+#        clockwise, 0 means it's mixed (probably some sort of weird
+#        self-intersecting thing) or lies on a plane through the origin."""
+#        lens = self.face_size
+#        min_len = lens.min()
+#        max_len = lens.max()
+#        orientation = np.zeros(lens.shape, dtype=np.int8)
+#        for i in range(min_len, max_len+1):
+#            index = lens == i
+#            i_faces = np.array([self.faces[i] for i in np.nonzero(index)[0]])
+#            i_pts = self.vertices[i_faces]
+#            if i == 3:
+#                dets = np.linalg.det(i_pts)
+#                cclock = dets > 0
+#                clock = dets < 0
+#            else:
+#                det_index = circulant(np.arange(4))[:, :3]
+#                dets_ind = np.linalg.det(i_pts[..., det_index, :])
+#                cclock = np.all(dets_ind > 0, axis=-1)
+#                clock =  np.all(dets_ind < 0, axis=-1)
+#            ix = np.nonzero(index)[0]
+#            orientation[ix[cclock]] = 1
+#            orientation[ix[clock]] = -1
+#        return orientation
+#
+#    def orient_faces(self):
+#        """Orient faces of tiling in counterclockwise order with
+#        respect (0,0,0)"""
+#        for face, o in zip(self.faces, self.face_orientation):
+#            if o == -1:
+#                face.reverse()
 
     @property
     def vertex_adjacency(self):
