@@ -3,7 +3,7 @@
 Generic polyhedron and tiling methods
 """
 import numpy as np
-from scipy.linalg import circulant
+#from scipy.linalg import circulant
 
 class Tiling:
     """Generic class for tilings and polyhedrons"""
@@ -20,6 +20,16 @@ class Tiling:
     def face_size(self):
         return np.array([len(x) for x in self.faces])
 
+    @property
+    def faces_by_size(self):
+        result = dict()
+        for face in self.faces:
+            x = len(face)
+            if x in result:
+                result[x].append(face)
+            else:
+                result[x] = [face]
+        return result
 #    @property
 #    def face_orientation(self):
 #        """Returns the orientation of the points in each face in the

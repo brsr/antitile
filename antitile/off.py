@@ -15,10 +15,10 @@ def readline_comment(file, symbol='#'):
         return result
 
 
-def load_off(filename):
+def load_off(file):
     """Loads OFF files from Antiprism.
     Arguments:
-        filename: Name of file to read
+        file: file handle
     Returns:
         vertices: A numpy array of shape (# of vertices , 3) representing
             the vertices of the polyhedron.
@@ -36,55 +36,54 @@ def load_off(filename):
         vertexcolors: A list of colors. If colors are not specified, will
             be None.
             """
-    with open(filename, 'r') as file:
-        head = readline_comment(file)
-        if head[:3] != 'OFF':
-            raise ValueError('not an OFF file')
-        count_line = readline_comment(file)
-        nvertices, nfaces, _ = [int(x) for x in count_line.split()]
-        vertices = []
-        for _ in range(nvertices):
-            line = readline_comment(file)
-            split_line = line.split()
-            if len(split_line) != 3:
-                raise ValueError('bad vertex: need 3d xyz coordinates')
-            vertices.append([float(x) for x in split_line])
-        vertices = np.array(vertices)
-        faces = []
-        facecolors = []
-        edges = []
-        edgecolors = []
-        verts = []
-        vertexcolors = []
-        for _ in range(nfaces):
-            line = readline_comment(file)
-            split_line = line.split()
-            nv = int(split_line[0])
-            vx = [int(x) for x in split_line[1:nv+1]]
-            colorspec = split_line[nv+1:]
-            lc = len(colorspec)
-            if lc == 0:
-                colorspec = None
-            elif lc == 1:
-                colorspec = int(colorspec[0])
-            elif lc >= 3:
-                colorspec = [float(x) for x in colorspec]
-                if max(colorspec) > 1:
-                    colorspec = [x/255 for x in colorspec]
-            if nv == 1:
-                verts.append(vx[0])
-                vertexcolors.append(colorspec)
-            elif nv == 2:
-                edges.append(vx)
-                edgecolors.append(colorspec)
-            else:
-                faces.append(vx)
-                facecolors.append(colorspec)
+    head = readline_comment(file)
+    if head[:3] != 'OFF':
+        raise ValueError('not an OFF file')
+    count_line = readline_comment(file)
+    nvertices, nfaces, _ = [int(x) for x in count_line.split()]
+    vertices = []
+    for _ in range(nvertices):
+        line = readline_comment(file)
+        split_line = line.split()
+        if len(split_line) != 3:
+            raise ValueError('bad vertex: need 3d xyz coordinates')
+        vertices.append([float(x) for x in split_line])
+    vertices = np.array(vertices)
+    faces = []
+    facecolors = []
+    edges = []
+    edgecolors = []
+    verts = []
+    vertexcolors = []
+    for _ in range(nfaces):
+        line = readline_comment(file)
+        split_line = line.split()
+        nv = int(split_line[0])
+        vx = [int(x) for x in split_line[1:nv+1]]
+        colorspec = split_line[nv+1:]
+        lc = len(colorspec)
+        if lc == 0:
+            colorspec = None
+        elif lc == 1:
+            colorspec = int(colorspec[0])
+        elif lc >= 3:
+            colorspec = [float(x) for x in colorspec]
+            if max(colorspec) > 1:
+                colorspec = [x/255 for x in colorspec]
+        if nv == 1:
+            verts.append(vx[0])
+            vertexcolors.append(colorspec)
+        elif nv == 2:
+            edges.append(vx)
+            edgecolors.append(colorspec)
+        else:
+            faces.append(vx)
+            facecolors.append(colorspec)
 
-        edges = np.array(edges, dtype=int)
-        verts = np.array(verts, dtype=int)
-        return (vertices, faces, facecolors, edges, edgecolors,
-                verts, vertexcolors)
+    edges = np.array(edges, dtype=int)
+    verts = np.array(verts, dtype=int)
+    return (vertices, faces, facecolors, edges, edgecolors,
+            verts, vertexcolors)
 
 
 def write_off(vertices, faces):

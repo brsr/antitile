@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(name='antitile',
       version='20170316',
-      description='Tiling subdivision, for use with Antiprism',
+      description='Tiling subdivision scripts, for use with Antiprism',
       url='http://github.com/brsr/antitile',
       author='B R S Recht',
       author_email='brstone@ufl.edu',
@@ -25,8 +25,7 @@ setup(name='antitile',
         'Topic :: Multimedia :: Graphics :: 3D Modeling',
         'Topic :: Scientific/Engineering :: Mathematics'
       ],
-      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/subtile.py',
-                 'bin/face_orient.py'],
+      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/sgs.py'],
       include_package_data=True,
       zip_safe=True,
       test_suite='tests')
