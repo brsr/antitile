@@ -4,6 +4,8 @@ Generic polyhedron and tiling methods
 """
 import numpy as np
 #from scipy.linalg import circulant
+#from scipy import sparse
+
 
 class Tiling:
     """Generic class for tilings and polyhedrons"""
@@ -11,6 +13,7 @@ class Tiling:
         self.vertices = vertices
         self.faces = faces
 
+    #should probably cache these properties
     @property
     def edges(self):
         """Returns a list of edges in the tiling"""

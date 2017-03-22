@@ -10,10 +10,10 @@ class Breakdown(flat.FlatTiling):
     Breakdown structures
     Attributes:
         freq: A 2-tuple (n, m) describing the breakdown structure.
-        shape: Either 't' (triangular) or 'q' (quadrilateral)
+        shape: Either 3 (triangular) or 4 (quadrilateral)
         vertices: Vertices of the breakdown
-        coord: Barycentric coordinates if shape='t',
-            or xy coordinates if shape='q'
+        coord: Barycentric coordinates if shape=3,
+            or xy coordinates if shape=4
         lindex: Linear index coordinates of each vertex
         group: An integer describing where each vertex falls.
             -19 through -10: Inside the breakdown, lying on a feature
@@ -26,7 +26,7 @@ class Breakdown(flat.FlatTiling):
         faces: Array of faces in the breakdown structure
 
     """
-    def __init__(self, a, b, shape='t', remove_outside=True):
+    def __init__(self, a, b, shape=3, remove_outside=True):
         """
         Constructor for the breakdown object.
 
@@ -49,9 +49,9 @@ class Breakdown(flat.FlatTiling):
         #adjust the vertices so we have room for the shape
         vertices[..., 0] -= b
         vertices[..., 2] += b
-        if shape=='t':
+        if shape==3:
             self._t()
-        elif shape == 'q':
+        elif shape == 4:
             self._q()
 
         cn = 111 if remove_outside else 128
@@ -153,10 +153,10 @@ class Breakdown(flat.FlatTiling):
         shared = np.unique(faces[face_inside])
         group[shared] = np.fmin(group[shared], 126)
 
-def frame(n=4, m=2, shape='t'):
-    if shape == 't':
+def frame(n=4, m=2, shape=3):
+    if shape == 3:
         return frame_triangle(n=n, m=m)
-    elif shape == 'q':
+    elif shape == 4:
         return frame_square(n=n, m=m)
 
 def frame_triangle(base_pts = np.eye(3), n=4, m=2, interp=xmath.lerp):
@@ -207,11 +207,11 @@ if __name__ == "__main__":
     from matplotlib.collections import PolyCollection, LineCollection
 
     a, b = 2, 0
-    shape = 't'
+    shape = 3
 
     bkdn = Breakdown(a, b, shape)
     frm = frame(a, b, shape)
-    if shape == 't':
+    if shape == 3:
         abc = np.array([[0,  0],
                         [1,  0],
                         [0.5, np.sqrt(3)/2]])

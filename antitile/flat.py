@@ -30,17 +30,17 @@ class FlatTiling(tiling.Tiling):
     tiling {3,6}
     Attributes:
         freq: A 2-tuple (n, m) describing the breakdown structure.
-        shape: Either 't' (triangular) or 'q' (quadrilateral)
+        shape: Either 3 (triangular) or 4 (quadrilateral)
         vertices: Vertices of the flat tiling
         faces: Faces of the flat tiling
     """
 
-    def __init__(self, a=25, b=25, shape='t'):
+    def __init__(self, a=25, b=25, shape=3):
         """Constructor for the planar triangle/hex geometry.
 
         Args:
             n, m: Number of vertices along each skew-axis.
-            shape: 't' for triangle, 'q' for quadrilateral
+            shape: 3 for triangle, 4 for quadrilateral
         """
 
         if a < 1 or b < 1:
@@ -53,9 +53,9 @@ class FlatTiling(tiling.Tiling):
         vertices = np.array(mesh).reshape(3, n).T
         self.vertices = vertices
 
-        if shape == 't':
+        if shape == 3:
             face_config = self._init_t()
-        elif shape == 'q':
+        elif shape == 4:
             face_config = self._init_q()
         else:
             raise ValueError('invalid shape ' + str(shape))
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     from matplotlib.collections import PolyCollection
 
     a, b = 2, 2
-    shape = 't'
+    shape = 3
     tiling = FlatTiling(a, b, shape)
     pts_2d = tiling.proj_2d
     mx = pts_2d.max(axis=0)

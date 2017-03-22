@@ -38,7 +38,7 @@ def tri_bary(bary, abc):
     return bary.dot(abc)
 #methods for disks
 
-def square_to_circle(xy, rotation = 1):#np.exp(1j*np.pi/4)):
+def square_to_circle(xy, rotation=1):#np.exp(1j*np.pi/4)):
     """Transforms square on [0,1]^2 to unit circle"""
     pts = xy*2-1
     r = np.max(np.abs(pts), axis=-1)
@@ -80,7 +80,7 @@ def tri_naive_slerp(bary, base_pts):
     max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
     if not np.isclose(max_diff, 0):
         raise ValueError("naive_slerp used with non-equilateral face. " +
-             "Difference is " + str(max_diff) + " radians.")
+                         "Difference is " + str(max_diff) + " radians.")
     omega = omegas[0]
     b = np.sin(omega * bary) / np.sin(omega)
     return b.dot(base_pts)
@@ -135,7 +135,6 @@ def tri_areal(beta, triangle):
     return np.linalg.solve(L, h)
 
 def triangles_method2(lindex, base_pts, freq):
-    # this could probably be more vectorized
     n, m = freq
     frame = breakdown.frame_triangle(base_pts, n, m)
     #get the normal to the great circle corresponding to the lines
@@ -159,24 +158,23 @@ def triangles_method2(lindex, base_pts, freq):
 
     return result
 
-def tri_intersections(lindex, base_pts, freq, normalize=True):
+def tri_intersections(lindex, base_pts, freq, tweak=False):
     """Transforms a triangle to a spherical triangle using the method of
     intersections"""
     pts = triangles_method2(lindex, base_pts, freq)
-    if normalize:
+    if ~tweak:
         pts = xmath.normalize(pts)
     result = pts.mean(axis=1)
-    result[(lindex[:,0] == 0) &
-           (lindex[:,1] == a) &
-           (lindex[:,2] == a + b )] = base_pts[0]
-    result[(lindex[:,0] == a + b) &
-           (lindex[:,1] == 0) &
-           (lindex[:,2] == a )] = base_pts[1]
-    result[(lindex[:,0] == a) &
-           (lindex[:,1] == a + b) &
-           (lindex[:,2] == 0 )] = base_pts[2]
+    result[(lindex[:, 0] == 0) &
+           (lindex[:, 1] == a) &
+           (lindex[:, 2] == a + b)] = base_pts[0]
+    result[(lindex[:, 0] == a + b) &
+           (lindex[:, 1] == 0) &
+           (lindex[:, 2] == a)] = base_pts[1]
+    result[(lindex[:, 0] == a) &
+           (lindex[:, 1] == a + b) &
+           (lindex[:, 2] == 0)] = base_pts[2]
     return result
-
 
 
 #squares -> spherical quadrilateral
@@ -206,12 +204,12 @@ def square_intersections(lindex, abcd, freq):
     n, m = freq
     preframe = breakdown.frame_square(n, m)
     frame = square_slerp(preframe[..., np.newaxis, :],
-                         abcd[:,np.newaxis, np.newaxis, np.newaxis])
+                         abcd[:, np.newaxis, np.newaxis, np.newaxis])
     gc_normals = np.cross(frame[..., 0, :], frame[..., 1, :])
     index = np.arange(2)
     pairs = gc_normals[index, lindex[:, index]]
     #intersection of great circles = cross product of normals
-    ptx = np.cross(pairs[:,0], pairs[:,1])
+    ptx = np.cross(pairs[:, 0], pairs[:, 1])
     # cross product could give the point we want or its negative.
     # test to see if the points are on the correct side of the sphere
     # take the dot product of these vectors with the center of the
@@ -219,12 +217,31 @@ def square_intersections(lindex, abcd, freq):
     center = np.sum(abcd, axis=0)#don't need to normalize this
     sign_correct = np.sum(center*ptx, axis=-1, keepdims=True) >= 0
     result = np.where(sign_correct, ptx, -ptx)
-    result[(lindex[:,0] == b)     & (lindex[:,1] == 0)] = abcd[0]
-    result[(lindex[:,0] == a + b) & (lindex[:,1] == b)] = abcd[1]
-    result[(lindex[:,0] == a)     & (lindex[:,1] == a + b)] = abcd[2]
-    result[(lindex[:,0] == 0)     & (lindex[:,1] == a)] = abcd[3]
+    result[(lindex[:, 0] == b)     & (lindex[:, 1] == 0)] = abcd[0]
+    result[(lindex[:, 0] == a + b) & (lindex[:, 1] == b)] = abcd[1]
+    result[(lindex[:, 0] == a)     & (lindex[:, 1] == a + b)] = abcd[2]
+    result[(lindex[:, 0] == 0)     & (lindex[:, 1] == a)] = abcd[3]
 
     return result
+
+
+FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
+        4: lambda bkdn, abc, freq, tweak: square_to_quad(bkdn.coord, abc)}
+
+SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
+         4: lambda bkdn, abc, freq, tweak: square_slerp(bkdn.coord, abc)}
+
+AREAL = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc)}
+
+GC = {3: lambda bkdn, abc, freq, tweak: tri_intersections(bkdn.lindex,
+                                                          abc, freq, tweak),
+      4: lambda bkdn, abc, freq, tweak: square_intersections(bkdn.lindex,
+                                                             abc, freq)}
+
+PROJECTIONS = {'flat':  FLAT,
+               'slerp': SLERP,
+               'areal': AREAL,
+               'gc':    GC}
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
@@ -232,17 +249,17 @@ if __name__ == "__main__":
 
     a, b = 2, 1
     bkdn = breakdown.Breakdown(a, b, 'q')
-    abcd = xmath.normalize(np.array([[1,1,1],
-                                     [1,-1,1],
-                                     [-1,-1,1],
-                                     [-1,1,1]]))
+    abcd = xmath.normalize(np.array([[1, 1, 1],
+                                     [1, -1, 1],
+                                     [-1, -1, 1],
+                                     [-1, 1, 1]]))
     borders = xmath.slerp(abcd[:, np.newaxis],
-                          np.roll(abcd,-1,axis=0)[:, np.newaxis],
-                          np.linspace(0,1)[:, np.newaxis]).reshape((-1,3))
+                          np.roll(abcd, -1, axis=0)[:, np.newaxis],
+                          np.linspace(0, 1)[:, np.newaxis]).reshape((-1, 3))
 
     sq1 = xmath.normalize(square_to_quad(bkdn.coord[:, np.newaxis], abcd))
     sqslerp = xmath.normalize(square_slerp(bkdn.coord[:, np.newaxis], abcd))
-    sq2 = xmath.normalize(square_intersections(bkdn.lindex, abcd, (a,b)))
+    sq2 = xmath.normalize(square_intersections(bkdn.lindex, abcd, (a, b)))
     badsq2 = np.linalg.norm(sq2, axis=-1) < 1E-6
     sq2[badsq2] = sq1[badsq2]
     #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
@@ -259,21 +276,21 @@ if __name__ == "__main__":
     ax1.scatter(sqslerp[..., 0], sqslerp[..., 1])
     ax1.scatter(sq2[..., 0], sq2[..., 1])
     for ax, pts in [(ax2, sq1), (ax3, sqslerp), (ax4, sq2)]:
-        ptx = pts[bkdn.faces] [..., :2]
+        ptx = pts[bkdn.faces][..., :2]
         pc = PolyCollection(ptx, edgecolors='grey')
         ax.add_collection(pc)
 
     bkdn = breakdown.Breakdown(a, b, 't')
     abc = xmath.normalize(np.array([[0, 1, 1],
-                        [ np.sqrt(3)/2, -0.5, 1],
-                        [-np.sqrt(3)/2, -0.5, 1]]))
+                                    [ np.sqrt(3)/2, -0.5, 1],
+                                    [-np.sqrt(3)/2, -0.5, 1]]))
     borders = xmath.slerp(abc[:, np.newaxis],
-                          np.roll(abc,-1,axis=0)[:, np.newaxis],
-                          np.linspace(0,1)[:, np.newaxis]).reshape((-1,3))
+                          np.roll(abc, -1, axis=0)[:, np.newaxis],
+                          np.linspace(0, 1)[:, np.newaxis]).reshape((-1, 3))
 
     tr1 = xmath.normalize(tri_bary(bkdn.coord, abc))
     trslerp = xmath.normalize(tri_naive_slerp(bkdn.coord, abc))
-    tr2 = xmath.normalize(tri_intersections(bkdn.lindex, abc, (a,b)))
+    tr2 = xmath.normalize(tri_intersections(bkdn.lindex, abc, (a, b)))
     badtr2 = np.linalg.norm(tr2, axis=-1) < 1E-6
     tr2[badtr2] = tr1[badtr2]
     #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
@@ -290,6 +307,6 @@ if __name__ == "__main__":
     ax1.scatter(trslerp[..., 0], trslerp[..., 1])
     ax1.scatter(tr2[..., 0], tr2[..., 1])
     for ax, pts in [(ax2, tr1), (ax3, trslerp), (ax4, tr2)]:
-        ptx = pts[bkdn.faces] [..., :2]
+        ptx = pts[bkdn.faces][..., :2]
         pc = PolyCollection(ptx, edgecolors='grey')
         ax.add_collection(pc)
