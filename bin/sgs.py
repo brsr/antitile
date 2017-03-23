@@ -43,6 +43,7 @@ def nonnegativeint(string, lowest=0):
     if x < lowest:
         msg = "must be greater than or equal to {y}"
         raise argparse.ArgumentTypeError(msg.format(y=lowest))
+    return x
 
 def posint(string):
     return nonnegativeint(string, 1)

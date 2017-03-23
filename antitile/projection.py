@@ -226,17 +226,19 @@ def square_intersections(lindex, abcd, freq):
 
 
 FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
-        4: lambda bkdn, abc, freq, tweak: square_to_quad(bkdn.coord, abc)}
+        4: lambda bkdn, abc, freq, tweak:
+            square_to_quad(bkdn.coord[:, np.newaxis], abc)}
 
 SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
-         4: lambda bkdn, abc, freq, tweak: square_slerp(bkdn.coord, abc)}
+         4: lambda bkdn, abc, freq, tweak:
+             square_slerp(bkdn.coord[:, np.newaxis], abc)}
 
 AREAL = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc)}
 
-GC = {3: lambda bkdn, abc, freq, tweak: tri_intersections(bkdn.lindex,
-                                                          abc, freq, tweak),
-      4: lambda bkdn, abc, freq, tweak: square_intersections(bkdn.lindex,
-                                                             abc, freq)}
+GC = {3: lambda bkdn, abc, freq, tweak:
+            tri_intersections(bkdn.lindex, abc, freq, tweak),
+      4: lambda bkdn, abc, freq, tweak:
+          square_intersections(bkdn.lindex, abc, freq)}
 
 PROJECTIONS = {'flat':  FLAT,
                'slerp': SLERP,

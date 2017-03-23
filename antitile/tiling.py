@@ -4,7 +4,7 @@ Generic polyhedron and tiling methods
 """
 import numpy as np
 #from scipy.linalg import circulant
-#from scipy import sparse
+from scipy import sparse
 
 
 class Tiling:
@@ -32,41 +32,9 @@ class Tiling:
                 result[x].append(face)
             else:
                 result[x] = [face]
+        for i in result:
+            result[i] = np.array(result[i])
         return result
-#    @property
-#    def face_orientation(self):
-#        """Returns the orientation of the points in each face in the
-#        tiling with respect to (0,0,0). 1 is counterclockwise, -1 is
-#        clockwise, 0 means it's mixed (probably some sort of weird
-#        self-intersecting thing) or lies on a plane through the origin."""
-#        lens = self.face_size
-#        min_len = lens.min()
-#        max_len = lens.max()
-#        orientation = np.zeros(lens.shape, dtype=np.int8)
-#        for i in range(min_len, max_len+1):
-#            index = lens == i
-#            i_faces = np.array([self.faces[i] for i in np.nonzero(index)[0]])
-#            i_pts = self.vertices[i_faces]
-#            if i == 3:
-#                dets = np.linalg.det(i_pts)
-#                cclock = dets > 0
-#                clock = dets < 0
-#            else:
-#                det_index = circulant(np.arange(4))[:, :3]
-#                dets_ind = np.linalg.det(i_pts[..., det_index, :])
-#                cclock = np.all(dets_ind > 0, axis=-1)
-#                clock =  np.all(dets_ind < 0, axis=-1)
-#            ix = np.nonzero(index)[0]
-#            orientation[ix[cclock]] = 1
-#            orientation[ix[clock]] = -1
-#        return orientation
-#
-#    def orient_faces(self):
-#        """Orient faces of tiling in counterclockwise order with
-#        respect (0,0,0)"""
-#        for face, o in zip(self.faces, self.face_orientation):
-#            if o == -1:
-#                face.reverse()
 
     @property
     def vertex_adjacency(self):
@@ -76,12 +44,32 @@ class Tiling:
     def face_adjacency(self):
         return NotImplemented
 
-    @property
-    def vertex_face_incidence(self):
-        return NotImplemented
 
     def faces_by_edge(self, edges):
-        return NotImplemented
+        """Given edges, lists the faces adjacent to the edges
+        Arguments:
+            edges: List of edges. An array of shape (n, 2). Lowest-numbered
+            vertex comes first.
+        Returns: two arrays:
+            edges: Index of each edge
+            faces: Index of each face"""
+        facesize = self.face_size
+        facedict = self.faces_by_size
+        ex = []
+        fx = []
+        for i in facedict:
+            face_no = np.nonzero(facesize == i)[0]
+            faces = facedict[i]
+            for j in range(i):
+                faceedge = faces[..., [j-1, j]]
+                condition = faceedge[..., 0] < faceedge[..., 1]
+                a = np.where(condition[..., np.newaxis], 
+                             faceedge, faceedge[..., ::-1])
+                edgel = np.all(edges[:, np.newaxis] == a[np.newaxis], axis=-1) 
+                edge_face = np.nonzero(edgel)
+                ex.append(edge_face[0])
+                fx.append(face_no[edge_face[1]])
+        return np.concatenate(ex), np.concatenate(fx)
 
 def edges_from_facelist(faces):
     """Given a list of faces, returns a list of edges."""

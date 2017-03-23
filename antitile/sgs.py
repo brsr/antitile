@@ -6,23 +6,46 @@ import warnings
 import numpy as np
 from numpy.linalg import norm
 from scipy.optimize import minimize_scalar
+from scipy import sparse
 from . import tiling, breakdown, projection, xmath
 
+def stitch_3(edge, bf, bkdn, index_0, index_1, freq):
+    a, b = freq
+    bkdn_0 = bkdn[index_0]
+    bkdn_1 = bkdn[index_1]
+    #first figure out how to roll the shapes so they meet at the edge
+    #TODO replace this with isin whenever that gets into numpy
+    notedge = np.nonzero(~np.in1d(bf, edge).reshape(bf.shape))[1]
+    roll = 2 - notedge
+    offset = np.array([a+b, a, 2*a+b])#from 0,0 to a,b
+    lindices = np.roll(bkdn_0.lindex, roll[0], axis=-1)
+    flipped = offset - np.roll(bkdn_1.lindex, roll[-1], axis=-1)
+    matches = np.nonzero(np.all(lindices[:, np.newaxis] ==
+                                flipped[np.newaxis], axis=-1))
+    l0 = np.nonzero(index_0)[0][matches[0]]
+    l1 = np.nonzero(index_1)[0][matches[1]]
+    return l0, l1
+
+def stitch_4(edge, bf, bkdn_0, bkdn_1, freq):
+    a, b = freq
+    offset = np.array([a+2*b, b])#from 0,0 to a,b
 
 def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     projections = projection.PROJECTIONS[proj]
     faces_dict = base.faces_by_size
     if any(x > 4 for x in faces_dict.keys()):
-        raise ValueError("Tiling contains at least one face with more than"
-                         " 4 sides. Try triangulating those faces first.")
+        raise ValueError("Tiling contains at least one face with more than "
+                         "4 sides. Try triangulating those faces first.")
     elif 3 in faces_dict and 4 in faces_dict:
         msg = ("Subdivision on mixed triangle-quadrilateral polyhedra "
                "is not yet implemented")
         raise NotImplementedError(msg)
     elif 3 in faces_dict:
         n = 3
+        stitcher = stitch_3
     elif 4 in faces_dict:
         n = 4
+        stitcher = stitch_4
     else:
         raise ValueError("Polyhedron has no faces")
     #create list of basically cartesion product of bkdn with base_faces
@@ -39,9 +62,48 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     arrays = [bf, group, coord, lindex, vertices]
     rbkdn = xmath.recordify(names, arrays)
     faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
-    #remove redundant vertices/faces
-    #TODO
+    #find redundant vertices
+    base_edges = base.edges
+    base_edge_corr, base_face_corr = base.faces_by_edge(base_edges)
+    l0 = []
+    l1 = []
+    for i in range(len(base_edges)):
+        edge = base_edges[i]
+        index = base_edge_corr == i
+        facex = base_face_corr[index]
+        fn = len(facex)
+        if fn > 2:
+            warnings.warn("More than 2 faces meet at a single edge. "
+                          "Choosing 2 faces arbitrarily...")
+            facex = facex[:2]
+        elif fn < 2:#external edge, ignore it
+            continue
+        index_0 = rbkdn.base_face == facex[0]
+        index_1 = rbkdn.base_face == facex[1]
+        lx0, lx1 = stitcher(edge, base_faces[facex], rbkdn,
+                            index_0, index_1, freq)
+        l0.extend(lx0)
+        l1.extend(lx1)
+        #TODO
+    matches = np.stack([l0, l1], axis=-1)
+    matches.sort(axis=-1)
+    #TODO replace this with np.unique when I update numpy
+    matches = np.array(list({tuple(t) for t in matches}))
+    #if first one lies outside the base face, swap
+    index = rbkdn.group[matches[..., 0]] >= 100
+    matches[index] = matches[index, ::-1]
+    vno = len(rbkdn)
+    unique_index = np.ones(vno, dtype=bool)
+    unique_index[matches[..., 1]] = False
 
+    conns = sparse.coo_matrix((np.ones(len(matches)),
+                              (matches[:, 0], matches[:, 1])),
+                              shape=(vno, vno))
+    ncp, cp = sparse.csgraph.connected_components(conns)
+    print(unique_index.sum())
+    print(ncp)
+    print(cp)
+    #
     #project vertices
     proj_fun = projections[n]
     for i in range(n_bf):
@@ -99,7 +161,7 @@ def optimize_k(poly, base, measure, exact=True, normalize=True):
     result = minimize_scalar(objective, bracket=[0, 1],
                              args=(poly, parallel_xyz, measure, normalize))
     if ~result.success:
-        warnings.warn('optimization routine did not converge')
+        warnings.warn('Optimization routine did not converge')
     return result.x
 
 def objective(k, poly, parallel_xyz, measure, normalize=True):
