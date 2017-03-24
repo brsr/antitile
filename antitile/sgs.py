@@ -26,9 +26,46 @@ def stitch_3(edge, bf, bkdn, index_0, index_1, freq):
     l1 = np.nonzero(index_1)[0][matches[1]]
     return l0, l1
 
-def stitch_4(edge, bf, bkdn_0, bkdn_1, freq):
+                   #0, 1,  2, 3
+ROLLMAP = np.array([3, 6, 12, 9])
+ROLLMASK = 2**np.arange(4)
+
+def _rot_4(coord, n, freq):
     a, b = freq
+    cco = coord[..., 0] + 1j*coord[..., 1]
+    rot_cco = cco * np.exp(1j*np.pi*n/2)
+    if n == 0:
+        offset = 0
+    elif n == 1:
+        offset = 1
+    elif n == 2:
+        offset = 1+1j
+    elif n == 3:
+        offset = 1j
+    shift_cco = rot_cco + offset
+    cxy = shift_cco * (a + b*1j)
+    lindex = np.stack([cxy.real + b, cxy.imag], axis=-1)
+    return lindex.astype(int)
+
+def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
+    #FIXME
+    a, b = freq
+    bkdn_0 = bkdn[index_0]
+    bkdn_1 = bkdn[index_1]
+    #first figure out how to roll the shapes so they meet at the edge
+    notedge = np.in1d(bf, edge).reshape(bf.shape).dot(ROLLMASK)
+    roll = np.nonzero(ROLLMAP[np.newaxis] == notedge[..., np.newaxis])[1]
     offset = np.array([a+2*b, b])#from 0,0 to a,b
+    lindices = _rot_4(bkdn_0.coord, roll[0], freq)
+    flipped = offset - _rot_4(bkdn_1.coord, roll[-1], freq)
+    print(lindices[(bkdn_0.group == 0) | (bkdn_0.group == 1)])
+    print(flipped[(bkdn_1.group == 0) | (bkdn_1.group == 1)])
+    print('-')
+    matches = np.nonzero(np.all(lindices[:, np.newaxis] ==
+                                flipped[np.newaxis], axis=-1))
+    l0 = np.nonzero(index_0)[0][matches[0]]
+    l1 = np.nonzero(index_1)[0][matches[1]]
+    return l0, l1
 
 def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     projections = projection.PROJECTIONS[proj]
@@ -100,10 +137,17 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
                               (matches[:, 0], matches[:, 1])),
                               shape=(vno, vno))
     ncp, cp = sparse.csgraph.connected_components(conns)
-    print(unique_index.sum())
-    print(ncp)
-    print(cp)
-    #
+    verts = np.zeros(vno, dtype=int)
+    verts[unique_index] = np.arange(unique_index.sum())
+    for i in range(ncp):
+        component = cp == i
+        v = verts[component & unique_index].min()
+        verts[component] = v
+
+    rbkdn = rbkdn[unique_index]
+    faces = tiling.remove_dupes(verts[faces])
+    bf = bf[unique_index]
+    group = group[unique_index]
     #project vertices
     proj_fun = projections[n]
     for i in range(n_bf):
@@ -121,9 +165,8 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
 def parallels(poly, base, exact=True):
     #This is only ever going to be used with equilateral faces,
     #so center = normal.
-    #FIXME
-    face_centers = xmath.normalize(base.vertices[base.faces].sum(axis=1))
-    normals = face_centers[poly.base_face]
+    #FIXME base.faces is a list of lists, not an array
+    normals = base.face_normals[poly.base_face]
     parallel = parallel_exact if exact else parallel_approx
     parallel_xyz = parallel(poly.vertices, normals)
     #xyz = poly.vertices

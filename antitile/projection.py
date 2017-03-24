@@ -161,6 +161,7 @@ def triangles_method2(lindex, base_pts, freq):
 def tri_intersections(lindex, base_pts, freq, tweak=False):
     """Transforms a triangle to a spherical triangle using the method of
     intersections"""
+    a, b = freq
     pts = triangles_method2(lindex, base_pts, freq)
     if ~tweak:
         pts = xmath.normalize(pts)

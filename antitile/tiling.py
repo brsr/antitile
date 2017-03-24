@@ -37,6 +37,22 @@ class Tiling:
         return result
 
     @property
+    def face_normals(self):
+        fs = self.face_size
+        fd = self.faces_by_size
+        result = np.zeros((len(fs), 3))
+        for i in fd:
+            if i <= 2:
+                continue
+            index = fs == i
+            faces = fd[i][..., :3]
+            a = self.vertices[faces[..., 0]]
+            b = self.vertices[faces[..., 1]]
+            c = self.vertices[faces[..., 2]]
+            normal = np.cross(a,b) + np.cross(b,c) + np.cross(c,a)
+            result[index] = normal
+        return result
+    @property
     def vertex_adjacency(self):
         return NotImplemented
 
@@ -63,9 +79,9 @@ class Tiling:
             for j in range(i):
                 faceedge = faces[..., [j-1, j]]
                 condition = faceedge[..., 0] < faceedge[..., 1]
-                a = np.where(condition[..., np.newaxis], 
+                a = np.where(condition[..., np.newaxis],
                              faceedge, faceedge[..., ::-1])
-                edgel = np.all(edges[:, np.newaxis] == a[np.newaxis], axis=-1) 
+                edgel = np.all(edges[:, np.newaxis] == a[np.newaxis], axis=-1)
                 edge_face = np.nonzero(edgel)
                 ex.append(edge_face[0])
                 fx.append(face_no[edge_face[1]])
@@ -99,4 +115,9 @@ def clean_triangles(faces):
 
 def remove_dupes(faces):
     """Remove duplicate entries from face list"""
-    return {tuple(x) for x in faces}
+    result = set()
+    for face in faces:
+        aface = np.array(face)
+        r = aface.argmin()
+        result.add(tuple(np.roll(aface, -r)))
+    return result#{tuple(x) for x in faces}

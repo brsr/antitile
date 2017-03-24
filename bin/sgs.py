@@ -84,7 +84,7 @@ def main():
                                    ~args.tweak, ~args.no_normalize)
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
             print('#k = ', k)
-        if ~args.no_normalize:
+        if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
         print(off.write_off(poly.vertices, poly.faces))
 
