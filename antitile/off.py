@@ -86,7 +86,7 @@ def load_off(file):
             verts, vertexcolors)
 
 
-def write_off(vertices, faces):
+def write_off(vertices, faces, facecolors=None):
     """Export a grid to an OFF file for use with Antiprism.
     Inputs:
         vertices: List of vertices
@@ -99,8 +99,29 @@ def write_off(vertices, faces):
         string = ' '.join([str(i) for i in row])
         result += string
         result += '\n'
-    for row in faces:
-        string = ' '.join([str(i) for i in row])
-        result += str(len(row)) + ' ' + string
-        result += '\n'
+        
+    if facecolors is None:
+        for face in faces:
+            try:
+                x = len(face)
+                face = list(face)
+            except TypeError:
+                x = 1
+                face = [face]
+            row = [x] + face 
+            result += ' '.join(str(i) for i in row) + '\n'
+    else:
+        for face, color in zip(faces, facecolors):
+            try:
+                x = len(face)
+                face = list(face)
+            except TypeError:
+                x = 1
+                face = [face]
+            try:
+                color = list(color)
+            except TypeError:
+                color = [color]
+            row = [x] + face + color
+            result += ' '.join(str(i) for i in row) + '\n'
     return result

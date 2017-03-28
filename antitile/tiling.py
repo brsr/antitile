@@ -2,7 +2,9 @@
 """
 Generic polyhedron and tiling methods
 """
+import warnings
 import numpy as np
+from . import xmath
 #from scipy.linalg import circulant
 from scipy import sparse
 
@@ -38,20 +40,19 @@ class Tiling:
 
     @property
     def face_normals(self):
+        """Normals for each face. This is ill-defined for skew faces."""
         fs = self.face_size
         fd = self.faces_by_size
-        result = np.zeros((len(fs), 3))
+        result = np.empty((len(fs), 3))
         for i in fd:
-            if i <= 2:
-                continue
             index = fs == i
-            faces = fd[i][..., :3]
-            a = self.vertices[faces[..., 0]]
-            b = self.vertices[faces[..., 1]]
-            c = self.vertices[faces[..., 2]]
-            normal = np.cross(a,b) + np.cross(b,c) + np.cross(c,a)
+            faces = fd[i]
+            a = self.vertices[faces]
+            b = self.vertices[np.roll(faces, -1, axis=-1)]
+            normal = np.cross(a,b).sum(axis=-2)
             result[index] = normal
-        return result
+        return xmath.normalize(result)
+
     @property
     def vertex_adjacency(self):
         return NotImplemented
@@ -120,4 +121,67 @@ def remove_dupes(faces):
         aface = np.array(face)
         r = aface.argmin()
         result.add(tuple(np.roll(aface, -r)))
-    return result#{tuple(x) for x in faces}
+    return list(result)
+
+
+#Measures
+def energy(xyz, exponent=1, over=None):
+    """Energy of the vertex arrangement, as defined in
+    Thomson's problem."""
+    dists = xmath.distance(xyz[np.newaxis], xyz[:, np.newaxis])
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore',
+                                r'divide by zero encountered in true_divide')
+        vertex_energy = 1/dists**exponent
+    index = np.diag_indices_from(dists)
+    vertex_energy[index] = 0
+    return vertex_energy.sum(axis=over)/2
+
+def center_of_gravity(xyz):
+    return np.linalg.norm(xyz.mean(axis=0))
+
+def edge_length(xyz, edges, spherical=False):
+    """Length of each edge in the grid"""
+    if spherical:
+        dist = xmath.spherical_distance
+    else:
+        dist = xmath.distance
+    x = xyz[edges]
+    result = dist(x[:, 0], x[:, 1])
+    return result
+
+def face_area(xyz, poly, spherical=False):
+    """Area of each face"""
+    if spherical:
+        area = xmath.spherical_triangle_area
+    else:
+        area = xmath.triangle_area
+    result = np.zeros(len(poly.faces))
+    fs = poly.face_size
+    for i, faces in poly.faces_by_size.items():
+        if i <= 2:
+            continue
+        index = fs == i
+        x = xyz[faces]
+        a = np.zeros(len(x))
+        for j in range(i-2):
+            a += area(x[:, 0], x[:, j+1], x[:, j+2])
+        result[index] = a
+    return result
+
+def aspect_ratio(xyz, poly, spherical=False):
+    """Ratio of longest edge to shortest edge for each face"""
+    if spherical:
+        dist = xmath.spherical_distance
+    else:
+        dist = xmath.distance
+    result = np.ones(len(poly.faces))
+    fs = poly.face_size
+    for i, faces in poly.faces_by_size.items():
+        if i <= 2:
+            continue
+        index = fs == i
+        x = xyz[faces]
+        y = dist(x, np.roll(x, 1, axis=1))
+        result[index] = y.max(axis=-1)/y.min(axis=-1)
+    return result

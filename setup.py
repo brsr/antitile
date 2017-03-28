@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name='antitile',
-      version='20170324',
+      version='20170328',
       description='Tiling subdivision scripts, for use with Antiprism',
       url='http://github.com/brsr/antitile',
       author='B R S Recht',
@@ -25,7 +25,8 @@ setup(name='antitile',
         'Topic :: Multimedia :: Graphics :: 3D Modeling',
         'Topic :: Scientific/Engineering :: Mathematics'
       ],
-      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/sgs.py'],
+      scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/sgs.py',
+                 'bin/sgsstats.py'],
       include_package_data=True,
       zip_safe=True,
       test_suite='tests')

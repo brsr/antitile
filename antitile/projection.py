@@ -109,6 +109,7 @@ def tri_areal(beta, triangle):
            [ 0.37935999,  0.88556406,  0.26807143],
            [ 0.        ,  0.92387953,  0.38268343]])
     """
+    triangle = xmath.normalize(triangle)
     area = xmath.spherical_triangle_area(triangle[0], triangle[1], triangle[2])
     area_i = beta * area
     triangle_iplus1 = np.roll(triangle, -1, axis=0)
@@ -223,6 +224,68 @@ def square_intersections(lindex, abcd, freq):
     result[(lindex[:, 0] == a)     & (lindex[:, 1] == a + b)] = abcd[2]
     result[(lindex[:, 0] == 0)     & (lindex[:, 1] == a)] = abcd[3]
 
+    return result
+
+#extra crap
+def to_sph_areal_coords(pts, triangle):
+    """Given a triangle and pts within that triangle, returns the
+    spherical areal coordinates of the pts with respect to the triangle.
+    >>> triangle = np.eye(3)
+    >>> triangle[2,1] = 1
+    >>> triangle = normalize(triangle)
+    >>> x = np.linspace(0,1,5)
+    >>> z = np.linspace(0.7,0,5)
+    >>> y = np.sqrt(1-x**2-z**2)
+    >>> pts = normalize(np.stack([x,y,z],axis=-1))
+    >>> to_sph_areal_coords(pts, triangle) # doctest: +NORMALIZE_WHITESPACE
+    array([[ 0.        ,  0.01273324,  0.98726676],
+           [ 0.12972226,  0.2358742 ,  0.63440354],
+           [ 0.27122545,  0.34291999,  0.38585456],
+           [ 0.45754141,  0.35616745,  0.18629114],
+           [ 1.        ,  0.        ,  0.        ]])
+    """
+    area = xmath.spherical_triangle_area(triangle[0], triangle[1], triangle[2])
+    area_i = xmath.spherical_triangle_area(pts[:, np.newaxis],
+                                     np.roll(triangle, 1, axis=0),
+                                     np.roll(triangle, -1, axis=0))
+    return area_i/area
+
+
+
+def project_sphere(sphcoords, zfunc=np.arcsin, scale=180 / np.pi):
+    """
+    Projects 3d coordinates on the sphere onto a 2d rectangle.
+    Corresponds to a number of rectangular map projections.
+
+    Args:
+        sphcoords: An array of shape (..., 3).
+        zfunc: A function to transform the z-values on the sphere. By
+               default this is np.arcsin, which makes the projection a
+               "rectangular" map projection. Use zfunc = lambda x: x
+               for an equal-area projection, and np.arctanh for Meractor.
+        scale: A scale function, applied to both coordinates of the result.
+               By default this is 180/np.pi, to
+               transform radians into degrees.
+
+    Returns:
+        The 2d rectangular coordinates, in an array of shape (..., 2).
+        By default, returns latitude and longitude, but if zfunc is
+        specified, the second coordinate will be whatever the function
+        transforms it to be.
+
+    >>> project_sphere(np.eye(3)) # doctest: +NORMALIZE_WHITESPACE
+    array([[  0.,   0.],
+           [ 90.,   0.],
+           [  0.,  90.]])
+    """
+    # specify shape of result
+    newdim = list(sphcoords.shape)
+    newdim[-1] = 2
+    result = np.empty(newdim)
+    # populate the array
+    result[..., 0] = np.arctan2(sphcoords[..., 1],
+                                sphcoords[..., 0]) * scale
+    result[..., 1] = zfunc(sphcoords[..., 2]) * scale
     return result
 
 

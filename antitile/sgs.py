@@ -67,6 +67,52 @@ def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
     l1 = np.nonzero(index_1)[0][matches[1]]
     return l0, l1
 
+def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
+    #find redundant vertices
+    base_edges = base.edges
+    base_edge_corr, base_face_corr = base.faces_by_edge(base_edges)
+    l0 = []
+    l1 = []
+    for i in range(len(base_edges)):
+        edge = base_edges[i]
+        index = base_edge_corr == i
+        facex = base_face_corr[index]
+        fn = len(facex)
+        if fn > 2:
+            warnings.warn("More than 2 faces meet at a single edge. "
+                          "Choosing 2 faces arbitrarily...")
+            facex = facex[:2]
+        elif fn < 2:#external edge, ignore it
+            continue
+        index_0 = rbkdn.base_face == facex[0]
+        index_1 = rbkdn.base_face == facex[1]
+        lx0, lx1 = stitcher(edge, base_faces[facex], rbkdn,
+                            index_0, index_1, freq)
+        l0.extend(lx0)
+        l1.extend(lx1)
+    matches = np.stack([l0, l1], axis=-1)
+    #TODO replace this with np.unique when I update numpy
+    matches = np.array(list({tuple(sorted(t)) for t in matches}))
+    #if first one lies outside the base face, swap
+    index = rbkdn.group[matches[..., 0]] >= 100
+    matches[index] = matches[index, ::-1]
+    vno = len(rbkdn)
+    #unique_index = np.ones(vno, dtype=bool) #FIXME do need to do this first
+    #unique_index[matches[..., 1]] = False
+    conns = sparse.coo_matrix((np.ones(len(matches)),
+                               (matches[:, 0], matches[:, 1])),
+                              shape=(vno, vno))
+    ncp, cp = sparse.csgraph.connected_components(conns)
+    verts = np.arange(vno, dtype=int)
+    #verts[unique_index] = np.arange(unique_index.sum())
+    for i in range(ncp):
+        component = cp == i
+        v = verts[component].min()#FIXME this may pick the wrong vertex
+        verts[component] = v
+    unique_index = verts == np.arange(len(verts))
+    renumbered = xmath.renumber(unique_index)
+    return renumbered[verts], unique_index
+
 def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     projections = projection.PROJECTIONS[proj]
     faces_dict = base.faces_by_size
@@ -99,50 +145,8 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     arrays = [bf, group, coord, lindex, vertices]
     rbkdn = xmath.recordify(names, arrays)
     faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
-    #find redundant vertices
-    base_edges = base.edges
-    base_edge_corr, base_face_corr = base.faces_by_edge(base_edges)
-    l0 = []
-    l1 = []
-    for i in range(len(base_edges)):
-        edge = base_edges[i]
-        index = base_edge_corr == i
-        facex = base_face_corr[index]
-        fn = len(facex)
-        if fn > 2:
-            warnings.warn("More than 2 faces meet at a single edge. "
-                          "Choosing 2 faces arbitrarily...")
-            facex = facex[:2]
-        elif fn < 2:#external edge, ignore it
-            continue
-        index_0 = rbkdn.base_face == facex[0]
-        index_1 = rbkdn.base_face == facex[1]
-        lx0, lx1 = stitcher(edge, base_faces[facex], rbkdn,
-                            index_0, index_1, freq)
-        l0.extend(lx0)
-        l1.extend(lx1)
-        #TODO
-    matches = np.stack([l0, l1], axis=-1)
-    matches.sort(axis=-1)
-    #TODO replace this with np.unique when I update numpy
-    matches = np.array(list({tuple(t) for t in matches}))
-    #if first one lies outside the base face, swap
-    index = rbkdn.group[matches[..., 0]] >= 100
-    matches[index] = matches[index, ::-1]
-    vno = len(rbkdn)
-    unique_index = np.ones(vno, dtype=bool)
-    unique_index[matches[..., 1]] = False
-
-    conns = sparse.coo_matrix((np.ones(len(matches)),
-                              (matches[:, 0], matches[:, 1])),
-                              shape=(vno, vno))
-    ncp, cp = sparse.csgraph.connected_components(conns)
-    verts = np.zeros(vno, dtype=int)
-    verts[unique_index] = np.arange(unique_index.sum())
-    for i in range(ncp):
-        component = cp == i
-        v = verts[component & unique_index].min()
-        verts[component] = v
+    verts, unique_index = _find_dupe_verts(base, base_faces,
+                                           rbkdn, freq, stitcher)
 
     rbkdn = rbkdn[unique_index]
     faces = tiling.remove_dupes(verts[faces])
@@ -155,22 +159,44 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
         base_face = base_faces[i]
         vbf = base.vertices[base_face]
         rbkdn.vertices[index] = proj_fun(rbkdn[index], vbf, freq, tweak)
-    #proj_fun(bkdn, abc, freq, k)
     result = tiling.Tiling(rbkdn.vertices, faces)
     result.group = group
     result.base_face = bf
     return result
 
+def face_color_bf(poly):
+    faces = poly.faces
+    bf = np.array(poly.base_face)
+    result = []
+    for face in faces:
+        face = np.array(face)
+        fbf = bf[face]
+        counts = np.bincount(fbf)
+        maxcount = counts.max()
+        index = (counts == maxcount)
+        if index.sum() > 1:
+            result.append(255)
+        else:
+            result.append(int(np.argwhere(index)))
+    return np.array(result)
+
+
+def face_color_group(poly, fn=max):
+    faces = poly.faces
+    group = np.array(poly.group)
+    result = []
+    for face in faces:
+        face = np.array(face)
+        fbf = group[face]
+        result.append(fn(fbf))
+    return np.array(result)
+
+
 #--Stuff having to do with naive slerp and the k-factor--
 def parallels(poly, base, exact=True):
-    #This is only ever going to be used with equilateral faces,
-    #so center = normal.
-    #FIXME base.faces is a list of lists, not an array
     normals = base.face_normals[poly.base_face]
     parallel = parallel_exact if exact else parallel_approx
-    parallel_xyz = parallel(poly.vertices, normals)
-    #xyz = poly.vertices
-    return parallel_xyz
+    return parallel(poly.vertices, normals)
 
 def parallel_sphere(xyz, pls, k=1):
     return xyz + k*pls
@@ -200,7 +226,7 @@ def parallel_approx(pts, normal):
     return q[..., np.newaxis] * normal
 
 def optimize_k(poly, base, measure, exact=True, normalize=True):
-    parallel_xyz = parallel_sphere(poly, base, exact)
+    parallel_xyz = parallels(poly, base, exact)
     result = minimize_scalar(objective, bracket=[0, 1],
                              args=(poly, parallel_xyz, measure, normalize))
     if ~result.success:
@@ -209,7 +235,6 @@ def optimize_k(poly, base, measure, exact=True, normalize=True):
 
 def objective(k, poly, parallel_xyz, measure, normalize=True):
     test_v = parallel_sphere(poly.vertices, parallel_xyz, k)
-    test_v = xmath.normalize(test_v)
     if normalize:
         test_v = xmath.normalize(test_v)
     elif ~normalize and normalize is not None:
@@ -219,59 +244,25 @@ def objective(k, poly, parallel_xyz, measure, normalize=True):
     #if it's None, don't normalize at all
     return measure(test_v, poly)
 
-#In most of these, only triangle faces are considered (since naive slerp is
-#the only one that optimizes k, and naive slerp only operates on triangles)
-def energy(xyz, poly, exponent=1, over=None):
+#measures
+def energy(xyz, poly):
     """Energy of the vertex arrangement, as defined in
     Thomson's problem."""
-    dists = xmath.distance(xyz[np.newaxis], xyz[:, np.newaxis])
-    vertex_energy = 1/dists**exponent
-    index = np.diag_indices_from(dists)
-    vertex_energy[index] = 0
-    return vertex_energy.sum(axis=over)/2
-
-def fill_ratio(xyz, poly):
-    """Fill ratio of the grid"""
-    faces = np.array(poly.faces_by_size[3])
-    face_volume = np.abs(np.linalg.det(xyz[faces]))
-    return 1 - face_volume.sum()/(8*np.pi)
+    return tiling.energy(xyz)
 
 def edge_length(xyz, poly, spherical=False):
-    """Length of each edge in the grid"""
-    if spherical:
-        dist = xmath.spherical_distance
-    else:
-        dist = xmath.distance
-    edges = poly.edges
-    x = xyz[edges]
-    result = dist(x[:, 0], x[:, 1])
+    result = tiling.edge_length(xyz, poly.edges, spherical)
     return result.max()/result.min()
 
 def face_area(xyz, poly, spherical=False):
-    """Area of each face"""
-    if spherical:
-        area = xmath.spherical_triangle_area
-    else:
-        area = xmath.triangle_area
-    faces = np.array(poly.faces_by_size[3])
-    x = xyz[faces]
-    result = area(x[:, 0], x[:, 1], x[:, 2])
+    result = tiling.face_area(xyz, poly, spherical)
     return result.max()/result.min()
 
 def aspect_ratio(xyz, poly, spherical=False):
-    """Ratio of longest edge to shortest edge for each triangle"""
-    if spherical:
-        dist = xmath.spherical_distance
-    else:
-        dist = xmath.distance
-    faces = np.array(poly.faces_by_size[3])
-    x = xyz[faces]
-    y = dist(x, np.roll(x, 1, axis=1))
-    result = y.max(axis=-1)/y.min(axis=-1)
+    result = tiling.aspect_ratio(xyz, poly, spherical)
     return result.max()/result.min()
 
 MEASURES = {'energy': energy,
-            'fill': fill_ratio,
             'edges': edge_length,
             'aspect': aspect_ratio,
             'faces': face_area,

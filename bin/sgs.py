@@ -4,8 +4,9 @@
 Subdivide a tiling or polyhedra using a similar grid
 """
 import argparse
+import numpy as np
 from sys import stdin
-from antitile import sgs, off, tiling, xmath
+from antitile import sgs, off, tiling, xmath, projection
 
 DESCRIPTION = """Similar grid subdivision: subdivide a tiling or
 polyhedron with a grid of similar triangles or squares."""
@@ -38,6 +39,10 @@ TWEAK = """Makes a tweak to certian methods. For triangular naive slerp, uses
 approximate parallels instead of exact. For triangular gc, changes weights in
 the vertex calculation. May produce a (slightly) different vertex positioning,
 and (very slightly) reduce runtime."""
+COLOR = """Color vertices by base face and faces by group,
+instead of vice versa"""
+
+
 def nonnegativeint(string, lowest=0):
     x = int(string)
     if x < lowest:
@@ -57,13 +62,13 @@ def main():
     parser.add_argument("-b", help=FREQ_B, default=0,
                         type=nonnegativeint)
     parser.add_argument("-p", '--projection', default='flat', help=PROJ,
-                        choices=['flat', 'slerp', 'areal', 'gc'])
+                        choices=projection.PROJECTIONS)
     parser.add_argument("-n", "--no_normalize", action="store_true",
                         help="Don't normalize vertices onto the unit sphere")
-    parser.add_argument("-k", default=1, help=ADJ,
-                        choices=['energy', 'fill', 'edges', 'aspect', 'faces',
-                                 'angle', 'angle_aspect', 'solid_angle'])
+    parser.add_argument("-k", default=1, help=ADJ, choices=sgs.MEASURES)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
+    parser.add_argument("--color", action="store_true",
+                        help=COLOR)
 
     args = parser.parse_args()
     frequency = (args.a, args.b)
@@ -83,10 +88,26 @@ def main():
                 k = sgs.optimize_k(poly, base, sgs.MEASURES[args.k],
                                    ~args.tweak, ~args.no_normalize)
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
-            print('#k = ', k)
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
-        print(off.write_off(poly.vertices, poly.faces))
+        if args.color:
+            facecolor = sgs.face_color_group(poly).astype(int) + 100
+            vertcolor = poly.base_face
+        else:
+            facecolor = sgs.face_color_bf(poly)
+            vertcolor = poly.group.astype(int) + 100
+        fx = list(poly.faces) + list(range(len(poly.vertices)))
+        colors = list(facecolor) + list(vertcolor)
+        print(off.write_off(poly.vertices, fx, colors))
+        print('#frequency =', frequency)
+        if args.filename:
+            print('#input file =', args.filename)
+        print('#projection =', args.projection)
+        if args.projection == 'slerp':
+            print('#k =', k)
+        if args.projection in ('slerp', 'gc'):
+            print('#tweak =', args.tweak)
+        print('#normalized =', not args.no_normalize)
 
 if __name__ == "__main__":
     main()

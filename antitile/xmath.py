@@ -8,73 +8,19 @@ from numpy.linalg import norm
 import pandas as pd
 
 def line_intersection(a1, a2, b1, b2):
+    """Finds the point in the plane that lies at the intersection of the
+    line from a1 to a2 and the line from b1 to b2."""
     a1x, a1y = a1[..., 0], a1[..., 1]
     a2x, a2y = a2[..., 0], a2[..., 1]
     b1x, b1y = b1[..., 0], b1[..., 1]
     b2x, b2y = b2[..., 0], b2[..., 1]
-    
-    
+
+
     numx = (a1x*a2y - a1y*a2x)*(b1x - b2x) - (b1x*b2y - b1y*b2x)*(a1x - a2x)
     numy = (a1x*a2y - a1y*a2x)*(b1y - b2y) - (b1x*b2y - b1y*b2x)*(a1y - a2y)
     denom = (a1x-a2x)*(b1y-b2y) - (a1y-a2y)*(b1x-b2x)
     num = np.stack([numx, numy], axis=-1)
     return num/denom[..., np.newaxis]
-
-#def square_to_quad(xy, abcd):
-#    """Transforms a square in [0,1]^2 to a (possibly skew) quadrilateral
-#    defined by abcd.
-#
-#    Args:
-#        xy: The 2d coordinates of the point. Last element of shape should be 2.
-#            If not, treated like xy[..., :2]: the values in xy[..., 2:] are
-#            ignored.
-#        abcd: The coordinates of the quadrilateral. Should be in
-#            counterclockwise order to maintain orientation. First element of
-#            shape should be 4.
-#    Returns:
-#        Coordinates in whatever space abcd was defined in."""
-#    a, b, c, d = abcd[0], abcd[1], abcd[2], abcd[3]
-#    x, y = xy[..., 0], xy[..., 1]
-#    return a + (b-a)*x + (d-a)*y + (a-b+c-d)*x*y
-#
-#def square_to_sphquad(xy, abcd):
-#    """Transforms a square in [0,1]^2 to a spherical quadrilateral
-#    defined by abcd.
-#
-#    Args:
-#        xy: The 2d coordinates of the point. Last element of shape should be 2.
-#            If not, treated like xy[..., :2]: the values in xy[..., 2:] are
-#            ignored.
-#        abcd: The coordinates of the quadrilateral. Should be in
-#            counterclockwise order to maintain orientation. Shape should be
-#            (4, ..., 3)
-#    Returns:
-#        Coordinates on the sphere."""
-#    a, b, c, d = abcd[0], abcd[1], abcd[2], abcd[3]
-#    x, y = xy[..., 0], xy[..., 1]
-#    ab = slerp(a, b, x)
-#    dc = slerp(d, c, x)
-#    return slerp(ab, dc, y)
-
-def spherical_to_xyz(phi, theta):
-    """Converts spherical coordinates to 3d xyz coordinates"""
-    return np.array([np.sin(phi) * np.cos(theta), # pylint: disable=no-member
-                     np.sin(phi) * np.sin(theta),
-                     np.cos(phi)]).T
-
-def lambert(disk):
-    """Converts coordinates on the disk to spherical coordinates, using
-    the Lambert azimuthal equal-area projection."""
-    theta = np.arctan2(disk[..., 1], disk[..., 0])
-    phi = 2*np.arcsin(norm(disk, axis=-1))
-    return phi, theta
-
-def equidistant(disk):
-    """Converts coordinates on the disk to spherical coordinates, using
-    the azimuthal equal-distance projection."""
-    theta = np.arctan2(disk[..., 1], disk[..., 0])
-    phi = norm(disk, axis=-1)*np.pi
-    return phi, theta
 
 
 def record_initialize(shape, dtype, default_bool=False,
@@ -140,7 +86,7 @@ def recordify(names, arrays):
 
 
 def renumber(in_array, fill=-1):
-    """Renumbers an index of a subarray given by the boolean array c.
+    """Renumbers an index of a subarray given by the boolean array inarray.
     (This will probably make more sense if you look at the doctest.)
 
     Arguments:
@@ -204,7 +150,7 @@ def slerp(pt1, pt2, intervals, axis=-1):
            [ 0.       ,  0.       ,  1.       ]])
     """
     t = intervals
-    a = np.arccos(np.sum(pt1 * pt2, axis=axis, keepdims=True))    
+    a = spherical_distance(pt1, pt2)[..., np.newaxis]
     return (np.sin((1 - t)*a)*pt1 + np.sin((t)*a)*pt2)/np.sin(a)
 
 
@@ -314,9 +260,9 @@ def spherical_distance(x, y):
     >>> spherical_distance(x,y)/np.pi*180 # doctest: +NORMALIZE_WHITESPACE
     array([  0.,  60.,  90.,  60.,   0.])
     """
-    # technically this is not the most numerically sound way to do this.
-    # if issues arise, can change it.
-    return np.arccos(np.clip(np.sum(x * y, axis=-1), -1, 1))
+    cos = np.sum(x*y, axis=-1)
+    sin = norm(np.cross(x, y), axis=-1)
+    return np.arctan(sin/cos)
 
 
 def spherical_triangle_area(a, b, c):
@@ -337,10 +283,16 @@ def spherical_triangle_area(a, b, c):
     >>> np.round(spherical_triangle_area(a, b, c), 4)
     array([ 1.5708,  1.231 ,  0.    ,  1.231 ,  1.5708])
     """
+    #Van Oosterom, A; Strackee, J (1983). "The Solid Angle of a Plane
+    #Triangle". IEEE Trans. Biom. Eng. BME-30 (2): 125–126.
+    #doi:10.1109/TBME.1983.325207.
     top = np.abs(triple_product(a, b, c))
-    bottom = (1 + np.sum(a * b, axis=-1)
-                + np.sum(b * c, axis=-1)
-                + np.sum(c * a, axis=-1))
+    na = norm(a, axis=-1)
+    nb = norm(a, axis=-1)
+    nc = norm(a, axis=-1)
+    bottom = (na*nb*nc + np.sum(a * b, axis=-1)*nc
+                + np.sum(b * c, axis=-1)*na
+                + np.sum(c * a, axis=-1)*nb)
     return 2 * (np.arctan(top / bottom) % np.pi)
 
 
@@ -367,110 +319,3 @@ def spherical_bearing(origin, destination, pole=np.array([0, 0, 1])):
     cos_theta = np.sum(c_1 * c_2, axis=-1)
     sin_theta = triple_product(origin, destination, pole)
     return np.arctan2(sin_theta, cos_theta)
-
-def to_sph_areal_coords(pts, triangle):
-    """Given a triangle and pts within that triangle, returns the
-    spherical areal coordinates of the pts with respect to the triangle.
-    >>> triangle = np.eye(3)
-    >>> triangle[2,1] = 1
-    >>> triangle = normalize(triangle)
-    >>> x = np.linspace(0,1,5)
-    >>> z = np.linspace(0.7,0,5)
-    >>> y = np.sqrt(1-x**2-z**2)
-    >>> pts = normalize(np.stack([x,y,z],axis=-1))
-    >>> to_sph_areal_coords(pts, triangle) # doctest: +NORMALIZE_WHITESPACE
-    array([[ 0.        ,  0.01273324,  0.98726676],
-           [ 0.12972226,  0.2358742 ,  0.63440354],
-           [ 0.27122545,  0.34291999,  0.38585456],
-           [ 0.45754141,  0.35616745,  0.18629114],
-           [ 1.        ,  0.        ,  0.        ]])
-    """
-    area = spherical_triangle_area(triangle[0], triangle[1], triangle[2])
-    area_i = spherical_triangle_area(pts[:, np.newaxis],
-                                     np.roll(triangle, 1, axis=0),
-                                     np.roll(triangle, -1, axis=0))
-    return area_i/area
-
-def from_sph_areal_coords(beta, triangle):
-    """Given a triangle and spherical areal coordinates, returns the vectors
-    cooresponding to those coordinates.
-
-    Args:
-        beta: spherical areal coordinates
-        triangle: vertices of the spherical triangle in a 3x3 array
-
-    Returns: Points on the sphere
-
-    >>> beta = np.array([[ 1, 0.8, 0.6, 0.4, 0.2, 0.0 ],
-    ...                  [ 0, 0.2, 0.2, 0.2, 0.5, 0.5 ],
-    ...                  [ 0, 0.0, 0.2, 0.4, 0.3, 0.5 ]]).T
-    >>> triangle = np.eye(3)
-    >>> triangle[2,1] = 1
-    >>> triangle = normalize(triangle)
-    >>> from_sph_areal_coords(beta, triangle) # doctest: +NORMALIZE_WHITESPACE
-    array([[ 1.        ,  0.        ,  0.        ],
-           [ 0.97123031,  0.23814214,  0.        ],
-           [ 0.87887868,  0.44073244,  0.18255735],
-           [ 0.68229421,  0.63250197,  0.3666277 ],
-           [ 0.37935999,  0.88556406,  0.26807143],
-           [ 0.        ,  0.92387953,  0.38268343]])
-    """
-    area = spherical_triangle_area(triangle[0], triangle[1], triangle[2])
-    area_i = beta * area
-    triangle_iplus1 = np.roll(triangle, -1, axis=0)
-    triangle_iplus2 = np.roll(triangle, 1, axis=0)
-    #FIXME whytf is this commented statement not equivalent to below?
-#    L = ((1 + np.cos(area_i))[:, np.newaxis]*
-#         np.cross(triangle_iplus1, triangle_iplus2) -
-#         np.sin(area_i)[:, np.newaxis]*
-#         (triangle_iplus1 + triangle_iplus2)).transpose((0,2,1))
-    L0 = ((1 + np.cos(area_i[..., 0]))[..., np.newaxis]*
-          np.cross(triangle[1], triangle[2]) -
-          np.sin(area_i[..., 0])[..., np.newaxis]*
-          (triangle[1] + triangle[2]))
-    L1 = ((1 + np.cos(area_i[..., 1]))[..., np.newaxis]*
-          np.cross(triangle[2], triangle[0]) -
-          np.sin(area_i[..., 1])[..., np.newaxis]*
-          (triangle[2] + triangle[0]))
-    L2 = ((1 + np.cos(area_i[..., 2]))[..., np.newaxis]*
-          np.cross(triangle[0], triangle[1]) -
-          np.sin(area_i[..., 2])[..., np.newaxis]*
-          (triangle[0] + triangle[1]))
-    L = np.stack([L0, L1, L2], axis=-2)
-    h = np.sin(area_i)*(1 + np.sum(triangle_iplus1*triangle_iplus2, axis=-1))
-    return np.linalg.solve(L, h)
-
-def project_sphere(sphcoords, zfunc=np.arcsin, scale=180 / np.pi):
-    """
-    Projects 3d coordinates on the sphere onto a 2d rectangle.
-
-    Args:
-        sphcoords: An array of shape (..., 3).
-        zfunc: A function to transform the z-values on the sphere. By
-               default this is np.arcsin, which makes the projection a
-               "rectangular" map projection. Use zfunc = lambda x: x
-               for an equal-area projection, and np.arctanh for Meractor.
-        scale: A scale function, applied to both coordinates of the result.
-               By default this is 180/np.pi, to
-               transform radians into degrees.
-
-    Returns:
-        The 2d rectangular coordinates, in an array of shape (..., 2).
-        By default, returns latitude and longitude, but if zfunc is
-        specified, the second coordinate will be whatever the function
-        transforms it to be.
-
-    >>> project_sphere(np.eye(3)) # doctest: +NORMALIZE_WHITESPACE
-    array([[  0.,   0.],
-           [ 90.,   0.],
-           [  0.,  90.]])
-    """
-    # specify shape of result
-    newdim = list(sphcoords.shape)
-    newdim[-1] = 2
-    result = np.empty(newdim)
-    # populate the array
-    result[..., 0] = np.arctan2(sphcoords[..., 1],
-                                sphcoords[..., 0]) * scale
-    result[..., 1] = zfunc(sphcoords[..., 2]) * scale
-    return result
