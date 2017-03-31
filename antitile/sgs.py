@@ -32,7 +32,7 @@ ROLLMASK = 2**np.arange(4)
 
 def _rot_4(coord, n, freq):
     a, b = freq
-    cco = coord[..., 0] + 1j*coord[..., 1]
+    cco = xmath.float2d_to_complex(coord)
     rot_cco = cco * np.exp(1j*np.pi*n/2)
     if n == 0:
         offset = 0
@@ -43,8 +43,8 @@ def _rot_4(coord, n, freq):
     elif n == 3:
         offset = 1j
     shift_cco = rot_cco + offset
-    cxy = shift_cco * (a + b*1j)
-    lindex = np.stack([cxy.real + b, cxy.imag], axis=-1)
+    cxy = shift_cco * (a + b*1j) + b
+    lindex = xmath.complex_to_float2d(cxy)
     return lindex.astype(int)
 
 def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
@@ -97,17 +97,17 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     index = rbkdn.group[matches[..., 0]] >= 100
     matches[index] = matches[index, ::-1]
     vno = len(rbkdn)
-    #unique_index = np.ones(vno, dtype=bool) #FIXME do need to do this first
-    #unique_index[matches[..., 1]] = False
     conns = sparse.coo_matrix((np.ones(len(matches)),
                                (matches[:, 0], matches[:, 1])),
                               shape=(vno, vno))
     ncp, cp = sparse.csgraph.connected_components(conns)
     verts = np.arange(vno, dtype=int)
-    #verts[unique_index] = np.arange(unique_index.sum())
     for i in range(ncp):
-        component = cp == i
-        v = verts[component].min()#FIXME this may pick the wrong vertex
+        component = np.argwhere(cp == i).flatten()
+        gp = rbkdn.group[component]
+        order = np.argsort(gp)
+        component = component[order]
+        v = verts[component[0]]
         verts[component] = v
     unique_index = verts == np.arange(len(verts))
     renumbered = xmath.renumber(unique_index)
@@ -229,7 +229,7 @@ def optimize_k(poly, base, measure, exact=True, normalize=True):
     parallel_xyz = parallels(poly, base, exact)
     result = minimize_scalar(objective, bracket=[0, 1],
                              args=(poly, parallel_xyz, measure, normalize))
-    if ~result.success:
+    if not result.success:
         warnings.warn('Optimization routine did not converge')
     return result.x
 

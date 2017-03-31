@@ -38,16 +38,46 @@ def tri_bary(bary, abc):
     return bary.dot(abc)
 #methods for disks
 
+def bary_tri(tri, vertices):
+    """Transforms a triangle back into barycentric
+    coordinates. Only elements [..., :2] are used."""
+    afill = np.ones(vertices.shape[:-1])
+    a = np.concatenate([vertices[..., :2], afill[..., np.newaxis]], axis=-1)
+    bfill = np.ones(tri.shape[:-1])
+    b = np.concatenate([tri[..., :2], bfill[..., np.newaxis]], axis=-1)
+    #couldn't make np.linalg.solve cooperate here.
+    #this should be OK numerically
+    ainv = np.linalg.inv(a)
+    return b.dot(ainv)
+
 def square_to_circle(xy, rotation=1):#np.exp(1j*np.pi/4)):
     """Transforms square on [0,1]^2 to unit circle"""
-    pts = xy*2-1
+    pts = 2*xy - 1
     r = np.max(np.abs(pts), axis=-1)
     theta = np.arctan2(pts[..., 1], pts[..., 0])
-    cx = r*np.exp(1j*theta)*rotation
-    return np.stack([cx.real, cx.imag], axis=-1)
+    result = r*np.exp(1j*theta)*rotation
+    return xmath.complex_to_float2d(result)
 
-#tri_naive_slerp transforms triangles to disk when base_pts are on a
-#great circle
+TRI_C = np.exp(2j*np.pi/3*np.arange(3))*1j
+TRI_R = xmath.complex_to_float2d(TRI_C)
+
+def tri_to_circle(beta, rotation=1, pts=TRI_C):
+    """Transforms triangle in barycentric coordinates to unit circle.
+    tri_naive_slerp also does this when the pts are on a great circle,
+    with somewhat different results."""
+    tri_pts = beta.dot(pts)
+    angle = np.angle(tri_pts)
+    r = 1 - 3*beta.min(axis=-1)
+    result = r*np.exp(1j*angle)
+    return xmath.complex_to_float2d(result)
+
+def _sq_cir(bkdn, abc, freq, tweak):
+    return square_to_quad(square_to_circle(bkdn.coord), abc)
+
+
+def _tri_cir(bkdn, abc, freq, tweak):
+    rebary = bary_tri(tri_to_circle(bkdn.coord), TRI_R)
+    return tri_bary(rebary, abc)
 
 #disk -> sphere
 
@@ -304,10 +334,14 @@ GC = {3: lambda bkdn, abc, freq, tweak:
       4: lambda bkdn, abc, freq, tweak:
           square_intersections(bkdn.lindex, abc, freq)}
 
+DISK = {3: _tri_cir,
+        4: _sq_cir}
+
 PROJECTIONS = {'flat':  FLAT,
                'slerp': SLERP,
                'areal': AREAL,
-               'gc':    GC}
+               'gc':    GC,
+               'disk':  DISK}
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt

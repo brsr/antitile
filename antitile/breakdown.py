@@ -137,7 +137,7 @@ class Breakdown(flat.FlatTiling):
         vx = a + b*1j
         cx = self.proj_complex
         xy = cx/vx
-        self.coord = np.stack([xy.real, xy.imag], axis=-1)
+        self.coord = xmath.complex_to_float2d(xy)
 
         #linear index coordinates
         u = x + b

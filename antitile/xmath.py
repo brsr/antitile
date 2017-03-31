@@ -7,6 +7,14 @@ import numpy as np
 from numpy.linalg import norm
 import pandas as pd
 
+def complex_to_float2d(arr):
+    """Converts a complex array to a multidimensional float array."""
+    return arr.view(float).reshape(list(arr.shape) + [-1])
+
+def float2d_to_complex(arr):
+    """Converts a multidimensional float array to a complex array."""
+    return arr.view(complex)
+
 def line_intersection(a1, a2, b1, b2):
     """Finds the point in the plane that lies at the intersection of the
     line from a1 to a2 and the line from b1 to b2."""

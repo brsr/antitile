@@ -14,8 +14,8 @@ EPILOG = """To use on a non-spherical polyhedron or tiling,
 specify -n -p=flat"""
 FREQ_A = """First breakdown frequency. Default is 2."""
 FREQ_B = """Second breakdown frequency. Default is 0."""
-PROJ = """Projection family. Default is flat.
-areal is only valid on triangular faces."""
+PROJ = """Projection family. Default is flat. areal is only valid on
+    triangular faces. disk is only valid on dihedra."""
 #    May be:
 #        flat: Flat subdivision of each face (Method 1 in geodesic dome jargon)
 #        slerp: Spherical linear interpolation (or related method)
@@ -25,7 +25,8 @@ areal is only valid on triangular faces."""
 ADJ = """Projection constant for the triangular naive slerp projections.
 May be a float or a string from the list below. If a string is given, it
 will optimize k based on the specified measurement of the polyhedron.
-Ignored unless -p=slerp and the grid has triangular faces. Default is 1. """
+Ignored unless -p=slerp and the grid has triangular faces or -p=disk.
+Default is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
@@ -53,6 +54,11 @@ def nonnegativeint(string, lowest=0):
 def posint(string):
     return nonnegativeint(string, 1)
 
+def kparser(string):
+    if string in sgs.MEASURES:
+        return string
+    else:
+        return float(string)
 
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION, epilog=EPILOG)
@@ -65,7 +71,7 @@ def main():
                         choices=projection.PROJECTIONS)
     parser.add_argument("-n", "--no_normalize", action="store_true",
                         help="Don't normalize vertices onto the unit sphere")
-    parser.add_argument("-k", default=1, help=ADJ, choices=sgs.MEASURES)
+    parser.add_argument("-k", default=1, help=ADJ, type=kparser)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
     parser.add_argument("--color", action="store_true",
                         help=COLOR)
@@ -81,10 +87,11 @@ def main():
             vertices, faces, fc, e, ec, v, vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
         poly = sgs.subdiv(base, frequency, args.projection, args.tweak)
-        if args.projection == 'slerp':
+        if args.projection in ('slerp', 'disk'):
             try:
                 k = float(args.k)
             except ValueError:
+                #FIXME why doesn't this work
                 k = sgs.optimize_k(poly, base, sgs.MEASURES[args.k],
                                    ~args.tweak, ~args.no_normalize)
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
