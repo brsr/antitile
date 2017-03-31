@@ -8,7 +8,7 @@ Under construction.
     pip3 install git+git://github.com/brsr/antitile.git
 
 ## Usage
-There are currently 3 scripts included with this package:
+There are currently 4 scripts included with this package:
 * `view_off.py` : A viewer for OFF files using matplotlib.
 * `balloon.py` : Balloon tiling of the sphere
 * `sgs.py` : Similar grid subdivision of tilings
