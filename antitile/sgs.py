@@ -32,6 +32,7 @@ ROLLMASK = 2**np.arange(4)
 
 def _rot_4(coord, n, freq):
     a, b = freq
+    coord = coord.astype(float)
     cco = xmath.float2d_to_complex(coord)
     rot_cco = cco * np.exp(1j*np.pi*n/2)
     if n == 0:
@@ -58,11 +59,11 @@ def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
     offset = np.array([a+2*b, b])#from 0,0 to a,b
     lindices = _rot_4(bkdn_0.coord, roll[0], freq)
     flipped = offset - _rot_4(bkdn_1.coord, roll[-1], freq)
-    print(lindices[(bkdn_0.group == 0) | (bkdn_0.group == 1)])
-    print(flipped[(bkdn_1.group == 0) | (bkdn_1.group == 1)])
-    print('-')
-    matches = np.nonzero(np.all(lindices[:, np.newaxis] ==
-                                flipped[np.newaxis], axis=-1))
+    #print(lindices[(bkdn_0.group == 0) | (bkdn_0.group == 1)])
+    #print(flipped[(bkdn_1.group == 0) | (bkdn_1.group == 1)])
+    #print('-')
+    matches = np.argwhere(np.all(lindices[:, np.newaxis] ==
+                                 flipped[np.newaxis], axis=-1)).T
     l0 = np.nonzero(index_0)[0][matches[0]]
     l1 = np.nonzero(index_1)[0][matches[1]]
     return l0, l1
@@ -94,7 +95,7 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     #TODO replace this with np.unique when I update numpy
     matches = np.array(list({tuple(sorted(t)) for t in matches}))
     #if first one lies outside the base face, swap
-    index = rbkdn.group[matches[..., 0]] >= 100
+    index = rbkdn.group[matches[..., 0]] >= 200
     matches[index] = matches[index, ::-1]
     vno = len(rbkdn)
     conns = sparse.coo_matrix((np.ones(len(matches)),
@@ -192,13 +193,17 @@ def face_color_group(poly, fn=max):
     return np.array(result)
 
 
-#--Stuff having to do with naive slerp and the k-factor--
+#--Stuff having to do with the k-factor--
 def parallels(poly, base, exact=True):
+    """Given a subdivided polyhedron based on a base polyhedron, return
+    the parallels to the base faces for each vertex in the polyhedron
+    that would put the vertices onto the sphere"""
     normals = base.face_normals[poly.base_face]
     parallel = parallel_exact if exact else parallel_approx
     return parallel(poly.vertices, normals)
 
 def parallel_sphere(xyz, pls, k=1):
+    """Given vertices and parallels, return points on sphere"""
     return xyz + k*pls
 
 def parallel_exact(pts, normal):

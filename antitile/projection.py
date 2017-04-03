@@ -72,7 +72,7 @@ def tri_to_circle(beta, rotation=1, pts=TRI_C):
     return xmath.complex_to_float2d(result)
 
 def _sq_cir(bkdn, abc, freq, tweak):
-    return square_to_quad(square_to_circle(bkdn.coord), abc)
+    return square_to_quad(square_to_circle(bkdn.coord)[:, np.newaxis], abc)
 
 
 def _tri_cir(bkdn, abc, freq, tweak):

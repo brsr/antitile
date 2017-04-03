@@ -4,7 +4,6 @@
 Subdivide a tiling or polyhedra using a similar grid
 """
 import argparse
-import numpy as np
 from sys import stdin
 from antitile import sgs, off, tiling, xmath, projection
 
@@ -12,6 +11,8 @@ DESCRIPTION = """Similar grid subdivision: subdivide a tiling or
 polyhedron with a grid of similar triangles or squares."""
 EPILOG = """To use on a non-spherical polyhedron or tiling,
 specify -n -p=flat"""
+FILENAME = """Input file. Reads from stdin if not given. Faces should be
+oriented counterclockwise (even for Class I and II)."""
 FREQ_A = """First breakdown frequency. Default is 2."""
 FREQ_B = """Second breakdown frequency. Default is 0."""
 PROJ = """Projection family. Default is flat. areal is only valid on
@@ -22,11 +23,11 @@ PROJ = """Projection family. Default is flat. areal is only valid on
 #        areal: Areal coordinates on the sphere (triangular faces only)
 #        gc: Intersection of great circles (Method 2 in geodesic dome jargon)
 #        gcv: Minor variation of gc
-ADJ = """Projection constant for the triangular naive slerp projections.
-May be a float or a string from the list below. If a string is given, it
-will optimize k based on the specified measurement of the polyhedron.
-Ignored unless -p=slerp and the grid has triangular faces or -p=disk.
-Default is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
+ADJ = """Projection constant. May be a float or a string from the list
+below. If a string is given, it will optimize k based on the specified
+measurement of the polyhedron. Ignored unless -p=disk or -p=slerp and
+the grid has triangular faces. Default is 1.
+String values can be """ + ', '.join(n for n in sgs.MEASURES)
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
@@ -36,15 +37,17 @@ Default is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
 #            sharing edges. (On a unit sphere, same as the spherical distance.)
 #        angle_aspect: Minimizes the aspect ratio of spherical triangles.
 #        solid_angle: Minimizes the difference in solid angle between faces.
-TWEAK = """Makes a tweak to certian methods. For triangular naive slerp, uses
-approximate parallels instead of exact. For triangular gc, changes weights in
-the vertex calculation. May produce a (slightly) different vertex positioning,
-and (very slightly) reduce runtime."""
-COLOR = """Color vertices by base face and faces by group,
-instead of vice versa"""
+TWEAK = """Makes a tweak to certian methods. For methods that use the
+projection constant k, uses approximate parallels instead of exact. For
+triangular gc, changes weights in the vertex calculation. May produce a
+(slightly) different vertex positioning, and (very slightly) reduce
+runtime."""
+#COLOR = """Color vertices by base face and faces by group,
+#instead of vice versa"""
 
 
 def nonnegativeint(string, lowest=0):
+    """Non-negative integer type for argparse"""
     x = int(string)
     if x < lowest:
         msg = "must be greater than or equal to {y}"
@@ -52,9 +55,11 @@ def nonnegativeint(string, lowest=0):
     return x
 
 def posint(string):
+    """Positive integer type for argparse"""
     return nonnegativeint(string, 1)
 
 def kparser(string):
+    """Parse the k-factor argument"""
     if string in sgs.MEASURES:
         return string
     else:
@@ -62,9 +67,8 @@ def kparser(string):
 
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION, epilog=EPILOG)
-    parser.add_argument("filename", nargs='?',
-                        help="Input file. Reads from stdin if not given.")
-    parser.add_argument("-a", help=FREQ_A, default=2, type=posint )
+    parser.add_argument("filename", nargs='?', help=FILENAME)
+    parser.add_argument("-a", help=FREQ_A, default=2, type=posint)
     parser.add_argument("-b", help=FREQ_B, default=0,
                         type=nonnegativeint)
     parser.add_argument("-p", '--projection', default='flat', help=PROJ,
@@ -73,8 +77,6 @@ def main():
                         help="Don't normalize vertices onto the unit sphere")
     parser.add_argument("-k", default=1, help=ADJ, type=kparser)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
-    parser.add_argument("--color", action="store_true",
-                        help=COLOR)
 
     args = parser.parse_args()
     frequency = (args.a, args.b)
@@ -84,27 +86,24 @@ def main():
             print(f.read())
     else:
         with file as f:
-            vertices, faces, fc, e, ec, v, vc = off.load_off(f)
+            vertices, faces, fc, _e, _ec, _v, _vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
         poly = sgs.subdiv(base, frequency, args.projection, args.tweak)
         if args.projection in ('slerp', 'disk'):
             try:
                 k = float(args.k)
             except ValueError:
-                #FIXME why doesn't this work
                 k = sgs.optimize_k(poly, base, sgs.MEASURES[args.k],
                                    ~args.tweak, ~args.no_normalize)
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
-        if args.color:
-            facecolor = sgs.face_color_group(poly).astype(int) + 100
-            vertcolor = poly.base_face
-        else:
-            facecolor = sgs.face_color_bf(poly)
-            vertcolor = poly.group.astype(int) + 100
-        fx = list(poly.faces) + list(range(len(poly.vertices)))
-        colors = list(facecolor) + list(vertcolor)
+        facecolor = sgs.face_color_bf(poly)
+        vertcolor = poly.group.astype(int)
+        fx = list(poly.faces)
+        fx.extend(range(len(poly.vertices)))
+        colors = list(facecolor)
+        colors.extend(vertcolor)
         print(off.write_off(poly.vertices, fx, colors))
         print('#frequency =', frequency)
         if args.filename:

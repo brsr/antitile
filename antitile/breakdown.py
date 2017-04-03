@@ -6,8 +6,7 @@ import numpy as np
 from . import flat, xmath
 
 class Breakdown(flat.FlatTiling):
-    """
-    Breakdown structures
+    """Breakdown structures
     Attributes:
         freq: A 2-tuple (n, m) describing the breakdown structure.
         shape: Either 3 (triangular) or 4 (quadrilateral)
@@ -16,16 +15,15 @@ class Breakdown(flat.FlatTiling):
             or xy coordinates if shape=4
         lindex: Linear index coordinates of each vertex
         group: An integer describing where each vertex falls.
-            -19 through -10: Inside the breakdown, lying on a feature
-            -1: Inside the breakdown, other
-            0, 1, 2, (3): Base vertices
-            10, 11, 12, (13): Base edges
-            100, 101, 102, (103): Vertices that lie outside the triangle
+            0: Inside the breakdown
+            1 through 89: Inside the breakdown, lying on a feature
+            90, 91, 92, 93: Base vertices
+            100, 101, 102, (103): Base edges
+            200, 201, 202, (203): Vertices that lie outside the triangle
                 but are adjacent to vertices within the triangle
-            127: Outside the breakdown triangle
-        faces: Array of faces in the breakdown structure
+            255: Outside the breakdown triangle
+        faces: Array of faces in the breakdown structure"""
 
-    """
     def __init__(self, a, b, shape=3, remove_outside=True):
         """
         Constructor for the breakdown object.
@@ -44,7 +42,7 @@ class Breakdown(flat.FlatTiling):
         self.freq = (a, b)
 
         vertices = self.vertices
-        group = -np.ones(len(vertices), dtype=np.int8)
+        group = np.zeros(len(vertices), dtype=np.uint8)
         self.group = group
         #adjust the vertices so we have room for the shape
         vertices[..., 0] -= b
@@ -54,7 +52,7 @@ class Breakdown(flat.FlatTiling):
         elif shape == 4:
             self._q()
 
-        cn = 111 if remove_outside else 128
+        cn = 222 if remove_outside else 256
         condition = group < cn
         # renumber the adjacency list too
         index = xmath.renumber(condition)
@@ -65,7 +63,7 @@ class Breakdown(flat.FlatTiling):
         faces = index[self.faces]
         badface = np.any(faces < 0, axis=-1)
         self.faces = faces[~badface]
-        self.base_pts = np.nonzero(np.in1d(self.group, [0,1,2,3]))[0]
+        self.base_pts = np.nonzero(np.in1d(self.group, [90, 91, 92, 93]))[0]
 
 
     def _t(self):
@@ -77,20 +75,33 @@ class Breakdown(flat.FlatTiling):
         x = vertices[:, 0]
         y = vertices[:, 1]
 
+        #featural lines
+        line1 = x == 0
+        line1_seg = y <= a
+        line2 = y == b
+        line2_seg = x >= 0     
+        line3 = y == a - x
+        line3_seg = y >= b
+        group[line1 & line1_seg] = 1
+        group[line2 & line2_seg] = 2
+        group[line3 & line3_seg] = 3
+        group[line1 & ~line1_seg] = 11
+        group[line2 & ~line2_seg] = 12
+        group[line3 & ~line3_seg] = 13
         side1 = a*y - b*x
         side2 = (a + b)*y + a*x
         side3 = (a + b)*x + b*y
-        group[side1 == 0] = 10
-        group[side2 == anorm] = 11
-        group[side3 == 0] = 12
-        group[(side1 < 0) | (side2 > anorm) | (side3 < 0)] = 127
-        group[(x == 0) & (y == 0)] = 0
-        group[(x == a) & (y == b)] = 1
-        group[(x == -b) & (y == a + b)] = 2
+        group[side1 == 0] = 100
+        group[side2 == anorm] = 101
+        group[side3 == 0] = 102
+        group[(side1 < 0) | (side2 > anorm) | (side3 < 0)] = 255
+        group[(x == 0) & (y == 0)] = 90
+        group[(x == a) & (y == b)] = 91
+        group[(x == -b) & (y == a + b)] = 92
         self._shared_group()
-        group[(group == 126) & (side1 < 0)] = 100
-        group[(group == 126) & (side2 > anorm)] = 101
-        group[(group == 126) & (side3 < 0)] = 102
+        group[(group == 250) & (side1 < 0)] = 200
+        group[(group == 250) & (side2 > anorm)] = 201
+        group[(group == 250) & (side3 < 0)] = 202
 
         # barycentric coordinates
         mat = np.array([[   -a, -b - a, anorm],
@@ -115,24 +126,42 @@ class Breakdown(flat.FlatTiling):
         #vertices of the square are (0,0), (a,b), (a-b, a+b), (-b,a)
         x = vertices[:, 0]
         y = vertices[:, 1]
+        #featural lines
+        line1 = x == 0
+        line1_seg = y <= a
+        line2 = y == b
+        line2_seg = x >= 0      
+        line3 = x == a-b
+        line3_seg = y >= b
+        line4 = y == a
+        line4_seg = x <= a - b   
+        group[line1 & line1_seg] = 1
+        group[line2 & line2_seg] = 2
+        group[line3 & line3_seg] = 3
+        group[line4 & line4_seg] = 4
+        group[line1 & ~line1_seg] = 11
+        group[line2 & ~line2_seg] = 12
+        group[line3 & ~line3_seg] = 13
+        group[line4 & ~line4_seg] = 14
+             
         right = a*y - b*x
         left = a*x + b*y
         anorm = (a**2+b**2)
-        group[right == 0] = 10
-        group[left == anorm] = 11
-        group[right == anorm] = 12
-        group[left == 0] = 13
+        group[right == 0] = 100
+        group[left == anorm] = 101
+        group[right == anorm] = 102
+        group[left == 0] = 103
         group[(right < 0) | (left > anorm) |
-              (right > anorm) | (left < 0)] = 127
-        group[(x == 0) & (y == 0)] = 0
-        group[(x == a) & (y == b)] = 1
-        group[(x == a - b) & (y == a + b)] = 2
-        group[(x == -b) & (y == a)] = 3
+              (right > anorm) | (left < 0)] = 255
+        group[(x == 0) & (y == 0)] = 90
+        group[(x == a) & (y == b)] = 91
+        group[(x == a - b) & (y == a + b)] = 92
+        group[(x == -b) & (y == a)] = 93
         self._shared_group()
-        group[(group == 126) & (right < 0)] = 100
-        group[(group == 126) & (left < anorm)] = 101
-        group[(group == 126) & (right > anorm)] = 102
-        group[(group == 126) & (left > 0)] = 103
+        group[(group == 250) & (right < 0)] = 200
+        group[(group == 250) & (left < anorm)] = 201
+        group[(group == 250) & (right > anorm)] = 202
+        group[(group == 250) & (left > 0)] = 203
         # xy [0,1]^2 coordinates
         vx = a + b*1j
         cx = self.proj_complex
@@ -147,11 +176,11 @@ class Breakdown(flat.FlatTiling):
     def _shared_group(self):
         group = self.group
         faces = self.faces
-        inside = np.nonzero(group < 0)[0]
+        inside = np.nonzero(group < 90)[0]
         fv_inside = np.in1d(faces, inside).reshape(faces.shape)
         face_inside = np.any(fv_inside, axis=-1)
         shared = np.unique(faces[face_inside])
-        group[shared] = np.fmin(group[shared], 126)
+        group[shared] = np.fmin(group[shared], 250)
 
 def frame(n=4, m=2, shape=3):
     if shape == 3:
