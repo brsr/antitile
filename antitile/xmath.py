@@ -158,7 +158,7 @@ def slerp(pt1, pt2, intervals, axis=-1):
            [ 0.       ,  0.       ,  1.       ]])
     """
     t = intervals
-    a = spherical_distance(pt1, pt2)[..., np.newaxis]
+    a = central_angle(pt1, pt2)[..., np.newaxis]
     return (np.sin((1 - t)*a)*pt1 + np.sin((t)*a)*pt2)/np.sin(a)
 
 
@@ -252,12 +252,13 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
     return np.arctan2(x, d)
 
 
-def spherical_distance(x, y):
-    """Spherical distance, i.e. central angle, between vectors.
+def central_angle(x, y):
+    """Central angle between vectors with respect to 0. If vectors have norm 
+    1, this is the spherical distance between them.
     Args:
         x, y: Coordinates of points on the sphere.
         axis: Which axis the vectors lie along. By default, -1.
-    Returns: Array of spherical distances.
+    Returns: Array of central angles.
 
     >>> t = np.linspace(0,np.pi,5)
     >>> c = np.cos(t)
@@ -265,7 +266,7 @@ def spherical_distance(x, y):
     >>> z = np.zeros(t.shape)
     >>> x = np.stack((c,s,z),axis=-1)
     >>> y = np.stack((c,z,s),axis=-1)
-    >>> spherical_distance(x,y)/np.pi*180 # doctest: +NORMALIZE_WHITESPACE
+    >>> central_angle(x,y)/np.pi*180 # doctest: +NORMALIZE_WHITESPACE
     array([  0.,  60.,  90.,  60.,   0.])
     """
     cos = np.sum(x*y, axis=-1)
@@ -273,22 +274,22 @@ def spherical_distance(x, y):
     return np.arctan(sin/cos)
 
 
-def spherical_triangle_area(a, b, c):
-    """Spherical area, i.e. solid angle, of a triangle. Note there are two
-    areas defined by three points on a sphere: inside the triangle and
-    outside it. This will always return the smaller of the two. (The other
+def triangle_solid_angle(a, b, c):
+    """Solid angle of a triangle with respect to 0. If vectors have norm 1, 
+    this is the spherical area. Note there are two solid angles defined by 
+    three points: this will always return the smaller of the two. (The other
     is 4*pi minus what this function returns.)
 
     Args:
         a, b, c: Coordinates of points on the sphere.
 
-    Returns: Array of spherical areas.
+    Returns: Array of solid angles.
 
     >>> t = np.linspace(0,np.pi,5)
     >>> a = np.stack([np.cos(t), np.sin(t), np.zeros(5)],axis=-1)
     >>> b = np.array([0,1,1])/np.sqrt(2)
     >>> c = np.array([0,-1,1])/np.sqrt(2)
-    >>> np.round(spherical_triangle_area(a, b, c), 4)
+    >>> np.round(triangle_solid_angle(a, b, c), 4)
     array([ 1.5708,  1.231 ,  0.    ,  1.231 ,  1.5708])
     """
     #Van Oosterom, A; Strackee, J (1983). "The Solid Angle of a Plane
@@ -296,8 +297,8 @@ def spherical_triangle_area(a, b, c):
     #doi:10.1109/TBME.1983.325207.
     top = np.abs(triple_product(a, b, c))
     na = norm(a, axis=-1)
-    nb = norm(a, axis=-1)
-    nc = norm(a, axis=-1)
+    nb = norm(b, axis=-1)
+    nc = norm(c, axis=-1)
     bottom = (na*nb*nc + np.sum(a * b, axis=-1)*nc
                 + np.sum(b * c, axis=-1)*na
                 + np.sum(c * a, axis=-1)*nb)

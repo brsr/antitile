@@ -31,9 +31,10 @@ ROLLMAP = np.array([3, 6, 12, 9])
 ROLLMASK = 2**np.arange(4)
 
 def _rot_4(coord, n, freq):
+    n = n%4
     a, b = freq
     coord = coord.astype(float)
-    cco = xmath.float2d_to_complex(coord)
+    cco = xmath.float2d_to_complex(coord).flatten()
     rot_cco = cco * np.exp(1j*np.pi*n/2)
     if n == 0:
         offset = 0
@@ -46,7 +47,7 @@ def _rot_4(coord, n, freq):
     shift_cco = rot_cco + offset
     cxy = shift_cco * (a + b*1j) + b
     lindex = xmath.complex_to_float2d(cxy)
-    return lindex.astype(int)
+    return np.round(lindex).astype(int)
 
 def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
     #FIXME
@@ -55,7 +56,7 @@ def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
     bkdn_1 = bkdn[index_1]
     #first figure out how to roll the shapes so they meet at the edge
     notedge = np.in1d(bf, edge).reshape(bf.shape).dot(ROLLMASK)
-    roll = np.nonzero(ROLLMAP[np.newaxis] == notedge[..., np.newaxis])[1]
+    roll = -np.nonzero(ROLLMAP[np.newaxis] == notedge[..., np.newaxis])[1]
     offset = np.array([a+2*b, b])#from 0,0 to a,b
     lindices = _rot_4(bkdn_0.coord, roll[0], freq)
     flipped = offset - _rot_4(bkdn_1.coord, roll[-1], freq)

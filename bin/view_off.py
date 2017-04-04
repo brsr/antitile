@@ -5,9 +5,10 @@ Visualizes OFF files using matplotlib, which allows for export to png, svg,
 etc.
 """
 import argparse
+from sys import stdin
 import numpy as np
 import matplotlib.pyplot as plt
-from geogrid.off import load_off
+from antitile.off import load_off
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 
@@ -96,8 +97,9 @@ def impute_color(colors, default):
 def main():
     parser = argparse.ArgumentParser(description="Visualize an OFF file "
                                                  "using matplotlib.")
-    parser.add_argument("infile", help="OFF file to visualize")
-    parser.add_argument("outfile", nargs="?", help="File to save image to. "
+    parser.add_argument("infile", nargs="?", help="OFF file to visualize."
+                        "If not specified, reads from stdin.")
+    parser.add_argument("-o", "--outfile", help="File to save image to. "
                         "If not specified, will display on screen.")
     parser.add_argument("-a", "--azim", type=float, default=30,
                         help="Viewing azimuth")
@@ -118,7 +120,9 @@ def main():
                         "color indexes (default: mpl default)")
 
     args = parser.parse_args()
-    x = load_off(args.infile)
+    file = open(args.infile) if args.infile else stdin
+    with file as f:
+        x = load_off(f)
     vertices, faces, facecolors, edges, edgecolors, verts, vertexcolors = x
     facecolors = impute_color(facecolors, args.color_face)
     edgecolors = impute_color(edgecolors, args.color_edge)
@@ -131,7 +135,6 @@ def main():
     else:
         vis_faces(ax, vertices, faces, facecolors,
                   edgecolors=args.color_edge, cmap=args.cmap)
-
     if args.outfile:
         plt.savefig(args.outfile, bbox_inches='tight', pad_inches=0,
                     facecolor='none')

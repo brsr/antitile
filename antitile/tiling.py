@@ -143,7 +143,7 @@ def center_of_gravity(xyz):
 def edge_length(xyz, edges, spherical=False):
     """Length of each edge in the grid"""
     if spherical:
-        dist = xmath.spherical_distance
+        dist = xmath.central_angle
     else:
         dist = xmath.distance
     x = xyz[edges]
@@ -152,8 +152,9 @@ def edge_length(xyz, edges, spherical=False):
 
 def face_area(xyz, poly, spherical=False):
     """Area of each face"""
+    #FIXME this is inconsistent for skew faces
     if spherical:
-        area = xmath.spherical_triangle_area
+        area = xmath.triangle_solid_area
     else:
         area = xmath.triangle_area
     result = np.zeros(len(poly.faces))
@@ -172,7 +173,7 @@ def face_area(xyz, poly, spherical=False):
 def aspect_ratio(xyz, poly, spherical=False):
     """Ratio of longest edge to shortest edge for each face"""
     if spherical:
-        dist = xmath.spherical_distance
+        dist = xmath.central_angle
     else:
         dist = xmath.distance
     result = np.ones(len(poly.faces))

@@ -77,17 +77,18 @@ class Breakdown(flat.FlatTiling):
 
         #featural lines
         line1 = x == 0
-        line1_seg = y <= a
+        line1_seg = y <= max(a,b)
         line2 = y == b
-        line2_seg = x >= 0     
+        line2_seg = x >= (0 if a > b else a-b)     
         line3 = y == a - x
-        line3_seg = y >= b
+        line3_seg = y >= min(a,b)
         group[line1 & line1_seg] = 1
         group[line2 & line2_seg] = 2
         group[line3 & line3_seg] = 3
-        group[line1 & ~line1_seg] = 11
-        group[line2 & ~line2_seg] = 12
-        group[line3 & ~line3_seg] = 13
+        if a == b:
+            group[line1 & ~line1_seg] = 11
+            group[line2 & ~line2_seg] = 12
+            group[line3 & ~line3_seg] = 13
         side1 = a*y - b*x
         side2 = (a + b)*y + a*x
         side3 = (a + b)*x + b*y
