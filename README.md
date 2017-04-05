@@ -27,6 +27,10 @@ Visualize a Goldberg polyhedron, with color:
 Canonical form (no skew faces) of a quadrilateral-faced similar grid subdivision polyhedron:
 
     sgs.py -a 5 -b 3 cube.off | canonical | view_off.py
+    
+Quadrilateral balloon polyhedra kinda look like a peeled coconut:
+
+    balloon.py 8 -pq | view_off.py
 
 ## For Contributors
 This code makes heavy use of vectorized operations on NumPy multidimensional arrays, which are honestly pretty impenetrable until you get familiar with them. (And, uh, even after that.) I use the convention that the last axis of an array specifies the spatial coordinates:
