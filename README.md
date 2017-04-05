@@ -29,7 +29,7 @@ Canonical form (no skew faces) of a quadrilateral-faced similar grid subdivision
 
     sgs.py -a 5 -b 3 cube.off | canonical | view_off.py
     
-Quadrilateral balloon polyhedra kinda look like a peeled coconut:
+A quadrilateral balloon polyhedra, which happens to resemble a peeled coconut:
 
     balloon.py 8 -pq | view_off.py
 
