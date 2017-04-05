@@ -7,14 +7,14 @@ Manipulation of polyhedra and tilings using Python. This package is designed to 
 
 ## Usage
 There are currently 4 programs included with this package:
-* `view_off.py`: A viewer for OFF files using matplotlib.
-* `balloon.py`: Balloon tiling of the sphere
 * `sgs.py`: Similar grid subdivision of tilings
-* `sgsstats.py`: Statistics of SGS tilings (see also `off_report` in Antiprism)
+* `balloon.py`: Balloon tiling of the sphere
+* `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
+* `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 
-These can be chained together with programs from Antiprism.
+These can be piped together with programs from Antiprism.
 
-OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-point dihedra are included (although where Python puts them may depend on your system).
+OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-edged dihedra are included in the `data` folder in the source.
 
 ## Examples
 Statistics of a geodesic polyhedron (created using what geodesic dome people call Method 1):
