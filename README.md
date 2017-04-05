@@ -10,15 +10,16 @@ There are currently 4 programs included with this package:
 * `view_off.py`: A viewer for OFF files using matplotlib.
 * `balloon.py`: Balloon tiling of the sphere
 * `sgs.py`: Similar grid subdivision of tilings
-* `sgsstats.py`: Statistics of SGS tilings
+* `sgsstats.py`: Statistics of SGS tilings (see also `off_report` in Antiprism)
+
 These can be chained together with programs from Antiprism.
 
 OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-point dihedra are included (although where Python puts them may depend on your system).
 
 ## Examples
-Statistics of a geodesic polyhedron (using what geodesic dome people call Method 1):
+Statistics of a geodesic polyhedron (created using what geodesic dome people call Method 1):
 
-	sgs.py -a 5 -b 3 icosahedron.off | sgsstats.py
+    sgs.py -a 5 -b 3 icosahedron.off | sgsstats.py
 
 Visualize a Goldberg polyhedron, with color:
 
