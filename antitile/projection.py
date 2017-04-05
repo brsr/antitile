@@ -50,6 +50,7 @@ def bary_tri(tri, vertices):
     ainv = np.linalg.inv(a)
     return b.dot(ainv)
 
+
 def square_to_circle(xy, rotation=1):#np.exp(1j*np.pi/4)):
     """Transforms square on [0,1]^2 to unit circle"""
     pts = 2*xy - 1
@@ -71,9 +72,14 @@ def tri_to_circle(beta, rotation=1, pts=TRI_C):
     result = r*np.exp(1j*angle)
     return xmath.complex_to_float2d(result)
 
+SQ_C = np.array([1, 1j, -1, -1j])
+SQ_R = xmath.complex_to_float2d(SQ_C)
+
 def _sq_cir(bkdn, abc, freq, tweak):
-    #FIXME this is hella broken
-    return square_to_quad(square_to_circle(bkdn.coord)[:, np.newaxis], abc)
+    sc = square_to_circle(bkdn.coord)
+    sc2 = sc/np.sqrt(2) + 0.5
+    result = square_to_quad(sc2[:, np.newaxis], abc)
+    return result
 
 
 def _tri_cir(bkdn, abc, freq, tweak):
@@ -107,13 +113,8 @@ def equidistant(disk):
 #triangles -> spherical triangle
 
 def tri_naive_slerp(bary, base_pts):
-    omegas = xmath.spherical_distance(base_pts, np.roll(base_pts, 1, axis=0))
-    max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
-    if not np.isclose(max_diff, 0):
-        raise ValueError("naive_slerp used with non-equilateral face. " +
-                         "Difference is " + str(max_diff) + " radians.")
-    omega = omegas[0]
-    b = np.sin(omega * bary) / np.sin(omega)
+    angle = xmath.central_angle_equilateral(base_pts)
+    b = np.sin(angle * bary) / np.sin(angle)
     return b.dot(base_pts)
 
 def tri_areal(beta, triangle):
@@ -141,7 +142,7 @@ def tri_areal(beta, triangle):
            [ 0.        ,  0.92387953,  0.38268343]])
     """
     triangle = xmath.normalize(triangle)
-    area = xmath.spherical_triangle_area(triangle[0], triangle[1], triangle[2])
+    area = xmath.triangle_solid_angle(triangle[0], triangle[1], triangle[2])
     area_i = beta * area
     triangle_iplus1 = np.roll(triangle, -1, axis=0)
     triangle_iplus2 = np.roll(triangle, 1, axis=0)
@@ -211,6 +212,20 @@ def tri_intersections(lindex, base_pts, freq, tweak=False):
 
 
 #squares -> spherical quadrilateral
+def square_naive_slerp(xy, base_pts):
+    angle = xmath.central_angle_equilateral(base_pts)
+    x, y = xy[..., 0], xy[..., 1]
+    sx = np.sin(x*angle)
+    sy = np.sin(y*angle)    
+    scx = np.sin((1-x)*angle)
+    scy = np.sin((1-y)*angle)
+    a = scx * scy
+    b = sx * scy
+    c = sx * sy
+    d = scx * sy
+    mat = np.stack([a, b, c, d], axis=-1) / np.sin(angle)**2
+    return mat.dot(base_pts)
+
 def square_slerp(xy, abcd):
     """Transforms a square in [0,1]^2 to a spherical quadrilateral
     defined by abcd, using spherical linear interpolation
@@ -224,6 +239,9 @@ def square_slerp(xy, abcd):
             (4, ..., 3)
     Returns:
         Coordinates on the sphere."""
+    #FIXME returns coordinates off the sphere.
+    #square_slerp(xy, abcd) == square_slerp(xy[:,::-1], abcd[[0,3,2,1]]) ?
+    #if not, what can we do to make it isotropic?
     a, b, c, d = abcd[0], abcd[1], abcd[2], abcd[3]
     x, y = xy[..., 0], xy[..., 1]
     ab = xmath.slerp(a, b, x)
@@ -326,9 +344,11 @@ FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
 
 SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
-             square_slerp(bkdn.coord[:, np.newaxis], abc)}
+             square_naive_slerp(bkdn.coord, abc)}
 
-AREAL = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc)}
+OTHER = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc),
+         4: lambda bkdn, abc, freq, tweak:
+             square_slerp(bkdn.coord[:, np.newaxis], abc)}
 
 GC = {3: lambda bkdn, abc, freq, tweak:
             tri_intersections(bkdn.lindex, abc, freq, tweak),
@@ -340,7 +360,7 @@ DISK = {3: _tri_cir,
 
 PROJECTIONS = {'flat':  FLAT,
                'slerp': SLERP,
-               'areal': AREAL,
+               'other': OTHER,
                'gc':    GC,
                'disk':  DISK}
 

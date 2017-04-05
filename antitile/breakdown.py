@@ -75,11 +75,13 @@ class Breakdown(flat.FlatTiling):
         x = vertices[:, 0]
         y = vertices[:, 1]
 
+
         #featural lines
+        q = a - b        
         line1 = x == 0
         line1_seg = y <= max(a,b)
         line2 = y == b
-        line2_seg = x >= (0 if a > b else a-b)     
+        line2_seg = x >= min(0,q)     
         line3 = y == a - x
         line3_seg = y >= min(a,b)
         group[line1 & line1_seg] = 1
@@ -128,23 +130,24 @@ class Breakdown(flat.FlatTiling):
         x = vertices[:, 0]
         y = vertices[:, 1]
         #featural lines
+        q = a - b
         line1 = x == 0
-        line1_seg = y <= a
+        line1_seg = y <= max(a,b)
         line2 = y == b
-        line2_seg = x >= 0      
+        line2_seg = x >= min(0,q)      
         line3 = x == a-b
-        line3_seg = y >= b
+        line3_seg = y >= min(a,b)
         line4 = y == a
-        line4_seg = x <= a - b   
+        line4_seg = x <= max(0,q)  
         group[line1 & line1_seg] = 1
         group[line2 & line2_seg] = 2
         group[line3 & line3_seg] = 3
         group[line4 & line4_seg] = 4
-        group[line1 & ~line1_seg] = 11
-        group[line2 & ~line2_seg] = 12
-        group[line3 & ~line3_seg] = 13
-        group[line4 & ~line4_seg] = 14
-             
+        if a == b:             
+            group[line1 & ~line1_seg] = 11
+            group[line2 & ~line2_seg] = 12
+            group[line3 & ~line3_seg] = 13
+            group[line4 & ~line4_seg] = 14             
         right = a*y - b*x
         left = a*x + b*y
         anorm = (a**2+b**2)

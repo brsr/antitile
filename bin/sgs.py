@@ -25,9 +25,8 @@ PROJ = """Projection family. Default is flat. areal is only valid on
 #        gcv: Minor variation of gc
 ADJ = """Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
-measurement of the polyhedron. Ignored unless -p=disk or -p=slerp and
-the grid has triangular faces. Default is 1.
-String values can be """ + ', '.join(n for n in sgs.MEASURES)
+measurement of the polyhedron. Ignored unless -p=disk or slerp. Default 
+is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.

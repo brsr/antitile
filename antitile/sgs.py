@@ -160,7 +160,8 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
         index = (rbkdn.base_face == i)
         base_face = base_faces[i]
         vbf = base.vertices[base_face]
-        rbkdn.vertices[index] = proj_fun(rbkdn[index], vbf, freq, tweak)
+        rbkdn_i = rbkdn[index]
+        rbkdn.vertices[index] = proj_fun(rbkdn_i, vbf, freq, tweak)
     result = tiling.Tiling(rbkdn.vertices, faces)
     result.group = group
     result.base_face = bf

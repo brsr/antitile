@@ -146,6 +146,15 @@ def normalize(vectors, axis=-1):
     return np.where(n <= 0, 0, vectors / n)
 
 
+def central_angle_equilateral(pts):
+    omegas = central_angle(pts, np.roll(pts, 1, axis=0))
+    max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
+    if not np.isclose(max_diff, 0):
+        raise ValueError("naive_slerp used with non-equilateral face. " +
+                         "Difference is " + str(max_diff) + " radians.")
+    return omegas[0]
+
+
 def slerp(pt1, pt2, intervals, axis=-1):
     """Spherical linear interpolation.
     >>> x = np.array([1,0,0])
@@ -158,8 +167,8 @@ def slerp(pt1, pt2, intervals, axis=-1):
            [ 0.       ,  0.       ,  1.       ]])
     """
     t = intervals
-    a = central_angle(pt1, pt2)[..., np.newaxis]
-    return (np.sin((1 - t)*a)*pt1 + np.sin((t)*a)*pt2)/np.sin(a)
+    angle = central_angle(pt1, pt2)[..., np.newaxis]
+    return (np.sin((1 - t)*angle)*pt1 + np.sin((t)*angle)*pt2)/np.sin(angle)
 
 
 def lerp(pt1, pt2, intervals):
@@ -252,7 +261,7 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
     return np.arctan2(x, d)
 
 
-def central_angle(x, y):
+def central_angle(x, y, signed=False):
     """Central angle between vectors with respect to 0. If vectors have norm 
     1, this is the spherical distance between them.
     Args:
@@ -271,7 +280,11 @@ def central_angle(x, y):
     """
     cos = np.sum(x*y, axis=-1)
     sin = norm(np.cross(x, y), axis=-1)
-    return np.arctan(sin/cos)
+    result = np.arctan2(sin, cos)
+    if signed:
+        return result
+    else:
+        return abs(result)
 
 
 def triangle_solid_angle(a, b, c):
