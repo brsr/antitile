@@ -23,10 +23,13 @@ class Tiling:
 
     @property
     def face_size(self):
+        """Size of each face in tiling"""
         return np.array([len(x) for x in self.faces])
 
     @property
     def faces_by_size(self):
+        """Faces in tiling, grouped by size and converted into
+        numpy arrays."""
         result = dict()
         for face in self.faces:
             x = len(face)
@@ -52,14 +55,6 @@ class Tiling:
             normal = np.cross(a,b).sum(axis=-2)
             result[index] = normal
         return xmath.normalize(result)
-
-    @property
-    def vertex_adjacency(self):
-        return NotImplemented
-
-    @property
-    def face_adjacency(self):
-        return NotImplemented
 
 
     def faces_by_edge(self, edges):
@@ -87,6 +82,36 @@ class Tiling:
                 ex.append(edge_face[0])
                 fx.append(face_no[edge_face[1]])
         return np.concatenate(ex), np.concatenate(fx)
+
+    @property
+    def vertex_adjacency(self):
+        """Vertex adjacency matrix"""
+        edges = self.edges
+        redges = np.concatenate([edges, edges[:, ::-1]], axis=0)
+        n_r = len(redges)
+        n = len(self.vertices)
+        return sparse.coo_matrix((np.ones(n_r), (redges[:, 0], redges[:, 1])),
+                                 shape=(n, n))
+
+    @property
+    def face_adjacency(self):
+        """Face adjacency matrix"""
+        edges = self.edges
+        ex, fx = self.faces_by_edge(edges)
+        faceadj = {}
+        for i in range(len(edges)):
+            index = ex == i
+            these_faces = fx[index]
+            for j in range(len(these_faces) - 1):
+                faceadj.add((these_faces[j - 1], these_faces[j]))
+        faceadj = faceadj.union( (x[1], x[0]) for x in faceadj)
+        faceadj = np.array(list(faceadj))
+        rface = np.concatenate([faceadj, faceadj[:, ::-1]], axis=0)
+        n_r = len(rface)
+        n = len(self.faces)
+        return sparse.coo_matrix((np.ones(n_r),
+                                  (faceadj[:, 0], faceadj[:, 1])),
+                                 shape=(n, n))
 
 def edges_from_facelist(faces):
     """Given a list of faces, returns a list of edges."""
@@ -140,6 +165,23 @@ def energy(xyz, exponent=1, over=None):
 def center_of_gravity(xyz):
     return np.linalg.norm(xyz.mean(axis=0))
 
+def bentness(xyz, poly):
+    """Bentness of faces: how far away from planar they are. Faces with 3
+    vertices (or less) inherently have bentness 0."""
+    fs = poly.face_size
+    fd = poly.faces_by_size
+    result = np.zeros(len(fs))
+    for i in fd:
+        if i <= 3:
+            continue
+        index = fs == i
+        faces = fd[i]
+        a = xyz[faces]
+        centered_a = a - np.mean(a, axis=1, keepdims=True)
+        sv = np.linalg.svd(centered_a, compute_uv=False)
+        result[index] = sv[..., 2]/(sv[..., :2].sum(axis=-1))
+    return result
+
 def edge_length(xyz, edges, spherical=False):
     """Length of each edge in the grid"""
     if spherical:
@@ -154,7 +196,7 @@ def face_area(xyz, poly, spherical=False):
     """Area of each face"""
     #FIXME this is inconsistent for skew faces
     if spherical:
-        area = xmath.triangle_solid_area
+        area = xmath.triangle_solid_angle
     else:
         area = xmath.triangle_area
     result = np.zeros(len(poly.faces))

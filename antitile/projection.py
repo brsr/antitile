@@ -7,20 +7,20 @@ import numpy as np
 from . import xmath, breakdown
 
 #generic methods, valid on any-d, any shape
-def square_to_quad(xy, abcd):
+def square_to_quad(xy, base_pts):
     """Transforms a square in [0,1]^2 to a (possibly skew) quadrilateral
-    defined by abcd.
+    defined by base_pts.
 
     Args:
         xy: The 2d coordinates of the point. Last element of shape should be 2.
             If not, treated like xy[..., :2]: the values in xy[..., 2:] are
             ignored.
-        abcd: The coordinates of the quadrilateral. Should be in
+        base_pts: The coordinates of the quadrilateral. Should be in
             counterclockwise order to maintain orientation. First element of
             shape should be 4.
     Returns:
-        Coordinates in whatever space abcd was defined in."""
-    a, b, c, d = abcd[0], abcd[1], abcd[2], abcd[3]
+        Coordinates in whatever space base_pts was defined in."""
+    a, b, c, d = base_pts[0], base_pts[1], base_pts[2], base_pts[3]
     x, y = xy[..., 0], xy[..., 1]
     return a + (b-a)*x + (d-a)*y + (a-b+c-d)*x*y
 
@@ -117,23 +117,23 @@ def tri_naive_slerp(bary, base_pts):
     b = np.sin(angle * bary) / np.sin(angle)
     return b.dot(base_pts)
 
-def tri_areal(beta, triangle):
+def tri_areal(beta, base_pts):
     """Given a triangle and spherical areal coordinates, returns the vectors
     cooresponding to those coordinates.
 
     Args:
         beta: spherical areal coordinates
-        triangle: vertices of the spherical triangle in a 3x3 array
+        base_pts: vertices of the spherical triangle in a 3x3 array
 
     Returns: Points on the sphere
 
     >>> beta = np.array([[ 1, 0.8, 0.6, 0.4, 0.2, 0.0 ],
     ...                  [ 0, 0.2, 0.2, 0.2, 0.5, 0.5 ],
     ...                  [ 0, 0.0, 0.2, 0.4, 0.3, 0.5 ]]).T
-    >>> triangle = np.eye(3)
-    >>> triangle[2,1] = 1
-    >>> triangle = normalize(triangle)
-    >>> from_sph_areal_coords(beta, triangle) # doctest: +NORMALIZE_WHITESPACE
+    >>> base_pts = np.eye(3)
+    >>> base_pts[2,1] = 1
+    >>> base_pts = normalize(base_pts)
+    >>> from_sph_areal_coords(beta, base_pts) # doctest: +NORMALIZE_WHITESPACE
     array([[ 1.        ,  0.        ,  0.        ],
            [ 0.97123031,  0.23814214,  0.        ],
            [ 0.87887868,  0.44073244,  0.18255735],
@@ -141,30 +141,30 @@ def tri_areal(beta, triangle):
            [ 0.37935999,  0.88556406,  0.26807143],
            [ 0.        ,  0.92387953,  0.38268343]])
     """
-    triangle = xmath.normalize(triangle)
-    area = xmath.triangle_solid_angle(triangle[0], triangle[1], triangle[2])
+    base_pts = xmath.normalize(base_pts)
+    area = xmath.triangle_solid_angle(base_pts[0], base_pts[1], base_pts[2])
     area_i = beta * area
-    triangle_iplus1 = np.roll(triangle, -1, axis=0)
-    triangle_iplus2 = np.roll(triangle, 1, axis=0)
+    base_pts_iplus1 = np.roll(base_pts, -1, axis=0)
+    base_pts_iplus2 = np.roll(base_pts, 1, axis=0)
     #FIXME whytf is this commented statement not equivalent to below?
 #    L = ((1 + np.cos(area_i))[:, np.newaxis]*
-#         np.cross(triangle_iplus1, triangle_iplus2) -
+#         np.cross(base_pts_iplus1, base_pts_iplus2) -
 #         np.sin(area_i)[:, np.newaxis]*
-#         (triangle_iplus1 + triangle_iplus2)).transpose((0,2,1))
+#         (base_pts_iplus1 + base_pts_iplus2)).transpose((0,2,1))
     L0 = ((1 + np.cos(area_i[..., 0]))[..., np.newaxis]*
-          np.cross(triangle[1], triangle[2]) -
+          np.cross(base_pts[1], base_pts[2]) -
           np.sin(area_i[..., 0])[..., np.newaxis]*
-          (triangle[1] + triangle[2]))
+          (base_pts[1] + base_pts[2]))
     L1 = ((1 + np.cos(area_i[..., 1]))[..., np.newaxis]*
-          np.cross(triangle[2], triangle[0]) -
+          np.cross(base_pts[2], base_pts[0]) -
           np.sin(area_i[..., 1])[..., np.newaxis]*
-          (triangle[2] + triangle[0]))
+          (base_pts[2] + base_pts[0]))
     L2 = ((1 + np.cos(area_i[..., 2]))[..., np.newaxis]*
-          np.cross(triangle[0], triangle[1]) -
+          np.cross(base_pts[0], base_pts[1]) -
           np.sin(area_i[..., 2])[..., np.newaxis]*
-          (triangle[0] + triangle[1]))
+          (base_pts[0] + base_pts[1]))
     L = np.stack([L0, L1, L2], axis=-2)
-    h = np.sin(area_i)*(1 + np.sum(triangle_iplus1*triangle_iplus2, axis=-1))
+    h = np.sin(area_i)*(1 + np.sum(base_pts_iplus1*base_pts_iplus2, axis=-1))
     return np.linalg.solve(L, h)
 
 def triangles_method2(lindex, base_pts, freq):
@@ -216,7 +216,7 @@ def square_naive_slerp(xy, base_pts):
     angle = xmath.central_angle_equilateral(base_pts)
     x, y = xy[..., 0], xy[..., 1]
     sx = np.sin(x*angle)
-    sy = np.sin(y*angle)    
+    sy = np.sin(y*angle)
     scx = np.sin((1-x)*angle)
     scy = np.sin((1-y)*angle)
     a = scx * scy
@@ -226,36 +226,44 @@ def square_naive_slerp(xy, base_pts):
     mat = np.stack([a, b, c, d], axis=-1) / np.sin(angle)**2
     return mat.dot(base_pts)
 
-def square_slerp(xy, abcd):
+def square_naive_slerp_2(xy, base_pts):
+    angle = xmath.central_angle_equilateral(base_pts)
+    x, y = xy[..., 0], xy[..., 1]
+    a = (1-x)*(1-y)
+    b = x*(1-y)
+    c = x*y
+    d = (1-x)*y
+    mat = np.sin(np.stack([a, b, c, d], axis=-1)*angle) / np.sin(angle)
+    return mat.dot(base_pts)
+
+def square_slerp(xy, base_pts):
     """Transforms a square in [0,1]^2 to a spherical quadrilateral
-    defined by abcd, using spherical linear interpolation
+    defined by base_pts, using spherical linear interpolation
 
     Args:
         xy: The 2d coordinates of the point. Last element of shape should be 2.
             If not, treated like xy[..., :2]: the values in xy[..., 2:] are
             ignored.
-        abcd: The coordinates of the quadrilateral. Should be in
+        base_pts: The coordinates of the quadrilateral. Should be in
             counterclockwise order to maintain orientation. Shape should be
             (4, ..., 3)
     Returns:
         Coordinates on the sphere."""
-    #FIXME returns coordinates off the sphere.
-    #square_slerp(xy, abcd) == square_slerp(xy[:,::-1], abcd[[0,3,2,1]]) ?
-    #if not, what can we do to make it isotropic?
-    a, b, c, d = abcd[0], abcd[1], abcd[2], abcd[3]
+    #FIXME not symmetric on irregular faces
+    a, b, c, d = base_pts[0], base_pts[1], base_pts[2], base_pts[3]
     x, y = xy[..., 0], xy[..., 1]
     ab = xmath.slerp(a, b, x)
     dc = xmath.slerp(d, c, x)
     result = xmath.slerp(ab, dc, y)
     return result
 
-def square_intersections(lindex, abcd, freq):
+def square_intersections(lindex, base_pts, freq):
     """Transforms a square to a spherical quadrilateral using the method of
     intersections"""
     n, m = freq
     preframe = breakdown.frame_square(n, m)
     frame = square_slerp(preframe[..., np.newaxis, :],
-                         abcd[:, np.newaxis, np.newaxis, np.newaxis])
+                         base_pts[:, np.newaxis, np.newaxis, np.newaxis])
     gc_normals = np.cross(frame[..., 0, :], frame[..., 1, :])
     index = np.arange(2)
     pairs = gc_normals[index, lindex[:, index]]
@@ -265,13 +273,13 @@ def square_intersections(lindex, abcd, freq):
     # test to see if the points are on the correct side of the sphere
     # take the dot product of these vectors with the center of the
     # base face. if it's positive, it's right, if not, negate it
-    center = np.sum(abcd, axis=0)#don't need to normalize this
+    center = np.sum(base_pts, axis=0)#don't need to normalize this
     sign_correct = np.sum(center*ptx, axis=-1, keepdims=True) >= 0
     result = np.where(sign_correct, ptx, -ptx)
-    result[(lindex[:, 0] == b)     & (lindex[:, 1] == 0)] = abcd[0]
-    result[(lindex[:, 0] == a + b) & (lindex[:, 1] == b)] = abcd[1]
-    result[(lindex[:, 0] == a)     & (lindex[:, 1] == a + b)] = abcd[2]
-    result[(lindex[:, 0] == 0)     & (lindex[:, 1] == a)] = abcd[3]
+    result[(lindex[:, 0] == b)     & (lindex[:, 1] == 0)] = base_pts[0]
+    result[(lindex[:, 0] == a + b) & (lindex[:, 1] == b)] = base_pts[1]
+    result[(lindex[:, 0] == a)     & (lindex[:, 1] == a + b)] = base_pts[2]
+    result[(lindex[:, 0] == 0)     & (lindex[:, 1] == a)] = base_pts[3]
 
     return result
 
@@ -346,6 +354,10 @@ SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
              square_naive_slerp(bkdn.coord, abc)}
 
+SLERP2 = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
+         4: lambda bkdn, abc, freq, tweak:
+             square_naive_slerp_2(bkdn.coord, abc)}
+
 OTHER = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
              square_slerp(bkdn.coord[:, np.newaxis], abc)}
@@ -359,10 +371,13 @@ DISK = {3: _tri_cir,
         4: _sq_cir}
 
 PROJECTIONS = {'flat':  FLAT,
-               'slerp': SLERP,
+               'nslerp': SLERP,
+               'nslerp2': SLERP2,
                'other': OTHER,
                'gc':    GC,
                'disk':  DISK}
+
+PARALLEL = ['nslerp', 'nslerp2', 'disk']
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
@@ -370,17 +385,17 @@ if __name__ == "__main__":
 
     a, b = 2, 1
     bkdn = breakdown.Breakdown(a, b, 'q')
-    abcd = xmath.normalize(np.array([[1, 1, 1],
+    base_pts = xmath.normalize(np.array([[1, 1, 1],
                                      [1, -1, 1],
                                      [-1, -1, 1],
                                      [-1, 1, 1]]))
-    borders = xmath.slerp(abcd[:, np.newaxis],
-                          np.roll(abcd, -1, axis=0)[:, np.newaxis],
+    borders = xmath.slerp(base_pts[:, np.newaxis],
+                          np.roll(base_pts, -1, axis=0)[:, np.newaxis],
                           np.linspace(0, 1)[:, np.newaxis]).reshape((-1, 3))
 
-    sq1 = xmath.normalize(square_to_quad(bkdn.coord[:, np.newaxis], abcd))
-    sqslerp = xmath.normalize(square_slerp(bkdn.coord[:, np.newaxis], abcd))
-    sq2 = xmath.normalize(square_intersections(bkdn.lindex, abcd, (a, b)))
+    sq1 = xmath.normalize(square_to_quad(bkdn.coord[:, np.newaxis], base_pts))
+    sqslerp = xmath.normalize(square_slerp(bkdn.coord[:, np.newaxis], base_pts))
+    sq2 = xmath.normalize(square_intersections(bkdn.lindex, base_pts, (a, b)))
     badsq2 = np.linalg.norm(sq2, axis=-1) < 1E-6
     sq2[badsq2] = sq1[badsq2]
     #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)

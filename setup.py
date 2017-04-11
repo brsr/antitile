@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name='antitile',
-      version='20170405',
+      version='20170411',
       description='Tiling subdivision scripts, for use with Antiprism',
       url='http://github.com/brsr/antitile',
       author='B R S Recht',

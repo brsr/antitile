@@ -29,6 +29,7 @@ def stitch_3(edge, bf, bkdn, index_0, index_1, freq):
                    #0, 1,  2, 3
 ROLLMAP = np.array([3, 6, 12, 9])
 ROLLMASK = 2**np.arange(4)
+ROLLOFFSET = [0, 1, 1+1j, 1j]
 
 def _rot_4(coord, n, freq):
     n = n%4
@@ -36,21 +37,12 @@ def _rot_4(coord, n, freq):
     coord = coord.astype(float)
     cco = xmath.float2d_to_complex(coord).flatten()
     rot_cco = cco * np.exp(1j*np.pi*n/2)
-    if n == 0:
-        offset = 0
-    elif n == 1:
-        offset = 1
-    elif n == 2:
-        offset = 1+1j
-    elif n == 3:
-        offset = 1j
-    shift_cco = rot_cco + offset
+    shift_cco = rot_cco + ROLLOFFSET[n]
     cxy = shift_cco * (a + b*1j) + b
     lindex = xmath.complex_to_float2d(cxy)
     return np.round(lindex).astype(int)
 
 def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
-    #FIXME
     a, b = freq
     bkdn_0 = bkdn[index_0]
     bkdn_1 = bkdn[index_1]
@@ -96,8 +88,8 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     #TODO replace this with np.unique when I update numpy
     matches = np.array(list({tuple(sorted(t)) for t in matches}))
     #if first one lies outside the base face, swap
-    index = rbkdn.group[matches[..., 0]] >= 200
-    matches[index] = matches[index, ::-1]
+    #index = rbkdn.group[matches[..., 0]] >= 200
+    #matches[index] = matches[index, ::-1]
     vno = len(rbkdn)
     conns = sparse.coo_matrix((np.ones(len(matches)),
                                (matches[:, 0], matches[:, 1])),
@@ -168,6 +160,7 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     return result
 
 def face_color_bf(poly):
+    #TODO refactor
     faces = poly.faces
     bf = np.array(poly.base_face)
     result = []
@@ -185,6 +178,7 @@ def face_color_bf(poly):
 
 
 def face_color_group(poly, fn=max):
+    #TODO refactor    
     faces = poly.faces
     group = np.array(poly.group)
     result = []
@@ -233,14 +227,16 @@ def parallel_approx(pts, normal):
     return q[..., np.newaxis] * normal
 
 def optimize_k(poly, base, measure, exact=True, normalize=True):
+    """Routine to optimize the factor k"""
     parallel_xyz = parallels(poly, base, exact)
-    result = minimize_scalar(objective, bracket=[0, 1],
+    result = minimize_scalar(objective, bracket=[0, 2],
                              args=(poly, parallel_xyz, measure, normalize))
     if not result.success:
         warnings.warn('Optimization routine did not converge')
     return result.x
 
 def objective(k, poly, parallel_xyz, measure, normalize=True):
+    """Objective function for the optimization routine"""
     test_v = parallel_sphere(poly.vertices, parallel_xyz, k)
     if normalize:
         test_v = xmath.normalize(test_v)
@@ -257,19 +253,31 @@ def energy(xyz, poly):
     Thomson's problem."""
     return tiling.energy(xyz)
 
+def bentness(xyz, poly):
+    """Measure: face bentness. Optimizes the max in the tiling, 
+    not the ratio of max to min."""
+    return tiling.bentness(xyz, poly).max()
+
 def edge_length(xyz, poly, spherical=False):
+    """Measure: edge length. Optimizes the ratio of max to min 
+    in the tiling."""
     result = tiling.edge_length(xyz, poly.edges, spherical)
     return result.max()/result.min()
 
 def face_area(xyz, poly, spherical=False):
+    """Measure: face area. Optimizes the ratio of max to min
+    in the tiling."""
     result = tiling.face_area(xyz, poly, spherical)
     return result.max()/result.min()
 
 def aspect_ratio(xyz, poly, spherical=False):
+    """Measure: aspect ratio. Optimizes the ratio of max to min
+    in the tiling."""
     result = tiling.aspect_ratio(xyz, poly, spherical)
     return result.max()/result.min()
 
 MEASURES = {'energy': energy,
+            'bent': bentness,
             'edges': edge_length,
             'aspect': aspect_ratio,
             'faces': face_area,

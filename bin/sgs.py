@@ -25,8 +25,8 @@ PROJ = """Projection family. Default is flat. areal is only valid on
 #        gcv: Minor variation of gc
 ADJ = """Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
-measurement of the polyhedron. Ignored unless -p=disk or slerp. Default 
-is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
+measurement of the polyhedron. Ignored unless -p=disk, nslerp, or nslerp2.
+Default is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
@@ -88,12 +88,13 @@ def main():
             vertices, faces, fc, _e, _ec, _v, _vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
         poly = sgs.subdiv(base, frequency, args.projection, args.tweak)
-        if args.projection in ('slerp', 'disk'):
-            try:
-                k = float(args.k)
-            except ValueError:
-                k = sgs.optimize_k(poly, base, sgs.MEASURES[args.k],
+        if args.projection in projection.PARALLEL:
+            if args.k in sgs.MEASURES:
+                measure = sgs.MEASURES[args.k]
+                k = sgs.optimize_k(poly, base, measure,
                                    ~args.tweak, ~args.no_normalize)
+            else:
+                k = float(args.k)
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
@@ -108,9 +109,9 @@ def main():
         if args.filename:
             print('#input file =', args.filename)
         print('#projection =', args.projection)
-        if args.projection == 'slerp':
+        if args.projection in projection.PARALLEL:
             print('#k =', k)
-        if args.projection in ('slerp', 'gc'):
+        if args.projection in projection.PARALLEL + ['gc']:
             print('#tweak =', args.tweak)
         print('#normalized =', not args.no_normalize)
 

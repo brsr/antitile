@@ -18,11 +18,11 @@ def main():
     parser.add_argument("-c", help="Write to csv file")
 
     args = parser.parse_args()
-    header = ['filename', 'energy', 'cog',
-                  'edge_max', 'edge_min'
-                  'aspect_ratio_max', 'aspect_ratio_min',
+    header = ['filename', 'energy', 'cog', 'bent_min', 'bent_max',
+                  'edge_min', 'edge_max',
+                  'aspect_ratio_min', 'aspect_ratio_max',
                   'faces_min', 'faces_max']
-    if args.s:
+    if not args.s:
             header += ['angle_min', 'angle_max',
                        'angle_aspect_min', 'angle_aspect_max',
                        'solid_angle_min', 'solid_angle_max']
@@ -37,6 +37,8 @@ def main():
         poly = tiling.Tiling(vertices, faces)
         energy = tiling.energy(vertices)
         norm_cog = tiling.center_of_gravity(vertices)
+        bentness = tiling.bentness(vertices, poly)
+        bent_min, bent_max = bentness.min(), bentness.max()
         edges = tiling.edge_length(vertices, poly.edges)
         edge_min, edge_max = edges.min(), edges.max()
         aspect = tiling.aspect_ratio(vertices, poly)
@@ -44,21 +46,26 @@ def main():
         faces = tiling.face_area(vertices, poly)
         face_min, face_max = faces.min(), faces.max()
         values = [fn, energy, norm_cog,
+                  bent_min, bent_max,
                   edge_min, edge_max,
                   aspect_min, aspect_max,
                   face_min, face_max]
         print('---')
         print('File: ', fn)
         print('Thomson energy: ', energy)
-        if not np.isclose(norm_cog, 0):
+        if not np.isclose(0, norm_cog):
             print('Distance of center of gravity from center:\t', norm_cog)
         print('\t\t\t    minimum |maximum |ratio')
         print('Edge length:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
               edge_min, edge_max, edge_max/edge_min))
         print('Aspect ratio:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
               aspect_min, aspect_max, aspect_max/aspect_min))
-        print('Face area:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-              face_min, face_max, face_max/face_min))
+        if np.isclose(0, bent_max, atol = 1E-6):
+            print('Face area:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
+                    face_min, face_max, face_max/face_min))
+        else:
+            print('Face bentness: \t\t    {:<,F}|{:<,F}|{:<,F}'.format(
+                    bent_min, bent_max, bent_max/bent_min))
         if not args.s:
             edges = tiling.edge_length(vertices, poly.edges, spherical=True)
             edge_min, edge_max = edges.min(), edges.max()
@@ -78,8 +85,9 @@ def main():
         lines.append(values)
 
     if args.c:
-        writer = csv.writer(args.c)
-        writer.writerows(lines)
+        with open(args.c, 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(lines)
 
 if __name__ == "__main__":
     main()
