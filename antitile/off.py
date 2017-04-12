@@ -82,6 +82,10 @@ def load_off(file):
 
     edges = np.array(edges, dtype=int)
     verts = np.array(verts, dtype=int)
+    facecolors = np.array(facecolors)
+    edgecolors = np.array(edgecolors)
+    vertexcolors = np.array(vertexcolors)
+    
     return (vertices, faces, facecolors, edges, edgecolors,
             verts, vertexcolors)
 

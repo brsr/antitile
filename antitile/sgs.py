@@ -159,34 +159,50 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     result.base_face = bf
     return result
 
-def face_color_bf(poly):
-    #TODO refactor
+def face_mean(face):
+    return np.mean(face, axis=0)
+
+def face_mode(face):
+    return np.bincount(face).argmax()
+
+def face_color_by_vertex(poly, vcolor, fun=face_mean):
     faces = poly.faces
-    bf = np.array(poly.base_face)
     result = []
     for face in faces:
         face = np.array(face)
-        fbf = bf[face]
-        counts = np.bincount(fbf)
-        maxcount = counts.max()
-        index = (counts == maxcount)
-        if index.sum() > 1:
-            result.append(255)
-        else:
-            result.append(int(np.argwhere(index)))
+        fvc = vcolor[face]
+        result.append(fun(fvc))
     return np.array(result)
+    
 
-
-def face_color_group(poly, fn=max):
-    #TODO refactor    
-    faces = poly.faces
-    group = np.array(poly.group)
-    result = []
-    for face in faces:
-        face = np.array(face)
-        fbf = group[face]
-        result.append(fn(fbf))
-    return np.array(result)
+#def face_color_bf(poly):
+#    #TODO refactor
+#    faces = poly.faces
+#    bf = np.array(poly.base_face)
+#    result = []
+#    for face in faces:
+#        face = np.array(face)
+#        fbf = bf[face]
+#        counts = np.bincount(fbf)
+#        maxcount = counts.max()
+#        index = (counts == maxcount)
+#        if index.sum() > 1:
+#            result.append(255)
+#        else:
+#            result.append(int(np.argwhere(index)))
+#    return np.array(result)
+#
+#
+#def face_color_group(poly, fn=max):
+#    #TODO refactor    
+#    faces = poly.faces
+#    group = np.array(poly.group)
+#    result = []
+#    for face in faces:
+#        face = np.array(face)
+#        fbf = group[face]
+#        result.append(fn(fbf))
+#    return np.array(result)
 
 
 #--Stuff having to do with the k-factor--
@@ -240,7 +256,7 @@ def objective(k, poly, parallel_xyz, measure, normalize=True):
     test_v = parallel_sphere(poly.vertices, parallel_xyz, k)
     if normalize:
         test_v = xmath.normalize(test_v)
-    elif ~normalize and normalize is not None:
+    elif not normalize and normalize is not None:
         #restore length of original vector
         test_v = xmath.normalize(test_v)
         test_v *= norm(poly.vertices, axis=-1, keepdims=True)
@@ -271,10 +287,10 @@ def face_area(xyz, poly, spherical=False):
     return result.max()/result.min()
 
 def aspect_ratio(xyz, poly, spherical=False):
-    """Measure: aspect ratio. Optimizes the ratio of max to min
-    in the tiling."""
+    """Measure: aspect ratio. Optimizes the max in the tiling, 
+    not the ratio of max to min."""
     result = tiling.aspect_ratio(xyz, poly, spherical)
-    return result.max()/result.min()
+    return result.max()
 
 MEASURES = {'energy': energy,
             'bent': bentness,
