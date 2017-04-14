@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from antitile.off import load_off
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+from matplotlib.collections import LineCollection, PolyCollection
+
 
 
 def vis_faces(ax, vertices, faces, facecolors=None, edgecolors='k', cmap=None):
@@ -93,6 +95,37 @@ def impute_color(colors, default):
                 colors[i] = default
     return colors
 
+def main_3d(vertices, faces, facecolors, edges, edgecolors, verts, 
+            vertexcolors, args):
+    fig, ax = vis_init(viewangles=(args.elev, args.azim), distance=args.dist)
+    vis_bounds(ax, vertices)
+    if args.skeleton:
+        vis_edges(ax, vertices, edges, edgecolors)
+        vis_vertices(ax, vertices, verts, vertexcolors)
+    else:
+        vis_faces(ax, vertices, faces, facecolors,
+                  edgecolors=args.color_edge, cmap=args.cmap)    
+    
+def main_2d(vertices, faces, facecolors, edges, edgecolors, verts, 
+            vertexcolors, args, canvassize = 4,):
+    fig = plt.figure()
+    fig.set_size_inches(canvassize, canvassize)
+    ax = fig.add_subplot(111)
+    ax.set_aspect("equal")
+    plt.axis('off')
+    these_faces = [vertices[i] for i in faces]
+    pd = PolyCollection(these_faces, edgecolors=edgecolors)
+    try:
+        pd.set_facecolor(facecolors)
+    except ValueError:
+        pd.set_array(np.array(facecolors))
+        pd.set_cmap(plt.get_cmap(args.cmap))
+    ax.add_collection(pd)
+    these_edges = vertices[edges]
+    ld = LineCollection(these_edges, edgecolor=edgecolors)
+    ax.add_collection(ld)
+    these_vertices = vertices[verts]
+    ax.scatter(these_vertices[..., 0], these_vertices[..., 1], c=vertexcolors)
 
 def main():
     parser = argparse.ArgumentParser(description="Visualize an OFF file "
@@ -101,14 +134,17 @@ def main():
                         "If not specified, reads from stdin.")
     parser.add_argument("-o", "--outfile", help="File to save image to. "
                         "If not specified, will display on screen.")
+    parser.add_argument("--dimension", type=int, choices=[2, 3],
+                        help="Force 2d or 3d view (normally inferred "
+                             "from the file)")    
     parser.add_argument("-a", "--azim", type=float, default=30,
-                        help="Viewing azimuth")
+                        help="Viewing azimuth (3d only)")
     parser.add_argument("-e", "--elev", type=float, default=30,
-                        help="Viewing elevation")
+                        help="Viewing elevation (3d only)")
     parser.add_argument("-d", "--dist", type=float, default=9,
-                        help="Viewing distance")
+                        help="Viewing distance (3d only)")
     parser.add_argument("-s", "--skeleton", action="store_true",
-                        help="Show edges instead of faces "
+                        help="Show edges instead of faces (3d only) "
                              "(edges must be defined in OFF file)")
     parser.add_argument("--color-face", default='y',
                         help="Color for faces (if not in OFF file)")
@@ -127,14 +163,25 @@ def main():
     facecolors = impute_color(facecolors, args.color_face)
     edgecolors = impute_color(edgecolors, args.color_edge)
     vertexcolors = impute_color(vertexcolors, args.color_vertex)
-    fig, ax = vis_init(viewangles=(args.elev, args.azim), distance=args.dist)
-    vis_bounds(ax, vertices)
-    vis_vertices(ax, vertices, verts, vertexcolors)
-    if args.skeleton:
-        vis_edges(ax, vertices, edges, edgecolors)
+
+    vranges = vertices.ptp(axis=0)
+    index = np.isclose(vranges, 0)
+    if args.dimension == 2 and index.sum() != 1:
+        index_x = np.array([False]*3)
+        x = np.argwhere(index)
+        if len(x) == 0:
+            x = 2
+        elif len(x) > 1:
+            x = x[0]
+        index_x[x] = True
+        index = index_x
+    if args.dimension == 2 or index.sum() == 1:
+        main_2d(vertices[..., ~index], faces, facecolors, edges, edgecolors, 
+                verts, vertexcolors, args)
     else:
-        vis_faces(ax, vertices, faces, facecolors,
-                  edgecolors=args.color_edge, cmap=args.cmap)
+        main_3d(vertices, faces, facecolors, edges, edgecolors, verts, 
+                vertexcolors, args)        
+        
     if args.outfile:
         plt.savefig(args.outfile, bbox_inches='tight', pad_inches=0,
                     facecolor='none')

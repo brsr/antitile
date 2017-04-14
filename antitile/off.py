@@ -8,6 +8,8 @@ def readline_comment(file, symbol='#'):
     """Reads line from a file object, but ignores everything after the
     comment symbol (by default '#')"""
     line = file.readline()
+    if len(line) == 0:
+        return ''
     result = line.partition(symbol)[0]
     if len(result) == 0:
         return readline_comment(file)
@@ -37,7 +39,9 @@ def load_off(file):
             be None.
             """
     head = readline_comment(file)
-    if head[:3] != 'OFF':
+    if not head:
+        raise ValueError('empty input')
+    elif head[:3] != 'OFF':
         raise ValueError('not an OFF file')
     count_line = readline_comment(file)
     nvertices, nfaces, _ = [int(x) for x in count_line.split()]

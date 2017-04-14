@@ -22,7 +22,10 @@ class Breakdown(flat.FlatTiling):
             200, 201, 202, (203): Vertices that lie outside the triangle
                 but are adjacent to vertices within the triangle
             255: Outside the breakdown triangle
-        faces: Array of faces in the breakdown structure"""
+        faces: Array of faces in the breakdown structure
+        face_group: An integer describing how many of the triangle points are
+            inside or on the border of the triangle
+            """
 
     def __init__(self, a, b, shape=3, remove_outside=True):
         """
@@ -61,10 +64,13 @@ class Breakdown(flat.FlatTiling):
         self.lindex = self.lindex[condition]
         self.group = self.group[condition]
         faces = index[self.faces]
-        badface = np.any(faces < 0, axis=-1)
+        badface = np.any(faces < 0, axis=-1)#remove missing faces
         self.faces = faces[~badface]
         self.base_pts = np.nonzero(np.in1d(self.group, [90, 91, 92, 93]))[0]
-
+        #assign faces to groups as 
+        fx = (self.group[self.faces] < 200)
+        self.face_group = fx.sum(axis=-1)
+        
 
     def _t(self):
         a, b = self.freq

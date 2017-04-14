@@ -98,7 +98,7 @@ class Tiling:
         """Face adjacency matrix"""
         edges = self.edges
         ex, fx = self.faces_by_edge(edges)
-        faceadj = {}
+        faceadj = set()
         for i in range(len(edges)):
             index = ex == i
             these_faces = fx[index]
@@ -106,10 +106,10 @@ class Tiling:
                 faceadj.add((these_faces[j - 1], these_faces[j]))
         faceadj = faceadj.union( (x[1], x[0]) for x in faceadj)
         faceadj = np.array(list(faceadj))
-        rface = np.concatenate([faceadj, faceadj[:, ::-1]], axis=0)
-        n_r = len(rface)
+        #rface = np.concatenate([faceadj, faceadj[:, ::-1]], axis=0)
+        n_r = len(faceadj)
         n = len(self.faces)
-        return sparse.coo_matrix((np.ones(n_r),
+        return sparse.coo_matrix((np.ones(n_r, dtype=np.int8),
                                   (faceadj[:, 0], faceadj[:, 1])),
                                  shape=(n, n))
 

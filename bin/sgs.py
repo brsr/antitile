@@ -98,10 +98,8 @@ def main():
             poly.vertices += k*sgs.parallels(poly, base, exact=True)
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
-        bfc = fc[poly.base_face]
-        fcf = sgs.face_mode if len(bfc.shape) == 1 else sgs.face_mean 
-        facecolor = sgs.face_color_by_vertex(poly, bfc, fcf)
         vertcolor = poly.group.astype(int)
+        facecolor = [0]*(len(poly.faces))
         fx = list(poly.faces)
         fx.extend(range(len(poly.vertices)))
         colors = list(facecolor)

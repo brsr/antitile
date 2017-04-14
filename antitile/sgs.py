@@ -108,6 +108,7 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     return renumbered[verts], unique_index
 
 def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
+    a, b = freq
     projections = projection.PROJECTIONS[proj]
     faces_dict = base.faces_by_size
     if any(x > 4 for x in faces_dict.keys()):
@@ -132,6 +133,8 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     n_bkdn = len(bkdn.coord)
     names = ['base_face', 'group', 'coord', 'lindex', 'vertices']
     bf = np.arange(n_bf).repeat(n_bkdn)
+    face_bf = np.arange(n_bf).repeat(len(bkdn.faces))
+    face_group = np.tile(bkdn.face_group, n_bf)
     group = np.tile(bkdn.group, n_bf)
     coord = np.tile(bkdn.coord, (n_bf, 1))
     lindex = np.tile(bkdn.lindex, (n_bf, 1))
@@ -141,11 +144,28 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
     verts, unique_index = _find_dupe_verts(base, base_faces,
                                            rbkdn, freq, stitcher)
-
     rbkdn = rbkdn[unique_index]
-    faces = tiling.remove_dupes(verts[faces])
     bf = bf[unique_index]
     group = group[unique_index]
+    faces = verts[faces]
+    #index = face_group >= 2
+    #faces = faces[index]
+    #face_bf = face_bf[index]
+    #face_group = face_group[index]
+    #arrange faces so lowest vertex is first
+#    for i in range(len(faces)):
+#        aface = np.array(faces[i])
+#        r = aface.argmin()
+#        faces[i] = np.roll(aface, -r)
+#    #this does not combine faces with different orientation, which is
+#    #actually what we want so dihedra don't weird out
+#    comp = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
+#    index = comp.sum(axis=-1) > 1
+#    face_bf[index] = 255
+    #TODO replace this with something using np.unique when 1.13 comes out   
+    #FIXME        
+    faces = tiling.remove_dupes(faces)
+    
     #project vertices
     proj_fun = projections[n]
     for i in range(n_bf):
@@ -157,6 +177,8 @@ def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
     result = tiling.Tiling(rbkdn.vertices, faces)
     result.group = group
     result.base_face = bf
+    result.face_bf = face_bf
+    result.face_group = face_group
     return result
 
 def face_mean(face):
@@ -173,37 +195,6 @@ def face_color_by_vertex(poly, vcolor, fun=face_mean):
         fvc = vcolor[face]
         result.append(fun(fvc))
     return np.array(result)
-    
-
-#def face_color_bf(poly):
-#    #TODO refactor
-#    faces = poly.faces
-#    bf = np.array(poly.base_face)
-#    result = []
-#    for face in faces:
-#        face = np.array(face)
-#        fbf = bf[face]
-#        counts = np.bincount(fbf)
-#        maxcount = counts.max()
-#        index = (counts == maxcount)
-#        if index.sum() > 1:
-#            result.append(255)
-#        else:
-#            result.append(int(np.argwhere(index)))
-#    return np.array(result)
-#
-#
-#def face_color_group(poly, fn=max):
-#    #TODO refactor    
-#    faces = poly.faces
-#    group = np.array(poly.group)
-#    result = []
-#    for face in faces:
-#        face = np.array(face)
-#        fbf = group[face]
-#        result.append(fn(fbf))
-#    return np.array(result)
-
 
 #--Stuff having to do with the k-factor--
 def parallels(poly, base, exact=True):
