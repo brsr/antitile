@@ -6,7 +6,7 @@ Manipulation of polyhedra and tilings using Python. This package is designed to 
     pip3 install git+git://github.com/brsr/antitile.git
 
 ## Usage
-There are currently 4 programs included with this package:
+These scripts are included with this package:
 * `sgs.py`: Similar grid subdivision of tilings
 * `balloon.py`: Balloon tiling of the sphere
 * `cellular.py`: Colors polyhedra using cellular automata
