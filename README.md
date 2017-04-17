@@ -9,6 +9,7 @@ Manipulation of polyhedra and tilings using Python. This package is designed to 
 There are currently 4 programs included with this package:
 * `sgs.py`: Similar grid subdivision of tilings
 * `balloon.py`: Balloon tiling of the sphere
+* `cellular.py`: Colors polyhedra using cellular automata
 * `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
 * `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 
