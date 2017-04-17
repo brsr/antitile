@@ -2,6 +2,7 @@
 * Clean up the code
 * Document
 * Test cases
+* Make `setup.py` put the OFF files somewhere useful
 * Improve coloring
 * Refactor `figures_*.py`
 * Replace the stitching logic in `antitile/sgs.py` so that for Class I and II subdivision, the faces do not need to be oriented. In theory this would allow SGS to operate on tilings on unorientable surfaces, although self-intersecting surfaces might have quirks to deal with.
