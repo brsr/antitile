@@ -89,47 +89,89 @@ def load_off(file):
     facecolors = np.array(facecolors)
     edgecolors = np.array(edgecolors)
     vertexcolors = np.array(vertexcolors)
-    
+
     return (vertices, faces, facecolors, edges, edgecolors,
             verts, vertexcolors)
 
 
-def write_off(vertices, faces, facecolors=None):
+def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
+              verts=None, vertexcolors=None):
     """Export a grid to an OFF file for use with Antiprism.
     Inputs:
-        vertices: List of vertices
-        faces: List of faces"""
+        vertices: List of vertex cordinates
+        faces: List of faces
+        facecolors: Colors corresponding to each face
+        edges: List of edges (2-vertex faces)
+        edgecolors: Colors corresponding to each edge
+        verts: List of vertexes (1-vertex faces)
+        vertexcolors: Colors corresponding to each vertex
+        """
+    #align the "faces" into a single list
+    if facecolors is None and faces is not None:
+        facecolors = ['']*len(faces)
+    if edgecolors is None and edges is not None:
+        edgecolors = ['']*len(edges)
+    if vertexcolors is None and verts is not None:
+        vertexcolors = ['']*len(verts)
+    elif vertexcolors is not None and verts is None:
+        verts = list(range(len(vertices)))
+
+    flist = list(faces)
+    if edges is not None:
+        flist.extend(list(edges))
+    if verts is not None:
+        flist.extend([v] for v in verts)
+    clist = list(facecolors)
+    if edgecolors is not None:
+        clist.extend(list(edgecolors))
+    if vertexcolors is not None:
+        clist.extend([v] for v in vertexcolors)
+
+    lengths = [len(x) for x in flist]
+
     result = 'OFF\n'
-    string = ' '.join([str(len(vertices)), str(len(faces)), '0'])
+    string = ' '.join([str(len(vertices)), str(len(flist)), '0'])
     result += string
     result += '\n'
+    #coordinates
     for row in vertices:
         string = ' '.join([str(i) for i in row])
         result += string
         result += '\n'
-        
-    if facecolors is None:
-        for face in faces:
-            try:
-                x = len(face)
-                face = list(face)
-            except TypeError:
-                x = 1
-                face = [face]
-            row = [x] + face 
-            result += ' '.join(str(i) for i in row) + '\n'
-    else:
-        for face, color in zip(faces, facecolors):
-            try:
-                x = len(face)
-                face = list(face)
-            except TypeError:
-                x = 1
-                face = [face]
-            try:
-                color = list(color)
-            except TypeError:
-                color = [color]
-            row = [x] + face + color
-            result += ' '.join(str(i) for i in row) + '\n'
+
+    #"faces"
+    for n, f, c in zip(lengths, flist, clist):
+        result += str(n) + ' '
+        try:
+            result += ' '.join(str(i) for i in f) + ' '
+        except TypeError:
+            result += str(f) + ' '
+        try:
+            result += ' '.join(str(i) for i in c) + '\n'
+        except TypeError:
+            result += str(c) + '\n'
     return result
+#    if facecolors is None:
+#        for face in faces:
+#            try:
+#                x = len(face)
+#                face = list(face)
+#            except TypeError:
+#                x = 1
+#                face = [face]
+#            row = [x] + face
+#            result += ' '.join(str(i) for i in row) + '\n'
+#    else:
+#        for face, color in zip(faces, facecolors):
+#            try:
+#                x = len(face)
+#                face = list(face)
+#            except TypeError:
+#                x = 1
+#                face = [face]
+#            try:
+#                color = list(color)
+#            except TypeError:
+#                color = [color]
+#            row = [x] + face + color
+#            result += ' '.join(str(i) for i in row) + '\n'

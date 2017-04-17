@@ -99,21 +99,18 @@ def main():
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
         vertcolor = poly.group.astype(int)
-        facecolor = [0]*(len(poly.faces))
-        fx = list(poly.faces)
-        fx.extend(range(len(poly.vertices)))
-        colors = list(facecolor)
-        colors.extend(vertcolor)
-        print(off.write_off(poly.vertices, fx, colors))
-        print('#frequency =', frequency)
+        result = off.write_off(poly.vertices, poly.faces,
+                               vertexcolors=vertcolor)
+        result += '#frequency = {}\n'.format(frequency)
         if args.filename:
-            print('#input file =', args.filename)
-        print('#projection =', args.projection)
+            result += '#input file = {}\n'.format(args.filename)
+        result += '#projection = {}\n'.format(args.projection)
         if args.projection in projection.PARALLEL:
-            print('#k =', k)
+            result += '#k = {}\n'.format(k)
         if args.projection in projection.PARALLEL + ['gc']:
-            print('#tweak =', args.tweak)
-        print('#normalized =', not args.no_normalize)
+            result += '#tweak = {}\n'.format(args.tweak)
+        result += '#normalized = {}\n'.format(not args.no_normalize)
+        print(result)
 
 if __name__ == "__main__":
     main()

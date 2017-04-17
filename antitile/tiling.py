@@ -4,7 +4,7 @@ Generic polyhedron and tiling methods
 """
 import warnings
 import numpy as np
-from . import xmath
+from . import xmath#, off
 #from scipy.linalg import circulant
 from scipy import sparse
 
@@ -14,6 +14,13 @@ class Tiling:
     def __init__(self, vertices, faces):
         self.vertices = vertices
         self.faces = faces
+
+#    @property
+#    def off(self):
+#        """Returns a string representing the OFF file for the faces
+#        and vertices of this tiling. Explicit edges and vertices,
+#        and colorings, are not included."""
+#        return off.write_off(self.vertices, self.faces)
 
     #should probably cache these properties
     @property

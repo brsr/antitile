@@ -52,9 +52,8 @@ if __name__ == "__main__":
     proj_fun = projection.lambert if args.p else projection.equidistant
     v, f, vertcolor = balloon(a, b, shape, proj=proj_fun)
     faces = tiling.remove_dupes(tiling.clean_triangles(tiling.strip_ev(f)))
-    fx = list(faces)
-    fx.extend(range(len(v)))
-    colors = ['']*len(faces)
-    colors.extend(vertcolor)
-    result = off.write_off(v, fx, colors)
+    result = off.write_off(v, faces, vertexcolors=vertcolor)
+    result += '#frequency = {}\n'.format((a,b))
+    result += '#projection = {}\n'.format('equidistant' if args.p
+                                             else 'lambert')
     print(result)
