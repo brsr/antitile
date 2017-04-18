@@ -45,7 +45,7 @@ def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
     base_bary = np.eye(3)
     frame = antitile.geodesic_grid.frame_method2(base_bary, n, m,
                                                 interp=xmath.lerp)
-    if ~degenerate:
+    if not degenerate:
         frame = frame.reshape((-1,2,3))
         norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
         bad = np.isclose(norm, 0)
@@ -55,6 +55,59 @@ def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
     frame_1 = frame[..., 1, np.newaxis, :]
     return xmath.lerp(frame_0, frame_1, t)
 
+
+
+def square_explicit(frame, line_pts_n=61, degenerate=False):
+    if ~degenerate:
+        frame = frame.reshape((-1,2,2))
+        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
+        bad = np.isclose(norm, 0)
+        frame = frame[~bad]
+    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
+    frame_0 = frame[..., 0, np.newaxis, :]
+    frame_1 = frame[..., 1, np.newaxis, :]
+    return xmath.lerp(frame_0, frame_1, t)
+
+
+def plot_square_circle(n=4, m=2, inverse=True, steplimit=90):
+    if inverse:
+        limits = [-2, 2]
+    else:
+        limits = [-1.05, 1.05]
+    frame = antitile.breakdown.frame_square(n, m)
+    euc_lines = square_explicit(frame)
+    lines = antitile.projection.square_to_circle(euc_lines)
+    fig, ax = plt.subplots()
+    fig.set_size_inches(8, 8)
+    fig.set_tight_layout(True)
+    ax.set_xlim(limits)
+    ax.set_ylim(limits)
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    plt.axis('off')#why do we need both? it is a mystery
+    if inverse:
+        norm = np.linalg.norm(lines, axis=-1, keepdims=True)
+        inverse = lines / norm**2
+        inverse[..., 0] = -inverse[..., 0]
+        dx = np.linalg.norm(inverse[:, 1:] - inverse[:, :-1], axis=-1)
+        if steplimit:
+            index = dx > steplimit
+            pad = np.zeros((index.shape[0], 1), dtype=bool)
+            index = np.concatenate((index, pad), axis=-1)
+            print(index.shape, inverse.shape)
+            inverse = np.where(index[..., np.newaxis], np.nan, inverse)
+        lc = LineCollection(inverse, color='grey', zorder=0)
+        ax.add_collection(lc)
+    lc = LineCollection(lines, color='k', zorder=1)
+    ax.add_collection(lc)
+    if m > 0:
+        color = 'blue'
+    else:
+        color = 'black'
+    circle = plt.Circle((0, 0), 1, color=color, fill=False, zorder=3)
+    ax.add_artist(circle)
+    #plot_m1_pts(ax, base_pts, method, n, m)
+    return fig, ax
 
 def show_breakdown(n=4, m=2, triangle=TRIANGLE):
     bkdn = antitile.Breakdown(n, m, remove_outside=True)

@@ -87,7 +87,7 @@ def main():
         with file as f:
             vertices, faces, fc, _e, _ec, _v, _vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
-        poly = sgs.subdiv(base, frequency, args.projection, args.tweak)
+        poly = sgs.SGS(base, frequency, args.projection, args.tweak)
         if args.projection in projection.PARALLEL:
             if args.k in sgs.MEASURES:
                 measure = sgs.MEASURES[args.k]
@@ -99,7 +99,9 @@ def main():
         if not args.no_normalize:
             poly.vertices = xmath.normalize(poly.vertices)
         vertcolor = poly.group.astype(int)
+        facecolor = poly.face_group.astype(int)
         result = off.write_off(poly.vertices, poly.faces,
+                               facecolors=facecolor,
                                vertexcolors=vertcolor)
         result += '#frequency = {}\n'.format(frequency)
         if args.filename:

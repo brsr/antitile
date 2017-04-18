@@ -107,79 +107,113 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     renumbered = xmath.renumber(unique_index)
     return renumbered[verts], unique_index
 
-def subdiv(base, freq=(2, 0), proj='flat', tweak=False):
-    a, b = freq
-    projections = projection.PROJECTIONS[proj]
-    faces_dict = base.faces_by_size
-    if any(x > 4 for x in faces_dict.keys()):
-        raise ValueError("Tiling contains at least one face with more than "
-                         "4 sides. Try triangulating those faces first.")
-    elif 3 in faces_dict and 4 in faces_dict:
-        msg = ("Subdivision on mixed triangle-quadrilateral polyhedra "
-               "is not yet implemented")
-        raise NotImplementedError(msg)
-    elif 3 in faces_dict:
-        n = 3
-        stitcher = stitch_3
-    elif 4 in faces_dict:
-        n = 4
-        stitcher = stitch_4
-    else:
-        raise ValueError("Polyhedron has no faces")
-    #create list of basically cartesion product of bkdn with base_faces
-    base_faces = np.array(faces_dict[n])
-    n_bf = len(base_faces)
-    bkdn = breakdown.Breakdown(*freq, n)
-    n_bkdn = len(bkdn.coord)
-    names = ['base_face', 'group', 'coord', 'lindex', 'vertices']
-    bf = np.arange(n_bf).repeat(n_bkdn)
-    face_bf = np.arange(n_bf).repeat(len(bkdn.faces))
-    face_group = np.tile(bkdn.face_group, n_bf)
-    group = np.tile(bkdn.group, n_bf)
-    coord = np.tile(bkdn.coord, (n_bf, 1))
-    lindex = np.tile(bkdn.lindex, (n_bf, 1))
-    vertices = np.empty((n_bkdn*n_bf, 3))
-    arrays = [bf, group, coord, lindex, vertices]
-    rbkdn = xmath.recordify(names, arrays)
-    faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
-    verts, unique_index = _find_dupe_verts(base, base_faces,
-                                           rbkdn, freq, stitcher)
-    rbkdn = rbkdn[unique_index]
-    bf = bf[unique_index]
-    group = group[unique_index]
-    faces = verts[faces]
-    #index = face_group >= 2
-    #faces = faces[index]
-    #face_bf = face_bf[index]
-    #face_group = face_group[index]
+def _find_dupe_faces(faces, face_group):
     #arrange faces so lowest vertex is first
-#    for i in range(len(faces)):
-#        aface = np.array(faces[i])
-#        r = aface.argmin()
-#        faces[i] = np.roll(aface, -r)
-#    #this does not combine faces with different orientation, which is
-#    #actually what we want so dihedra don't weird out
-#    comp = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
-#    index = comp.sum(axis=-1) > 1
-#    face_bf[index] = 255
-    #TODO replace this with something using np.unique when 1.13 comes out   
-    #FIXME        
-    faces = tiling.remove_dupes(faces)
-    
-    #project vertices
-    proj_fun = projections[n]
-    for i in range(n_bf):
-        index = (rbkdn.base_face == i)
-        base_face = base_faces[i]
-        vbf = base.vertices[base_face]
-        rbkdn_i = rbkdn[index]
-        rbkdn.vertices[index] = proj_fun(rbkdn_i, vbf, freq, tweak)
-    result = tiling.Tiling(rbkdn.vertices, faces)
-    result.group = group
-    result.base_face = bf
-    result.face_bf = face_bf
-    result.face_group = face_group
+    for i in range(len(faces)):
+        aface = np.array(faces[i])
+        r = aface.argmin()
+        faces[i] = np.roll(aface, -r)
+    #this does not combine faces with different orientation, which is
+    #actually what we want so dihedra don't weird out
+    #TODO replace this with something using np.unique when 1.13 comes out
+    comp = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
+    comp[np.diag_indices_from(comp)] = False
+    index = comp.sum(axis=-1) > 0 #repeated faces
+    #print(comp.shape)
+    #print(face_group)
+    ncp, cp = sparse.csgraph.connected_components(comp)
+    #print(ncp)
+    #print(cp)
+    result = np.ones(len(faces), dtype=bool)
+    for i in range(ncp):
+        index = cp == i
+        fg = face_group[index]
+        am = np.argmin(fg)
+        result_i = np.zeros(fg.shape, dtype=bool)
+        result_i[am] = True
+        result[index] = result_i
     return result
+
+class SGS(tiling.Tiling):
+    """Similar grid subdivision of a tiling.
+    Attributes:
+        vertices: List of vertices
+        faces: List of faces
+        base: Pointer to the base polyhedron that was subdivided
+        freq: Frequency of the subdivision
+        base_face: Which base face each vertex falls into. If vertex is
+            on the border of more than one base face, will be the lower
+            numbered base face.
+        group: Vertex grouping (see Breakdown)
+        face_bf: Which base face each face lies on. If face lies over
+            more than one face, will be whichever base face contains more
+            points of the face; if evenly split, it will be the lower
+            numbered base face.
+        face_group: Face grouping (see Breakdown)
+        """
+    def __init__(self, base, freq=(2, 0), proj='flat', tweak=False):
+        self.base = base
+        self.freq = freq
+        a, b = freq
+        projections = projection.PROJECTIONS[proj]
+        faces_dict = base.faces_by_size
+        if any(x > 4 for x in faces_dict.keys()):
+            raise ValueError("Tiling contains at least one face with more than "
+                             "4 sides. Try triangulating those faces first.")
+        elif 3 in faces_dict and 4 in faces_dict:
+            msg = ("Subdivision on mixed triangle-quadrilateral polyhedra "
+                   "is not yet implemented")
+            raise NotImplementedError(msg)
+        elif 3 in faces_dict:
+            n = 3
+            stitcher = stitch_3
+        elif 4 in faces_dict:
+            n = 4
+            stitcher = stitch_4
+        else:
+            raise ValueError("Polyhedron has no faces")
+        #create list of basically cartesion product of bkdn with base_faces
+        base_faces = np.array(faces_dict[n])
+        n_bf = len(base_faces)
+        bkdn = breakdown.Breakdown(*freq, n)
+        n_bkdn = len(bkdn.coord)
+        names = ['base_face', 'group', 'coord', 'lindex', 'vertices']
+        bf = np.arange(n_bf).repeat(n_bkdn)
+        face_bf = np.arange(n_bf).repeat(len(bkdn.faces))
+        face_group = np.tile(bkdn.face_group, n_bf)
+        group = np.tile(bkdn.group, n_bf)
+        coord = np.tile(bkdn.coord, (n_bf, 1))
+        lindex = np.tile(bkdn.lindex, (n_bf, 1))
+        vertices = np.empty((n_bkdn*n_bf, 3))
+        arrays = [bf, group, coord, lindex, vertices]
+        rbkdn = xmath.recordify(names, arrays)
+        faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
+        verts, unique_v = _find_dupe_verts(base, base_faces,
+                                               rbkdn, freq, stitcher)
+        rbkdn = rbkdn[unique_v]
+        bf = bf[unique_v]
+        group = group[unique_v]
+        faces = verts[faces]
+        unique_f = _find_dupe_faces(faces, face_group)
+        faces = faces[unique_f]
+        face_bf = face_bf[unique_f]
+        face_group = face_group[unique_f]
+        #FIXME
+        #faces = tiling.remove_dupes(faces)
+
+        #project vertices
+        proj_fun = projections[n]
+        for i in range(n_bf):
+            index = (rbkdn.base_face == i)
+            base_face = base_faces[i]
+            vbf = base.vertices[base_face]
+            rbkdn_i = rbkdn[index]
+            rbkdn.vertices[index] = proj_fun(rbkdn_i, vbf, freq, tweak)
+        super().__init__(rbkdn.vertices, faces)
+        self.group = group
+        self.base_face = bf
+        self.face_bf = face_bf
+        self.face_group = face_group
 
 def face_mean(face):
     return np.mean(face, axis=0)
@@ -261,12 +295,12 @@ def energy(xyz, poly):
     return tiling.energy(xyz)
 
 def bentness(xyz, poly):
-    """Measure: face bentness. Optimizes the max in the tiling, 
+    """Measure: face bentness. Optimizes the max in the tiling,
     not the ratio of max to min."""
     return tiling.bentness(xyz, poly).max()
 
 def edge_length(xyz, poly, spherical=False):
-    """Measure: edge length. Optimizes the ratio of max to min 
+    """Measure: edge length. Optimizes the ratio of max to min
     in the tiling."""
     result = tiling.edge_length(xyz, poly.edges, spherical)
     return result.max()/result.min()
@@ -278,7 +312,7 @@ def face_area(xyz, poly, spherical=False):
     return result.max()/result.min()
 
 def aspect_ratio(xyz, poly, spherical=False):
-    """Measure: aspect ratio. Optimizes the max in the tiling, 
+    """Measure: aspect ratio. Optimizes the max in the tiling,
     not the ratio of max to min."""
     result = tiling.aspect_ratio(xyz, poly, spherical)
     return result.max()

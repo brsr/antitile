@@ -16,15 +16,18 @@ class Breakdown(flat.FlatTiling):
         lindex: Linear index coordinates of each vertex
         group: An integer describing where each vertex falls.
             0: Inside the breakdown
-            1 through 89: Inside the breakdown, lying on a feature
-            90, 91, 92, 93: Base vertices
-            100, 101, 102, (103): Base edges
-            200, 201, 202, (203): Vertices that lie outside the triangle
-                but are adjacent to vertices within the triangle
-            255: Outside the breakdown triangle
+            1 - 89: Inside the breakdown, lying on a feature
+            90 - 93: Base vertices
+            100 - 103: Base edges
+            200 - 203: Vertices that lie outside but are adjacent to
+                vertices within
+            255: Outside the breakdown
         faces: Array of faces in the breakdown structure
-        face_group: An integer describing how many of the triangle points are
-            inside or on the border of the triangle
+        face_group: Max of the group of each vertex within a face.
+            The face_group of faces lying partially out of the breakdown
+            is adjusted so faces with more points in the breakdown
+            will tend to be assigned to that base face in the SGS
+            routine.
             """
 
     def __init__(self, a, b, shape=3, remove_outside=True):
@@ -66,11 +69,24 @@ class Breakdown(flat.FlatTiling):
         faces = index[self.faces]
         badface = np.any(faces < 0, axis=-1)#remove missing faces
         self.faces = faces[~badface]
-        self.base_pts = np.nonzero(np.in1d(self.group, [90, 91, 92, 93]))[0]
-        #assign faces to groups as 
-        fx = (self.group[self.faces] < 200)
-        self.face_group = fx.sum(axis=-1)
-        
+        faces = self.faces
+        group = self.group
+        #self.base_pts = np.nonzero(np.in1d(self.group, [90, 91, 92, 93]))[0]
+#        #assign faces to groups
+#        face_group = np.zeros(len(faces), dtype=np.uint8)
+#        index_in = self.group < 90
+#        index_bv = (self.group >= 90) & (self.group < 100)
+#        index_be = (self.group >= 100) & (self.group < 200)
+        index_out = (self.group >= 200)
+        face_out = index_out[faces]
+        face_out_sum = face_out.sum(axis=-1).astype(np.uint8)
+#        face_out_max = face_out.max(axis=-1)
+#        face_group = face_out_max + 10*face_out_sum
+        fx = group[faces]
+        face_group = fx.max(axis=-1)
+        face_group += face_out_sum*10
+        self.face_group = face_group
+
 
     def _t(self):
         a, b = self.freq
@@ -83,11 +99,11 @@ class Breakdown(flat.FlatTiling):
 
 
         #featural lines
-        q = a - b        
+        q = a - b
         line1 = x == 0
         line1_seg = y <= max(a,b)
         line2 = y == b
-        line2_seg = x >= min(0,q)     
+        line2_seg = x >= min(0,q)
         line3 = y == a - x
         line3_seg = y >= min(a,b)
         group[line1 & line1_seg] = 1
@@ -140,20 +156,20 @@ class Breakdown(flat.FlatTiling):
         line1 = x == 0
         line1_seg = y <= max(a,b)
         line2 = y == b
-        line2_seg = x >= min(0,q)      
+        line2_seg = x >= min(0,q)
         line3 = x == a-b
         line3_seg = y >= min(a,b)
         line4 = y == a
-        line4_seg = x <= max(0,q)  
+        line4_seg = x <= max(0,q)
         group[line1 & line1_seg] = 1
         group[line2 & line2_seg] = 2
         group[line3 & line3_seg] = 3
         group[line4 & line4_seg] = 4
-        if a == b:             
+        if a == b:
             group[line1 & ~line1_seg] = 11
             group[line2 & ~line2_seg] = 12
             group[line3 & ~line3_seg] = 13
-            group[line4 & ~line4_seg] = 14             
+            group[line4 & ~line4_seg] = 14
         right = a*y - b*x
         left = a*x + b*y
         anorm = (a**2+b**2)

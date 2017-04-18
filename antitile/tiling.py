@@ -10,7 +10,11 @@ from scipy import sparse
 
 
 class Tiling:
-    """Generic class for tilings and polyhedrons"""
+    """Generic class for tilings and polyhedrons
+    Attributes:
+        vertices: List of vertices
+        faces: List of faces
+        """
     def __init__(self, vertices, faces):
         self.vertices = vertices
         self.faces = faces
