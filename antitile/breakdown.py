@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-
+Breakdown structures
 """
+
 import numpy as np
 from . import flat, xmath
 
@@ -75,7 +76,7 @@ class Breakdown(flat.FlatTiling):
 #        #assign faces to groups
 #        face_group = np.zeros(len(faces), dtype=np.uint8)
 #        index_in = self.group < 90
-#        index_bv = (self.group >= 90) & (self.group < 100)
+        index_bv = (self.group >= 90) & (self.group < 100)
 #        index_be = (self.group >= 100) & (self.group < 200)
         index_out = (self.group >= 200)
         face_out = index_out[faces]
@@ -85,6 +86,8 @@ class Breakdown(flat.FlatTiling):
         fx = group[faces]
         face_group = fx.max(axis=-1)
         face_group += face_out_sum*10
+        face_bv = np.any(index_bv[faces], axis=-1)
+        face_group[face_bv] = 90 + face_out_sum[face_bv]
         self.face_group = face_group
 
 

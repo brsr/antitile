@@ -24,12 +24,12 @@ Statistics of a geodesic polyhedron (created using what geodesic dome people cal
 
 Visualize a Goldberg polyhedron, with color:
 
-    sgs.py -a 5 -b 3 icosahedron.off | off_color -v M -m color_map.txt | pol_recip | view_off.py
+    sgs.py -a 5 -b 3 icosahedron.off | off_color -v M -m group_color.txt | pol_recip | view_off.py
 
 Canonical form (no skew faces) of a quadrilateral-faced similar grid subdivision polyhedron:
 
     sgs.py -a 5 -b 3 cube.off | canonical | view_off.py
-    
+
 A quadrilateral balloon polyhedra, which happens to resemble a peeled coconut:
 
     balloon.py 8 -pq | view_off.py

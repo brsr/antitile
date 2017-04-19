@@ -136,28 +136,28 @@ def edges_from_facelist(faces):
     result = np.array(sorted([edge for edge in edges]))
     return result
 
-def strip_ev(faces):
-    """Strip 1- and 2-vertex "faces" from the facelist"""
-    count = np.array([len(np.unique(i)) for i in faces])
-    index = count >= 3
-    if index.sum() == 0:
-        index = count >= 2
-    return faces[index]
-
-def clean_triangles(faces):
-    """Restate degenerate polygons as triangles or whatever"""
-    facelist = faces.tolist()
-    facelist = [list(set(x)) if len(set(x)) <= 3 else x for x in facelist]
-    return facelist
-
-def remove_dupes(faces):
-    """Remove duplicate entries from face list"""
-    result = set()
-    for face in faces:
-        aface = np.array(face)
-        r = aface.argmin()
-        result.add(tuple(np.roll(aface, -r)))
-    return list(result)
+#def strip_ev(faces):
+#    """Strip 1- and 2-vertex "faces" from the facelist"""
+#    count = np.array([len(np.unique(i)) for i in faces])
+#    index = count >= 3
+#    if index.sum() == 0:
+#        index = count >= 2
+#    return faces[index]
+#
+#def clean_triangles(faces):
+#    """Restate degenerate polygons as triangles or whatever"""
+#    facelist = faces.tolist()
+#    facelist = [list(set(x)) if len(set(x)) <= 3 else x for x in facelist]
+#    return facelist
+#
+#def remove_dupes(faces):
+#    """Remove duplicate entries from face list"""
+#    result = set()
+#    for face in faces:
+#        aface = np.array(face)
+#        r = aface.argmin()
+#        result.add(tuple(np.roll(aface, -r)))
+#    return list(result)
 
 
 #Measures

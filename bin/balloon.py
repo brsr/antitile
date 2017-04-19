@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Spherical tiling of the henagonal hosohedron.
-Vaguely resembles a peeled coconut.
 """
 import argparse
 import numpy as np
@@ -32,7 +31,25 @@ def balloon(a, b, shape, proj=projection.lambert):
     vertices = sqc[goodverts]
     phi, theta = proj(vertices)
     sph_3d = projection.spherical_to_xyz(phi, theta)
-    return sph_3d, faces, bkdn.group[goodverts]
+    #get rid of degenerate faces
+    #(unless they're all degenerate, then keep one for display)
+    fc = np.array([len(set(x)) for x in faces])
+    if fc.max() <= 2:
+        i = np.argwhere(fc == 2)
+        if len(i) > 1:
+            faceindex = i[0]
+        else:
+            faceindex = i
+    else:
+        faceindex = fc >= 3
+    faces = faces[faceindex]
+    face_group = bkdn.face_group[faceindex]
+    #remove repeated vertices but maintain orientation
+    outfaces = []
+    for face in faces:
+        repindex = face != np.roll(face, 1)
+        outfaces.append(face[repindex])
+    return (sph_3d, outfaces, bkdn.group[goodverts], face_group)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
@@ -50,9 +67,9 @@ if __name__ == "__main__":
     a, b = args.a, args.b
     shape = 4 if args.q else 3
     proj_fun = projection.lambert if args.p else projection.equidistant
-    v, f, vertcolor = balloon(a, b, shape, proj=proj_fun)
-    faces = tiling.remove_dupes(tiling.clean_triangles(tiling.strip_ev(f)))
-    result = off.write_off(v, faces, vertexcolors=vertcolor)
+    v, f, vertcolor, facecolor = balloon(a, b, shape, proj=proj_fun)
+    result = off.write_off(v, f, facecolors=facecolor,
+                           vertexcolors=vertcolor)
     result += '#frequency = {}\n'.format((a,b))
     result += '#projection = {}\n'.format('equidistant' if args.p
                                              else 'lambert')

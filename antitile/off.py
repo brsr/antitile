@@ -100,11 +100,11 @@ def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
     Inputs:
         vertices: List of vertex cordinates
         faces: List of faces
-        facecolors: Colors corresponding to each face
+        facecolors: List of colors corresponding to each face
         edges: List of edges (2-vertex faces)
-        edgecolors: Colors corresponding to each edge
+        edgecolors: List of colors corresponding to each edge
         verts: List of vertexes (1-vertex faces)
-        vertexcolors: Colors corresponding to each vertex
+        vertexcolors: List of colors corresponding to each vertex
         """
     #align the "faces" into a single list
     if facecolors is None and faces is not None:
@@ -116,6 +116,13 @@ def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
     elif vertexcolors is not None and verts is None:
         verts = list(range(len(vertices)))
 
+    if len(faces) != len(facecolors):
+        raise ValueError("Different number of face colors than faces")
+    elif edgecolors is not None and len(edges) != len(edgecolors):
+        raise ValueError("Different number of edge colors than edges")
+    elif vertexcolors is not None and len(verts) != len(vertexcolors):
+        raise ValueError("Different number of vertex colors than vertices")
+        
     flist = list(faces)
     if edges is not None:
         flist.extend(list(edges))

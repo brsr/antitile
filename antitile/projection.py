@@ -260,8 +260,8 @@ def square_slerp(xy, base_pts):
 def square_intersections(lindex, base_pts, freq):
     """Transforms a square to a spherical quadrilateral using the method of
     intersections"""
-    n, m = freq
-    preframe = breakdown.frame_square(n, m)
+    a, b = freq
+    preframe = breakdown.frame_square(a, b)
     frame = square_slerp(preframe[..., np.newaxis, :],
                          base_pts[:, np.newaxis, np.newaxis, np.newaxis])
     gc_normals = np.cross(frame[..., 0, :], frame[..., 1, :])
