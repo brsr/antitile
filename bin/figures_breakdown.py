@@ -281,29 +281,35 @@ def inverse(pts):
 
 if __name__ == "__main__":
     n = 4
-    m = 4
-    shape_n = 3
-    z = 1/np.sqrt(3)
+    m = 2
+    shape_n = 4
+    z = 0#1/np.sqrt(3)
+    k = 1
     tweak = False
-    p = 'gc'
+    if z == 0:
+        names = projection.PARALLEL
+    else:
+        names = list(projection.PROJECTIONS.keys())
+        names.remove('disk')
+    #names = ['flat', 'nslerp', 'nslerp2', 'other', 'gc']
 
     freq = n, m
-    proj = projection.PROJECTIONS[p][shape_n]
     shape = SHAPES[shape_n]
     base_pts = base_3d(z, shape=shape)
     bkdn = breakdown.Breakdown(n, m, shape_n)
-    pts = xmath.normalize(proj(bkdn, base_pts[:-1], freq, tweak))
-    pts_2d = pts[bkdn.group < 200, :2]
-    inv = inverse(pts_2d)
-    x = np.nanmax(inv)
     fig, ax = start_plot()
     plot_sphere_outline(ax)
     plot_base(ax, base_pts)
-    if z == 0:
-        ax.scatter(inv[..., 0], inv[..., 1], color='grey')
-    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], color='k')
+    for name in names:
+        proj = projection.PROJECTIONS[name][shape_n]
+        pts = proj(bkdn, base_pts[:-1], freq, tweak)
+        if name in projection.PARALLEL:
+            pts += k*projection.parallel_exact(pts, CENTER)
+        pts = xmath.normalize(pts)
+        pts_2d = pts[bkdn.group < 200, :2]
 
-#    plt.gca().set_position([0, 0, 1, 1])
-    #plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
-    #plt.savefig('test.svg',
-    #            bbox_inches='tight', pad_inches = 0, facecolor='none')
+        ax.scatter(pts_2d[..., 0], pts_2d[..., 1], label=name)
+    #if z == 0:
+        #inv = inverse(pts_2d)
+        #ax.scatter(inv[..., 0], inv[..., 1], color='grey', label='inverse')
+    ax.legend()

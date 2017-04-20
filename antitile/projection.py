@@ -4,6 +4,8 @@ Transformations from the breakdowns to 3-space (sometimes 2-space)
 """
 
 import numpy as np
+from numpy.linalg import norm
+
 from . import xmath, breakdown
 
 #generic methods, valid on any-d, any shape
@@ -236,6 +238,14 @@ def square_naive_slerp_2(xy, base_pts):
     mat = np.sin(np.stack([a, b, c, d], axis=-1)*angle) / np.sin(angle)
     return mat.dot(base_pts)
 
+def _square_slerp(xy, base_pts):
+    a, b, c, d = base_pts[0], base_pts[1], base_pts[2], base_pts[3]
+    x, y = xy[..., 0], xy[..., 1]
+    ab = xmath.slerp(a, b, x)
+    dc = xmath.slerp(d, c, x)
+    result = xmath.slerp(ab, dc, y)
+    return result
+
 def square_slerp(xy, base_pts):
     """Transforms a square in [0,1]^2 to a spherical quadrilateral
     defined by base_pts, using spherical linear interpolation
@@ -249,21 +259,18 @@ def square_slerp(xy, base_pts):
             (4, ..., 3)
     Returns:
         Coordinates on the sphere."""
-    #FIXME not symmetric on irregular faces
-    a, b, c, d = base_pts[0], base_pts[1], base_pts[2], base_pts[3]
-    x, y = xy[..., 0], xy[..., 1]
-    ab = xmath.slerp(a, b, x)
-    dc = xmath.slerp(d, c, x)
-    result = xmath.slerp(ab, dc, y)
-    return result
+    #have to do this twice and average them because just doing nested
+    #slerp isn't symmetric
+    one = _square_slerp(xy, base_pts)
+    two = _square_slerp(xy[..., ::-1], base_pts[[0, 3, 2, 1]])
+    return xmath.normalize(one + two)
 
 def square_intersections(lindex, base_pts, freq):
     """Transforms a square to a spherical quadrilateral using the method of
     intersections"""
     a, b = freq
     preframe = breakdown.frame_square(a, b)
-    frame = square_slerp(preframe[..., np.newaxis, :],
-                         base_pts[:, np.newaxis, np.newaxis, np.newaxis])
+    frame = square_naive_slerp_2(preframe, base_pts)
     gc_normals = np.cross(frame[..., 0, :], frame[..., 1, :])
     index = np.arange(2)
     pairs = gc_normals[index, lindex[:, index]]
@@ -345,6 +352,30 @@ def project_sphere(sphcoords, zfunc=np.arcsin, scale=180 / np.pi):
     result[..., 1] = zfunc(sphcoords[..., 2]) * scale
     return result
 
+#parallel projections
+def parallel_exact(pts, normal):
+    """Projects points onto the sphere parallel to the normal vector.
+    >>> center = np.array([0,0,1])
+    >>> pts = np.array([[0.5,0.5,0],
+                        [1,0,0]])
+    >>> parallel_exact(pts, center)
+    """
+    vdotc = np.sum(pts * normal, axis=-1)
+    vdotv = norm(pts, axis=-1)**2
+    p = -vdotc + np.sqrt(np.fmax(1 + vdotc**2 - vdotv, 0))
+    return p[..., np.newaxis] * normal
+
+
+def parallel_approx(pts, normal):
+    """Approximately projects points onto the sphere parallel to the
+        center vector.
+    >>> center = np.array([0,0,1])
+    >>> pts = np.array([[0.5,0.5,0],
+                        [1,0,0]])
+    >>> parallel_approx(pts, center)
+        """
+    q = 1 - norm(pts, axis=-1)
+    return q[..., np.newaxis] * normal
 
 FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
         4: lambda bkdn, abc, freq, tweak:
