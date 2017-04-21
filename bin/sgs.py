@@ -15,18 +15,18 @@ FILENAME = """Input file. Reads from stdin if not given. Faces should be
 oriented counterclockwise (even for Class I and II)."""
 FREQ_A = """First breakdown frequency. Default is 2."""
 FREQ_B = """Second breakdown frequency. Default is 0."""
-PROJ = """Projection family. Default is flat. areal is only valid on
-    triangular faces. disk is only valid on dihedra."""
+PROJ = """Projection family. Default is flat. disk is only valid on dihedra."""
 #    May be:
 #        flat: Flat subdivision of each face (Method 1 in geodesic dome jargon)
 #        slerp: Spherical linear interpolation (or related method)
 #        areal: Areal coordinates on the sphere (triangular faces only)
 #        gc: Intersection of great circles (Method 2 in geodesic dome jargon)
 #        gcv: Minor variation of gc
-ADJ = """Projection constant. May be a float or a string from the list
+ADJ = ("""Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
-measurement of the polyhedron. Ignored unless -p=disk, nslerp, or nslerp2.
-Default is 1. String values can be """ + ', '.join(n for n in sgs.MEASURES)
+measurement of the polyhedron. Ignored unless -p=""" +
+', '.join(projection.PARALLEL) + "Default is 1. String values can be " +
+', '.join(n for n in sgs.MEASURES))
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
