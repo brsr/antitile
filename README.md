@@ -10,6 +10,7 @@ These scripts are included with this package:
 * `sgs.py`: Similar grid subdivision of tilings
 * `balloon.py`: Balloon tiling of the sphere
 * `cellular.py`: Colors polyhedra using cellular automata
+* `breakdown.py`: Visualize breakdown structures
 * `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
 * `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 

@@ -236,17 +236,11 @@ def parallels(poly, base, exact=True):
     the parallels to the base faces for each vertex in the polyhedron
     that would put the vertices onto the sphere"""
     normals = base.face_normals[poly.base_face]
-    if exact:
-        parallel = projection.parallel_exact 
-    else: 
-        parallel = projection.parallel_approx
-    return parallel(poly.vertices, normals)
+    return projection.parallel(poly.vertices, normals, exact)
 
 def parallel_sphere(xyz, pls, k=1):
     """Given vertices and parallels, return points on sphere"""
     return xyz + k*pls
-
-
 
 def optimize_k(poly, base, measure, exact=True, normalize=True):
     """Routine to optimize the factor k"""

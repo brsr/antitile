@@ -103,21 +103,21 @@ class FlatTiling(tiling.Tiling):
     def proj_complex(self):
         twod = self.proj_2d
         return twod[..., 0] + 1j*twod[..., 1]
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    from matplotlib.collections import PolyCollection
-
-    a, b = 2, 2
-    shape = 3
-    tiling = FlatTiling(a, b, shape)
-    pts_2d = tiling.proj_2d
-    mx = pts_2d.max(axis=0)
-    mn = pts_2d.min(axis=0)
-    ptx = pts_2d[tiling.faces]
-    fig, ax = plt.subplots()
-    fig.set_size_inches(10, 6)
-    plt.axis('equal')
-    pc = PolyCollection(ptx, edgecolors='grey')
-    ax.add_collection(pc)
-    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c='k')
+#
+#if __name__ == "__main__":
+#    import matplotlib.pyplot as plt
+#    from matplotlib.collections import PolyCollection
+#
+#    a, b = 2, 2
+#    shape = 3
+#    tiling = FlatTiling(a, b, shape)
+#    pts_2d = tiling.proj_2d
+#    mx = pts_2d.max(axis=0)
+#    mn = pts_2d.min(axis=0)
+#    ptx = pts_2d[tiling.faces]
+#    fig, ax = plt.subplots()
+#    fig.set_size_inches(10, 6)
+#    plt.axis('equal')
+#    pc = PolyCollection(ptx, edgecolors='grey')
+#    ax.add_collection(pc)
+#    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c='k')

@@ -259,66 +259,66 @@ def frame_square(n=4, m=2):
     pairs = np.stack([frm, to], axis=1)
     other = np.stack([1-pairs[..., 1], pairs[..., 0]], axis=-1)
     return np.stack([pairs, other])
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    from matplotlib.collections import PolyCollection, LineCollection
-
-    a, b = 2, 0
-    shape = 3
-
-    bkdn = Breakdown(a, b, shape)
-    frm = frame(a, b, shape)
-    if shape == 3:
-        abc = np.array([[0,  0],
-                        [1,  0],
-                        [0.5, np.sqrt(3)/2]])
-        pts_2d = bkdn.coord @ abc
-    else:
-        abc = np.array([[0,0],
-                         [1,0],
-                         [1,1],
-                         [0,1]])
-        pts_2d = bkdn.coord
-    mx = pts_2d.max(axis=0)
-    mn = pts_2d.min(axis=0)
-    ptx = pts_2d[bkdn.faces]
-    fig, ax = plt.subplots()
-    fig.set_size_inches(6, 6)
-    plt.axis('equal')
-    pc = PolyCollection(ptx, edgecolors='grey')
-    ax.add_collection(pc)
-    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c=-bkdn.group)
-    x = abc[...,0].tolist() + [abc[0,0]]
-    y = abc[...,1].tolist() + [abc[0,1]]
-
-    ax.plot(x,y, c='k')
-    if shape == 't':
-        frmp = frm @ abc
-        pass
-    else:
-        frmp = frm
-    lc = LineCollection(frmp.reshape((-1, frmp.shape[-2], frmp.shape[-1])), color='c')
-    ax.add_collection(lc)
-    lindex = bkdn.lindex
-    li = xmath.line_intersection(frmp[0,lindex[:,0],0],frmp[0,lindex[:,0],1],
-                                 frmp[1,lindex[:,1],0],frmp[1,lindex[:,1],1])
-    ax.scatter(li[..., 0], li[..., 1], c='y')
-    #x = np.stack([li[:,0],pts_2d[:,0]],axis=-1)
-    #y = np.stack([li[:,1],pts_2d[:,1]],axis=-1)
-    #ax.plot(x, y, c='g')
-
-    anorm = a**2 + a*b+ b**2
-    vertices = bkdn.vertices
-    mat = np.array([[a+b, b],
-                    [-b, a]])/anorm
-    coords1 = vertices[:, :2].dot(mat.T)
-    l1 = 1-coords1.sum(axis=-1, keepdims=True)
-    coord1 = np.concatenate([l1, coords1], axis=1)
-    mat2 = np.array([[   -a, -b - a, anorm],
-                    [a + b,      b, 0],
-                    [   -b,      a, 0]]) / anorm
-
-    coords = vertices.copy()
-    coords[:, 2] = 1  # the ol' affine matrix trick
-    coord2 = coords.dot(mat2.T)
+#
+#if __name__ == "__main__":
+#    import matplotlib.pyplot as plt
+#    from matplotlib.collections import PolyCollection, LineCollection
+#
+#    a, b = 2, 0
+#    shape = 3
+#
+#    bkdn = Breakdown(a, b, shape)
+#    frm = frame(a, b, shape)
+#    if shape == 3:
+#        abc = np.array([[0,  0],
+#                        [1,  0],
+#                        [0.5, np.sqrt(3)/2]])
+#        pts_2d = bkdn.coord @ abc
+#    else:
+#        abc = np.array([[0,0],
+#                         [1,0],
+#                         [1,1],
+#                         [0,1]])
+#        pts_2d = bkdn.coord
+#    mx = pts_2d.max(axis=0)
+#    mn = pts_2d.min(axis=0)
+#    ptx = pts_2d[bkdn.faces]
+#    fig, ax = plt.subplots()
+#    fig.set_size_inches(6, 6)
+#    plt.axis('equal')
+#    pc = PolyCollection(ptx, edgecolors='grey')
+#    ax.add_collection(pc)
+#    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c=-bkdn.group)
+#    x = abc[...,0].tolist() + [abc[0,0]]
+#    y = abc[...,1].tolist() + [abc[0,1]]
+#
+#    ax.plot(x,y, c='k')
+#    if shape == 't':
+#        frmp = frm @ abc
+#        pass
+#    else:
+#        frmp = frm
+#    lc = LineCollection(frmp.reshape((-1, frmp.shape[-2], frmp.shape[-1])), color='c')
+#    ax.add_collection(lc)
+#    lindex = bkdn.lindex
+#    li = xmath.line_intersection(frmp[0,lindex[:,0],0],frmp[0,lindex[:,0],1],
+#                                 frmp[1,lindex[:,1],0],frmp[1,lindex[:,1],1])
+#    ax.scatter(li[..., 0], li[..., 1], c='y')
+#    #x = np.stack([li[:,0],pts_2d[:,0]],axis=-1)
+#    #y = np.stack([li[:,1],pts_2d[:,1]],axis=-1)
+#    #ax.plot(x, y, c='g')
+#
+#    anorm = a**2 + a*b+ b**2
+#    vertices = bkdn.vertices
+#    mat = np.array([[a+b, b],
+#                    [-b, a]])/anorm
+#    coords1 = vertices[:, :2].dot(mat.T)
+#    l1 = 1-coords1.sum(axis=-1, keepdims=True)
+#    coord1 = np.concatenate([l1, coords1], axis=1)
+#    mat2 = np.array([[   -a, -b - a, anorm],
+#                    [a + b,      b, 0],
+#                    [   -b,      a, 0]]) / anorm
+#
+#    coords = vertices.copy()
+#    coords[:, 2] = 1  # the ol' affine matrix trick
+#    coord2 = coords.dot(mat2.T)
