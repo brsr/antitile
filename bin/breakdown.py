@@ -40,7 +40,7 @@ HEIGHTS = {'ico': 0.794654, #FIXME put the actual equation here
            'oct': 1/np.sqrt(3),
            'tet': 1/3,
            'cube': 1/np.sqrt(3),
-           'dihedron': 0}
+           'di': 0}
 
 def base_3d(z, shape=TRIANGLE):
     """
@@ -63,82 +63,38 @@ def plot_base(ax, shape, line_pts_n=50, color='blue'):
     reshape_border = border.reshape((-1, 3))
     ax.plot(reshape_border[..., 0], reshape_border[..., 1], color=color)
 
-#def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
-#    base_bary = np.eye(3)
-#    frame = projection.tri_intersections(base_bary, n, m,
-#                                                interp=xmath.lerp)
-#    if not degenerate:
-#        frame = frame.reshape((-1,2,3))
-#        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
-#        bad = np.isclose(norm, 0)
-#        frame = frame[~bad]
-#    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
-#    frame_0 = frame[..., 0, np.newaxis, :]
-#    frame_1 = frame[..., 1, np.newaxis, :]
-#    return xmath.lerp(frame_0, frame_1, t)
-#
-#def breakdown_into_xy(n=4, m=2, line_pts_n=50, degenerate=False):
-#    base_bary = np.eye(3)
-#    frame = projection.square_intersections(base_bary, n, m,
-#                                                interp=xmath.lerp)
-#    if not degenerate:
-#        frame = frame.reshape((-1,2,3))
-#        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
-#        bad = np.isclose(norm, 0)
-#        frame = frame[~bad]
-#    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
-#    frame_0 = frame[..., 0, np.newaxis, :]
-#    frame_1 = frame[..., 1, np.newaxis, :]
-#    return xmath.lerp(frame_0, frame_1, t)
+def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
+    base_bary = np.eye(3)
+    frame = breakdown.frame_triangle(base_bary, n, m)
+    if not degenerate:
+        frame = frame.reshape((-1,2,3))
+        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
+        bad = np.isclose(norm, 0)
+        frame = frame[~bad]
+    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
+    frame_0 = frame[..., 0, np.newaxis, :]
+    frame_1 = frame[..., 1, np.newaxis, :]
+    return xmath.lerp(frame_0, frame_1, t)
 
-#def m1_3_bkdn_lines(base_pts, method, n=4, m=2, line_pts_n=50):
-#    bary = breakdown_into_bary(n, m, line_pts_n).reshape((-1, line_pts_n, 3))
-#    lines = method(bary, base_pts)
-#    return lines.reshape((-1, line_pts_n, 3))
-#
-#def m1_4_bkdn_lines(base_pts, method, n=4, m=2, line_pts_n=50):
-#    bary = breakdown_into_bary(n, m, line_pts_n).reshape((-1, line_pts_n, 3))
-#    lines = method(bary, base_pts)
-#    return lines.reshape((-1, line_pts_n, 3))
-#
-#
-#def plot_m1_bkdn(ax, base_pts, method, shape=3, n=4, m=2, line_pts_n=50):
-#    if shape==3:
-#        lines = m1_3_bkdn_lines(base_pts, method, n, m, line_pts_n)
-#    else:
-#        lines = m1_4_bkdn_lines(base_pts, method, n, m, line_pts_n)
-#    lc = LineCollection(lines[..., :2], color='k', zorder=1)
-#    ax.add_collection(lc)
-#
-#
-#def plot_m2_bkdn_lines(ax, base_pts, n=4, m=2, line_pts_n=50):
-#    frame = breakdown.frame_triangle(base_pts, n, m)
-#    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
-#    frame_0 = frame[..., 0, np.newaxis, :]
-#    frame_1 = frame[..., 1, np.newaxis, :]
-#
-#    lines = xmath.slerp(frame_0, frame_1, t)
-#    reshape_lines = lines.reshape((-1, line_pts_n, 3))
-#    lc = LineCollection(reshape_lines[..., :2], color='k', zorder=1)
-#    ax.add_collection(lc)
-#
-#
-#def plot_m2_bkdn_triangles(ax, base_pts, n=4, m=2, line_pts_n=50):
-#    bkdn = breakdown.Breakdown(n, m, remove_outside=True)
-#    tm2 = projection.triangles_method2
-#    ptx = xmath.normalize(tm2(bkdn.vertices, base_pts, (n, m)))
-#
-#    pc = PolyCollection(ptx[..., :2], color='lightgrey', zorder=0)
-#    ax.add_collection(pc)#these leak outside their triangle but close enough
-
+def breakdown_into_xy(n=4, m=2, line_pts_n=50, degenerate=False):
+    frame = breakdown.frame_square(n, m)
+    if not degenerate:
+        frame = frame.reshape((-1,2,2))
+        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
+        bad = np.isclose(norm, 0)
+        frame = frame[~bad]
+    t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
+    frame_0 = frame[..., 0, np.newaxis, :]
+    frame_1 = frame[..., 1, np.newaxis, :]
+    return xmath.lerp(frame_0, frame_1, t)
 
 def start_plot(limits=[-1.05, 1.05]):
     fig, ax = plt.subplots()
     fig.set_size_inches(8, 8)
     fig.set_tight_layout(True)
+    plt.axis('equal')
     ax.set_xlim(limits)
     ax.set_ylim(limits)
-    plt.axis('equal')
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     plt.axis('off')#why do we need both? it is a mystery
@@ -146,14 +102,14 @@ def start_plot(limits=[-1.05, 1.05]):
 
 def plot_parallel(ax, in_pts, name, k=[1], exact=True, line_pts_n=50):
     pts = in_pts + k[0]*projection.parallel(in_pts, CENTER, exact)
-    sc = ax.scatter(pts[..., 0], pts[..., 1], label=name)
+    sc = ax.scatter(pts[..., 0], pts[..., 1], label=name, zorder=10)
     color = list(sc.get_facecolor().flat)
     if len(k) > 1:
         ks = np.linspace(*k, num=line_pts_n)[..., np.newaxis, np.newaxis]
         in_pts = in_pts[np.newaxis]
         linpts = in_pts + ks*projection.parallel(in_pts, CENTER, exact)
         linpts = xmath.normalize(linpts)
-        ax.plot(linpts[..., 0], linpts[..., 1], c=color)
+        ax.plot(linpts[..., 0], linpts[..., 1], c=color, zorder=10)
     return pts
 
 def plot_m2_triangles(ax, base_pts, freq, bkdn):
@@ -166,6 +122,19 @@ def plot_m2_4(ax, base_pts, freq):
     frame = breakdown.frame_square(*freq)
     return projection.square_naive_slerp(frame, base_pts)
 
+
+def plot_m1_bkdn(ax, base_pts, freq, shape, bkdn, proj,
+                 line_pts_n=50, tweak=False):
+    if shape == 3:
+        c = breakdown_into_bary(*freq, line_pts_n).reshape((-1,
+                                                              line_pts_n, 3))
+    else:
+        c = breakdown_into_xy(*freq, line_pts_n).reshape((-1,
+                                                            line_pts_n, 2))
+    coords = xmath.recordify(['coord'], [c.reshape((-1, c.shape[-1]))])
+    result = proj(coords, base_pts, freq, tweak)
+    return result.reshape(c.shape[:-1] + (3,))
+
 def plot_m2_bkdn(ax, base_pts, freq, shape, bkdn, line_pts_n=50, tweak=False):
     if shape == 4:
         preframe = breakdown.frame_square(*freq)
@@ -175,17 +144,17 @@ def plot_m2_bkdn(ax, base_pts, freq, shape, bkdn, line_pts_n=50, tweak=False):
         frame = breakdown.frame_triangle(base_pts, n=freq[0], m=freq[1],
                                          interp = xmath.slerp)
     t = np.linspace(0, 1, num=line_pts_n)[..., np.newaxis]
+    reshape = (-1, line_pts_n, 3)
     lines = xmath.slerp(frame[..., 0, np.newaxis, :],
-                        frame[..., 1, np.newaxis, :], t).reshape((-1,
-                                                                  line_pts_n,
-                                                                  3))
-    ax.scatter(frame[..., 0], frame[..., 1], color='k')
-    lc = LineCollection(lines[..., :2], edgecolor='k')
-    ax.add_collection(lc)
+                        frame[..., 1, np.newaxis, :], t).reshape(reshape)
+    #ax.scatter(frame[..., 0], frame[..., 1], color='k')
+    return lines
 
 
 def inverse(pts):
-    return pts / np.linalg.norm(pts[..., :2], axis=-1, keepdims=True)**2
+    result = pts / np.linalg.norm(pts[..., :2], axis=-1, keepdims=True)**2
+    result[..., 0] *= -1
+    return result
 
 def nonnegativeint(string, lowest=0):
     """Non-negative integer type for argparse"""
@@ -200,6 +169,8 @@ def posint(string):
     return nonnegativeint(string, 1)
 
 def zerotoone(string):
+    if string in HEIGHTS:
+        return HEIGHTS[string]
     x = float(string)
     if x < 0 or x > 1:
         msg = "z must be between 0 and 1 inclusive"
@@ -231,19 +202,23 @@ def main():
     parser.add_argument("a", help=FREQ_A, type=posint)
     parser.add_argument("b", help=FREQ_B, nargs='?', default=0,
                         type=nonnegativeint)
+    parser.add_argument("-e", default=1.05, type=float,
+                        help="extent of plot (defaults to 1.05)")
     parser.add_argument("-z", default=1/np.sqrt(3), type=zerotoone,
-                        help="height of breakdown face, in [0, 1]")
+                        help="height of breakdown face, in [0, 1], default "
+                             "1/3. or a text string: " + ', '.join(HEIGHTS))
     parser.add_argument("-p", '--projection', nargs="*",
                         help=PROJ, choices=projection.PROJECTIONS)
+    parser.add_argument("-f", choices=projection.PROJECTIONS,
+                        help="""Which projection to use for face figure. By
+                        default uses the last one in the projection list. gc
+                        (without the q option) shows the triangles created
+                        by intersecting great circles instead.""")
     parser.add_argument("-q", action="store_true",
                         help="use quadrilateral instead of triangle")
     parser.add_argument("-k", default=[1], help=ADJ, type=parse_k)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
-    parser.add_argument("-f", action="store_true",
-                        help="""without this flag, shows faces (based on
-                        first item in projection list). with, shows GC
-                        triangles (z>0 only, works even if GC isn't in
-                        the list)""")
+
     args = parser.parse_args()
     freq = args.a, args.b
     shape_n = 4 if args.q else 3
@@ -258,20 +233,28 @@ def main():
     shape = SHAPES[shape_n]
     base_pts = base_3d(args.z, shape=shape)
     bkdn = breakdown.Breakdown(*freq, shape_n)
-    fig, ax = start_plot()
+    fig, ax = start_plot([-args.e, args.e])
+    basecolor = 'k' if args.b == 0 else 'blue'
     if z == 0:
-        plot_sphere_outline(ax, color='blue')
+        plot_sphere_outline(ax, color=basecolor)
     else:
         plot_sphere_outline(ax)
-        plot_base(ax, base_pts)
+        plot_base(ax, base_pts, color=basecolor)
 
-    if args.f and z > 0:
-        plot_m2_bkdn(ax, base_pts[:-1], freq, shape_n, bkdn, tweak=args.tweak)
+    faceproj = args.f if args.f else names[-1]
+    if faceproj == 'gc':
+        lines = plot_m2_bkdn(ax, base_pts[:-1], freq, shape_n,
+                             bkdn, tweak=args.tweak, line_pts_n=100)
     else:
-        proj = projection.PROJECTIONS[names[0]][shape_n]
-        #FIXME probably need shape as an input
-        #plot_m1_bkdn(ax, base_pts, proj, *freq)
-
+        proj = projection.PROJECTIONS[faceproj][shape_n]
+        lines = plot_m1_bkdn(ax, base_pts[:-1], freq, shape_n,
+                             bkdn, proj, tweak=args.tweak, line_pts_n=100)
+        if faceproj in projection.PARALLEL:
+            pl = projection.parallel
+            lines += args.k[0]*pl(lines, CENTER, not args.tweak)
+    lines = xmath.normalize(lines)
+    lc = LineCollection(lines[..., :2], edgecolor='k')
+    ax.add_collection(lc)
     for name in names:
         proj = projection.PROJECTIONS[name][shape_n]
         pts = proj(bkdn, base_pts[:-1], freq, args.tweak)
@@ -281,11 +264,15 @@ def main():
                                 exact=not args.tweak)
         else:
             pts = xmath.normalize(pts)
-            ax.scatter(pts[..., 0], pts[..., 1], label=name)
+            ax.scatter(pts[..., 0], pts[..., 1], label=name, zorder=10)
     if z == 0 and len(names) == 1:
         inv = inverse(pts)
-        ax.scatter(inv[..., 0], inv[..., 1], color='grey', label='inverse')
-        #FIXME add inverse of faces
+        invlines = inverse(lines)
+        invlines[np.abs(invlines) > 2*args.e] = np.nan
+        ax.scatter(inv[..., 0], inv[..., 1], color='grey', zorder=0,
+                   label='inverse')
+        lc = LineCollection(invlines[..., :2], edgecolor='grey', zorder=0)
+        ax.add_collection(lc)
     ax.legend()
     plt.show()
 
