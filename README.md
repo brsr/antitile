@@ -6,15 +6,16 @@ Manipulation of polyhedra and tilings using Python. This package is designed to 
     pip3 install git+git://github.com/brsr/antitile.git
 
 ## Usage
-These scripts are included with this package:
+The package includes a number of scripts. These can be piped together with programs from Antiprism:
 * `sgs.py`: Similar grid subdivision of tilings
 * `balloon.py`: Balloon tiling of the sphere
 * `cellular.py`: Colors polyhedra using cellular automata
-* `breakdown.py`: Visualize breakdown structures
 * `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
 * `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 
-These can be piped together with programs from Antiprism.
+These are free-standing:
+* `breakdown.py`: Visualize breakdown structures
+* `factor.py`: Factors Gaussian, Eisenstein, Nietsnesie (Eisenstein based on the 6th root of unity instead of 3rd), and regular integers.
 
 OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-edged dihedra are included in the `data` folder in the source.
 
