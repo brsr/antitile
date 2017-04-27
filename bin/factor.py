@@ -72,10 +72,6 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return NotImplemented, NotImplemented
 
     @abc.abstractmethod
-    def __truediv__(self, other):
-        return NotImplemented
-
-    @abc.abstractmethod
     def anorm(self):
         return NotImplemented
 
@@ -117,7 +113,7 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         else:
             return other.gcd(self % other)
 
-    def factor(self):
+    def _factor(self):
         constructor = type(self)
         an = self.anorm()
         p = smallest_prime_factor(an)
@@ -138,7 +134,24 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
                 left, rem = divmod(self, factor)
             if rem:
                 raise Exception('failed to find divisor')
-        return [factor] + left.factor()
+        return [factor] + left._factor()
+    
+    def factor(self):
+        one = constructor(1)
+        factors = self._factor()
+        nf = [f.normal_form()[0] for f in factors if f.anorm() > 1]
+        if len(nf) > 0:
+            backcalc = nf[-1]
+            for i in range(len(nf)-1):
+                f = nf[i]
+                if f.anorm() > 1:
+                    backcalc *= f
+        else:
+            backcalc = one
+        unit = self//backcalc
+        if unit != one or len(nf) == 0:
+            nf.append(unit)
+        return nf
 
     def normal_form(self):
         if (self.a > 0 and self.b >= 0) or (self.a == 0 and self.b == 0):
@@ -369,19 +382,13 @@ if __name__ == "__main__":
     parser.add_argument("-d", choices=DOMAINS, default="g",
                         help="Specify domain. Defaults to [g]aussian.")
     args = parser.parse_args()
+    if args.a == 0 and args.b == 0:
+        print('0')
+        exit()
     constructor = DOMAINS[args.d]
     x = constructor(args.a, args.b)
     factors = x.factor()
-    nf = [f.normal_form()[0] for f in factors if f.anorm() > 1]
-    backcalc = nf[-1]
-    for i in range(len(nf)-1):
-        f = nf[i]
-        if f.anorm() > 1:
-            backcalc *= f
-    unit = x//backcalc
-    if unit != constructor(1):
-        nf.append(unit)
-    nfcount = Counter(nf)
+    nfcount = Counter(factors)
     gen = ('{}'.format(x) if y == 1 else '{}^{}'.format(x, y)
            for x, y in sorted(nfcount.items()))
     print(' * '.join(gen))
