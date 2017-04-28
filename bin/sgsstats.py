@@ -18,7 +18,7 @@ def main():
     parser.add_argument("-c", help="Write to csv file")
 
     args = parser.parse_args()
-    header = ['filename', 'energy', 'cog', 'bent_min', 'bent_max',
+    header = ['filename', 'n_v', 'n_f', 'energy', 'cog', 'bent_min', 'bent_max',
                   'edge_min', 'edge_max',
                   'aspect_ratio_min', 'aspect_ratio_max',
                   'faces_min', 'faces_max']
@@ -35,6 +35,8 @@ def main():
         with h as handle:
             vertices, faces, fc, e, ec, v, vc = off.load_off(handle)
         poly = tiling.Tiling(vertices, faces)
+        n_v = len(vertices)
+        n_f = len(faces)
         energy = tiling.energy(vertices)
         norm_cog = tiling.center_of_gravity(vertices)
         bentness = tiling.bentness(vertices, poly)
@@ -45,13 +47,14 @@ def main():
         aspect_min, aspect_max = aspect.min(), aspect.max()
         faces = tiling.face_area(vertices, poly)
         face_min, face_max = faces.min(), faces.max()
-        values = [fn, energy, norm_cog,
+        values = [fn, n_v, n_f, energy, norm_cog,
                   bent_min, bent_max,
                   edge_min, edge_max,
                   aspect_min, aspect_max,
                   face_min, face_max]
         print('---')
         print('File: ', fn)
+        print('Vertices, faces: {}, {}'.format(n_v, n_f))
         print('Thomson energy: ', energy)
         if not np.isclose(0, norm_cog):
             print('Distance of center of gravity from center:\t', norm_cog)

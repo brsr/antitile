@@ -5,7 +5,7 @@ Subdivide a tiling or polyhedra using a similar grid
 """
 import argparse
 from sys import stdin
-from antitile import sgs, off, tiling, xmath, projection
+from antitile import sgs, off, tiling, projection
 
 DESCRIPTION = """Similar grid subdivision: subdivide a tiling or
 polyhedron with a grid of similar triangles or squares."""
@@ -41,9 +41,9 @@ projection constant k, uses approximate parallels instead of exact. For
 triangular gc, changes weights in the vertex calculation. May produce a
 (slightly) different vertex positioning, and (very slightly) reduce
 runtime."""
-#COLOR = """Color vertices by base face and faces by group,
-#instead of vice versa"""
-
+FACTOR = """Factors the frequency and performs repeated subdivision using
+those factors. Smaller subdivisions (by norm) are applied first. (If the
+factors are powers of (2,0), this is Method 3 in geodesic dome parlance.)"""
 
 def nonnegativeint(string, lowest=0):
     """Non-negative integer type for argparse"""
@@ -76,6 +76,7 @@ def main():
                         help="Don't normalize vertices onto the unit sphere")
     parser.add_argument("-k", default=1, help=ADJ, type=kparser)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
+    parser.add_argument("-f", "--factor", action="store_true", help=FACTOR)
 
     args = parser.parse_args()
     frequency = (args.a, args.b)
@@ -87,17 +88,14 @@ def main():
         with file as f:
             vertices, faces, fc, _e, _ec, _v, _vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
-        poly = sgs.SGS(base, frequency, args.projection, args.tweak)
-        if args.projection in projection.PARALLEL:
-            if args.k in sgs.MEASURES:
-                measure = sgs.MEASURES[args.k]
-                k = sgs.optimize_k(poly, base, measure,
-                                   ~args.tweak, ~args.no_normalize)
-            else:
-                k = float(args.k)
-            poly.vertices += k*sgs.parallels(poly, base, exact=True)
-        if not args.no_normalize:
-            poly.vertices = xmath.normalize(poly.vertices)
+        if args.factor:
+            poly = sgs.build_sgs_rep(base, frequency, args.projection,
+                                     tweak=args.tweak, k=args.k,
+                                     normalize=not args.no_normalize)
+        else:
+            poly = sgs.build_sgs(base, frequency, args.projection,
+                                 tweak=args.tweak, k=args.k,
+                                 normalize=not args.no_normalize)
         vertcolor = poly.group.astype(int)
         facecolor = poly.face_group.astype(int)
         result = off.write_off(poly.vertices, poly.faces,
@@ -108,7 +106,7 @@ def main():
             result += '#input file = {}\n'.format(args.filename)
         result += '#projection = {}\n'.format(args.projection)
         if args.projection in projection.PARALLEL:
-            result += '#k = {}\n'.format(k)
+            result += '#k = {}\n'.format(poly.k)
         if args.projection in projection.PARALLEL + ['gc']:
             result += '#tweak = {}\n'.format(args.tweak)
         result += '#normalized = {}\n'.format(not args.no_normalize)

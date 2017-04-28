@@ -7,7 +7,7 @@ import numpy as np
 from numpy.linalg import norm
 from scipy.optimize import minimize_scalar
 from scipy import sparse
-from . import tiling, breakdown, projection, xmath
+from . import tiling, breakdown, projection, xmath, factor
 
 def stitch_3(edge, bf, bkdn, index_0, index_1, freq):
     a, b = freq
@@ -57,6 +57,36 @@ def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
     #print('-')
     matches = np.argwhere(np.all(lindices[:, np.newaxis] ==
                                  flipped[np.newaxis], axis=-1)).T
+    l0 = np.nonzero(index_0)[0][matches[0]]
+    l1 = np.nonzero(index_1)[0][matches[1]]
+    return l0, l1
+
+def roll(coord, freq, edge, bf, improper=False):
+    #TODO finish this
+    pass
+
+def stitch(edge, bf, bkdn_0, bkdn_1, freq):
+    #TODO finish this
+    a, b = freq
+    improper = (freq[0] == freq[1] or freq[1] == 0)
+    shape_0 = 4 if bkdn_0.coord.shape[1] == 2 else 3
+    shape_1 = 4 if bkdn_1.coord.shape[1] == 2 else 3
+    if shape_1 == 4:
+        offset = np.array([a+2*b, b])
+    else:
+        offset = np.array([a+b, a, 2*a+b])
+    lindices = roll(bkdn_0.coord, freq, edge, bf[0], improper)
+    flipped = offset - roll(bkdn_1.coord, freq, edge, bf[1], improper)
+    if shape_0 == shape_1:
+        comparison = np.all(lindices[:, np.newaxis] == flipped[np.newaxis], 
+                            axis=-1)
+    elif b == 0:
+        comparison = lindices[:, 0, np.newaxis] == flipped[np.newaxis, ..., 0]
+    else:
+        msg = ("Class II and III subdivision on mixed "
+               "triangle-quadrilateral polyhedra is not implemented")
+        raise NotImplementedError(msg)
+    matches = np.argwhere(comparison).T
     l0 = np.nonzero(index_0)[0][matches[0]]
     l1 = np.nonzero(index_1)[0][matches[1]]
     return l0, l1
@@ -215,20 +245,67 @@ class SGS(tiling.Tiling):
         self.face_bf = face_bf
         self.face_group = face_group
 
-def face_mean(face):
-    return np.mean(face, axis=0)
+#def face_mean(face):
+#    return np.mean(face, axis=0)
+#
+#def face_mode(face):
+#    return np.bincount(face).argmax()
+#
+#def face_color_by_vertex(poly, vcolor, fun=face_mean):
+#    faces = poly.faces
+#    result = []
+#    for face in faces:
+#        face = np.array(face)
+#        fvc = vcolor[face]
+#        result.append(fun(fvc))
+#    return np.array(result)
 
-def face_mode(face):
-    return np.bincount(face).argmax()
+def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
+    poly = SGS(base, frequency, proj, tweak)
+    """Wrapper around the SGS constructor that performs parallel projection
+    and normalization."""
+    if proj in projection.PARALLEL:
+        if k in MEASURES:
+            measure = MEASURES[k]
+            k = optimize_k(poly, base, measure, not tweak, normalize)
+        else:
+            k = float(k)
+        poly.vertices += k*parallels(poly, base, exact=not tweak)
+    if normalize:
+        poly.vertices = xmath.normalize(poly.vertices)
+    poly.k = k
+    return poly
 
-def face_color_by_vertex(poly, vcolor, fun=face_mean):
-    faces = poly.faces
-    result = []
-    for face in faces:
-        face = np.array(face)
-        fvc = vcolor[face]
-        result.append(fun(fvc))
-    return np.array(result)
+def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
+                normalize=True):
+    """Wrapper around the SGS constructor that factors the frequency
+    and uses the factors to repeatedly subdivide the grid. Uses
+    lower-norm factors first. Also does everything `build_sgs` does."""
+    fs = base.face_size
+    fsu = np.unique(fs)
+    fsu = fsu[fsu > 2]
+    if len(fsu) != 1:
+        raise ValueError('cannot perform repeated subdivision on mixed grid')
+    elif fsu[0] == 3:
+        element = factor.Nietsnesie
+    elif fsu[0] == 4:
+        element = factor.Gaussian
+    else:
+        msg = ("cannot perform repeated subdivision on grid of faces with "
+               + str(fsu[0]) + " sides")
+        raise ValueError(msg)
+    q = element(*frequency)
+    fq = q.factor()
+
+    result = base
+    for f in fq:
+        if f.anorm() <= 1:
+            continue
+        freq = f.tuple
+        result = build_sgs(result, freq, proj, k=k, tweak=tweak,
+                           normalize=normalize)
+    return result
+
 
 #--Stuff having to do with the k-factor--
 def parallels(poly, base, exact=True):
