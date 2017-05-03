@@ -96,7 +96,7 @@ class Tiling:
 
     @property
     def vertex_adjacency(self):
-        """Vertex adjacency matrix"""
+        """Vertex edge adjacency matrix"""
         edges = self.edges
         redges = np.concatenate([edges, edges[:, ::-1]], axis=0)
         n_r = len(redges)
@@ -106,7 +106,7 @@ class Tiling:
 
     @property
     def face_adjacency(self):
-        """Face adjacency matrix"""
+        """Face edge adjacency matrix"""
         edges = self.edges
         ex, fx = self.faces_by_edge(edges)
         faceadj = set()
@@ -124,6 +124,40 @@ class Tiling:
                                   (faceadj[:, 0], faceadj[:, 1])),
                                  shape=(n, n))
 
+    @property
+    def face_vertex_incidence(self):
+        """Face vertex incidence matrix"""
+        faces = self.faces
+        n_f = len(self.faces)
+        n_v = len(self.vertices)
+        fx = []
+        vx = []
+        for i in range(n_f):
+            face = self.faces[i]
+            for v in face:
+                fx.append(i)
+                vx.append(v)
+        ones = np.ones(len(fx), dtype=np.int8)
+        return sparse.coo_matrix((ones, (fx, vx)), shape=(n_f, n_v))
+
+    @property
+    def vertex_f_adjacency(self):
+        """Vertex face adjacency matrix"""
+        fvi = self.face_vertex_incidence
+        result = fvi.T @ fvi
+        result.setdiag(0)
+        result.eliminate_zeros()
+        return result
+
+    @property
+    def face_v_adjacency(self):
+        """Face vertex adjacency matrix"""
+        fvi = self.face_vertex_incidence
+        result = fvi @ fvi.T
+        result.setdiag(0)
+        result.eliminate_zeros()
+        return result
+
 def edges_from_facelist(faces):
     """Given a list of faces, returns a list of edges."""
     edges = set()
@@ -137,7 +171,7 @@ def edges_from_facelist(faces):
     return result
 
 def orient_face(face, edge, reflection=False):
-    """Determines how to roll the list of vertices for a face so that its 
+    """Determines how to roll the list of vertices for a face so that its
     0th and 1st vertices correspond to edge. If reflection=True,
     allows reversing the list as well.
     Returns:

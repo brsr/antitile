@@ -29,6 +29,10 @@ Colors indexes of the input file is used as the initial condition,
 interpreting 0 as dead and anything else as alive. If colors are not
 given, initial condition is assigned randomly with 50% live cells."""
 
+NEIGHBOR = """By default, faces are considered adjacent if they
+share an edge (von Neumann neighborhood). With this option, faces
+are adjacent if they share a vertex (Moore neighborhood)."""
+
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument("filename", nargs='?',
@@ -39,26 +43,25 @@ def main():
     parser.add_argument("-s", help="Survival rule, comma-separated",
                         default=[1, 2], type=ruleparse)
     parser.add_argument("-l", help="Lookback", type=int, default=12)
-    parser.add_argument("-v", help="Use vertex adjacency instead of face",
-                        action='store_true')
+    parser.add_argument("-v", help=NEIGHBOR, action='store_true')
+    parser.add_argument("-d", action='store_true', help="Color the vertices "
+                        "as if the cellular automata were operating on "
+                        "the dual polyhedron/tiling")    
     parser.add_argument("-o", help="Output prefix.", default="cellular")
     args = parser.parse_args()
     file = open(args.filename) if args.filename else stdin
     with file as f:
         vertices, faces, fc, e, ec, verts, vc = off.load_off(f)
-    if fc is None:
-        fc = np.random.randint(2, size=len(faces))
-    elif len(fc.shape) > 1:
-        raise ValueError("Faces contain color values, not color indexes")
-    if vc is None:
-        vc = np.random.randint(2, size=len(vertices))
-    elif len(vc.shape) > 1:
-        raise ValueError("Vertices contain color values, not color indexes")
-    if verts is None:
-        verts = np.arange(len(vertices))
-    init = vc if args.v else fc
+    init = vc if args.d else fc
+    if init is None:
+        init = np.random.randint(2, size=len(faces))
+    elif len(init.shape) > 1:
+        raise ValueError("Need color indexes, not color values")    
     poly = tiling.Tiling(vertices, faces)
-    adj = poly.vertex_adjacency if args.v else poly.face_adjacency
+    if args.d:
+        adj = poly.vertex_f_adjacency if args.v else poly.vertex_adjacency
+    else:
+        adj = poly.face_v_adjacency if args.v else poly.face_adjacency
     rule = np.array(args.b + [i - 128 for i in args.s], dtype=np.int8)
     state = np.zeros((args.n + 1, len(init)), dtype=bool)
     state[0] = init
@@ -68,12 +71,13 @@ def main():
     for i in range(args.n):
         this_state = ca_step(state[i], rule, adj)
         state[i+1] = this_state
-        if args.v:
-            vc = this_state.astype(int)
+        result = this_state.astype(int)
+        if args.d:
+            string = off.write_off(vertices, faces, facecolors=fc, edges=e,
+                                   edgecolors=ec, vertexcolors=result)            
         else:
-            fc = this_state.astype(int)
-        string = off.write_off(vertices, faces, facecolors=fc, edges=e,
-                               edgecolors=ec, vertexcolors=vc)
+            string = off.write_off(vertices, faces, facecolors=result, edges=e,
+                                   edgecolors=ec, vertexcolors=vc)
         fn = file_template.format(i + 1)
         with open(fn, 'w') as f:
             f.write(string)
