@@ -136,6 +136,31 @@ def edges_from_facelist(faces):
     result = np.array(sorted([edge for edge in edges]))
     return result
 
+def orient_face(face, edge, reflection=False):
+    """Determines how to roll the list of vertices for a face so that its 
+    0th and 1st vertices correspond to edge. If reflection=True,
+    allows reversing the list as well.
+    Returns:
+        roll, flip"""
+    indexes = np.argwhere(np.in1d(face, edge))
+    if len(indexes) != 2:
+        raise ValueError()
+    elif ((indexes[1] + 1) % len(face)) == indexes[0]:
+        roll = 1
+    elif indexes[1] == indexes[0] + 1:
+        roll = -indexes[0]
+    else:
+        raise ValueError()
+
+    rolled_face = np.roll(face, roll)
+    if np.all(rolled_face[:2] == edge):
+        flip = False
+    elif np.all(rolled_face[:2][::-1] == edge):
+        flip = True
+    else:
+        raise ValueError()
+    return int(roll), flip
+
 #def strip_ev(faces):
 #    """Strip 1- and 2-vertex "faces" from the facelist"""
 #    count = np.array([len(np.unique(i)) for i in faces])
