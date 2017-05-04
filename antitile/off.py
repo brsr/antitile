@@ -84,11 +84,11 @@ def load_off(file):
             faces.append(vx)
             facecolors.append(colorspec)
 
-    edges = np.array(edges, dtype=int)
-    verts = np.array(verts, dtype=int)
-    facecolors = np.array(facecolors)
-    edgecolors = np.array(edgecolors)
-    vertexcolors = np.array(vertexcolors)
+    edges = None if len(edges) == 0 else np.array(edges, dtype=int)
+    verts = None if len(verts) == 0 else np.array(verts, dtype=int)
+    facecolors = None if len(facecolors) == 0 else np.array(facecolors)
+    edgecolors = None if len(edgecolors) == 0 else np.array(edgecolors)
+    vertexcolors = None if len(vertexcolors) == 0 else np.array(vertexcolors)
 
     return (vertices, faces, facecolors, edges, edgecolors,
             verts, vertexcolors)
@@ -107,21 +107,25 @@ def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
         vertexcolors: List of colors corresponding to each vertex
         """
     #align the "faces" into a single list
-    if facecolors is None and faces is not None:
+    if (facecolors is None or len(facecolors) == 0) and faces is not None:
         facecolors = ['']*len(faces)
-    if edgecolors is None and edges is not None:
+    if (edgecolors is None or len(edgecolors) == 0) and edges is not None:
         edgecolors = ['']*len(edges)
-    if vertexcolors is None and verts is not None:
+    if (vertexcolors is None or len(vertexcolors) == 0) and verts is not None:
+        print('woo')
         vertexcolors = ['']*len(verts)
     elif vertexcolors is not None and verts is None:
         verts = list(range(len(vertices)))
 
     if len(faces) != len(facecolors):
-        raise ValueError("Different number of face colors than faces")
+        msg = "Different number of face colors than faces: {}, {}"
+        raise ValueError(msg.format(len(faces), len(facecolors)))
     elif edgecolors is not None and len(edges) != len(edgecolors):
-        raise ValueError("Different number of edge colors than edges")
+        msg ="Different number of edge colors than edges: {}, {}"
+        raise ValueError(msg.format(len(edges), len(edgecolors)))
     elif vertexcolors is not None and len(verts) != len(vertexcolors):
-        raise ValueError("Different number of vertex colors than vertices")
+        msg = "Different number of vertex colors than vertices: {}, {}"
+        raise ValueError(msg.format(len(verts), len(vertexcolors)))
         
     flist = list(faces)
     if edges is not None:

@@ -7,7 +7,6 @@ from antitile import factor
 import argparse
 from collections import Counter
 
-#norm, mod, natural prime mod class
 DOMAINS = {"i": factor.Integer,
            "g": factor.Gaussian,
            "e": factor.Eisenstein,

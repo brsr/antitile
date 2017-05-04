@@ -1,9 +1,7 @@
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Apr 14 15:01:28 2017
-
-@author: Bstone
-"""
+Cellular automata on the faces (or vertices) of polyhedra"""
 
 import argparse
 from sys import stdin
@@ -46,7 +44,7 @@ def main():
     parser.add_argument("-v", help=NEIGHBOR, action='store_true')
     parser.add_argument("-d", action='store_true', help="Color the vertices "
                         "as if the cellular automata were operating on "
-                        "the dual polyhedron/tiling")    
+                        "the dual polyhedron/tiling")
     parser.add_argument("-o", help="Output prefix.", default="cellular")
     args = parser.parse_args()
     file = open(args.filename) if args.filename else stdin
@@ -55,8 +53,9 @@ def main():
     init = vc if args.d else fc
     if init is None:
         init = np.random.randint(2, size=len(faces))
-    elif len(init.shape) > 1:
-        raise ValueError("Need color indexes, not color values")    
+    init = np.asarray(init)
+    if len(init.shape) > 1:
+        raise ValueError("Need color indexes, not color values")
     poly = tiling.Tiling(vertices, faces)
     if args.d:
         adj = poly.vertex_f_adjacency if args.v else poly.vertex_adjacency
@@ -74,10 +73,10 @@ def main():
         result = this_state.astype(int)
         if args.d:
             string = off.write_off(vertices, faces, facecolors=fc, edges=e,
-                                   edgecolors=ec, vertexcolors=result)            
+                                   edgecolors=ec, vertexcolors=result)
         else:
-            string = off.write_off(vertices, faces, facecolors=result, edges=e,
-                                   edgecolors=ec, vertexcolors=vc)
+            string = off.write_off(vertices, faces, facecolors=result,
+                                   edges=e, edgecolors=ec, vertexcolors=vc)
         fn = file_template.format(i + 1)
         with open(fn, 'w') as f:
             f.write(string)

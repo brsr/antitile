@@ -1,6 +1,8 @@
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+Statistics of polyhedra, with a focus on using similar grid subdivision
+polyhedra to approximate the sphere 
 """
 import argparse
 import csv

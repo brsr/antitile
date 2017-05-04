@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Visualizes OFF files using matplotlib, which allows for export to png, svg,
