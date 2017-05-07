@@ -67,6 +67,9 @@ class Tiling:
             result[index] = normal
         return xmath.normalize(result)
 
+    @property
+    def true_faces(self):
+        return [x for x in self.faces if len(x) > 2]
 
     def faces_by_edge(self, edges):
         """Given edges, lists the faces adjacent to the edges
@@ -156,6 +159,43 @@ class Tiling:
         result = fvi @ fvi.T
         result.setdiag(0)
         result.eliminate_zeros()
+        return result
+    
+    def normalize_faces(self):
+        """Normalizes faces by rotating the vertex list so that  
+        the lowest vertex is first."""
+        faces = self.faces
+        for i in range(len(faces)):
+            aface = np.array(faces[i])
+            r = aface.argmin()
+            faces[i] = np.roll(aface, -r)
+
+    def id_dupe_faces(self, face_group=None):
+        """Identify duplicate faces"""
+        if face_group is None:
+            face_group = np.zeros(len(self.faces))
+        fs = self.faces_by_size
+        fn = self.face_size
+        n = len(fn)
+        comp = np.zeros((n,n), dtype=bool)
+        for i in fs:
+            faces = fs[i]
+            index = fn == i
+            #TODO replace this with np.unique when 1.13 comes out            
+            reps = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
+            reps[np.diag_indices_from(reps)] = False
+            reps = reps.sum(axis=-1) > 0 #repeated faces
+            #FIXME not sure this works right
+            comp[np.ix_(index, index)] = reps
+        ncp, cp = sparse.csgraph.connected_components(comp)
+        result = np.ones(n, dtype=bool)
+        for i in range(ncp):
+            index = cp == i
+            fg = face_group[index]
+            am = np.argmin(fg)
+            result_i = np.zeros(fg.shape, dtype=bool)
+            result_i[am] = True
+            result[index] = result_i
         return result
 
 def edges_from_facelist(faces):
