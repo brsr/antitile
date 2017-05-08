@@ -71,7 +71,7 @@ def tri_to_circle(beta, rotation=1, pts=TRI_C):
     tri_pts = beta.dot(pts)
     angle = np.angle(tri_pts)
     r = 1 - 3*beta.min(axis=-1)
-    result = r*np.exp(1j*angle)
+    result = r*np.exp(1j*angle)*rotation
     return xmath.complex_to_float2d(result)
 
 SQ_C = np.array([1, 1j, -1, -1j])
@@ -304,10 +304,10 @@ def to_sph_areal_coords(pts, triangle):
            [ 0.45754141,  0.35616745,  0.18629114],
            [ 1.        ,  0.        ,  0.        ]])
     """
-    area = xmath.spherical_triangle_area(triangle[0], triangle[1], triangle[2])
-    area_i = xmath.spherical_triangle_area(pts[:, np.newaxis],
-                                     np.roll(triangle, 1, axis=0),
-                                     np.roll(triangle, -1, axis=0))
+    area = xmath.triangle_solid_angle(triangle[0], triangle[1], triangle[2])
+    area_i = xmath.triangle_solid_angle(pts[:, np.newaxis],
+                                        np.roll(triangle, 1, axis=0),
+                                        np.roll(triangle, -1, axis=0))
     return area_i/area
 
 
@@ -375,30 +375,31 @@ def parallel_approx(pts, normal):
 
 def parallel(pts, normal, exact=True):
     if exact:
-        return parallel_exact(pts, normal)
+        result = parallel_exact(pts, normal)
     else:
-        return parallel_approx(pts, normal)
+        result = parallel_approx(pts, normal)
+    return result
 
 FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
         4: lambda bkdn, abc, freq, tweak:
-            square_to_quad(bkdn.coord[:, np.newaxis], abc)}
+           square_to_quad(bkdn.coord[:, np.newaxis], abc)}
 
 SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
-             square_naive_slerp(bkdn.coord, abc)}
+            square_naive_slerp(bkdn.coord, abc)}
 
 SLERP2 = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
-             square_naive_slerp_2(bkdn.coord, abc)}
+            square_naive_slerp_2(bkdn.coord, abc)}
 
 OTHER = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
-             square_slerp(bkdn.coord[:, np.newaxis], abc)}
+            square_slerp(bkdn.coord[:, np.newaxis], abc)}
 
 GC = {3: lambda bkdn, abc, freq, tweak:
-            tri_intersections(bkdn.lindex, abc, freq, tweak),
+         tri_intersections(bkdn.lindex, abc, freq, tweak),
       4: lambda bkdn, abc, freq, tweak:
-          square_intersections(bkdn.lindex, abc, freq)}
+         square_intersections(bkdn.lindex, abc, freq)}
 
 DISK = {3: _tri_cir,
         4: _sq_cir}

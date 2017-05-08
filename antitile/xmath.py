@@ -147,6 +147,9 @@ def normalize(vectors, axis=-1):
 
 
 def central_angle_equilateral(pts):
+    """For use with the naive slerp methods. Takes the central angle between
+    each of the points in pts. If they are close, returns the central angle.
+    If not, raises an error."""
     omegas = central_angle(pts, np.roll(pts, 1, axis=0))
     max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
     if not np.isclose(max_diff, 0):
@@ -155,7 +158,7 @@ def central_angle_equilateral(pts):
     return omegas[0]
 
 
-def slerp(pt1, pt2, intervals, axis=-1):
+def slerp(pt1, pt2, intervals):
     """Spherical linear interpolation.
     >>> x = np.array([1,0,0])
     >>> y = np.array([0,0,1])
@@ -262,7 +265,7 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
 
 
 def central_angle(x, y, signed=False):
-    """Central angle between vectors with respect to 0. If vectors have norm 
+    """Central angle between vectors with respect to 0. If vectors have norm
     1, this is the spherical distance between them.
     Args:
         x, y: Coordinates of points on the sphere.
@@ -281,15 +284,12 @@ def central_angle(x, y, signed=False):
     cos = np.sum(x*y, axis=-1)
     sin = norm(np.cross(x, y), axis=-1)
     result = np.arctan2(sin, cos)
-    if signed:
-        return result
-    else:
-        return abs(result)
+    return result if signed else abs(result)
 
 
 def triangle_solid_angle(a, b, c):
-    """Solid angle of a triangle with respect to 0. If vectors have norm 1, 
-    this is the spherical area. Note there are two solid angles defined by 
+    """Solid angle of a triangle with respect to 0. If vectors have norm 1,
+    this is the spherical area. Note there are two solid angles defined by
     three points: this will always return the smaller of the two. (The other
     is 4*pi minus what this function returns.)
 
@@ -313,8 +313,8 @@ def triangle_solid_angle(a, b, c):
     nb = norm(b, axis=-1)
     nc = norm(c, axis=-1)
     bottom = (na*nb*nc + np.sum(a * b, axis=-1)*nc
-                + np.sum(b * c, axis=-1)*na
-                + np.sum(c * a, axis=-1)*nb)
+              + np.sum(b * c, axis=-1)*na
+              + np.sum(c * a, axis=-1)*nb)
     return 2 * (np.arctan(top / bottom) % np.pi)
 
 

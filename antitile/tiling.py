@@ -4,10 +4,8 @@ Generic polyhedron and tiling methods
 """
 import warnings
 import numpy as np
-from . import xmath#, off
-#from scipy.linalg import circulant
 from scipy import sparse
-
+from . import xmath
 
 class Tiling:
     """Generic class for tilings and polyhedrons
@@ -63,7 +61,7 @@ class Tiling:
             faces = fd[i]
             a = self.vertices[faces]
             b = self.vertices[np.roll(faces, -1, axis=-1)]
-            normal = np.cross(a,b).sum(axis=-2)
+            normal = np.cross(a, b).sum(axis=-2)
             result[index] = normal
         return xmath.normalize(result)
 
@@ -118,7 +116,7 @@ class Tiling:
             these_faces = fx[index]
             for j in range(len(these_faces) - 1):
                 faceadj.add((these_faces[j - 1], these_faces[j]))
-        faceadj = faceadj.union( (x[1], x[0]) for x in faceadj)
+        faceadj = faceadj.union((x[1], x[0]) for x in faceadj)
         faceadj = np.array(list(faceadj))
         #rface = np.concatenate([faceadj, faceadj[:, ::-1]], axis=0)
         n_r = len(faceadj)
@@ -136,7 +134,7 @@ class Tiling:
         fx = []
         vx = []
         for i in range(n_f):
-            face = self.faces[i]
+            face = faces[i]
             for v in face:
                 fx.append(i)
                 vx.append(v)
@@ -160,9 +158,9 @@ class Tiling:
         result.setdiag(0)
         result.eliminate_zeros()
         return result
-    
+
     def normalize_faces(self):
-        """Normalizes faces by rotating the vertex list so that  
+        """Normalizes faces by rotating the vertex list so that
         the lowest vertex is first."""
         faces = self.faces
         for i in range(len(faces)):
@@ -177,15 +175,13 @@ class Tiling:
         fs = self.faces_by_size
         fn = self.face_size
         n = len(fn)
-        comp = np.zeros((n,n), dtype=bool)
+        comp = np.zeros((n, n), dtype=bool)
         for i in fs:
             faces = fs[i]
             index = fn == i
-            #TODO replace this with np.unique when 1.13 comes out            
-            reps = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
+            #TODO replace this with np.unique when 1.13 comes out
+            reps = np.all(faces[:, np.newaxis] == faces[np.newaxis], axis=-1)
             reps[np.diag_indices_from(reps)] = False
-            reps = reps.sum(axis=-1) > 0 #repeated faces
-            #FIXME not sure this works right
             comp[np.ix_(index, index)] = reps
         ncp, cp = sparse.csgraph.connected_components(comp)
         result = np.ones(n, dtype=bool)
@@ -203,8 +199,8 @@ def edges_from_facelist(faces):
     edges = set()
     for face in faces:
         for i in range(len(face)):
-            edge = set((face[i-1], face[i]))
-            if len(edge) == 2:
+            edge = (face[i-1], face[i])
+            if edge[0] != edge[1]:
                 edge = tuple(sorted(edge))
                 edges.add(edge)
     result = np.array(sorted([edge for edge in edges]))

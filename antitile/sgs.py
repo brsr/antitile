@@ -9,89 +9,64 @@ from scipy.optimize import minimize_scalar
 from scipy import sparse
 from . import tiling, breakdown, projection, xmath, factor
 
-def stitch_3(edge, bf, bkdn, index_0, index_1, freq):
-    a, b = freq
-    bkdn_0 = bkdn[index_0]
-    bkdn_1 = bkdn[index_1]
-    #first figure out how to roll the shapes so they meet at the edge
-    #TODO replace this with isin whenever that gets into numpy
-    notedge = np.nonzero(~np.in1d(bf, edge).reshape(bf.shape))[1]
-    roll = 2 - notedge
-    offset = np.array([a+b, a, 2*a+b])#from 0,0 to a,b
-    lindices = np.roll(bkdn_0.lindex, roll[0], axis=-1)
-    flipped = offset - np.roll(bkdn_1.lindex, roll[-1], axis=-1)
-    matches = np.nonzero(np.all(lindices[:, np.newaxis] ==
-                                flipped[np.newaxis], axis=-1))
-    l0 = np.nonzero(index_0)[0][matches[0]]
-    l1 = np.nonzero(index_1)[0][matches[1]]
-    return l0, l1
+_ROTMAT = np.array([[0, -1],
+                    [1, 0]])
 
-                   #0, 1,  2, 3
-ROLLMAP = np.array([3, 6, 12, 9])
-ROLLMASK = 2**np.arange(4)
-ROLLOFFSET = [0, 1, 1+1j, 1j]
-
-def _rot_4(coord, n, freq):
+def _rot_4(lindex, n, freq, flip=False):
     n = n%4
-    a, b = freq
-    coord = coord.astype(float)
-    cco = xmath.float2d_to_complex(coord).flatten()
-    rot_cco = cco * np.exp(1j*np.pi*n/2)
-    shift_cco = rot_cco + ROLLOFFSET[n]
-    cxy = shift_cco * (a + b*1j) + b
-    lindex = xmath.complex_to_float2d(cxy)
-    return np.round(lindex).astype(int)
+    rm = np.linalg.matrix_power(_ROTMAT, n).T
+    result = lindex.dot(rm)
+    if flip:
+        pass #FIXME result[..., 0] *= -1
+    result -= result.min(axis=0)
+    return result
 
-def stitch_4(edge, bf, bkdn, index_0, index_1, freq):
+def rotate(lindex, freq, edge, bf, improper=False, other=False):
     a, b = freq
-    bkdn_0 = bkdn[index_0]
-    bkdn_1 = bkdn[index_1]
-    #first figure out how to roll the shapes so they meet at the edge
-    notedge = np.in1d(bf, edge).reshape(bf.shape).dot(ROLLMASK)
-    roll = -np.nonzero(ROLLMAP[np.newaxis] == notedge[..., np.newaxis])[1]
-    offset = np.array([a+2*b, b])#from 0,0 to a,b
-    lindices = _rot_4(bkdn_0.coord, roll[0], freq)
-    flipped = offset - _rot_4(bkdn_1.coord, roll[-1], freq)
-    #print(lindices[(bkdn_0.group == 0) | (bkdn_0.group == 1)])
-    #print(flipped[(bkdn_1.group == 0) | (bkdn_1.group == 1)])
-    #print('-')
-    matches = np.argwhere(np.all(lindices[:, np.newaxis] ==
-                                 flipped[np.newaxis], axis=-1)).T
-    l0 = np.nonzero(index_0)[0][matches[0]]
-    l1 = np.nonzero(index_1)[0][matches[1]]
-    return l0, l1
-
-def roll(coord, freq, edge, bf, improper=False):
-    #TODO finish this
-    pass
-
-def stitch(edge, bf, bkdn_0, bkdn_1, freq):
-    #TODO finish this
-    a, b = freq
-    improper = (freq[0] == freq[1] or freq[1] == 0)
-    shape_0 = 4 if bkdn_0.coord.shape[1] == 2 else 3
-    shape_1 = 4 if bkdn_1.coord.shape[1] == 2 else 3
-    if shape_1 == 4:
-        offset = np.array([a+2*b, b])
+    roll, flip = tiling.orient_face(bf, edge, improper)
+    if lindex.shape[-1] == 3:
+        result = np.roll(lindex, roll, axis=-1)
+        if flip and improper:#FIXME
+            pass
     else:
-        offset = np.array([a+b, a, 2*a+b])
-    lindices = roll(bkdn_0.coord, freq, edge, bf[0], improper)
-    flipped = offset - roll(bkdn_1.coord, freq, edge, bf[1], improper)
+        result = _rot_4(lindex, roll, freq, flip=flip and improper)
+    if other:
+        if lindex.shape[-1] == 3:
+            offset = np.array([a+b, a, 2*a+b])
+        else:
+            offset = np.array([a+2*b, b])
+        if flip and improper:#FIXME
+            pass
+        result = offset - result
+    return result
+
+def _stitch(edge, faces, bkdns, freq):
+    a, b = freq
+    face_0, face_1 = faces
+    shape_0 = len(face_0)
+    shape_1 = len(face_1)
+    bkdn_0 = bkdns[shape_0]
+    bkdn_1 = bkdns[shape_1]
+    improper = (a == b or b == 0)
+    lindices = rotate(bkdn_0.lindex, freq, edge, face_0, improper)
+    flipped = rotate(bkdn_1.lindex, freq, edge, face_1, improper,
+                     other=True)
     if shape_0 == shape_1:
-        comparison = np.all(lindices[:, np.newaxis] == flipped[np.newaxis], 
+        comparison = np.all(lindices[:, np.newaxis] == flipped[np.newaxis],
                             axis=-1)
-    elif b == 0:
-        comparison = lindices[:, 0, np.newaxis] == flipped[np.newaxis, ..., 0]
+    elif b == 0:#class I, mixed grid
+        cmp_1 = lindices[:, 0, np.newaxis] == flipped[np.newaxis, ..., 0]
+        cmp_2 = lindices[:, -1, np.newaxis] == (0 if shape_0 == 4 else a)
+        cmp_3 = flipped[np.newaxis, ..., -1] == (a if shape_0 == 4 else 0)
+        comparison = (cmp_1 & cmp_2 & cmp_3)
     else:
         msg = ("Class II and III subdivision on mixed "
                "triangle-quadrilateral polyhedra is not implemented")
         raise NotImplementedError(msg)
-    matches = np.argwhere(comparison).T
-    l0 = np.nonzero(index_0)[0][matches[0]]
-    l1 = np.nonzero(index_1)[0][matches[1]]
-    return l0, l1
+    matches = np.argwhere(comparison)
+    return matches
 
-def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
+def _find_dupe_verts(base, bf, group, freq, bkdns):
     #find redundant vertices
     base_edges = base.edges
     base_edge_corr, base_face_corr = base.faces_by_edge(base_edges)
@@ -106,21 +81,20 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
             warnings.warn("More than 2 faces meet at a single edge. "
                           "Choosing 2 faces arbitrarily...")
             facex = facex[:2]
-        elif fn < 2:#external edge, ignore it
+        elif fn < 2:#external edge, skip it
             continue
-        index_0 = rbkdn.base_face == facex[0]
-        index_1 = rbkdn.base_face == facex[1]
-        lx0, lx1 = stitcher(edge, base_faces[facex], rbkdn,
-                            index_0, index_1, freq)
+        index_0 = bf == facex[0]
+        index_1 = bf == facex[1]
+        faces = [base.faces[facex[0]], base.faces[facex[1]]]
+        match = _stitch(edge, faces, bkdns, freq)
+        lx0 = np.argwhere(index_0)[match[..., 0]].flatten()
+        lx1 = np.argwhere(index_1)[match[..., 1]].flatten()
         l0.extend(lx0)
         l1.extend(lx1)
     matches = np.stack([l0, l1], axis=-1)
-    #TODO replace this with np.unique when I update numpy
-    matches = np.array(list({tuple(sorted(t)) for t in matches}))
-    #if first one lies outside the base face, swap
-    #index = rbkdn.group[matches[..., 0]] >= 200
-    #matches[index] = matches[index, ::-1]
-    vno = len(rbkdn)
+    #TODO replace this with np.unique when 1.13 comes out
+    matches = np.array(sorted(list({tuple(sorted(t)) for t in matches})))
+    vno = len(group)
     conns = sparse.coo_matrix((np.ones(len(matches)),
                                (matches[:, 0], matches[:, 1])),
                               shape=(vno, vno))
@@ -128,7 +102,7 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     verts = np.arange(vno, dtype=int)
     for i in range(ncp):
         component = np.argwhere(cp == i).flatten()
-        gp = rbkdn.group[component]
+        gp = group[component]
         order = np.argsort(gp)
         component = component[order]
         v = verts[component[0]]
@@ -136,33 +110,6 @@ def _find_dupe_verts(base, base_faces, rbkdn, freq, stitcher):
     unique_index = verts == np.arange(len(verts))
     renumbered = xmath.renumber(unique_index)
     return renumbered[verts], unique_index
-
-def _find_dupe_faces(faces, face_group):
-    #arrange faces so lowest vertex is first
-    for i in range(len(faces)):
-        aface = np.array(faces[i])
-        r = aface.argmin()
-        faces[i] = np.roll(aface, -r)
-    #this does not combine faces with different orientation, which is
-    #actually what we want so dihedra don't weird out
-    #TODO replace this with something using np.unique when 1.13 comes out
-    comp = np.all(faces[:,np.newaxis] == faces[np.newaxis], axis=-1)
-    comp[np.diag_indices_from(comp)] = False
-    index = comp.sum(axis=-1) > 0 #repeated faces
-    #print(comp.shape)
-    #print(face_group)
-    ncp, cp = sparse.csgraph.connected_components(comp)
-    #print(ncp)
-    #print(cp)
-    result = np.ones(len(faces), dtype=bool)
-    for i in range(ncp):
-        index = cp == i
-        fg = face_group[index]
-        am = np.argmin(fg)
-        result_i = np.zeros(fg.shape, dtype=bool)
-        result_i[am] = True
-        result[index] = result_i
-    return result
 
 class SGS(tiling.Tiling):
     """Similar grid subdivision of a tiling.
@@ -186,84 +133,70 @@ class SGS(tiling.Tiling):
         self.freq = freq
         a, b = freq
         projections = projection.PROJECTIONS[proj]
-        faces_dict = base.faces_by_size
-        if any(x > 4 for x in faces_dict.keys()):
+        base_faces = base.faces
+        base_verts = base.vertices
+        fs = base.face_size
+        if np.any(fs > 4):
             raise ValueError("Tiling contains at least one face with more than "
                              "4 sides. Try triangulating those faces first.")
-        elif 3 in faces_dict and 4 in faces_dict:
-            msg = ("Subdivision on mixed triangle-quadrilateral polyhedra "
-                   "is not yet implemented")
-            raise NotImplementedError(msg)
-        elif 3 in faces_dict:
-            n = 3
-            stitcher = stitch_3
-        elif 4 in faces_dict:
-            n = 4
-            stitcher = stitch_4
-        else:
+        elif np.all(fs < 2):
             raise ValueError("Polyhedron has no faces")
-        #create list of basically cartesion product of bkdn with base_faces
-        base_faces = np.array(faces_dict[n])
-        n_bf = len(base_faces)
-        bkdn = breakdown.Breakdown(*freq, n)
-        n_bkdn = len(bkdn.coord)
-        names = ['base_face', 'group', 'coord', 'lindex', 'vertices']
-        bf = np.arange(n_bf).repeat(n_bkdn)
-        face_bf = np.arange(n_bf).repeat(len(bkdn.faces))
-        face_group = np.tile(bkdn.face_group, n_bf)
-        group = np.tile(bkdn.group, n_bf)
-        coord = np.tile(bkdn.coord, (n_bf, 1))
-        lindex = np.tile(bkdn.lindex, (n_bf, 1))
-        vertices = np.empty((n_bkdn*n_bf, 3))
-        arrays = [bf, group, coord, lindex, vertices]
-        rbkdn = xmath.recordify(names, arrays)
-        faces = np.concatenate([bkdn.faces + i*n_bkdn for i in range(n_bf)])
-        verts, unique_v = _find_dupe_verts(base, base_faces,
-                                               rbkdn, freq, stitcher)
-        rbkdn = rbkdn[unique_v]
+        bkdns = dict()
+        if 3 in fs:
+            bkdns[3] = breakdown.Breakdown(*freq, 3)
+        if 4 in fs:
+            bkdns[4] = breakdown.Breakdown(*freq, 4)
+        n_bf = len(fs)
+        v_f_list = []
+        v_f_bf = []
+        v_f_group = []
+        faces = []
+        f_faces_bf = []
+        f_face_group = []
+        for i in range(n_bf):
+            n = fs[i]
+            proj_fun = projections[n]
+            bkdn = bkdns[n]
+            n_pts = len(bkdn.group)
+            face = base_verts[base_faces[i]]
+            n_v_i = sum(len(x) for x in v_f_list)
+            with np.errstate(divide='ignore', invalid='ignore'):
+                v_f_list.append(proj_fun(bkdn, face, freq, tweak))
+            v_f_bf.append(i*np.ones(n_pts))
+            v_f_group.append(bkdn.group)
+            faces.extend(x + n_v_i for x in bkdn.faces)
+            f_faces_bf.append(i*np.ones(len(bkdn.faces)))
+            f_face_group.append(bkdn.face_group)
+        vertices = np.concatenate(v_f_list, axis=0)
+        bf = np.concatenate(v_f_bf, axis=0)
+        group = np.concatenate(v_f_group, axis=0)
+        face_bf = np.concatenate(f_faces_bf, axis=0)
+        face_group = np.concatenate(f_face_group, axis=0)
+        vert_index, unique_v = _find_dupe_verts(base, bf, group, freq, bkdns)
+        vertices = vertices[unique_v]
         bf = bf[unique_v]
         group = group[unique_v]
-        faces = verts[faces]
-        unique_f = _find_dupe_faces(faces, face_group)
-        faces = faces[unique_f]
-        face_bf = face_bf[unique_f]
-        face_group = face_group[unique_f]
-        #FIXME
-        #faces = tiling.remove_dupes(faces)
-
-        #project vertices
-        proj_fun = projections[n]
-        for i in range(n_bf):
-            index = (rbkdn.base_face == i)
-            base_face = base_faces[i]
-            vbf = base.vertices[base_face]
-            rbkdn_i = rbkdn[index]
-            rbkdn.vertices[index] = proj_fun(rbkdn_i, vbf, freq, tweak)
-        super().__init__(rbkdn.vertices, faces)
+        faces = [vert_index[face] for face in faces]
+        super().__init__(vertices, faces)
+        self.normalize_faces()
         self.group = group
         self.base_face = bf
-        self.face_bf = face_bf
-        self.face_group = face_group
-
-#def face_mean(face):
-#    return np.mean(face, axis=0)
-#
-#def face_mode(face):
-#    return np.bincount(face).argmax()
-#
-#def face_color_by_vertex(poly, vcolor, fun=face_mean):
-#    faces = poly.faces
-#    result = []
-#    for face in faces:
-#        face = np.array(face)
-#        fvc = vcolor[face]
-#        result.append(fun(fvc))
-#    return np.array(result)
+        if b == 0:
+            #faces don't overlap if b == 0, so just take them as they are
+            self.face_bf = face_bf
+            self.face_group = face_group
+        else:
+            unique_f = self.id_dupe_faces(face_group)
+            for i in np.argwhere(~unique_f):
+                self.faces[int(i)] = None
+            self.faces = [face for face in self.faces if face is not None]
+            self.face_bf = face_bf[unique_f]
+            self.face_group = face_group[unique_f]
 
 def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
-    poly = SGS(base, frequency, proj, tweak)
     """Wrapper around the SGS constructor that performs parallel projection
     and normalization."""
+    poly = SGS(base, frequency, proj, tweak)
     if proj in projection.PARALLEL:
         if k in MEASURES:
             measure = MEASURES[k]
@@ -277,7 +210,7 @@ def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
     return poly
 
 def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
-                normalize=True):
+                  normalize=True):
     """Wrapper around the SGS constructor that factors the frequency
     and uses the factors to repeatedly subdivide the grid. Uses
     lower-norm factors first. Also does everything `build_sgs` does."""
@@ -341,7 +274,7 @@ def objective(k, poly, parallel_xyz, measure, normalize=True):
     return measure(test_v, poly)
 
 #measures
-def energy(xyz, poly):
+def energy(xyz, poly=None):
     """Energy of the vertex arrangement, as defined in
     Thomson's problem."""
     return tiling.energy(xyz)

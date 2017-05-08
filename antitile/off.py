@@ -8,14 +8,10 @@ def readline_comment(file, symbol='#'):
     """Reads line from a file object, but ignores everything after the
     comment symbol (by default '#')"""
     line = file.readline()
-    if len(line) == 0:
+    if not line:
         return ''
     result = line.partition(symbol)[0]
-    if len(result) == 0:
-        return readline_comment(file)
-    else:
-        return result
-
+    return result if result else readline_comment(file)
 
 def load_off(file):
     """Loads OFF files from Antiprism.
@@ -84,11 +80,11 @@ def load_off(file):
             faces.append(vx)
             facecolors.append(colorspec)
 
-    edges = None if len(edges) == 0 else np.array(edges, dtype=int)
-    verts = None if len(verts) == 0 else np.array(verts, dtype=int)
-    facecolors = None if len(facecolors) == 0 else np.array(facecolors)
-    edgecolors = None if len(edgecolors) == 0 else np.array(edgecolors)
-    vertexcolors = None if len(vertexcolors) == 0 else np.array(vertexcolors)
+    edges = np.array(edges, dtype=int) if edges else None
+    verts = np.array(verts, dtype=int) if verts else None
+    facecolors = facecolors if facecolors else None
+    edgecolors = edgecolors if edgecolors else None
+    vertexcolors = vertexcolors if vertexcolors else None
 
     return (vertices, faces, facecolors, edges, edgecolors,
             verts, vertexcolors)
@@ -121,12 +117,12 @@ def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
         msg = "Different number of face colors than faces: {}, {}"
         raise ValueError(msg.format(len(faces), len(facecolors)))
     elif edgecolors is not None and len(edges) != len(edgecolors):
-        msg ="Different number of edge colors than edges: {}, {}"
+        msg = "Different number of edge colors than edges: {}, {}"
         raise ValueError(msg.format(len(edges), len(edgecolors)))
     elif vertexcolors is not None and len(verts) != len(vertexcolors):
         msg = "Different number of vertex colors than vertices: {}, {}"
         raise ValueError(msg.format(len(verts), len(vertexcolors)))
-        
+
     flist = list(faces)
     if edges is not None:
         flist.extend(list(edges))
