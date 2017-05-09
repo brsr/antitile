@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 Statistics of polyhedra, with a focus on using similar grid subdivision
-polyhedra to approximate the sphere 
+polyhedra to approximate the sphere
 """
 import argparse
 import csv
-import numpy as np
 from sys import stdin
+import numpy as np
 from antitile import off, tiling
 
 def main():
@@ -20,19 +20,17 @@ def main():
     parser.add_argument("-c", help="Write to csv file")
 
     args = parser.parse_args()
-    header = ['filename', 'n_v', 'n_f', 'energy', 'cog', 'bent_min', 'bent_max',
-                  'edge_min', 'edge_max',
-                  'aspect_ratio_min', 'aspect_ratio_max',
-                  'faces_min', 'faces_max']
+    header = ['filename', 'n_v', 'n_f', 'energy', 'cog', 'bent_min',
+              'bent_max', 'edge_min', 'edge_max', 'aspect_ratio_min',
+              'aspect_ratio_max', 'faces_min', 'faces_max']
     if not args.s:
-            header += ['angle_min', 'angle_max',
-                       'angle_aspect_min', 'angle_aspect_max',
-                       'solid_angle_min', 'solid_angle_max']
+        header += ['angle_min', 'angle_max', 'angle_aspect_min',
+                   'angle_aspect_max', 'solid_angle_min', 'solid_angle_max']
 
     lines = [header]
     handles = [(fn, open(fn)) for fn in args.filename]
     if not handles:
-        handles = [('stdin',  stdin)]
+        handles = [('stdin', stdin)]
     for fn, h in handles:
         with h as handle:
             vertices, faces, fc, e, ec, v, vc = off.load_off(handle)
@@ -62,15 +60,15 @@ def main():
             print('Distance of center of gravity from center:\t', norm_cog)
         print('\t\t\t    minimum |maximum |ratio')
         print('Edge length:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-              edge_min, edge_max, edge_max/edge_min))
+            edge_min, edge_max, edge_max/edge_min))
         print('Aspect ratio:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-              aspect_min, aspect_max, aspect_max/aspect_min))
+            aspect_min, aspect_max, aspect_max/aspect_min))
         if np.isclose(0, bent_max, atol = 1E-6):
             print('Face area:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-                    face_min, face_max, face_max/face_min))
+                face_min, face_max, face_max/face_min))
         else:
             print('Face bentness: \t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-                    bent_min, bent_max, bent_max/bent_min))
+                bent_min, bent_max, bent_max/bent_min))
         if not args.s:
             edges = tiling.edge_length(vertices, poly.edges, spherical=True)
             edge_min, edge_max = edges.min(), edges.max()
@@ -78,15 +76,14 @@ def main():
             aspect_min, aspect_max = aspect.min(), aspect.max()
             faces = tiling.face_area(vertices, poly, spherical=True)
             face_min, face_max = faces.min(), faces.max()
-            values += [edge_min, edge_max,
-                       aspect_min, aspect_max,
+            values += [edge_min, edge_max, aspect_min, aspect_max,
                        face_min, face_max]
             print('Central angle:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-                  edge_min, edge_max, edge_max/edge_min))
+                edge_min, edge_max, edge_max/edge_min))
             print('Central angle aspect ratio: {:<,F}|{:<,F}|{:<,F}'.format(
-                  aspect_min, aspect_max, aspect_max/aspect_min))
+                aspect_min, aspect_max, aspect_max/aspect_min))
             print('Solid angle:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
-                  face_min, face_max, face_max/face_min))
+                face_min, face_max, face_max/face_min))
         lines.append(values)
 
     if args.c:

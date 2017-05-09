@@ -45,7 +45,7 @@ class Breakdown(flat.FlatTiling):
             By default, true.
         """
         v = a + b + 1
-        super().__init__(v,v,shape)
+        super().__init__(v, v, shape)
         self.freq = (a, b)
 
         vertices = self.vertices
@@ -54,7 +54,7 @@ class Breakdown(flat.FlatTiling):
         #adjust the vertices so we have room for the shape
         vertices[..., 0] -= b
         vertices[..., 2] += b
-        if shape==3:
+        if shape == 3:
             self._t()
         elif shape == 4:
             self._q()
@@ -99,16 +99,14 @@ class Breakdown(flat.FlatTiling):
         # vertices of the triangle are (0,0), (a,b),(-b,a+b)
         x = vertices[:, 0]
         y = vertices[:, 1]
-
-
         #featural lines
         q = a - b
         line1 = x == 0
-        line1_seg = y <= max(a,b)
+        line1_seg = y <= max(a, b)
         line2 = y == b
-        line2_seg = x >= min(0,q)
+        line2_seg = x >= min(0, q)
         line3 = y == a - x
-        line3_seg = y >= min(a,b)
+        line3_seg = y >= min(a, b)
         group[line1 & line1_seg] = 1
         group[line2 & line2_seg] = 2
         group[line3 & line3_seg] = 3
@@ -157,13 +155,13 @@ class Breakdown(flat.FlatTiling):
         #featural lines
         q = a - b
         line1 = x == 0
-        line1_seg = y <= max(a,b)
+        line1_seg = y <= max(a, b)
         line2 = y == b
-        line2_seg = x >= min(0,q)
+        line2_seg = x >= min(0, q)
         line3 = x == a-b
-        line3_seg = y >= min(a,b)
+        line3_seg = y >= min(a, b)
         line4 = y == a
-        line4_seg = x <= max(0,q)
+        line4_seg = x <= max(0, q)
         group[line1 & line1_seg] = 1
         group[line2 & line2_seg] = 2
         group[line3 & line3_seg] = 3
@@ -175,7 +173,7 @@ class Breakdown(flat.FlatTiling):
             group[line4 & ~line4_seg] = 14
         right = a*y - b*x
         left = a*x + b*y
-        anorm = (a**2+b**2)
+        anorm = (a**2 + b**2)
         group[right == 0] = 100
         group[left == anorm] = 101
         group[right == anorm] = 102
@@ -217,7 +215,7 @@ def frame(n=4, m=2, shape=3):
     elif shape == 4:
         return frame_square(n=n, m=m)
 
-def frame_triangle(base_pts = np.eye(3), n=4, m=2, interp=xmath.lerp):
+def frame_triangle(base_pts=np.eye(3), n=4, m=2, interp=xmath.lerp):
     """Creates the "frame" of edge points for method 2.
     Returns a multidimensional array with dimensions:
         (3:         Which rotation of the lines
@@ -255,70 +253,7 @@ def frame_square(n=4, m=2):
     right = np.stack([np.ones(tm.shape), tm], axis=-1)
     left = np.stack([np.zeros(tm.shape), tm], axis=-1)
     frm = np.concatenate((left[:-1], bottom), axis=0)
-    to = np.concatenate( (top[:-1], right), axis=0)
+    to = np.concatenate((top[:-1], right), axis=0)
     pairs = np.stack([frm, to], axis=1)
     other = np.stack([1-pairs[..., 1], pairs[..., 0]], axis=-1)
     return np.stack([pairs, other])
-#
-#if __name__ == "__main__":
-#    import matplotlib.pyplot as plt
-#    from matplotlib.collections import PolyCollection, LineCollection
-#
-#    a, b = 2, 0
-#    shape = 3
-#
-#    bkdn = Breakdown(a, b, shape)
-#    frm = frame(a, b, shape)
-#    if shape == 3:
-#        abc = np.array([[0,  0],
-#                        [1,  0],
-#                        [0.5, np.sqrt(3)/2]])
-#        pts_2d = bkdn.coord @ abc
-#    else:
-#        abc = np.array([[0,0],
-#                         [1,0],
-#                         [1,1],
-#                         [0,1]])
-#        pts_2d = bkdn.coord
-#    mx = pts_2d.max(axis=0)
-#    mn = pts_2d.min(axis=0)
-#    ptx = pts_2d[bkdn.faces]
-#    fig, ax = plt.subplots()
-#    fig.set_size_inches(6, 6)
-#    plt.axis('equal')
-#    pc = PolyCollection(ptx, edgecolors='grey')
-#    ax.add_collection(pc)
-#    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c=-bkdn.group)
-#    x = abc[...,0].tolist() + [abc[0,0]]
-#    y = abc[...,1].tolist() + [abc[0,1]]
-#
-#    ax.plot(x,y, c='k')
-#    if shape == 't':
-#        frmp = frm @ abc
-#        pass
-#    else:
-#        frmp = frm
-#    lc = LineCollection(frmp.reshape((-1, frmp.shape[-2], frmp.shape[-1])), color='c')
-#    ax.add_collection(lc)
-#    lindex = bkdn.lindex
-#    li = xmath.line_intersection(frmp[0,lindex[:,0],0],frmp[0,lindex[:,0],1],
-#                                 frmp[1,lindex[:,1],0],frmp[1,lindex[:,1],1])
-#    ax.scatter(li[..., 0], li[..., 1], c='y')
-#    #x = np.stack([li[:,0],pts_2d[:,0]],axis=-1)
-#    #y = np.stack([li[:,1],pts_2d[:,1]],axis=-1)
-#    #ax.plot(x, y, c='g')
-#
-#    anorm = a**2 + a*b+ b**2
-#    vertices = bkdn.vertices
-#    mat = np.array([[a+b, b],
-#                    [-b, a]])/anorm
-#    coords1 = vertices[:, :2].dot(mat.T)
-#    l1 = 1-coords1.sum(axis=-1, keepdims=True)
-#    coord1 = np.concatenate([l1, coords1], axis=1)
-#    mat2 = np.array([[   -a, -b - a, anorm],
-#                    [a + b,      b, 0],
-#                    [   -b,      a, 0]]) / anorm
-#
-#    coords = vertices.copy()
-#    coords[:, 2] = 1  # the ol' affine matrix trick
-#    coord2 = coords.dot(mat2.T)

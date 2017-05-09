@@ -7,13 +7,11 @@ etc.
 import argparse
 from sys import stdin
 import numpy as np
-import matplotlib.pyplot as plt
 from antitile.off import load_off
+import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection, PolyCollection
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
-from matplotlib.collections import LineCollection, PolyCollection
-
-
 
 def vis_faces(ax, vertices, faces, facecolors=None, edgecolors='k', cmap=None):
     """Plots faces
@@ -58,7 +56,7 @@ def vis_vertices(ax, vertices, verts, vertexcolors=None):
                these_vertices[..., 2], c=vertexcolors)
 
 
-def vis_init(canvassize = 4, viewangles = (45, 45), distance=10):
+def vis_init(canvassize=4, viewangles=(45, 45), distance=10):
     """Initializes the visualization.
     Arguments:
         viewangles: Viewing elevation and azimuth
@@ -87,7 +85,7 @@ def vis_bounds(ax, vertices):
 
 def impute_color(colors, default):
     """Replaces None in color listings"""
-    if len(colors) == 0:
+    if not colors:
         colors = default
     else:
         for i in range(len(colors)):
@@ -95,7 +93,7 @@ def impute_color(colors, default):
                 colors[i] = default
     return colors
 
-def main_3d(vertices, faces, facecolors, edges, edgecolors, verts, 
+def main_3d(vertices, faces, facecolors, edges, edgecolors, verts,
             vertexcolors, args):
     fig, ax = vis_init(viewangles=(args.elev, args.azim), distance=args.dist)
     vis_bounds(ax, vertices)
@@ -104,10 +102,10 @@ def main_3d(vertices, faces, facecolors, edges, edgecolors, verts,
         vis_vertices(ax, vertices, verts, vertexcolors)
     else:
         vis_faces(ax, vertices, faces, facecolors,
-                  edgecolors=args.color_edge, cmap=args.cmap)    
-    
-def main_2d(vertices, faces, facecolors, edges, edgecolors, verts, 
-            vertexcolors, args, canvassize = 4,):
+                  edgecolors=args.color_edge, cmap=args.cmap)
+
+def main_2d(vertices, faces, facecolors, edges, edgecolors, verts,
+            vertexcolors, args, canvassize=4):
     fig = plt.figure()
     fig.set_size_inches(canvassize, canvassize)
     ax = fig.add_subplot(111)
@@ -136,7 +134,7 @@ def main():
                         "If not specified, will display on screen.")
     parser.add_argument("--dimension", type=int, choices=[2, 3],
                         help="Force 2d or 3d view (normally inferred "
-                             "from the file)")    
+                             "from the file)")
     parser.add_argument("-a", "--azim", type=float, default=30,
                         help="Viewing azimuth (3d only)")
     parser.add_argument("-e", "--elev", type=float, default=30,
@@ -176,12 +174,12 @@ def main():
         index_x[x] = True
         index = index_x
     if args.dimension == 2 or index.sum() == 1:
-        main_2d(vertices[..., ~index], faces, facecolors, edges, edgecolors, 
+        main_2d(vertices[..., ~index], faces, facecolors, edges, edgecolors,
                 verts, vertexcolors, args)
     else:
-        main_3d(vertices, faces, facecolors, edges, edgecolors, verts, 
-                vertexcolors, args)        
-        
+        main_3d(vertices, faces, facecolors, edges, edgecolors, verts,
+                vertexcolors, args)
+
     if args.outfile:
         plt.savefig(args.outfile, bbox_inches='tight', pad_inches=0,
                     facecolor='none')

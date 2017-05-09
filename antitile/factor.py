@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Factor Gaussian integers, Eisenstein integers, and 
+Factor Gaussian integers, Eisenstein integers, and
 """
 
 import abc
@@ -133,13 +133,13 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
             if rem:
                 raise Exception('failed to find divisor')
         return [factor] + left._factor()
-    
+
     def factor(self):
-        constructor = type(self)        
+        constructor = type(self)
         one = constructor(1)
         factors = self._factor()
         nf = [f.normal_form()[0] for f in factors if f.anorm() > 1]
-        if len(nf) > 0:
+        if nf:
             backcalc = nf[-1]
             for i in range(len(nf)-1):
                 f = nf[i]
@@ -148,7 +148,7 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         else:
             backcalc = one
         unit = self//backcalc
-        if unit != one or len(nf) == 0:
+        if unit != one or not nf:
             nf.append(unit)
         return sorted(nf)
 
@@ -361,4 +361,3 @@ class Nietsnesie(EuclideanInteger):
         else:
             raise Exception('wtf')
         return cls(k, 1)
-    

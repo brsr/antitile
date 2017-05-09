@@ -5,7 +5,7 @@ Spherical tiling of the henagonal hosohedron.
 """
 import argparse
 import numpy as np
-from antitile import breakdown, projection, xmath, off, tiling
+from antitile import breakdown, projection, xmath, off
 
 _SQRT32 = np.sqrt(3)/2
 _TRIANGLE = np.array([[0, 1],
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     v, f, vertcolor, facecolor = balloon(a, b, shape, proj=proj_fun)
     result = off.write_off(v, f, facecolors=facecolor,
                            vertexcolors=vertcolor)
-    result += '#frequency = {}\n'.format((a,b))
+    result += '#frequency = {}\n'.format((a, b))
     result += '#projection = {}\n'.format('equidistant' if args.p
-                                             else 'lambert')
+                                          else 'lambert')
     print(result)

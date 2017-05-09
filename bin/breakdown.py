@@ -28,7 +28,7 @@ SQUARE = np.array([[ 1,  0],
 SHAPES = {3: TRIANGLE,
           4: SQUARE}
 
-CENTER = np.array([0,0,1])
+CENTER = np.array([0, 0, 1])
 #dihedral angles:
 #    icosahedron: arctan(2)
 #    octahedron: np.pi/2
@@ -68,8 +68,8 @@ def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
     base_bary = np.eye(3)
     frame = breakdown.frame_triangle(base_bary, n, m)
     if not degenerate:
-        frame = frame.reshape((-1,2,3))
-        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
+        frame = frame.reshape((-1, 2, 3))
+        norm = np.linalg.norm(frame[:, 0]-frame[:, 1], axis=-1)
         bad = np.isclose(norm, 0)
         frame = frame[~bad]
     t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
@@ -80,8 +80,8 @@ def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
 def breakdown_into_xy(n=4, m=2, line_pts_n=50, degenerate=False):
     frame = breakdown.frame_square(n, m)
     if not degenerate:
-        frame = frame.reshape((-1,2,2))
-        norm = np.linalg.norm(frame[:,0]-frame[:,1], axis=-1)
+        frame = frame.reshape((-1, 2, 2))
+        norm = np.linalg.norm(frame[:, 0]-frame[:, 1], axis=-1)
         bad = np.isclose(norm, 0)
         frame = frame[~bad]
     t = np.linspace(0, 1, line_pts_n)[:, np.newaxis]
@@ -89,7 +89,7 @@ def breakdown_into_xy(n=4, m=2, line_pts_n=50, degenerate=False):
     frame_1 = frame[..., 1, np.newaxis, :]
     return xmath.lerp(frame_0, frame_1, t)
 
-def start_plot(limits=[-1.05, 1.05]):
+def start_plot(limits=(-1.05, 1.05)):
     fig, ax = plt.subplots()
     fig.set_size_inches(8, 8)
     fig.set_tight_layout(True)
@@ -101,7 +101,7 @@ def start_plot(limits=[-1.05, 1.05]):
     plt.axis('off')#why do we need both? it is a mystery
     return fig, ax
 
-def plot_parallel(ax, in_pts, name, k=[1], exact=True, line_pts_n=50):
+def plot_parallel(ax, in_pts, name, k=(1,), exact=True, line_pts_n=50):
     pts = in_pts + k[0]*projection.parallel(in_pts, CENTER, exact)
     sc = ax.scatter(pts[..., 0], pts[..., 1], label=name, zorder=10)
     color = list(sc.get_facecolor().flat)
@@ -127,11 +127,10 @@ def plot_m2_4(ax, base_pts, freq):
 def plot_m1_bkdn(ax, base_pts, freq, shape, bkdn, proj,
                  line_pts_n=50, tweak=False):
     if shape == 3:
-        c = breakdown_into_bary(*freq, line_pts_n).reshape((-1,
-                                                              line_pts_n, 3))
+        c = breakdown_into_bary(*freq,
+                                line_pts_n).reshape((-1, line_pts_n, 3))
     else:
-        c = breakdown_into_xy(*freq, line_pts_n).reshape((-1,
-                                                            line_pts_n, 2))
+        c = breakdown_into_xy(*freq, line_pts_n).reshape((-1, line_pts_n, 2))
     coords = xmath.recordify(['coord'], [c.reshape((-1, c.shape[-1]))])
     result = proj(coords, base_pts, freq, tweak)
     return result.reshape(c.shape[:-1] + (3,))
@@ -143,7 +142,7 @@ def plot_m2_bkdn(ax, base_pts, freq, shape, bkdn, line_pts_n=50, tweak=False):
     else:
         plot_m2_triangles(ax, base_pts, freq, bkdn)
         frame = breakdown.frame_triangle(base_pts, n=freq[0], m=freq[1],
-                                         interp = xmath.slerp)
+                                         interp=xmath.slerp)
     t = np.linspace(0, 1, num=line_pts_n)[..., np.newaxis]
     reshape = (-1, line_pts_n, 3)
     lines = xmath.slerp(frame[..., 0, np.newaxis, :],

@@ -206,7 +206,7 @@ def edges_from_facelist(faces):
     result = np.array(sorted([edge for edge in edges]))
     return result
 
-def orient_face(face, edge, reflection=False):
+def orient_face(face, edge):
     """Determines how to roll the list of vertices for a face so that its
     0th and 1st vertices correspond to edge. If reflection=True,
     allows reversing the list as well.
@@ -230,30 +230,6 @@ def orient_face(face, edge, reflection=False):
     else:
         raise ValueError()
     return int(roll), flip
-
-#def strip_ev(faces):
-#    """Strip 1- and 2-vertex "faces" from the facelist"""
-#    count = np.array([len(np.unique(i)) for i in faces])
-#    index = count >= 3
-#    if index.sum() == 0:
-#        index = count >= 2
-#    return faces[index]
-#
-#def clean_triangles(faces):
-#    """Restate degenerate polygons as triangles or whatever"""
-#    facelist = faces.tolist()
-#    facelist = [list(set(x)) if len(set(x)) <= 3 else x for x in facelist]
-#    return facelist
-#
-#def remove_dupes(faces):
-#    """Remove duplicate entries from face list"""
-#    result = set()
-#    for face in faces:
-#        aface = np.array(face)
-#        r = aface.argmin()
-#        result.add(tuple(np.roll(aface, -r)))
-#    return list(result)
-
 
 #Measures
 def energy(xyz, exponent=1, over=None):

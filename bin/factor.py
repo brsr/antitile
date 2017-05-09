@@ -3,9 +3,9 @@
 """
 Factor integers in various Euclidean domains
 """
-from antitile import factor
 import argparse
 from collections import Counter
+from antitile import factor
 
 DOMAINS = {"i": factor.Integer,
            "g": factor.Gaussian,

@@ -25,8 +25,8 @@ PROJ = """Projection family. Default is flat. disk is only valid on dihedra."""
 ADJ = ("""Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
 measurement of the polyhedron. Ignored unless -p=""" +
-', '.join(projection.PARALLEL) + "Default is 1. String values can be " +
-', '.join(n for n in sgs.MEASURES))
+       ', '.join(projection.PARALLEL) + "Default is 1. String values can be "
+       + ', '.join(n for n in sgs.MEASURES))
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
@@ -59,10 +59,7 @@ def posint(string):
 
 def kparser(string):
     """Parse the k-factor argument"""
-    if string in sgs.MEASURES:
-        return string
-    else:
-        return float(string)
+    return string if string in sgs.MEASURES else float(string)
 
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION, epilog=EPILOG)

@@ -4,10 +4,10 @@
 Cellular automata on the faces (or vertices) of polyhedra"""
 
 import argparse
+import warnings
 from sys import stdin
 import numpy as np
 import pandas as pd
-import warnings
 from scipy import sparse
 from antitile import off, tiling
 

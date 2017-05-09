@@ -74,7 +74,7 @@ class FlatTiling(tiling.Tiling):
         #turn adjacency into a list of faces
         faces = adj_indexes.reshape((-1, face_config.shape[-2]))
         goodface = np.all(faces >= 0, axis=-1)#eliminate off-the-grid faces
-        self.faces = faces[goodface]
+        super().__init__(vertices, faces[goodface])
 
     def _init_t(self):
         vertices = self.vertices

@@ -389,8 +389,8 @@ SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
             square_naive_slerp(bkdn.coord, abc)}
 
 SLERP2 = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
-         4: lambda bkdn, abc, freq, tweak:
-            square_naive_slerp_2(bkdn.coord, abc)}
+          4: lambda bkdn, abc, freq, tweak:
+             square_naive_slerp_2(bkdn.coord, abc)}
 
 OTHER = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc),
          4: lambda bkdn, abc, freq, tweak:
@@ -412,71 +412,3 @@ PROJECTIONS = {'flat':  FLAT,
                'disk':  DISK}
 
 PARALLEL = ['nslerp', 'nslerp2', 'disk']
-
-#if __name__ == "__main__":
-#    import matplotlib.pyplot as plt
-#    from matplotlib.collections import PolyCollection, LineCollection
-#
-#    a, b = 2, 1
-#    bkdn = breakdown.Breakdown(a, b, 'q')
-#    base_pts = xmath.normalize(np.array([[1, 1, 1],
-#                                     [1, -1, 1],
-#                                     [-1, -1, 1],
-#                                     [-1, 1, 1]]))
-#    borders = xmath.slerp(base_pts[:, np.newaxis],
-#                          np.roll(base_pts, -1, axis=0)[:, np.newaxis],
-#                          np.linspace(0, 1)[:, np.newaxis]).reshape((-1, 3))
-#
-#    sq1 = xmath.normalize(square_to_quad(bkdn.coord[:, np.newaxis], base_pts))
-#    sqslerp = xmath.normalize(square_slerp(bkdn.coord[:, np.newaxis], base_pts))
-#    sq2 = xmath.normalize(square_intersections(bkdn.lindex, base_pts, (a, b)))
-#    badsq2 = np.linalg.norm(sq2, axis=-1) < 1E-6
-#    sq2[badsq2] = sq1[badsq2]
-#    #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
-#    #y = np.stack([sqslerp[:,1],sq2[:,1]],axis=-1)
-#    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True, sharey=True)
-#    fig.set_size_inches(8, 2)
-#    plt.axis('equal')
-#    #ax1.plot(x, y, c='g')
-#    ax1.plot(borders[..., 0], borders[..., 1], c='b')
-#    for ax in (ax1, ax2, ax3, ax4):
-#        circle = plt.Circle((0, 0), 1, color='k', fill=False, zorder=3)
-#        ax.add_artist(circle)
-#    ax1.scatter(sq1[..., 0], sq1[..., 1])
-#    ax1.scatter(sqslerp[..., 0], sqslerp[..., 1])
-#    ax1.scatter(sq2[..., 0], sq2[..., 1])
-#    for ax, pts in [(ax2, sq1), (ax3, sqslerp), (ax4, sq2)]:
-#        ptx = pts[bkdn.faces][..., :2]
-#        pc = PolyCollection(ptx, edgecolors='grey')
-#        ax.add_collection(pc)
-#
-#    bkdn = breakdown.Breakdown(a, b, 't')
-#    abc = xmath.normalize(np.array([[0, 1, 1],
-#                                    [ np.sqrt(3)/2, -0.5, 1],
-#                                    [-np.sqrt(3)/2, -0.5, 1]]))
-#    borders = xmath.slerp(abc[:, np.newaxis],
-#                          np.roll(abc, -1, axis=0)[:, np.newaxis],
-#                          np.linspace(0, 1)[:, np.newaxis]).reshape((-1, 3))
-#
-#    tr1 = xmath.normalize(tri_bary(bkdn.coord, abc))
-#    trslerp = xmath.normalize(tri_naive_slerp(bkdn.coord, abc))
-#    tr2 = xmath.normalize(tri_intersections(bkdn.lindex, abc, (a, b)))
-#    badtr2 = np.linalg.norm(tr2, axis=-1) < 1E-6
-#    tr2[badtr2] = tr1[badtr2]
-#    #x = np.stack([sqslerp[:,0],sq2[:,0]],axis=-1)
-#    #y = np.stack([sqslerp[:,1],sq2[:,1]],axis=-1)
-#    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True, sharey=True)
-#    fig.set_size_inches(8, 2)
-#    plt.axis('equal')
-#    #ax1.plot(x, y, c='g')
-#    ax1.plot(borders[..., 0], borders[..., 1], c='b')
-#    for ax in (ax1, ax2, ax3, ax4):
-#        circle = plt.Circle((0, 0), 1, color='k', fill=False, zorder=3)
-#        ax.add_artist(circle)
-#    ax1.scatter(tr1[..., 0], tr1[..., 1])
-#    ax1.scatter(trslerp[..., 0], trslerp[..., 1])
-#    ax1.scatter(tr2[..., 0], tr2[..., 1])
-#    for ax, pts in [(ax2, tr1), (ax3, trslerp), (ax4, tr2)]:
-#        ptx = pts[bkdn.faces][..., :2]
-#        pc = PolyCollection(ptx, edgecolors='grey')
-#        ax.add_collection(pc)
