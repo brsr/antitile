@@ -9,30 +9,6 @@ from scipy.optimize import minimize_scalar
 from scipy import sparse
 from . import tiling, breakdown, projection, xmath, factor
 
-_ROTMAT = np.array([[0, -1],
-                    [1, 0]])
-
-def _rot_4(lindex, n, flip=False):
-    n = n%4
-    rm = np.linalg.matrix_power(_ROTMAT, n).T
-    result = lindex.dot(rm)
-    if flip:
-        result[..., 0] *= -1#FIXME argh this should be the easy one
-    result -= result.min(axis=0)
-    #print('-')
-    #print(lindex)
-    #print(result)
-    return result
-
-def rotate(lindex, roll, flip=False):
-    if lindex.shape[-1] == 3:
-        result = np.roll(lindex, roll, axis=-1)
-        if flip:
-            result = np.roll(result[::-1], 2, axis=-1)#FIXME
-    else:
-        result = _rot_4(lindex, roll, flip=flip)
-    return result
-
 def _stitch(edge, faces, bkdns, freq):
     a, b = freq
     face_0, face_1 = faces
@@ -44,12 +20,12 @@ def _stitch(edge, faces, bkdns, freq):
     roll_0, flip_0 = tiling.orient_face(face_0, edge)
     roll_1, flip_1 = tiling.orient_face(face_1, edge)
     flip = (flip_0 == flip_1) and improper
-    lindices = rotate(bkdn_0.lindex, roll_0, flip=flip)
+    lindices = bkdn_0.lindex_reorient(roll_0, flip=flip)
     if shape_1 == 3:
         offset = np.array([a+b, a, 2*a+b])
     else:
         offset = np.array([a+2*b, b])
-    flipped = offset - rotate(bkdn_1.lindex, roll_1)
+    flipped = offset - bkdn_1.lindex_reorient(roll_1)
     if shape_0 == shape_1:
         comparison = np.all(lindices[:, np.newaxis] == flipped[np.newaxis],
                             axis=-1)

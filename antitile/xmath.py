@@ -7,6 +7,12 @@ import numpy as np
 from numpy.linalg import norm
 import pandas as pd
 
+def reflect_through_origin(normal):
+    """Reflection matrix for reflecting through a plane through the origin
+    specified by its normal"""
+    return (np.eye(len(normal)) -
+            2 * np.outer(normal, normal) / np.inner(normal, normal))
+
 def complex_to_float2d(arr):
     """Converts a complex array to a multidimensional float array."""
     return arr.view(float).reshape(list(arr.shape) + [-1])

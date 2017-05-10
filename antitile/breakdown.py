@@ -2,7 +2,6 @@
 """
 Breakdown structures
 """
-
 import numpy as np
 from . import flat, xmath
 
@@ -47,6 +46,7 @@ class Breakdown(flat.FlatTiling):
         v = a + b + 1
         super().__init__(v, v, shape)
         self.freq = (a, b)
+        self.shape = shape
 
         vertices = self.vertices
         group = np.zeros(len(vertices), dtype=np.uint8)
@@ -208,6 +208,50 @@ class Breakdown(flat.FlatTiling):
         face_inside = np.any(fv_inside, axis=-1)
         shared = np.unique(faces[face_inside])
         group[shared] = np.fmin(group[shared], 250)
+
+    def lindex_reorient(self, n, flip=False):
+        """This really only works for Class I and II breakdowns"""
+        if self.shape == 3:
+            return _reorient_3(self, n, flip)
+        else:
+            return _reorient_4(self, n, flip)
+
+def _reorient_3(bkdn, n, flip=False):
+    if flip:
+        #print(n)#fix 1 to 0
+        #for some reason 1 - n also appears to work here
+        #given the issues I'm having with non-orientable surfaces
+        #I don't trust it
+        n = n - 1
+    n = n%3
+    result = np.roll(bkdn.lindex, n, axis=-1)
+    if flip:#FIXME not sure this works right
+        a, b = bkdn.freq
+        normal = np.array([-b, a + b, -a])
+        rm = xmath.reflect_through_origin(normal).T
+        result = result.dot(rm)
+    return result.astype(int)
+
+_ROTMAT = np.array([[0, -1],
+                    [1, 0]])
+
+def _reorient_4(bkdn, n, flip=False):
+    if flip:
+        #print(n)#fix 1 to -1
+        n = n - 2#?
+    n = n%4
+    rm = np.linalg.matrix_power(_ROTMAT, n).T
+    result = bkdn.lindex.dot(rm)
+    result -= result.min(axis=0)
+    if flip:#FIXME not sure this works right
+        a, b = bkdn.freq
+        normal = np.array([b, -a])
+        offset = np.array([b, a])/2
+        rm = xmath.reflect_through_origin(normal).T
+        ro = result - offset
+        result = ro.dot(rm)
+        result += offset
+    return result.astype(int)
 
 def frame(n=4, m=2, shape=3):
     if shape == 3:

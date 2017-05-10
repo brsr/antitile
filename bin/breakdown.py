@@ -37,7 +37,7 @@ CENTER = np.array([0, 0, 1])
 #    cube: arccos(1/3)
 #    4-dihedron: np.pi/2
 
-HEIGHTS = {'ico': 0.794654, #FIXME put the actual equation here
+HEIGHTS = {'ico': np.sqrt((5 + 2*np.sqrt(5))/15),
            'oct': 1/np.sqrt(3),
            'tet': 1/3,
            'cube': 1/np.sqrt(3),
@@ -218,6 +218,8 @@ def main():
                         help="use quadrilateral instead of triangle")
     parser.add_argument("-k", default=[1], help=ADJ, type=parse_k)
     parser.add_argument("-t", "--tweak", action="store_true", help=TWEAK)
+    parser.add_argument("-L", "--lindex", action="store_true",
+                        help="Show linear indexes")
 
     args = parser.parse_args()
     freq = args.a, args.b
@@ -258,13 +260,21 @@ def main():
     for name in names:
         proj = projection.PROJECTIONS[name][shape_n]
         pts = proj(bkdn, base_pts[:-1], freq, args.tweak)
-        pts = pts[bkdn.group < 200]
+        index = bkdn.group < 200
+        pts = pts[index]
         if name in projection.PARALLEL:
             pts = plot_parallel(ax, pts, name, k=args.k,
                                 exact=not args.tweak)
         else:
             pts = xmath.normalize(pts)
             ax.scatter(pts[..., 0], pts[..., 1], label=name, zorder=10)
+
+    if args.lindex:
+        lindex_here = bkdn.lindex[index]
+        for pt, lin in zip(pts, lindex_here):
+            ax.annotate(','.join(str(x) for x in lin), xy=pt[:2],
+                        textcoords='data', zorder=100)
+        
     if z == 0 and len(names) == 1:
         inv = inverse(pts)
         invlines = inverse(lines)
