@@ -170,6 +170,7 @@ class Tiling:
 
     def id_dupe_faces(self, face_group=None):
         """Identify duplicate faces"""
+        #FIXME add a way to remove dupes that are oriented differently
         if face_group is None:
             face_group = np.zeros(len(self.faces))
         fs = self.faces_by_size

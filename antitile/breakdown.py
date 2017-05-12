@@ -230,7 +230,7 @@ def _reorient_3(bkdn, n, flip=False):
         normal = np.array([-b, a + b, -a])
         rm = xmath.reflect_through_origin(normal).T
         result = result.dot(rm)
-    return result.astype(int)
+    return np.round(result).astype(int)
 
 _ROTMAT = np.array([[0, -1],
                     [1, 0]])
@@ -251,7 +251,7 @@ def _reorient_4(bkdn, n, flip=False):
         ro = result - offset
         result = ro.dot(rm)
         result += offset
-    return result.astype(int)
+    return np.round(result).astype(int)
 
 def frame(n=4, m=2, shape=3):
     if shape == 3:
