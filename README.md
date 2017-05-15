@@ -28,10 +28,15 @@ Visualize a Goldberg polyhedron, with color:
 
     sgs.py -a 5 -b 3 icosahedron.off | off_color -v M -m group_color.txt | pol_recip | view_off.py
 
-Canonical form (no skew faces) of a quadrilateral-faced similar grid subdivision polyhedron:
+Create a quadrilateral-faced similar grid subdivision polyhedron, put it into canonical form (so the faces are all flat), and color it using Conway's Game of Life with random initial condition:
 
-    sgs.py -a 5 -b 3 cube.off | canonical | view_off.py
+	sgs.py -a 5 -b 3 cube.off | canonical | off_color test.off -f n | cellular.py -v -b=3 -s=2,3
+	view_off.py cellular100.off #or whatever if it reaches steady state early
 
+`sgs.py` can subdivide (Class I and II) non-orientable surfaces too. Here, the base is a mobius strip-like surface with 12 faces:
+
+	unitile2d 2 -s m -w 4 -l 1 | sgs.py -a 2 -b 2 -n | view_off.py	
+	
 A quadrilateral balloon polyhedra, which happens to resemble a peeled coconut:
 
     balloon.py 8 -pq | view_off.py

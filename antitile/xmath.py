@@ -9,32 +9,59 @@ import pandas as pd
 
 def reflect_through_origin(normal):
     """Reflection matrix for reflecting through a plane through the origin
-    specified by its normal"""
+    specified by its normal
+
+    >>> x = np.array([1, 0, 0])
+    >>> reflect_through_origin(x)  #doctest: +NORMALIZE_WHITESPACE
+    array([[-1.,  0.,  0.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.]])    
+    """
     return (np.eye(len(normal)) -
             2 * np.outer(normal, normal) / np.inner(normal, normal))
 
 def complex_to_float2d(arr):
-    """Converts a complex array to a multidimensional float array."""
+    """Converts a complex array to a multidimensional float array.
+    >>> x = np.exp(2j*np.pi*np.linspace(0,1,5)).round()
+    >>> complex_to_float2d(x.round())
+    array([[ 1.,  0.],
+           [ 0.,  1.],
+           [-1.,  0.],
+           [-0., -1.],
+           [ 1., -0.]])
+    """
     return arr.view(float).reshape(list(arr.shape) + [-1])
 
 def float2d_to_complex(arr):
-    """Converts a multidimensional float array to a complex array."""
+    """Converts a multidimensional float array to a complex array.
+    >>> y = np.arange(8, dtype=float).reshape((-1, 2))
+    >>> float2d_to_complex(y)
+    array([[ 0.+1.j],
+           [ 2.+3.j],
+           [ 4.+5.j],
+           [ 6.+7.j]])
+    """
     return arr.view(complex)
 
 def line_intersection(a1, a2, b1, b2):
     """Finds the point in the plane that lies at the intersection of the
-    line from a1 to a2 and the line from b1 to b2."""
+    line from a1 to a2 and the line from b1 to b2.
+    >>> a1 = np.array([0, 0])
+    >>> a2 = np.array([1, 1])
+    >>> b1 = np.array([1, 0])
+    >>> b2 = np.array([0, 1])
+    >>> line_intersection(a1, a2, b1, b2)
+    array([ 0.5,  0.5])
+    """
     a1x, a1y = a1[..., 0], a1[..., 1]
     a2x, a2y = a2[..., 0], a2[..., 1]
     b1x, b1y = b1[..., 0], b1[..., 1]
     b2x, b2y = b2[..., 0], b2[..., 1]
 
-
     numx = (a1x*a2y - a1y*a2x)*(b1x - b2x) - (b1x*b2y - b1y*b2x)*(a1x - a2x)
     numy = (a1x*a2y - a1y*a2x)*(b1y - b2y) - (b1x*b2y - b1y*b2x)*(a1y - a2y)
     denom = (a1x-a2x)*(b1y-b2y) - (a1y-a2y)*(b1x-b2x)
-    num = np.stack([numx, numy], axis=-1)
-    return num/denom[..., np.newaxis]
+    return np.stack([numx, numy], axis=-1)/denom[..., np.newaxis]
 
 
 def record_initialize(shape, dtype, default_bool=False,
@@ -152,18 +179,6 @@ def normalize(vectors, axis=-1):
     return np.where(n <= 0, 0, vectors / n)
 
 
-def central_angle_equilateral(pts):
-    """For use with the naive slerp methods. Takes the central angle between
-    each of the points in pts. If they are close, returns the central angle.
-    If not, raises an error."""
-    omegas = central_angle(pts, np.roll(pts, 1, axis=0))
-    max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
-    if not np.isclose(max_diff, 0):
-        raise ValueError("naive_slerp used with non-equilateral face. " +
-                         "Difference is " + str(max_diff) + " radians.")
-    return omegas[0]
-
-
 def slerp(pt1, pt2, intervals):
     """Spherical linear interpolation.
     >>> x = np.array([1,0,0])
@@ -256,9 +271,9 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
         direction: A vector giving the direction the bearing is
             calculated with respect to. By default, [0, 1].
     Returns: Array of bearings.
-    >>> a = np.array([0,0])
-    >>> b = np.array([1,0])
-    >>> c = np.array([0,1])
+    >>> a = np.array([0,0,0])
+    >>> b = np.array([1,0,0])
+    >>> c = np.array([0,0,1])
 
     >>> bearing(a,b,c)/np.pi*180 #doctest: +ELLIPSIS
     90...
@@ -284,7 +299,7 @@ def central_angle(x, y, signed=False):
     >>> z = np.zeros(t.shape)
     >>> x = np.stack((c,s,z),axis=-1)
     >>> y = np.stack((c,z,s),axis=-1)
-    >>> central_angle(x,y)/np.pi*180 # doctest: +NORMALIZE_WHITESPACE
+    >>> np.round(central_angle(x,y)/np.pi*180) # doctest: +NORMALIZE_WHITESPACE
     array([  0.,  60.,  90.,  60.,   0.])
     """
     cos = np.sum(x*y, axis=-1)
@@ -293,11 +308,37 @@ def central_angle(x, y, signed=False):
     return result if signed else abs(result)
 
 
+def central_angle_equilateral(pts):
+    """For use with the naive slerp methods. Takes the central angle between
+    each of the points in pts. If they are close, returns the central angle.
+    If not, raises an error.
+    >>> x = np.eye(3)
+    >>> central_angle_equilateral(x)/np.pi*180 #doctest: +ELLIPSIS
+    90...
+    >>> y = x[[0,0,2]]
+    >>> central_angle_equilateral(y)/np.pi*180 #doctest: +ELLIPSIS
+    Traceback (most recent call last):
+        ...
+    ValueError: naive_slerp used with non-equilateral face. Difference is 1.57... radians.
+
+    """
+    omegas = central_angle(pts, np.roll(pts, 1, axis=0))
+    max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
+    if not np.isclose(max_diff, 0):
+        raise ValueError("naive_slerp used with non-equilateral face. " +
+                         "Difference is " + str(max_diff) + " radians.")
+    return omegas[0]
+
+
 def triangle_solid_angle(a, b, c):
     """Solid angle of a triangle with respect to 0. If vectors have norm 1,
     this is the spherical area. Note there are two solid angles defined by
     three points: this will always return the smaller of the two. (The other
     is 4*pi minus what this function returns.)
+
+    Formula is from Van Oosterom, A; Strackee, J (1983).
+    "The Solid Angle of a Plane Triangle". IEEE Trans. Biom. Eng.
+    BME-30 (2): 125–126. doi:10.1109/TBME.1983.325207.
 
     Args:
         a, b, c: Coordinates of points on the sphere.
@@ -311,9 +352,7 @@ def triangle_solid_angle(a, b, c):
     >>> np.round(triangle_solid_angle(a, b, c), 4)
     array([ 1.5708,  1.231 ,  0.    ,  1.231 ,  1.5708])
     """
-    #Van Oosterom, A; Strackee, J (1983). "The Solid Angle of a Plane
-    #Triangle". IEEE Trans. Biom. Eng. BME-30 (2): 125–126.
-    #doi:10.1109/TBME.1983.325207.
+
     top = np.abs(triple_product(a, b, c))
     na = norm(a, axis=-1)
     nb = norm(b, axis=-1)
@@ -339,8 +378,8 @@ def spherical_bearing(origin, destination, pole=np.array([0, 0, 1])):
     Returns: Array of bearings.
 
     >>> x = np.array([1,0,0])
-    >>> spherical_bearing(x,np.roll(x,1))/np.pi
-    0.5
+    >>> spherical_bearing(x,np.roll(x,1))/np.pi*180 #doctest: +ELLIPSIS
+    90...
     """
     c_1 = np.cross(origin, destination)
     c_2 = np.cross(origin, pole)

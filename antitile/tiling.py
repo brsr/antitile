@@ -17,14 +17,7 @@ class Tiling:
         self.vertices = vertices
         self.faces = faces
 
-#    @property
-#    def off(self):
-#        """Returns a string representing the OFF file for the faces
-#        and vertices of this tiling. Explicit edges and vertices,
-#        and colorings, are not included."""
-#        return off.write_off(self.vertices, self.faces)
-
-    #should probably cache these properties
+    #none of these properties are cached, that's OK for now
     @property
     def edges(self):
         """Returns a list of edges in the tiling"""
@@ -168,9 +161,12 @@ class Tiling:
             r = aface.argmin()
             faces[i] = np.roll(aface, -r)
 
-    def id_dupe_faces(self, face_group=None):
-        """Identify duplicate faces"""
-        #FIXME add a way to remove dupes that are oriented differently
+    def id_dupe_faces(self, face_group=None, oriented=False):
+        """Identify duplicate faces. Should use `normalize_faces` first.
+        Arguments:
+            face_group: Lower-numbered faces will be preferred
+            oriented: Consider opposite orientations of faces to be duplicates
+        """
         if face_group is None:
             face_group = np.zeros(len(self.faces))
         fs = self.faces_by_size
@@ -182,6 +178,11 @@ class Tiling:
             index = fn == i
             #TODO replace this with np.unique when 1.13 comes out
             reps = np.all(faces[:, np.newaxis] == faces[np.newaxis], axis=-1)
+            if not oriented:
+                revfaces = np.roll(faces[..., ::-1], 1, axis=-1)
+                revreps = np.all(faces[:, np.newaxis] == revfaces[np.newaxis],
+                              axis=-1)
+                reps |= revreps
             reps[np.diag_indices_from(reps)] = False
             comp[np.ix_(index, index)] = reps
         ncp, cp = sparse.csgraph.connected_components(comp)

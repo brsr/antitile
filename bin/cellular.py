@@ -25,7 +25,8 @@ def ruleparse(string):
 DESCRIPTION = """Colors tiling using semitotalistic cellular automata.
 Colors indexes of the input file is used as the initial condition,
 interpreting 0 as dead and anything else as alive. If colors are not
-given, initial condition is assigned randomly with 50% live cells."""
+given or tiling only has one color, initial condition is assigned randomly
+with 50% live cells."""
 
 NEIGHBOR = """By default, faces are considered adjacent if they
 share an edge (von Neumann neighborhood). With this option, faces
@@ -51,11 +52,13 @@ def main():
     with file as f:
         vertices, faces, fc, e, ec, verts, vc = off.load_off(f)
     init = vc if args.d else fc
-    if init is None:
+    if init is None or np.ptp(init) == 0:
         init = np.random.randint(2, size=len(faces))
     init = np.asarray(init)
     if len(init.shape) > 1:
         raise ValueError("Need color indexes, not color values")
+    elif np.any(init > 1):
+        init = init > (init.max()+init.min())/2
     poly = tiling.Tiling(vertices, faces)
     if args.d:
         adj = poly.vertex_f_adjacency if args.v else poly.vertex_adjacency
