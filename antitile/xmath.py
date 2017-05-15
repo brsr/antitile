@@ -72,8 +72,8 @@ def record_initialize(shape, dtype, default_bool=False,
     instead of whatever garbage happened to already be there.
 
     >>> dtype = np.dtype([('a', bool), ('b', int), ('c', float)])
-    >>> record_initialize(1, dtype)  #doctest: +ELLIPSIS
-    rec.array([(False, -1, nan)], ...])
+    >>> record_initialize(1, dtype)  #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    rec.array([(False, -1, nan)], ...
     """
     sctypes = np.sctypes
     result = np.recarray(shape, dtype=dtype)
@@ -115,8 +115,8 @@ def recordify(names, arrays):
     >>> y = np.eye(4)
     >>> z = np.arange(4**3).reshape(4,4,4)
     >>> r = recordify(['x','y','z'],[x,y,z])
-    >>> r.dtype
-    dtype((numpy.record, [('x', '<f8'), ('y', '<f8', (4,)), ('z', '<i4', (4, 4))]))"""
+    >>> r.dtype #doctest: +ELLIPSIS
+    dtype((numpy.record, [('x', '<f...'), ('y', '<f...', (4,)), ('z', '<i...', (4, 4))]))"""
     type_list = [(name, array.dtype, array.shape[1:])
                  for (name, array) in zip(names, arrays)]
     wtype = np.dtype(type_list)
