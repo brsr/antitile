@@ -16,7 +16,12 @@ import math
 from math import gcd
 
 def smallest_prime_factor(n):
-    """The smallest factor of n larger than 1. Will be n if n is prime."""
+    """The smallest factor of n larger than 1. Will be n if n is prime.
+    >>> smallest_prime_factor(7)
+    7
+    >>> smallest_prime_factor(15)
+    3
+    """
     if abs(n) <= 3:
         return n
     for i in range(2, n + 1):
@@ -24,12 +29,19 @@ def smallest_prime_factor(n):
             return i
 
 class EuclideanInteger(metaclass=abc.ABCMeta):
+    """Abstract base class for elements in Euclidean domains."""
     symbol = NotImplemented
     unit = NotImplemented
     mod = NotImplemented
     unitmap = NotImplemented
 
     def __init__(self, a, b=0):
+        """Constructor for the euclidean integer instance.
+        
+        Args:
+        a: First component of the element.
+        b: Second component (default: 0)
+        """
         self.a = int(a)
         self.b = int(b)
 
@@ -169,6 +181,7 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
             return nf, 1 + n
 
 class Integer(EuclideanInteger):
+    """Class representing regular, run-of-the-mill integers."""
     mod = 0
     prime_class = 0
     unit = 0
@@ -178,6 +191,13 @@ class Integer(EuclideanInteger):
                (-1, 0): '-1'}
 
     def __init__(self, a, b=0):
+        """Constructor for the Integer instance.
+        
+        Args:
+        a: The integer.
+        b: Ignored, only present so the constructor has the same signature
+            as the other classes that inherit from EuclideanInteger.
+        """
         super().__init__(a, 0)
 
     def anorm(self):
@@ -215,6 +235,8 @@ class Integer(EuclideanInteger):
             return self, 0
 
 class Gaussian(EuclideanInteger):
+    """Class representing the Gaussian integers, a + bj where j is the 
+    imaginary unit sqrt(-1) and a and b are integers."""
     mod = 4
     unit = 1j
     symbol = 'j'
@@ -264,6 +286,8 @@ class Gaussian(EuclideanInteger):
         return cls(k, 1)
 
 class Eisenstein(EuclideanInteger):
+    """Class representing the Eisenstein integers, a + bw where 
+    w = exp(j*2pi/3) and a and b are integers."""    
     mod = 3
     unit = (-1 + 1j*math.sqrt(3))/2
     symbol = 'w'
@@ -324,6 +348,11 @@ class Eisenstein(EuclideanInteger):
 
 
 class Nietsnesie(EuclideanInteger):
+    """Class representing the Nietsnesie (Eisenstein backwards) integers, 
+    a + bu where u = exp(j*pi/3) and a and b are integers. These are 
+    isomorphic to the Eisenstein integers but this parameterization 
+    is more convenient for use with sgs.py"""    
+    
     mod = 3
     unit = (1 + 1j*math.sqrt(3))/2
     symbol = 'u'

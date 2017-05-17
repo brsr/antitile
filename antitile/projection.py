@@ -134,8 +134,8 @@ def tri_areal(beta, base_pts):
     ...                  [ 0, 0.0, 0.2, 0.4, 0.3, 0.5 ]]).T
     >>> base_pts = np.eye(3)
     >>> base_pts[2,1] = 1
-    >>> base_pts = normalize(base_pts)
-    >>> from_sph_areal_coords(beta, base_pts) # doctest: +NORMALIZE_WHITESPACE
+    >>> base_pts = xmath.normalize(base_pts)
+    >>> tri_areal(beta, base_pts) # doctest: +NORMALIZE_WHITESPACE
     array([[ 1.        ,  0.        ,  0.        ],
            [ 0.97123031,  0.23814214,  0.        ],
            [ 0.87887868,  0.44073244,  0.18255735],
@@ -292,11 +292,11 @@ def to_sph_areal_coords(pts, triangle):
     spherical areal coordinates of the pts with respect to the triangle.
     >>> triangle = np.eye(3)
     >>> triangle[2,1] = 1
-    >>> triangle = normalize(triangle)
+    >>> triangle = xmath.normalize(triangle)
     >>> x = np.linspace(0,1,5)
     >>> z = np.linspace(0.7,0,5)
     >>> y = np.sqrt(1-x**2-z**2)
-    >>> pts = normalize(np.stack([x,y,z],axis=-1))
+    >>> pts = xmath.normalize(np.stack([x,y,z],axis=-1))
     >>> to_sph_areal_coords(pts, triangle) # doctest: +NORMALIZE_WHITESPACE
     array([[ 0.        ,  0.01273324,  0.98726676],
            [ 0.12972226,  0.2358742 ,  0.63440354],
@@ -350,11 +350,16 @@ def project_sphere(sphcoords, zfunc=np.arcsin, scale=180 / np.pi):
 
 #parallel projections
 def parallel_exact(pts, normal):
-    """Projects points onto the sphere parallel to the normal vector.
-    >>> center = np.array([0,0,1])
-    >>> pts = np.array([[0.5,0.5,0],
-                        [1,0,0]])
-    >>> parallel_exact(pts, center)
+    """Projects points exactly onto the sphere parallel to the normal vector.
+    Args:
+        pts: Points to project
+        normal: Normal vector
+        
+    >>> center = np.array([0, 0, 1])
+    >>> pts = np.array([[0.5, 0.5, 0], [1, 0, 0]])
+    >>> parallel_exact(pts, center) # doctest: +NORMALIZE_WHITESPACE
+    array([[ 0.        ,  0.        ,  0.70710678],
+           [ 0.        ,  0.        ,  0.        ]])    
     """
     vdotc = np.sum(pts * normal, axis=-1)
     vdotv = norm(pts, axis=-1)**2
@@ -364,16 +369,28 @@ def parallel_exact(pts, normal):
 
 def parallel_approx(pts, normal):
     """Approximately projects points onto the sphere parallel to the
-        center vector.
-    >>> center = np.array([0,0,1])
-    >>> pts = np.array([[0.5,0.5,0],
-                        [1,0,0]])
-    >>> parallel_approx(pts, center)
+        normal vector.
+    Args:
+        pts: Points to project
+        normal: Normal vector
+        
+    >>> center = np.array([0, 0, 1])
+    >>> pts = np.array([[0.5, 0.5, 0], [1, 0, 0]])
+    >>> parallel_approx(pts, center) # doctest: +NORMALIZE_WHITESPACE
+    array([[ 0.        ,  0.        ,  0.29289322],
+           [ 0.        ,  0.        ,  0.        ]])    
         """
     q = 1 - norm(pts, axis=-1)
     return q[..., np.newaxis] * normal
 
 def parallel(pts, normal, exact=True):
+    """Projects points onto the sphere parallel to the normal vector.
+    Args:
+        pts: Points to project
+        normal: Normal vector
+        exact: Whether to project exactly or approximately. 
+            Defaults to exact (True).
+    """
     if exact:
         result = parallel_exact(pts, normal)
     else:

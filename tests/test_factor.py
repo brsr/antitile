@@ -5,6 +5,7 @@ Tests for the factor module in antitile.
 """
 
 import unittest
+import doctest
 from operator import mul
 from functools import reduce
 from itertools import product

@@ -14,12 +14,12 @@ def project_skew(coords):
 
     >>> x = np.arange(5)
     >>> coords = np.vstack((x,np.zeros(5),-x)).T
-    >>> flattenhexgrid(coords)
+    >>> project_skew(coords) # doctest: +NORMALIZE_WHITESPACE
     array([[ 0.,  0.],
-       [ 0.,  1.],
-       [ 0.,  2.],
-       [ 0.,  3.],
-       [ 0.,  4.]])
+           [ 1.,  0.],
+           [ 2.,  0.],
+           [ 3.,  0.],
+           [ 4.,  0.]])
     """
     x = coords[..., 0] + coords[..., 1] / 2
     y = coords[..., 1] * np.sqrt(3) / 2
