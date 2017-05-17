@@ -1,15 +1,15 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tests for the xmath module in antitile.
+Tests for the flat module in antitile.
 """
 
 import unittest
 import doctest
-from antitile import xmath
+from antitile import flat
 
 def load_tests(loader, tests, ignore):
-    tests.addTests(doctest.DocTestSuite(xmath))
+    tests.addTests(doctest.DocTestSuite(flat))
     return tests
 
 if __name__ == '__main__':

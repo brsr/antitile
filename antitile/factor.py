@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Factor Gaussian integers, Eisenstein integers, and
+Objects to represent elements of Euclidean domains that can be expressed as
+a + b u, where u is some unit and a and b are integers. Also implements
+the Euclidean algorithm to factor those elements.
+    Gaussian: u = j
+    Eisenstein: u = exp(2pi/3)
+    Nietsnesie: u = exp(pi/3) (isomorphic to Eisenstein but useful)
+    (regular) Integers: b = 0, u = -1
+
+See https://en.wikipedia.org/wiki/Euclidean_domain for more info.
 """
 
 import abc
@@ -74,7 +82,6 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return NotImplemented
 
     @staticmethod
-    @abc.abstractmethod
     def _testfactor(p):
         return NotImplemented
 
@@ -245,14 +252,15 @@ class Gaussian(EuclideanInteger):
 
     @classmethod
     def _testfactor(cls, p):
-        exponent = (p - 1)/2
+        exponent = (p - 1)//2
         for n in range(1, p):
             ksq = n**exponent + 1
             if ksq % p == 0:
-                k = n**(exponent/2)
+                k = n**(exponent//2)
                 break
         else:
-            raise Exception('wtf')
+            msg = "couldn't find test factor for {} in the Gaussians".format(p)
+            raise Exception(msg)
         return cls(k, 1)
 
 class Eisenstein(EuclideanInteger):
@@ -310,7 +318,8 @@ class Eisenstein(EuclideanInteger):
             if kf % p == 0:
                 break
         else:
-            raise Exception('wtf')
+            msg = "couldn't find test factor for {} in the Eisensteins".format(p)
+            raise Exception(msg)
         return cls(k, 1)
 
 
@@ -359,5 +368,6 @@ class Nietsnesie(EuclideanInteger):
             if kf % p == 0:
                 break
         else:
-            raise Exception('wtf')
+            msg = "couldn't find test factor for {} in the Nietsnesies".format(p)
+            raise Exception(msg)
         return cls(k, 1)
