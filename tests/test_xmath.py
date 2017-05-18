@@ -9,7 +9,9 @@ import doctest
 from antitile import xmath
 
 def load_tests(loader, tests, ignore):
-    tests.addTests(doctest.DocTestSuite(xmath))
+    optionflags = (doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS |
+                   doctest.IGNORE_EXCEPTION_DETAIL)
+    tests.addTests(doctest.DocTestSuite(xmath, optionflags=optionflags))
     return tests
 
 if __name__ == '__main__':
