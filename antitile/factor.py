@@ -29,24 +29,29 @@ def smallest_prime_factor(n):
             return i
 
 class EuclideanInteger(metaclass=abc.ABCMeta):
-    """Abstract base class for elements in Euclidean domains."""
+    """Abstract base class for elements in Euclidean domains.
+
+    Args:
+        a: First component of the element.
+        b: Second component (default: 0)
+
+    Class-level attributes:
+        symbol: Symbol to use for the unit (j, w, etc.)
+        unit: Numeric form of the unit
+        mod: Argument for modulus in Euclidean algorithm.
+        unitmap: A map from units to a nice printable form for them."""
     symbol = NotImplemented
     unit = NotImplemented
     mod = NotImplemented
     unitmap = NotImplemented
 
     def __init__(self, a, b=0):
-        """Constructor for the euclidean integer instance.
-        
-        Args:
-        a: First component of the element.
-        b: Second component (default: 0)
-        """
         self.a = int(a)
         self.b = int(b)
 
     @property
     def tuple(self):
+        """The components of the element, in tuple form."""
         return (self.a, self.b)
 
     def __complex__(self):
@@ -78,10 +83,6 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return math.sqrt(self.anorm())
 
     @abc.abstractmethod
-    def conjugate(self):
-        return NotImplemented
-
-    @abc.abstractmethod
     def __mul__(self, other):
         return NotImplemented
 
@@ -90,11 +91,18 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return NotImplemented, NotImplemented
 
     @abc.abstractmethod
+    def conjugate(self):
+        """Conjugate of the element."""
+        return NotImplemented
+
+    @abc.abstractmethod
     def anorm(self):
+        """Algebraic norm of the element."""
         return NotImplemented
 
     @staticmethod
     def _testfactor(p):
+        """Test factor for use in factoring algorithm"""
         return NotImplemented
 
     def __floordiv__(self, other):
@@ -124,6 +132,7 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
 
 
     def gcd(self, other):
+        """Greatest common denominator of this and another element."""
         #print(self, other)
         if not other:
             return self
@@ -131,6 +140,8 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
             return other.gcd(self % other)
 
     def _factor(self):
+        """Workhorse function for factoring. This is the Euclidean algorithm
+        that Euclidean domains get their name from."""
         constructor = type(self)
         an = self.anorm()
         p = smallest_prime_factor(an)
@@ -154,6 +165,7 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return [factor] + left._factor()
 
     def factor(self):
+        """Factor this element."""
         constructor = type(self)
         one = constructor(1)
         factors = self._factor()
@@ -172,6 +184,8 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
         return sorted(nf)
 
     def normal_form(self):
+        """Returns normal form of this element and how many multiplications
+        of the unit it takes to get from normal form to this form."""
         if (self.a > 0 and self.b >= 0) or (self.a == 0 and self.b == 0):
             return self, 0
         else:
@@ -181,23 +195,23 @@ class EuclideanInteger(metaclass=abc.ABCMeta):
             return nf, 1 + n
 
 class Integer(EuclideanInteger):
-    """Class representing regular, run-of-the-mill integers."""
+    """Class representing regular, run-of-the-mill integers.
+
+    Args:
+        a: The integer.
+        b: Ignored, only present so the constructor has the same signature
+            as the other classes that inherit from EuclideanInteger.
+
+    See docs for EuclideanInteger for more information.
+        """
     mod = 0
-    prime_class = 0
-    unit = 0
+    unit = -1
     b = 0
     symbol = ''
     unitmap = {(1, 0): '1',
                (-1, 0): '-1'}
 
     def __init__(self, a, b=0):
-        """Constructor for the Integer instance.
-        
-        Args:
-        a: The integer.
-        b: Ignored, only present so the constructor has the same signature
-            as the other classes that inherit from EuclideanInteger.
-        """
         super().__init__(a, 0)
 
     def anorm(self):
@@ -235,7 +249,7 @@ class Integer(EuclideanInteger):
             return self, 0
 
 class Gaussian(EuclideanInteger):
-    """Class representing the Gaussian integers, a + bj where j is the 
+    """Class representing the Gaussian integers, a + bj where j is the
     imaginary unit sqrt(-1) and a and b are integers."""
     mod = 4
     unit = 1j
@@ -286,8 +300,10 @@ class Gaussian(EuclideanInteger):
         return cls(k, 1)
 
 class Eisenstein(EuclideanInteger):
-    """Class representing the Eisenstein integers, a + bw where 
-    w = exp(j*2pi/3) and a and b are integers."""    
+    """Class representing the Eisenstein integers, a + bw where
+    w = exp(j*2pi/3) and a and b are integers.
+
+    See docs for EuclideanInteger for more information."""
     mod = 3
     unit = (-1 + 1j*math.sqrt(3))/2
     symbol = 'w'
@@ -348,11 +364,14 @@ class Eisenstein(EuclideanInteger):
 
 
 class Nietsnesie(EuclideanInteger):
-    """Class representing the Nietsnesie (Eisenstein backwards) integers, 
-    a + bu where u = exp(j*pi/3) and a and b are integers. These are 
-    isomorphic to the Eisenstein integers but this parameterization 
-    is more convenient for use with sgs.py"""    
-    
+    """Class representing the Nietsnesie (Eisenstein backwards) integers,
+    a + bu where u = exp(j*pi/3) and a and b are integers. These are
+    isomorphic to the Eisenstein integers but this parameterization
+    is more convenient for use with sgs.py.
+
+    See docs for EuclideanInteger for more information.
+    """
+
     mod = 3
     unit = (1 + 1j*math.sqrt(3))/2
     symbol = 'u'

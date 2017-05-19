@@ -12,10 +12,10 @@ def reflect_through_origin(normal):
     specified by its normal
 
     >>> x = np.array([1, 0, 0])
-    >>> reflect_through_origin(x)  
+    >>> reflect_through_origin(x)
     array([[-1.,  0.,  0.],
            [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.]])    
+           [ 0.,  0.,  1.]])
     """
     return (np.eye(len(normal)) -
             2 * np.outer(normal, normal) / np.inner(normal, normal))
@@ -24,7 +24,7 @@ def complex_to_float2d(arr):
     """Converts a complex array to a multidimensional float array.
 
     >>> x = np.exp(2j*np.pi*np.linspace(0, 1, 5)).round()
-    >>> complex_to_float2d(x.round()) 
+    >>> complex_to_float2d(x.round())
     array([[ 1.,  0.],
            [ 0.,  1.],
            [-1.,  0.],
@@ -36,7 +36,7 @@ def complex_to_float2d(arr):
 def float2d_to_complex(arr):
     """Converts a multidimensional float array to a complex array.
     Input must be a float type, since there is no integer complex type.
-    
+
     >>> y = np.arange(8, dtype=float).reshape((-1, 2))
     >>> float2d_to_complex(y)
     array([[ 0.+1.j],
@@ -49,7 +49,7 @@ def float2d_to_complex(arr):
 def line_intersection(a1, a2, b1, b2):
     """Finds the point in the plane that lies at the intersection of the
     line from a1 to a2 and the line from b1 to b2.
-    
+
     >>> a1 = np.array([0, 0])
     >>> a2 = np.array([1, 1])
     >>> b1 = np.array([1, 0])
@@ -75,7 +75,7 @@ def record_initialize(shape, dtype, default_bool=False,
     Creates and initializes a record array with specified defaults
     instead of whatever garbage happened to already be there.
 
-    Arguments:
+    Args:
         shape: Shape of the array
         dtype: dtype of the array (including field names)
         default_bool: Default value for booleans (default: False)
@@ -106,7 +106,7 @@ def transpose(long_array, filler=-1):
     Transposes an array of shape N x 2 into a wide 2d array, using the first
     column as an index. Blanks in the array are filled in with the argument
     filler (by default -1)
-    
+
     >>> x = np.tile(np.arange(2), 5)[:9]
     >>> y = np.arange(9)
     >>> transpose(np.stack((x, y), axis=-1))
@@ -124,7 +124,7 @@ def recordify(names, arrays):
     """Take a bunch of arrays of the same first dimension and combine them
     into a record array
 
-    Arguments:
+    Args:
         names: List of field names
         arrays: List of arrays
 
@@ -132,7 +132,7 @@ def recordify(names, arrays):
     >>> y = np.eye(4)
     >>> z = np.arange(4**3).reshape(4, 4, 4)
     >>> r = recordify(['x', 'y', 'z'], [x, y, z])
-    >>> r.dtype 
+    >>> r.dtype
     dtype((numpy.record, [('x', '<f...'), ('y', '<f...', (4,)), ('z', '<i...', (4, 4))]))"""
     type_list = [(name, array.dtype, array.shape[1:])
                  for (name, array) in zip(names, arrays)]
@@ -147,14 +147,14 @@ def renumber(in_array, fill=-1):
     """Renumbers an index of a subarray given by the boolean array inarray.
     (This will probably make more sense if you look at the doctest.)
 
-    Arguments:
+    Args:
         inarray: A 1d boolean array
         fill: An integer to fill in elements that don't appear in the subarray
             By default, -1.
     Returns:
         A 1d numeric array. Takes the value of fill if element does not
             exist in the subarray.
-            
+
     >>> x = np.arange(5)
     >>> condition = (x > 2)
     >>> y = x[condition]
@@ -172,7 +172,7 @@ def triple_product(a, b, c):
     """The scalar triple product of 3 vectors
     a dot b cross c = determinant of [a b c]
     a,b, and c must have last dimension = 3
-    
+
     >>> a = np.zeros(3)
     >>> a[0] = 1
     >>> b = np.arange(4, 16).reshape(4, 3)
@@ -186,8 +186,12 @@ def triple_product(a, b, c):
 def normalize(vectors, axis=-1):
     """Normalizes vectors in n-space. The zero vector remains the zero vector.
 
+    Args:
+        vectors: Array of vectors
+        axis: Which axis to take the norm over (by default the last axis, -1)
+
     >>> x = np.stack((np.ones(5), np.arange(5)), axis=-1)
-    >>> normalize(x) 
+    >>> normalize(x)
     array([[ 1.        ,  0.        ],
            [ 0.70710678,  0.70710678],
            [ 0.4472136 ,  0.89442719],
@@ -205,12 +209,12 @@ def slerp(pt1, pt2, intervals):
         pt1: Array of points. When interval is 0, the result is pt1.
         pt2: Array of points. When interval is 1, the result is pt2.
         intervals: Array of intervals at which to evaluate the
-        linear interpolation
-        
+            linear interpolation
+
     >>> x = np.array([1, 0, 0])
     >>> y = np.array([0, 0, 1])
     >>> t = np.linspace(0, 1, 4)[:, np.newaxis]
-    >>> slerp(x, y, t) 
+    >>> slerp(x, y, t)
     array([[ 1.       ,  0.       ,  0.       ],
            [ 0.8660254,  0.       ,  0.5      ],
            [ 0.5      ,  0.       ,  0.8660254],
@@ -228,12 +232,12 @@ def lerp(pt1, pt2, intervals):
         pt1: Array of points. When interval is 0, the result is pt1.
         pt2: Array of points. When interval is 1, the result is pt2.
         intervals: Array of intervals at which to evaluate the
-        linear interpolation
-        
+            linear interpolation
+
     >>> x = np.array([1, 0, 0])
     >>> y = np.array([0, 0, 1])
     >>> t = np.linspace(0, 1, 4)[:, np.newaxis]
-    >>> lerp(x, y, t) 
+    >>> lerp(x, y, t)
     array([[ 1.        ,  0.        ,  0.        ],
            [ 0.66666667,  0.        ,  0.33333333],
            [ 0.33333333,  0.        ,  0.66666667],
@@ -247,11 +251,11 @@ def nlerp(*args):
     """Normalized linear interpolation.
 
     Args: Same as lerp.
-    
+
     >>> x = np.array([1, 0, 0])
     >>> y = np.array([0, 0, 1])
     >>> t = np.linspace(0, 1, 4)[:, np.newaxis]
-    >>> nlerp(x, y, t) 
+    >>> nlerp(x, y, t)
     array([[ 1.        ,  0.        ,  0.        ],
            [ 0.89442719,  0.        ,  0.4472136 ],
            [ 0.4472136 ,  0.        ,  0.89442719],
@@ -268,13 +272,13 @@ def distance(x, y, p=2, axis=-1, scale=1):
         p: Which norm to use. 2 = euclidean, 1 = taxicab.
         axis: Which axis the vectors lie along. By default, -1.
         scale: Scale factor for the distance.
-        
+
     Returns: Array of distances.
 
     >>> t = np.linspace(0, 1, 5)[:, np.newaxis]
     >>> x = np.array([[0, 0, 0]])*t + np.array([[0, 10, -10]])*(1 - t)
     >>> y = np.array([[0, 0, 0]])*t + np.array([[10, 0, -10]])*(1 - t)
-    >>> np.round(distance(x, y), 2) 
+    >>> np.round(distance(x, y), 2)
     array([ 14.14,  10.61,   7.07,   3.54,   0.  ])
     """
     return norm((x - y) / scale, ord=p, axis=axis)
@@ -287,7 +291,7 @@ def triangle_area(a, b, c):
         a, b, c: Coordinates of points.
 
     Returns: Array of areas.
-    
+
     >>> t = np.linspace(0, np.pi, 5)
     >>> a = np.stack([np.cos(t), np.sin(t), np.zeros(5)],axis=-1)
     >>> b = np.array([0, 1, 1])/np.sqrt(2)
@@ -309,9 +313,9 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
         destination: Destination points
         direction: A vector giving the direction the bearing is
             calculated with respect to. By default, [0, 1].
-            
+
     Returns: Array of bearings.
-    
+
     >>> a = np.array([0, 0, 0])
     >>> b = np.array([1, 0, 0])
     >>> c = np.array([0, 0, 1])
@@ -328,11 +332,11 @@ def bearing(origin, destination, pole=np.array([0, 0, 1])):
 def central_angle(x, y, signed=False):
     """Central angle between vectors with respect to 0. If vectors have norm
     1, this is the spherical distance between them.
-    
+
     Args:
         x, y: Coordinates of points on the sphere.
         axis: Which axis the vectors lie along. By default, -1.
-        
+
     Returns: Array of central angles.
 
     >>> t = np.linspace(0, np.pi, 5)
@@ -354,14 +358,15 @@ def central_angle_equilateral(pts):
     """For use with the naive slerp methods. Takes the central angle between
     each of the points in pts. If they are close, returns the central angle.
     If not, raises an error.
+
     >>> x = np.eye(3)
-    >>> central_angle_equilateral(x)/np.pi*180 
+    >>> central_angle_equilateral(x)/np.pi*180
     90...
     >>> y = x[[0, 0, 2]]
-    >>> central_angle_equilateral(y)/np.pi*180 
+    >>> central_angle_equilateral(y)/np.pi*180
     Traceback (most recent call last):
         ...
-    ValueError: naive_slerp used with non-equilateral face. Difference is 1.57... radians.
+    ValueError: naive_slerp used with non-equilateral face. Difference is 1...
     """
     omegas = central_angle(pts, np.roll(pts, 1, axis=0))
     max_diff = np.abs(omegas - np.roll(omegas, 1)).max()
@@ -419,7 +424,7 @@ def spherical_bearing(origin, destination, pole=np.array([0, 0, 1])):
     Returns: Array of bearings.
 
     >>> x = np.array([1, 0, 0])
-    >>> spherical_bearing(x, np.roll(x, 1))/np.pi*180 
+    >>> spherical_bearing(x, np.roll(x, 1))/np.pi*180
     90...
     """
     c_1 = np.cross(origin, destination)

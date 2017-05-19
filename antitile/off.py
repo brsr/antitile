@@ -15,8 +15,10 @@ def readline_comment(file, symbol='#'):
 
 def load_off(file):
     """Loads OFF files from Antiprism.
-    Arguments:
+
+    Args:
         file: file handle
+
     Returns:
         vertices: A numpy array of shape (# of vertices , 3) representing
             the vertices of the polyhedron.
@@ -26,11 +28,11 @@ def load_off(file):
             be None.
         edges: A numpy array of shape (# of edges, 2) with values of
             vertex indices. Any entry in the face list in the OFF
-            file where Nv = 2 will be here.
+            file where Nv = 2 will be here. May be None.
         edgecolors: A list of colors. If colors are not specified, entry will
             be None.
         verts: A numpy array  of vertex indices. Any entry in the face
-            list in the OFF file where Nv = 1 will be here.
+            list in the OFF file where Nv = 1 will be here. May be None.
         vertexcolors: A list of colors. If colors are not specified, will
             be None.
             """
@@ -93,15 +95,19 @@ def load_off(file):
 def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
               verts=None, vertexcolors=None):
     """Export a grid to an OFF file for use with Antiprism.
-    Inputs:
+
+    Args:
         vertices: List of vertex cordinates
         faces: List of faces
-        facecolors: List of colors corresponding to each face
-        edges: List of edges (2-vertex faces)
-        edgecolors: List of colors corresponding to each edge
-        verts: List of vertexes (1-vertex faces)
-        vertexcolors: List of colors corresponding to each vertex
-        """
+        facecolors: List of colors corresponding to each face (optional)
+        edges: List of edges (2-vertex faces) (optional)
+        edgecolors: List of colors corresponding to each edge (optional)
+        verts: List of vertexes (1-vertex faces) (optional)
+        vertexcolors: List of colors corresponding to each vertex (optional)
+
+    Returns:
+        A string containing the contents of the OFF file
+    """
     #align the "faces" into a single list
     if (facecolors is None or len(facecolors) == 0) and faces is not None:
         facecolors = ['']*len(faces)
@@ -158,27 +164,3 @@ def write_off(vertices, faces, facecolors=None, edges=None, edgecolors=None,
         except TypeError:
             result += str(c) + '\n'
     return result
-#    if facecolors is None:
-#        for face in faces:
-#            try:
-#                x = len(face)
-#                face = list(face)
-#            except TypeError:
-#                x = 1
-#                face = [face]
-#            row = [x] + face
-#            result += ' '.join(str(i) for i in row) + '\n'
-#    else:
-#        for face, color in zip(faces, facecolors):
-#            try:
-#                x = len(face)
-#                face = list(face)
-#            except TypeError:
-#                x = 1
-#                face = [face]
-#            try:
-#                color = list(color)
-#            except TypeError:
-#                color = [color]
-#            row = [x] + face + color
-#            result += ' '.join(str(i) for i in row) + '\n'

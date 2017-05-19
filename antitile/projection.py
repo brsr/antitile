@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Transformations from the breakdowns to 3-space (sometimes 2-space)
+Transformations from the breakdowns to some surface in 3-space
+(sometimes 2-space)
+
+Attributes:
+    PROJECTIONS: A map of maps. The first map is keyed on the name of a family
+        of projections, and the second is keyed on shape (3 or 4). For
+        instance, PROJECTIONS['nslerp'][3] gives the function to perform
+        nslerp on a triangle.
+    PARALLEL: A list of which projections are compatible with
+        parallel projection.
 """
 
 import numpy as np
@@ -10,10 +19,10 @@ from . import xmath, breakdown
 
 _TEST_EQ_TRI = np.eye(3)
 _TEST_EQ_Q = xmath.normalize(np.array([[1, 0, 1],
-                                        [0, 1, 1],
-                                        [-1, 0, 1],
-                                        [0, -1, 1]]))
-_TEST_SKEW_TRI = np.array([[4/5, 3/5, 0],
+                                       [0, 1, 1],
+                                       [-1, 0, 1],
+                                       [0, -1, 1]]))
+_TEST_SKEW_TRI = np.array([[0.8, 0.6, 0],
                            [0, 1, 0],
                            [0, 0, 1]])
 _TEST_SKEW_Q = xmath.normalize(np.array([[1, 0, 1],
@@ -24,7 +33,7 @@ _TEST_BARY = np.array([[1, 0.8, 0.6, 0.4, 0.2, 0.0],
                        [0, 0.2, 0.2, 0.2, 0.5, 0.5],
                        [0, 0.0, 0.2, 0.4, 0.3, 0.5]]).T
 _TEST_XY = np.array([[0, 1, 1, 0, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3],
-                     [0, 0, 1, 1, 0,   0.5, 1  , 0,   0.5, 1]]).T
+                     [0, 0, 1, 1, 0, 0.5, 1, 0, 0.5, 1]]).T
 
 _TEST_FREQ = 4, 2
 _TEST_TRI_LINDEX = np.array([[0, 4, 6],
@@ -39,9 +48,16 @@ _TEST_Q_LINDEX = np.array([[2, 0],
                            [4, 1],
                            [1, 2],
                            [2, 2]])
-#_TEST_DISK
-#_TEST_SPHERE_PTS
-#_TEST_TRI_PTS
+_TEST_DISK_C = np.exp(np.linspace(0, 2j*np.pi, 7))*np.linspace(0, 1, 7)
+_TEST_DISK_R = xmath.complex_to_float2d(_TEST_DISK_C)
+_TEST_TRI_PTS = np.array([[0.8, 0.6, 0],
+                          [0, 1, 0],
+                          [0, 0, 1],
+                          [0.4, 0.8, 0],
+                          [0, 0.5, 0.5],
+                          [0.4, 0.3, 0.5],
+                          [4/15, 8/15, 1/3]])
+_TEST_SPHERE_PTS = xmath.normalize(_TEST_TRI_PTS)
 
 #generic methods, valid on any-d, any shape
 def square_to_quad(xy, base_pts):
@@ -49,12 +65,9 @@ def square_to_quad(xy, base_pts):
     defined by base_pts.
 
     Args:
-        xy: The 2d coordinates of the point. Last element of shape should be 2.
-            If not, treated like xy[..., :2]: the values in xy[..., 2:] are
-            ignored.
-        base_pts: The coordinates of the quadrilateral. Should be in
-            counterclockwise order to maintain orientation. First element of
-            shape should be 4.
+        xy: Array, shape [..., 2]. The 2d coordinates of the point.
+        base_pts: Array, shape [4, ...]. The coordinates of the quadrilateral.
+            Should be in counterclockwise order to maintain orientation.
     Returns:
         Coordinates in whatever space base_pts was defined in.
 
@@ -75,17 +88,18 @@ def square_to_quad(xy, base_pts):
     x, y = xy[..., 0], xy[..., 1]
     return a + (b-a)*x + (d-a)*y + (a-b+c-d)*x*y
 
-def tri_bary(bary, abc):
+def tri_bary(bary, base_pts):
     """Transforms barycentric coordinates to a (Euclidean) triangle
-    defined by abc.
+    defined by base_pts.
 
     Args:
-        bary: Barycentric coordinates. Last element of shape should be 3.
-        abc: Coordinates of the triangle. Should be in counterclockwise order
-            to maintain orientation. First element of shape should be 3.
+        bary: Array, shape [..., 3]. Barycentric coordinates.
+        base_pts: Array, shape [3, ...]. Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
 
     Returns:
-        Coordinates in whatever space abc was define in.
+        Coordinates in whatever space base_pts was define in.
+
     >>> tri_bary(_TEST_BARY, _TEST_SKEW_TRI)
     array([[ 0.8 ,  0.6 ,  0.  ],
            [ 0.64,  0.68,  0.  ],
@@ -95,11 +109,12 @@ def tri_bary(bary, abc):
            [ 0.  ,  0.5 ,  0.5 ]])
 
     """
-    return bary.dot(abc)
+    return bary.dot(base_pts)
 
 #methods for disks
 def square_to_disk(xy, rotation=1):#np.exp(1j*np.pi/4)):
-    """Transforms square on [0,1]^2 to unit disk
+    """Transforms square on [0,1]^2 to unit disk.
+
     >>> np.round(square_to_disk(_TEST_XY), 6)
     array([[-0.707107, -0.707107],
            [ 0.707107, -0.707107],
@@ -122,7 +137,7 @@ def square_to_disk(xy, rotation=1):#np.exp(1j*np.pi/4)):
 DISK_TRI_C = np.exp(2j*np.pi/3*np.arange(3))*1j
 DISK_TRI_R = xmath.complex_to_float2d(DISK_TRI_C)
 
-def tri_to_disk(beta, rotation=1, pts=DISK_TRI_C):
+def tri_to_disk(bary, rotation=1, pts=DISK_TRI_C):
     """Transforms triangle in barycentric coordinates to unit disk.
     tri_naive_slerp also does this when pts are on a great circle,
     with somewhat different results.
@@ -135,30 +150,38 @@ def tri_to_disk(beta, rotation=1, pts=DISK_TRI_C):
            [-0.261861, -0.302372],
            [-0.      , -1.      ]])
     """
-    tri_pts = beta.dot(pts)
+    tri_pts = bary.dot(pts)
     angle = np.angle(tri_pts)
-    r = 1 - 3*beta.min(axis=-1)
+    r = 1 - 3*bary.min(axis=-1)
     result = r*np.exp(1j*angle)*rotation
     return xmath.complex_to_float2d(result)
 
 DISK_SQ_C = np.array([1, 1j, -1, -1j])
 DISK_SQ_R = xmath.complex_to_float2d(DISK_SQ_C)
 
-def _sq_disk(bkdn, abc, freq, tweak):
+def _sq_disk(bkdn, base_pts, freq, tweak):
     sc = square_to_disk(bkdn.coord)
     sc2 = sc/np.sqrt(2) + 0.5
-    result = square_to_quad(sc2[:, np.newaxis], abc)
+    result = square_to_quad(sc2[:, np.newaxis], base_pts)
     return result
 
 
-def _tri_disk(bkdn, abc, freq, tweak):
+def _tri_disk(bkdn, base_pts, freq, tweak):
     rebary = bary_tri(tri_to_disk(bkdn.coord), DISK_TRI_R)
-    return tri_bary(rebary, abc)
+    return tri_bary(rebary, base_pts)
 
 #disk -> sphere
 
 def spherical_to_xyz(phi, theta):
-    """Converts spherical coordinates to 3d xyz coordinates
+    """Converts spherical coordinates to 3d xyz coordinates.
+
+    Args:
+        phi: Inclination
+        theta: Azimuth
+
+    Returns:
+        An array with of shape = [..., 3].
+
     >>> phi = np.arccos(np.linspace(-1, 1, 7))
     >>> theta = np.arcsin(np.linspace(-1, 1, 7))
     >>> np.round(spherical_to_xyz(phi, theta), 6)
@@ -177,7 +200,18 @@ def spherical_to_xyz(phi, theta):
 def lambert(disk):
     """Converts coordinates on the disk to spherical coordinates, using
     the Lambert azimuthal equal-area projection.
-    >>> lambert(_TEST_DISK)
+
+    Args:
+        disk: Array of shape [..., 2] representing points on the disk.
+
+    Returns:
+        phi, theta: Spherical coordinates
+
+    >>> phi, theta = lambert(_TEST_DISK_R)
+    >>> np.round(phi*180/np.pi, 2)
+    array([   0.  ,   19.19,   38.94,   60.  ,   83.62,  112.89,  180.  ])
+    >>> np.round(theta*180/np.pi, 2)
+    array([   0.,   60.,  120.,  180., -120.,  -60.,   -0.])
     """
     theta = np.arctan2(disk[..., 1], disk[..., 0])
     phi = 2*np.arcsin(np.linalg.norm(disk, axis=-1))
@@ -186,7 +220,18 @@ def lambert(disk):
 def equidistant(disk):
     """Converts coordinates on the disk to spherical coordinates, using
     the azimuthal equal-distance projection.
-    >>> equidistant(_TEST_DISK)
+
+    Args:
+        disk: Array of shape [..., 2] representing points on the disk.
+
+    Returns:
+        phi, theta: Spherical coordinates
+
+    >>> phi, theta = equidistant(_TEST_DISK_R)
+    >>> np.round(phi*180/np.pi, 2)
+    array([   0.,   30.,   60.,   90.,  120.,  150.,  180.])
+    >>> np.round(theta*180/np.pi, 2)
+    array([   0.,   60.,  120.,  180., -120.,  -60.,   -0.])
     """
     theta = np.arctan2(disk[..., 1], disk[..., 0])
     phi = np.linalg.norm(disk, axis=-1)*np.pi
@@ -198,6 +243,16 @@ def equidistant(disk):
 
 def tri_naive_slerp(bary, base_pts):
     """
+    Naive slerp (spherical linear interpolation) on a spherical triangle.
+
+    Args:
+        bary: Array, shape [..., 3]. Barycentric coordinates.
+        base_pts: Array, shape [3, ..., 3]. Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
+
+    Returns:
+        An array of shape [..., 3], representing points in 3d-space.
+
     >>> tri_naive_slerp(_TEST_BARY, _TEST_EQ_TRI)
     array([[ 1.        ,  0.        ,  0.        ],
            [ 0.95105652,  0.30901699,  0.        ],
@@ -211,15 +266,17 @@ def tri_naive_slerp(bary, base_pts):
     b = np.sin(angle * bary) / np.sin(angle)
     return b.dot(base_pts)
 
-def tri_areal(beta, base_pts):
+def tri_areal(bary, base_pts):
     """Given a triangle and spherical areal coordinates, returns the vectors
     cooresponding to those coordinates.
 
     Args:
-        beta: spherical areal coordinates
-        base_pts: vertices of the spherical triangle in a 3x3 array
+        bary: Array, shape [..., 3]. Barycentric coordinates.
+        base_pts: Array, shape [3, ..., 3]. Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
 
-    Returns: Points on the sphere
+    Returns:
+        An array of shape [..., 3], representing points in 3d-space.
 
     >>> tri_areal(_TEST_BARY, _TEST_SKEW_TRI)
     array([[ 0.8       ,  0.6       ,  0.        ],
@@ -231,7 +288,7 @@ def tri_areal(beta, base_pts):
     """
     base_pts = xmath.normalize(base_pts)
     area = xmath.triangle_solid_angle(base_pts[0], base_pts[1], base_pts[2])
-    area_i = beta * area
+    area_i = bary * area
     base_pts_iplus1 = np.roll(base_pts, -1, axis=0)
     base_pts_iplus2 = np.roll(base_pts, 1, axis=0)
     #FIXME whytf is this commented statement not equivalent to below?
@@ -257,8 +314,20 @@ def tri_areal(beta, base_pts):
 
 def triangles_method2(lindex, base_pts, freq):
     """Triangles of method 2
+
+    Args:
+        lindex: Array, shape (..., 3). Linear indexes (should correspond
+            to freq)
+        base_pts: Array, shape (3, ..., 3). Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
+        freq: 2-tuple. Frequency of the subdivision.
+
+    Returns:
+        Array of shape (..., 3, 3)
+
     >>> np.round(triangles_method2(_TEST_TRI_LINDEX[1:3], _TEST_SKEW_TRI,
     ...                            _TEST_FREQ), 6)
+
     array([[[ 0.205392,  0.183498,  0.051016],
             [ 0.34558 ,  0.317059,  0.10024 ],
             [ 0.098942,  0.085439,  0.03013 ]],
@@ -266,7 +335,7 @@ def triangles_method2(lindex, base_pts, freq):
            [[ 0.283136,  0.377856,  0.038599],
             [ 0.24816 ,  0.339397,  0.042048],
             [ 0.152133,  0.199126,  0.028172]]])
-"""
+    """
     n, m = freq
     frame = breakdown.frame_triangle(base_pts, n, m, interp=xmath.slerp)
     #get the normal to the great circle corresponding to the lines
@@ -288,6 +357,19 @@ def triangles_method2(lindex, base_pts, freq):
 def tri_intersections(lindex, base_pts, freq, tweak=False):
     """Transforms a triangle to a spherical triangle using the method of
     intersections
+
+    Args:
+        lindex: Array, shape (..., 3). Linear indexes (should correspond
+            to freq)
+        base_pts: Array, shape (3, ..., 3). Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
+        freq: 2-tuple. Frequency of the subdivision.
+        tweak: Whether to normalize the points of the triangle before
+            taking their centroid. By default false.
+
+    Returns:
+        Array of shape (..., 3)
+
     >>> tri_intersections(_TEST_TRI_LINDEX, _TEST_SKEW_TRI, _TEST_FREQ)
     array([[ 0.8       ,  0.6       ,  0.        ],
            [ 0.73045891,  0.65102869,  0.20524575],
@@ -298,7 +380,7 @@ def tri_intersections(lindex, base_pts, freq, tweak=False):
     """
     a, b = freq
     pts = triangles_method2(lindex, base_pts, freq)
-    if ~tweak:
+    if tweak:
         pts = xmath.normalize(pts)
     result = pts.mean(axis=1)
     result[(lindex[:, 0] == 0) &
@@ -317,7 +399,15 @@ def tri_intersections(lindex, base_pts, freq, tweak=False):
 
 def square_naive_slerp(xy, base_pts):
     """
-    Naive slerp on a spherical square.
+    Naive slerp (spherical linear interpolation) on a spherical square.
+
+    Args:
+        xy: Array, shape [..., 2]. XY coordinates on the square.
+        base_pts: Array, shape [4, ..., 3]. Coordinates of the square.
+            Should be in counterclockwise order to maintain orientation.
+
+    Returns:
+        An array of shape [..., 3], representing points in 3d-space.
 
     >>> square_naive_slerp(_TEST_XY, _TEST_EQ_Q)
     array([[ 0.70710678,  0.        ,  0.70710678],
@@ -344,6 +434,14 @@ def square_naive_slerp(xy, base_pts):
 def square_naive_slerp_2(xy, base_pts):
     """
     Variant naive slerp on a spherical square.
+
+    Args:
+        xy: Array, shape [..., 2]. XY coordinates on the square.
+        base_pts: Array, shape [4, ..., 3]. Coordinates of the square.
+            Should be in counterclockwise order to maintain orientation.
+
+    Returns:
+        An array of shape [..., 3], representing points in 3d-space.
 
     >>> square_naive_slerp_2(_TEST_XY, _TEST_EQ_Q)
     array([[ 0.70710678,  0.        ,  0.70710678],
@@ -376,6 +474,14 @@ def _square_slerp(xy, base_pts):
     Helper function for square_slerp. This does the slerp, and then
     square_slerp averages the two orientations together.
 
+    Args:
+        xy: Array, shape [..., 2]. XY coordinates on the square.
+        base_pts: Array, shape [4, ..., 3]. Coordinates of the square.
+            Should be in counterclockwise order to maintain orientation.
+
+    Returns:
+        An array of shape [..., 3], representing points in 3d-space.
+
     >>> _square_slerp(_TEST_XY[:, np.newaxis], _TEST_SKEW_Q)
     array([[ 0.70710678,  0.        ,  0.70710678],
            [ 0.        ,  0.70710678,  0.70710678],
@@ -400,14 +506,13 @@ def square_slerp(xy, base_pts):
     defined by base_pts, using spherical linear interpolation
 
     Args:
-        xy: The 2d coordinates of the point. Last element of shape should be 2.
-            If not, treated like xy[..., :2]: the values in xy[..., 2:] are
-            ignored.
-        base_pts: The coordinates of the quadrilateral. Should be in
-            counterclockwise order to maintain orientation. Shape should be
-            (4, ..., 3)
+        xy: Array, shape [..., 2]. XY coordinates on the square.
+        base_pts: Array, shape [4, ..., 3]. Coordinates of the square.
+            Should be in counterclockwise order to maintain orientation.
+
     Returns:
-        Coordinates on the sphere.
+        An array of shape [..., 3], representing points in 3d-space.
+
     >>> square_slerp(_TEST_XY[:, np.newaxis], _TEST_SKEW_Q)
     array([[ 0.70710678,  0.        ,  0.70710678],
            [ 0.        ,  0.70710678,  0.70710678],
@@ -429,6 +534,17 @@ def square_slerp(xy, base_pts):
 def square_intersections(lindex, base_pts, freq):
     """Transforms a square to a spherical quadrilateral using the method of
     intersections
+
+    Args:
+        lindex: Array, shape (..., 2). Linear indexes (should correspond
+            to freq)
+        base_pts: Array, shape (4, ..., 3). Coordinates of the triangle.
+            Should be in counterclockwise order to maintain orientation.
+        freq: 2-tuple. Frequency of the subdivision.
+
+    Returns:
+        Array of shape (..., 3)
+
     >>> square_intersections(_TEST_Q_LINDEX, _TEST_SKEW_Q, _TEST_FREQ)
     array([[ 0.70710678,  0.        ,  0.70710678],
            [ 0.43240784, -0.07811493,  0.54287903],
@@ -462,7 +578,23 @@ def square_intersections(lindex, base_pts, freq):
 def bary_tri(tri, vertices):
     """Transforms a triangle back into barycentric
     coordinates. Only elements [..., :2] are used.
-    >>> bary_tri(tri, vertices)"""
+
+    Args:
+        tri: Triangle to calculate barycentric coordinates with respect to.
+        vertices: Array of vertices
+
+    Returns:
+        Array of barycentric coordinates
+
+    >>> bary_tri(_TEST_TRI_PTS, _TEST_SKEW_TRI)
+    array([[ 1.        ,  0.        ,  0.        ],
+           [ 0.        ,  1.        ,  0.        ],
+           [ 0.        ,  0.        ,  1.        ],
+           [ 0.5       ,  0.5       ,  0.        ],
+           [ 0.        ,  0.5       ,  0.5       ],
+           [ 0.5       ,  0.        ,  0.5       ],
+           [ 0.33333333,  0.33333333,  0.33333333]])
+    """
     afill = np.ones(vertices.shape[:-1])
     a = np.concatenate([vertices[..., :2], afill[..., np.newaxis]], axis=-1)
     bfill = np.ones(tri.shape[:-1])
@@ -475,12 +607,23 @@ def bary_tri(tri, vertices):
 def to_sph_areal_coords(pts, triangle):
     """Given a triangle and pts within that triangle, returns the
     spherical areal coordinates of the pts with respect to the triangle.
+
+    Args:
+        tri: Array with shape (..., 3). Triangle to calculate spherical
+            areal coordinates with respect to.
+        vertices: Array with shape (..., 3). Array of vertices
+
+    Returns:
+        Array of spherical areal coordinates
+
     >>> to_sph_areal_coords(_TEST_SPHERE_PTS, _TEST_SKEW_TRI)
-    array([[ 0.        ,  0.01273324,  0.98726676],
-           [ 0.12972226,  0.2358742 ,  0.63440354],
-           [ 0.27122545,  0.34291999,  0.38585456],
-           [ 0.45754141,  0.35616745,  0.18629114],
-           [ 1.        ,  0.        ,  0.        ]])
+    array([[ 1.        ,  0.        ,  0.        ],
+           [ 0.        ,  1.        ,  0.        ],
+           [ 0.        ,  0.        ,  1.        ],
+           [ 0.5       ,  0.5       ,  0.        ],
+           [ 0.        ,  0.5595371 ,  0.4404629 ],
+           [ 0.5595371 ,  0.        ,  0.4404629 ],
+           [ 0.36751409,  0.36751409,  0.26497182]])
     """
     area = xmath.triangle_solid_angle(triangle[0], triangle[1], triangle[2])
     area_i = xmath.triangle_solid_angle(pts[:, np.newaxis],
@@ -512,9 +655,13 @@ def project_sphere(sphcoords, zfunc=np.arcsin, scale=180 / np.pi):
         transforms it to be.
 
     >>> project_sphere(_TEST_SPHERE_PTS)
-    array([[  0.,   0.],
-           [ 90.,   0.],
-           [  0.,  90.]])
+    array([[ 36.86989765,   0.        ],
+           [ 90.        ,   0.        ],
+           [  0.        ,  90.        ],
+           [ 63.43494882,   0.        ],
+           [ 90.        ,  45.        ],
+           [ 36.86989765,  45.        ],
+           [ 63.43494882,  29.20593225]])
     """
     # specify shape of result
     newdim = list(sphcoords.shape)
@@ -577,35 +724,35 @@ def parallel(pts, normal, exact=True):
         result = parallel_approx(pts, normal)
     return result
 
-FLAT = {3: lambda bkdn, abc, freq, tweak: tri_bary(bkdn.coord, abc),
-        4: lambda bkdn, abc, freq, tweak:
-           square_to_quad(bkdn.coord[:, np.newaxis], abc)}
+_FLAT = {3: lambda bkdn, base_pts, freq, tweak: tri_bary(bkdn.coord, base_pts),
+         4: lambda bkdn, base_pts, freq, tweak:
+            square_to_quad(bkdn.coord[:, np.newaxis], base_pts)}
 
-SLERP = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
-         4: lambda bkdn, abc, freq, tweak:
-            square_naive_slerp(bkdn.coord, abc)}
+_SLERP = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord, base_pts),
+          4: lambda bkdn, base_pts, freq, tweak:
+             square_naive_slerp(bkdn.coord, base_pts)}
 
-SLERP2 = {3: lambda bkdn, abc, freq, tweak: tri_naive_slerp(bkdn.coord, abc),
-          4: lambda bkdn, abc, freq, tweak:
-             square_naive_slerp_2(bkdn.coord, abc)}
+_SLERP2 = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord, base_pts),
+           4: lambda bkdn, base_pts, freq, tweak:
+              square_naive_slerp_2(bkdn.coord, base_pts)}
 
-OTHER = {3: lambda bkdn, abc, freq, tweak: tri_areal(bkdn.coord, abc),
-         4: lambda bkdn, abc, freq, tweak:
-            square_slerp(bkdn.coord[:, np.newaxis], abc)}
+_OTHER = {3: lambda bkdn, base_pts, freq, tweak: tri_areal(bkdn.coord, base_pts),
+          4: lambda bkdn, base_pts, freq, tweak:
+             square_slerp(bkdn.coord[:, np.newaxis], base_pts)}
 
-GC = {3: lambda bkdn, abc, freq, tweak:
-         tri_intersections(bkdn.lindex, abc, freq, tweak),
-      4: lambda bkdn, abc, freq, tweak:
-         square_intersections(bkdn.lindex, abc, freq)}
+_GC = {3: lambda bkdn, base_pts, freq, tweak:
+          tri_intersections(bkdn.lindex, base_pts, freq, tweak),
+       4: lambda bkdn, base_pts, freq, tweak:
+          square_intersections(bkdn.lindex, base_pts, freq)}
 
-DISK = {3: _tri_disk,
-        4: _sq_disk}
+_DISK = {3: _tri_disk,
+         4: _sq_disk}
 
-PROJECTIONS = {'flat':  FLAT,
-               'nslerp': SLERP,
-               'nslerp2': SLERP2,
-               'other': OTHER,
-               'gc':    GC,
-               'disk':  DISK}
+PROJECTIONS = {'flat':  _FLAT,
+               'nslerp': _SLERP,
+               'nslerp2': _SLERP2,
+               'other': _OTHER,
+               'gc':    _GC,
+               'disk':  _DISK}
 
 PARALLEL = ['nslerp', 'nslerp2', 'disk']

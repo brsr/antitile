@@ -9,7 +9,7 @@ from . import xmath
 
 class Tiling:
     """Generic class for tilings and polyhedrons
-    Attributes:
+    Args/Attributes:
         vertices: List of vertices
         faces: List of faces
         """
@@ -60,13 +60,16 @@ class Tiling:
 
     @property
     def true_faces(self):
+        """List of true faces (those with 3 or more vertices)."""
         return [x for x in self.faces if len(x) > 2]
 
     def faces_by_edge(self, edges):
         """Given edges, lists the faces adjacent to the edges
+
         Arguments:
             edges: List of edges. An array of shape (n, 2). Lowest-numbered
             vertex comes first.
+
         Returns: two arrays:
             edges: Index of each edge
             faces: Index of each face"""
@@ -163,9 +166,19 @@ class Tiling:
 
     def id_dupe_faces(self, face_group=None, oriented=False):
         """Identify duplicate faces. Should use `normalize_faces` first.
-        Arguments:
-            face_group: Lower-numbered faces will be preferred
-            oriented: Consider opposite orientations of faces to be duplicates
+
+        Args:
+            face_group: Optional. Of a collection with duplicate faces, the
+                faces with lowest value will be preferred to those with higher
+                values. By default, just uses the face that is earlier in the
+                face list.
+            oriented: Optional. Consider opposite orientations of the same face
+                to be different.
+
+        Returns:
+            An array of face indexes. Non-duplicated faces will have an entry
+            equal to its position in the array. If a face is duplicated, its
+            antry will equal the preferred face's position
         """
         if face_group is None:
             face_group = np.zeros(len(self.faces))
@@ -181,7 +194,7 @@ class Tiling:
             if not oriented:
                 revfaces = np.roll(faces[..., ::-1], 1, axis=-1)
                 revreps = np.all(faces[:, np.newaxis] == revfaces[np.newaxis],
-                              axis=-1)
+                                 axis=-1)
                 reps |= revreps
             reps[np.diag_indices_from(reps)] = False
             comp[np.ix_(index, index)] = reps
@@ -210,10 +223,16 @@ def edges_from_facelist(faces):
 
 def orient_face(face, edge):
     """Determines how to roll the list of vertices for a face so that its
-    0th and 1st vertices correspond to edge. If reflection=True,
-    allows reversing the list as well.
+    0th and 1st vertices correspond to edge.
+
+    Args:
+        face: A list of vertex numbers.
+        edge: A list of vertex numbers.
+
     Returns:
-        roll, flip"""
+        roll: Argument to ``np.roll`` to roll ``face`` into the right position
+        flip: If the 0th and 1st indexes of ``face``, once rolled, are in
+            opposite order of ``edge``, this is true."""
     indexes = np.argwhere(np.in1d(face, edge))
     if len(indexes) != 2:
         raise ValueError()
@@ -236,7 +255,21 @@ def orient_face(face, edge):
 #Measures
 def energy(xyz, exponent=1, over=None):
     """Energy of the vertex arrangement, as defined in
-    Thomson's problem."""
+    Thomson's problem.
+
+    Args:
+        xyz: Coordinates of vertices.
+        exponent: By default, the energy is the sum of 1/r, where r is
+        the distance from one point to another. If exponent is specified,
+        instead 1/r^exponent is used.
+        over: Which axis to sum over. By default all axes are summed over.
+            To get the contribution of each individual vertex, specify
+            over = 1.
+
+    Returns:
+        Energy of the vertex arrangement (or energy of individual vertexes
+        if over = 1)
+    """
     dists = xmath.distance(xyz[np.newaxis], xyz[:, np.newaxis])
     with warnings.catch_warnings():
         warnings.filterwarnings('ignore',
@@ -247,11 +280,22 @@ def energy(xyz, exponent=1, over=None):
     return vertex_energy.sum(axis=over)/2
 
 def center_of_gravity(xyz):
+    """Distance between the center of gravity of the vertices xyz and
+    the zero point."""
     return np.linalg.norm(xyz.mean(axis=0))
 
 def bentness(xyz, poly):
     """Bentness of faces: how far away from planar they are. Faces with 3
-    vertices (or less) inherently have bentness 0."""
+    vertices (or less) inherently have bentness 0.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+
+    Returns:
+        Array containing the bentness of each face."""
     fs = poly.face_size
     fd = poly.faces_by_size
     result = np.zeros(len(fs))
@@ -267,7 +311,16 @@ def bentness(xyz, poly):
     return result
 
 def edge_length(xyz, edges, spherical=False):
-    """Length of each edge in the grid"""
+    """Length of each edge in the grid
+    Args:
+        xyz: Coordinates of vertices.
+        edge: Array of shape (N, 2), specifying which vertices make up an edge.
+        spherical: If true, uses the spherical distance (central angle)
+            along each edge instead of the Euclidean distance.
+
+    Returns:
+        Array of length N containing the length of each edge.
+    """
     if spherical:
         dist = xmath.central_angle
     else:
@@ -277,7 +330,19 @@ def edge_length(xyz, edges, spherical=False):
     return result
 
 def face_area(xyz, poly, spherical=False):
-    """Area of each face"""
+    """Area of each face.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+        spherical: If true, uses the spherical area (solid angle)
+            of each face instead of the Euclidean area.
+
+    Returns:
+        Array containing the area of each face.
+    """
     #FIXME this is inconsistent for skew faces
     if spherical:
         area = xmath.triangle_solid_angle
@@ -297,7 +362,19 @@ def face_area(xyz, poly, spherical=False):
     return result
 
 def aspect_ratio(xyz, poly, spherical=False):
-    """Ratio of longest edge to shortest edge for each face"""
+    """Ratio of longest edge to shortest edge for each face.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+        spherical: If true, uses the spherical distance (central angle)
+            along each edge instead of the Euclidean distance.
+
+    Returns:
+        Array containing the aspect ratio of each face.
+    """
     if spherical:
         dist = xmath.central_angle
     else:

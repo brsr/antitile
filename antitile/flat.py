@@ -28,6 +28,11 @@ def project_skew(coords):
 class FlatTiling(tiling.Tiling):
     """Info about the geometry of a flat square {4,4} and triangular
     tiling {3,6}
+
+    Args:
+        n, m: Number of vertices along each skew-axis.
+        shape: 3 for triangle, 4 for quadrilateral
+
     Attributes:
         freq: A 2-tuple (n, m) describing the breakdown structure.
         shape: Either 3 (triangular) or 4 (quadrilateral)
@@ -36,13 +41,6 @@ class FlatTiling(tiling.Tiling):
     """
 
     def __init__(self, a=25, b=25, shape=3):
-        """Constructor for the planar triangle/hex geometry.
-
-        Args:
-            n, m: Number of vertices along each skew-axis.
-            shape: 3 for triangle, 4 for quadrilateral
-        """
-
         if a < 1 or b < 1:
             raise ValueError("Frequency out of range")
         self.freq = (a, b)
@@ -97,27 +95,11 @@ class FlatTiling(tiling.Tiling):
 
     @property
     def proj_2d(self):
+        """2d projection of the flat tiling."""
         return self.default_proj(self.vertices)
 
     @property
     def proj_complex(self):
+        """2d projection of the flat tiling, expressed as a complex number."""
         twod = self.proj_2d
         return twod[..., 0] + 1j*twod[..., 1]
-#
-#if __name__ == "__main__":
-#    import matplotlib.pyplot as plt
-#    from matplotlib.collections import PolyCollection
-#
-#    a, b = 2, 2
-#    shape = 3
-#    tiling = FlatTiling(a, b, shape)
-#    pts_2d = tiling.proj_2d
-#    mx = pts_2d.max(axis=0)
-#    mn = pts_2d.min(axis=0)
-#    ptx = pts_2d[tiling.faces]
-#    fig, ax = plt.subplots()
-#    fig.set_size_inches(10, 6)
-#    plt.axis('equal')
-#    pc = PolyCollection(ptx, edgecolors='grey')
-#    ax.add_collection(pc)
-#    ax.scatter(pts_2d[..., 0], pts_2d[..., 1], c='k')
