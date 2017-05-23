@@ -64,9 +64,9 @@ def svg_breakdowns(shapeinfo, n, m):
 
 square = {'name': 'square',
           'shape': np.array([[1, 1],
-                             [181, 1],
+                             [1, 181],
                              [181, 181],
-                             [1, 181]]),
+                             [181, 1]]),
           'size': [182,]*2,
           'frame': lambda n, m: antitile.breakdown.frame_square(n, m)*180 + 1,
           'diagonal': 'Diagonal subdivision'}
