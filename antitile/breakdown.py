@@ -6,13 +6,24 @@ import numpy as np
 from . import flat, xmath
 
 class Breakdown(flat.FlatTiling):
-    """Breakdown structures
+    """Breakdown structures.
+
+    Args:
+        a, b: Frequency of the breakdown
+        shape: 3 for triangle, 4 for quadrilateral.
+        remove_outside: Whether to remove features that lie outside the
+            breakdown.
+            True: Remove faces and vertices that are neither inside the
+                breakdown nor adjacent to it,
+            False: Keep everything
+            By default, True.
+
     Attributes:
-        freq: A 2-tuple (n, m) describing the breakdown structure.
+        freq: A 2-tuple (a, b) describing the breakdown structure.
         shape: Either 3 (triangular) or 4 (quadrilateral)
         vertices: Vertices of the breakdown
-        coord: Barycentric coordinates if shape=3,
-            or xy coordinates if shape=4
+        coord: Barycentric coordinates if shape==3,
+            or xy coordinates if shape==4
         lindex: Linear index coordinates of each vertex
         group: An integer describing where each vertex falls.
             0: Inside the breakdown
@@ -31,18 +42,6 @@ class Breakdown(flat.FlatTiling):
             """
 
     def __init__(self, a, b, shape=3, remove_outside=True):
-        """
-        Constructor for the breakdown object.
-
-        Args:
-        n, m: Frequency of the breakdown
-        remove_outside: Whether to remove features that lie outside the
-            breakdown.
-            True: Remove faces and vertices that are neither inside the
-                breakdown nor adjacent to it,
-            False: Keep everything
-            By default, true.
-        """
         v = a + b + 1
         super().__init__(v, v, shape)
         self.freq = (a, b)
@@ -92,6 +91,7 @@ class Breakdown(flat.FlatTiling):
 
 
     def _t(self):
+        """Initialization for triangle breakdowns"""
         a, b = self.freq
         vertices = self.vertices
         group = self.group
@@ -146,6 +146,7 @@ class Breakdown(flat.FlatTiling):
         self.lindex = np.array([u, v, w]).T
 
     def _q(self):
+        """Initialization for quad breakdowns"""
         a, b = self.freq
         vertices = self.vertices
         group = self.group
@@ -201,6 +202,8 @@ class Breakdown(flat.FlatTiling):
         self.lindex = np.array([u, v]).T
 
     def _shared_group(self):
+        """Routine for the parts of determining vertex groups
+        that are shared between triangle and quad faces."""
         group = self.group
         faces = self.faces
         inside = np.nonzero(group < 90)[0]
@@ -210,22 +213,21 @@ class Breakdown(flat.FlatTiling):
         group[shared] = np.fmin(group[shared], 250)
 
     def lindex_reorient(self, n, flip=False):
-        """This really only works for Class I and II breakdowns"""
+        """Reorient linear indexes with n and flip, as returned by
+        ``tiling.orient_face``. This really only works for Class I
+        and II breakdowns."""
         if self.shape == 3:
             return _reorient_3(self, n, flip)
         else:
             return _reorient_4(self, n, flip)
 
 def _reorient_3(bkdn, n, flip=False):
+    """Helper function for triangle faces"""
     if flip:
-        #print(n)#fix 1 to 0
-        #for some reason 1 - n also appears to work here
-        #given the issues I'm having with non-orientable surfaces
-        #I don't trust it
         n = n - 1
     n = n%3
     result = np.roll(bkdn.lindex, n, axis=-1)
-    if flip:#FIXME not sure this works right
+    if flip:
         a, b = bkdn.freq
         normal = np.array([-b, a + b, -a])
         rm = xmath.reflect_through_origin(normal).T
@@ -236,14 +238,14 @@ _ROTMAT = np.array([[0, -1],
                     [1, 0]])
 
 def _reorient_4(bkdn, n, flip=False):
+    """Helper function for quad faces"""
     if flip:
-        #print(n)#fix 1 to -1
-        n = n - 2#?
+        n = n - 2
     n = n%4
     rm = np.linalg.matrix_power(_ROTMAT, n).T
     result = bkdn.lindex.dot(rm)
     result -= result.min(axis=0)
-    if flip:#FIXME not sure this works right
+    if flip:
         a, b = bkdn.freq
         normal = np.array([b, -a])
         offset = np.array([b, a])/2
@@ -254,13 +256,30 @@ def _reorient_4(bkdn, n, flip=False):
     return np.round(result).astype(int)
 
 def frame(n=4, m=2, shape=3):
+    """Creates the "frame" of edge points for method 2.
+
+    Args:
+        n, m: breakdown frequency
+        shape: triangle (3) or square (4) faces
+
+    Returns a multidimensional array with dimensions:
+        (x:         Which rotation of the lines
+        n + m + 1:  Linear index
+        2:          Which end of the line (0 is the "bottom")
+        x:          barycentric or xy coordinates)
+        x is 3 if shape is 3, else 2.
+    """
     if shape == 3:
         return frame_triangle(n=n, m=m)
     elif shape == 4:
         return frame_square(n=n, m=m)
 
-def frame_triangle(base_pts=np.eye(3), n=4, m=2, interp=xmath.lerp):
-    """Creates the "frame" of edge points for method 2.
+def frame_triangle(n=4, m=2, base_pts=np.eye(3), interp=xmath.lerp):
+    """Creates the "frame" of edge points for method 2 on a triangle face.
+
+    Args:
+        n, m: breakdown frequency
+
     Returns a multidimensional array with dimensions:
         (3:         Which rotation of the lines
         n + m + 1:  Linear index
@@ -283,7 +302,11 @@ def frame_triangle(base_pts=np.eye(3), n=4, m=2, interp=xmath.lerp):
     return np.stack([linterpol_nm, to], axis=2)
 
 def frame_square(n=4, m=2):
-    """Creates the "frame" of edge points for method 2.
+    """Creates the "frame" of edge points for method 2 on a quad face.
+
+    Args:
+        n, m: breakdown frequency
+
     Returns a multidimensional array with dimensions:
         (2:         Which rotation of the lines
         n + m + 1:  Linear index

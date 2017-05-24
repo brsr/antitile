@@ -67,8 +67,8 @@ class Tiling:
         """Given edges, lists the faces adjacent to the edges
 
         Arguments:
-            edges: List of edges. An array of shape (n, 2). Lowest-numbered
-            vertex comes first.
+            edges: List of edges. An array of shape (n, 2).
+                Lowest-numbered vertex comes first.
 
         Returns: two arrays:
             edges: Index of each edge
@@ -168,12 +168,12 @@ class Tiling:
         """Identify duplicate faces. Should use `normalize_faces` first.
 
         Args:
-            face_group: Optional. Of a collection with duplicate faces, the
-                faces with lowest value will be preferred to those with higher
-                values. By default, just uses the face that is earlier in the
-                face list.
-            oriented: Optional. Consider opposite orientations of the same face
-                to be different.
+            face_group: Optional. Of a collection with duplicate faces,
+                the faces with lowest value will be preferred to those
+                with higher values. By default, just uses the face that
+                is earlier in the face list.
+            oriented: If True, consider opposite orientations of
+                the same face to be different. Default False.
 
         Returns:
             An array of face indexes. Non-duplicated faces will have an entry
@@ -316,7 +316,7 @@ def edge_length(xyz, edges, spherical=False):
         xyz: Coordinates of vertices.
         edge: Array of shape (N, 2), specifying which vertices make up an edge.
         spherical: If true, uses the spherical distance (central angle)
-            along each edge instead of the Euclidean distance.
+            along each edge instead of the Euclidean distance. Default False.
 
     Returns:
         Array of length N containing the length of each edge.
@@ -330,7 +330,8 @@ def edge_length(xyz, edges, spherical=False):
     return result
 
 def face_area(xyz, poly, spherical=False):
-    """Area of each face.
+    """Area of each face. If one of the faces is bent and spherical is not
+    True, that face may have an inconsistent result.
 
     Args:
         xyz: Coordinates of vertices.
@@ -338,12 +339,11 @@ def face_area(xyz, poly, spherical=False):
             vertices. (xyz is separate so we don't have to recalculate the
             structure every time we change the vertex position.)
         spherical: If true, uses the spherical area (solid angle)
-            of each face instead of the Euclidean area.
+            of each face instead of the Euclidean area. Default False.
 
     Returns:
         Array containing the area of each face.
     """
-    #FIXME this is inconsistent for skew faces
     if spherical:
         area = xmath.triangle_solid_angle
     else:
@@ -370,7 +370,7 @@ def aspect_ratio(xyz, poly, spherical=False):
             vertices. (xyz is separate so we don't have to recalculate the
             structure every time we change the vertex position.)
         spherical: If true, uses the spherical distance (central angle)
-            along each edge instead of the Euclidean distance.
+            along each edge instead of the Euclidean distance. Default False.
 
     Returns:
         Array containing the aspect ratio of each face.

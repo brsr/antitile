@@ -15,7 +15,7 @@ The package includes a number of scripts. These can be piped together with progr
 
 These are free-standing:
 * `breakdown.py`: Visualize breakdown structures
-* `factor.py`: Factors Gaussian, Eisenstein, Nietsnesie (Eisenstein based on the 6th root of unity instead of 3rd), and regular integers.
+* `factor.py`: Factors Gaussian, Eisenstein, Nietsnesie (Eisenstein expressed with the 6th root of unity instead of 3rd), and regular integers.
 
 OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-edged dihedra are included in the `data` folder in the source.
 
@@ -31,15 +31,16 @@ Visualize a Goldberg polyhedron, with color:
 Create a quadrilateral-faced similar grid subdivision polyhedron, put it into canonical form (so the faces are all flat), and color it using Conway's Game of Life with random initial condition:
 
 	sgs.py -a 5 -b 3 cube.off | canonical | off_color test.off -f n | cellular.py -v -b=3 -s=2,3
-	view_off.py cellular100.off #or whatever if it reaches steady state early
+	view_off.py cellular100.off 
+	# or whatever the last file is if it reaches steady state early
 
-`sgs.py` can subdivide (Class I and II) non-orientable surfaces too. Here, the base is a mobius strip-like surface with 12 faces:
+`sgs.py` can subdivide non-orientable surfaces too, at least for Class I and II subdivisions. Here, the base is a Möbius strip-like surface with 12 faces:
 
 	unitile2d 2 -s m -w 4 -l 1 | sgs.py -a 2 -b 2 -n | view_off.py	
 	
 A quadrilateral balloon polyhedra, which happens to resemble a peeled coconut:
 
-    balloon.py 8 -pq | view_off.py
+    balloon.py 8 -pql | view_off.py
 
 ## For Contributors
 This code makes heavy use of vectorized operations on NumPy multidimensional arrays, which are honestly pretty impenetrable until you get familiar with them. (And, uh, even after that.) I use the convention that the last axis of an array specifies the spatial coordinates:

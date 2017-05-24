@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Subdivide a tiling or polyhedra using a similar grid
+
+Attributes:
+    MEASURES: A map from the measure's name to a function that can be used
+        in the optimization routine for k.
 """
 import warnings
 import numpy as np
@@ -10,6 +14,20 @@ from scipy import sparse
 from . import tiling, breakdown, projection, xmath, factor
 
 def _stitch(edge, faces, bkdns, freq):
+    """
+    Stitch together two faces sharing an edge.
+
+    Args:
+        edge: Edge shared by the faces in faces.
+        faces: Two lists of vertices in each face.
+        bkdns: A map from {3, 4} to the breakdown structures for
+            triangle and quadrilaterals, respectively.
+        freq: Frequency of subdivision (a 2-tuple)
+
+    Returns:
+        An array of shape (..., 2) containing vertices that
+        should be merged together.
+    """
     a, b = freq
     face_0, face_1 = faces
     shape_0 = len(face_0)
@@ -42,6 +60,17 @@ def _stitch(edge, faces, bkdns, freq):
     return matches
 
 def _find_dupe_verts(base, bf, group, freq, bkdns):
+    """
+    Find duplicate vertices in a subdivided polyhedron.
+
+    Args:
+        base: Base polyhedron
+        bf: Corresponding base face of each vertex
+        group: Group number of each vertex
+        freq: Frequency of subdivision (a 2-tuple)
+        bkdns: A map from {3, 4} to the breakdown structures for
+            triangle and quadrilaterals, respectively.
+    """
     #find redundant vertices
     base_edges = base.edges
     base_edge_corr, base_face_corr = base.faces_by_edge(base_edges)
@@ -88,6 +117,13 @@ def _find_dupe_verts(base, bf, group, freq, bkdns):
 
 class SGS(tiling.Tiling):
     """Similar grid subdivision of a tiling.
+    Args:
+        base: Tiling/polyhedron to base the subdivision on. If the tiling has
+            faces with 5 or more sides, ValueError will be raised.
+        freq: Subdivision frequency.
+        proj: Projection family to use
+        tweak: Tweaks to certain calculations
+
     Attributes:
         vertices: List of vertices
         faces: List of faces
@@ -96,13 +132,14 @@ class SGS(tiling.Tiling):
         base_face: Which base face each vertex falls into. If vertex is
             on the border of more than one base face, will be the lower
             numbered base face.
-        group: Vertex grouping (see Breakdown)
+        group: Vertex grouping (see ``Breakdown`` for definition)
         face_bf: Which base face each face lies on. If face lies over
             more than one face, will be whichever base face contains more
             points of the face; if evenly split, it will be the lower
             numbered base face.
-        face_group: Face grouping (see Breakdown)
+        face_group: Face grouping (see ``Breakdown`` for definition)
         """
+
     def __init__(self, base, freq=(2, 0), proj='flat', tweak=False):
         self.base = base
         self.freq = freq
@@ -170,7 +207,19 @@ class SGS(tiling.Tiling):
 
 def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
     """Wrapper around the SGS constructor that performs parallel projection
-    and normalization."""
+    and normalization.
+
+    Args:
+        base: Base polyhedron/tiling.
+        frequency: Frequency of subdivision
+        proj: Projection family
+        k: Parallel projection constant. Can be a float, or an element of
+        ``MEASURES``, in which case it will choose a k that optimizes that
+        measure.
+        tweak: Tweak to certain calculations. False by default.
+        normalize: Whether to normalize the polyhedron's vertices.
+            True by default.
+    """
     poly = SGS(base, frequency, proj, tweak)
     if proj in projection.PARALLEL:
         if k in MEASURES:
@@ -188,7 +237,19 @@ def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
                   normalize=True):
     """Wrapper around the SGS constructor that factors the frequency
     and uses the factors to repeatedly subdivide the grid. Uses
-    lower-norm factors first. Also does everything `build_sgs` does."""
+    lower-norm factors first. Also does everything `build_sgs` does.
+
+    Args:
+        base: Base polyhedron/tiling.
+        frequency: Frequency of subdivision
+        proj: Projection family
+        k: Parallel projection constant. Can be a float, or an element of
+        ``MEASURES``, in which case it will choose a k that optimizes that
+        measure.
+        tweak: Tweak to certain calculations. False by default.
+        normalize: Whether to normalize the polyhedron's vertices.
+            True by default.
+    """
     fs = base.face_size
     fsu = np.unique(fs)
     fsu = fsu[fsu > 2]
@@ -219,25 +280,66 @@ def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
 def parallels(poly, base, exact=True):
     """Given a subdivided polyhedron based on a base polyhedron, return
     the parallels to the base faces for each vertex in the polyhedron
-    that would put the vertices onto the sphere"""
+    that would put the vertices onto the sphere
+
+    Args:
+        poly: Subdivided polyhedron
+        base: Base polyhedron
+        exact: Whether to use exact or approximate parallels. By default, True.
+
+    Returns:
+        Parallel vectors for each vertex in poly.
+    """
     normals = base.face_normals[poly.base_face]
     return projection.parallel(poly.vertices, normals, exact)
 
 def parallel_sphere(xyz, pls, k=1):
-    """Given vertices and parallels, return points on sphere"""
+    """Given vertices and parallels, return points on (or near) the sphere.
+
+    Args:
+        xyz: Vertices
+        pls: Parallel vectors
+        k: Projection constant. Defaults to 1.
+
+    Returns:
+        Vertices, parallel projected."""
     return xyz + k*pls
 
 def optimize_k(poly, base, measure, exact=True, normalize=True):
-    """Routine to optimize the factor k"""
+    """Routine to optimize the factor k
+
+    Args:
+        poly: Subdivided polyhedron
+        base: Base polyhedron
+        measure: Which measure to optimize on.
+        exact: Whether to use exact or approximate parallels. By default, True.
+        normalize: Whether to normalize the vectors. Default: True:
+            True: Normalize the vectors
+            False: Preserve vector norms
+            None: Don't normalize at all"""
     parallel_xyz = parallels(poly, base, exact)
-    result = minimize_scalar(objective, bracket=[0, 2],
+    result = minimize_scalar(_objective, bracket=[0, 2],
                              args=(poly, parallel_xyz, measure, normalize))
     if not result.success:
         warnings.warn('Optimization routine did not converge')
     return result.x
 
-def objective(k, poly, parallel_xyz, measure, normalize=True):
-    """Objective function for the optimization routine"""
+def _objective(k, poly, parallel_xyz, measure, normalize=True):
+    """Objective function for the optimization routine
+
+    Args:
+        k: Projection constant value
+        poly: Subdivided polyhedron
+        parallel_xyz: Parallel vectors
+        measure: Which measure to optimize on.
+        normalize: Whether to normalize the vectors. Default: True:
+            True: Normalize the vectors
+            False: Preserve vector norms
+            None: Don't normalize at all
+
+    Return:
+        Measure value for optimization rountine
+    """
     test_v = parallel_sphere(poly.vertices, parallel_xyz, k)
     if normalize:
         test_v = xmath.normalize(test_v)
@@ -251,29 +353,82 @@ def objective(k, poly, parallel_xyz, measure, normalize=True):
 #measures
 def energy(xyz, poly=None):
     """Energy of the vertex arrangement, as defined in
-    Thomson's problem."""
+    Thomson's problem.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Ignored, only present to give this function
+            the same signature as the other measures. Defaults to None.
+
+    Returns:
+        Energy of the vertex arrangement
+    """
     return tiling.energy(xyz)
 
 def bentness(xyz, poly):
-    """Measure: face bentness. Optimizes the max in the tiling,
-    not the ratio of max to min."""
+    """Measure: face bentness.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+
+    Returns:
+        Maximum face bentness. (Not ratio of maximum to
+        minimum face bentness.)
+    """
     return tiling.bentness(xyz, poly).max()
 
 def edge_length(xyz, poly, spherical=False):
-    """Measure: edge length. Optimizes the ratio of max to min
-    in the tiling."""
+    """Measure: edge length.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+        spherical: If true, uses the spherical distance (central angle)
+            along each edge instead of the Euclidean distance. Default False.
+
+    Returns:
+        Ratio of maximum to minimum edge length.
+    """
     result = tiling.edge_length(xyz, poly.edges, spherical)
     return result.max()/result.min()
 
 def face_area(xyz, poly, spherical=False):
-    """Measure: face area. Optimizes the ratio of max to min
-    in the tiling."""
+    """Measure: face area.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+        spherical: If true, uses the spherical area (solid angle)
+            of each face instead of the Euclidean area. Default False.
+
+    Returns:
+        Ratio of maximum to minimum face area.
+    """
     result = tiling.face_area(xyz, poly, spherical)
     return result.max()/result.min()
 
 def aspect_ratio(xyz, poly, spherical=False):
-    """Measure: aspect ratio. Optimizes the max in the tiling,
-    not the ratio of max to min."""
+    """Measure: aspect ratio.
+
+    Args:
+        xyz: Coordinates of vertices.
+        poly: Tiling object, used to get the polyhedral structure of the
+            vertices. (xyz is separate so we don't have to recalculate the
+            structure every time we change the vertex position.)
+        spherical: If true, uses the spherical distance (central angle)
+            along each edge instead of the Euclidean distance. Default False.
+
+    Returns:
+        Maximum aspect ratio of any one face.
+        (Not ratio of max to min aspect ratio.)
+    """
     result = tiling.aspect_ratio(xyz, poly, spherical)
     return result.max()
 

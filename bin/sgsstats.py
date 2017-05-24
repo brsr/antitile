@@ -63,7 +63,7 @@ def main():
             edge_min, edge_max, edge_max/edge_min))
         print('Aspect ratio:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
             aspect_min, aspect_max, aspect_max/aspect_min))
-        if np.isclose(0, bent_max, atol = 1E-6):
+        if np.isclose(0, bent_max, atol=1E-6):
             print('Face area:\t\t    {:<,F}|{:<,F}|{:<,F}'.format(
                 face_min, face_max, face_max/face_min))
         else:

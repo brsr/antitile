@@ -75,6 +75,7 @@ class FlatTiling(tiling.Tiling):
         super().__init__(vertices, faces[goodface])
 
     def _init_t(self):
+        """Initialization for triangular tiling"""
         vertices = self.vertices
         vertices[..., 2] = -vertices[..., 0] - vertices[..., 1]
         self.default_proj = project_skew
@@ -87,6 +88,7 @@ class FlatTiling(tiling.Tiling):
 
 
     def _init_q(self):
+        """Initialization for quad tiling"""
         self.default_proj = lambda x: x[..., :2]
         return np.array([[0, 0, 0],
                          [1, 0, 0],

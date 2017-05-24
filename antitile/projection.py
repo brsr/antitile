@@ -728,15 +728,18 @@ _FLAT = {3: lambda bkdn, base_pts, freq, tweak: tri_bary(bkdn.coord, base_pts),
          4: lambda bkdn, base_pts, freq, tweak:
             square_to_quad(bkdn.coord[:, np.newaxis], base_pts)}
 
-_SLERP = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord, base_pts),
+_SLERP = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord,
+                                                                 base_pts),
           4: lambda bkdn, base_pts, freq, tweak:
              square_naive_slerp(bkdn.coord, base_pts)}
 
-_SLERP2 = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord, base_pts),
+_SLERP2 = {3: lambda bkdn, base_pts, freq, tweak: tri_naive_slerp(bkdn.coord,
+                                                                  base_pts),
            4: lambda bkdn, base_pts, freq, tweak:
               square_naive_slerp_2(bkdn.coord, base_pts)}
 
-_OTHER = {3: lambda bkdn, base_pts, freq, tweak: tri_areal(bkdn.coord, base_pts),
+_OTHER = {3: lambda bkdn, base_pts, freq, tweak: tri_areal(bkdn.coord,
+                                                           base_pts),
           4: lambda bkdn, base_pts, freq, tweak:
              square_slerp(bkdn.coord[:, np.newaxis], base_pts)}
 
