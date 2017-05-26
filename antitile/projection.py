@@ -337,7 +337,8 @@ def triangles_method2(lindex, base_pts, freq):
             [ 0.152133,  0.199126,  0.028172]]])
     """
     n, m = freq
-    frame = breakdown.frame_triangle(base_pts, n, m, interp=xmath.slerp)
+    frame = breakdown.frame_triangle(n, m, base_pts=base_pts,
+                                     interp=xmath.slerp)
     #get the normal to the great circle corresponding to the lines
     #don't need to normalize this
     gc_normals = np.cross(frame[..., 0, :], frame[..., 1, :])
