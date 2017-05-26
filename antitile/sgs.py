@@ -174,7 +174,7 @@ class SGS(tiling.Tiling):
             n_v_i = sum(len(x) for x in v_f_list)
             with np.errstate(divide='ignore', invalid='ignore'):
                 v_f_list.append(proj_fun(bkdn, face, freq, tweak))
-            v_f_bf.append(i*np.ones(n_pts))
+            v_f_bf.append(i*np.ones(n_pts, dtype=int))
             v_f_group.append(bkdn.group)
             faces.extend(x + n_v_i for x in bkdn.faces)
             f_faces_bf.append(i*np.ones(len(bkdn.faces)))
