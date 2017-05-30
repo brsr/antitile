@@ -87,7 +87,7 @@ def main():
         lines.append(values)
 
     if args.c:
-        with open(args.c, 'w') as f:
+        with open(args.c, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerows(lines)
 
