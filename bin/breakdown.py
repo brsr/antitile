@@ -141,8 +141,8 @@ def plot_m2_bkdn(ax, base_pts, freq, shape, bkdn, line_pts_n=50, tweak=False):
         frame = projection.square_naive_slerp(preframe, base_pts)
     else:
         plot_m2_triangles(ax, base_pts, freq, bkdn)
-        frame = breakdown.frame_triangle(base_pts, n=freq[0], m=freq[1],
-                                         interp=xmath.slerp)
+        frame = breakdown.frame_triangle(base_pts=base_pts, n=freq[0],
+                                         m=freq[1], interp=xmath.slerp)
     t = np.linspace(0, 1, num=line_pts_n)[..., np.newaxis]
     reshape = (-1, line_pts_n, 3)
     lines = xmath.slerp(frame[..., 0, np.newaxis, :],
@@ -206,7 +206,8 @@ def main():
                         help="extent of plot (defaults to 1.05)")
     parser.add_argument("-z", default=1/np.sqrt(3), type=zerotoone,
                         help="height of breakdown face, in [0, 1], default "
-                             "1/3. or a text string: " + ', '.join(HEIGHTS))
+                             "1/sqrt(3). or a text string: " +
+                             ', '.join(HEIGHTS))
     parser.add_argument("-p", '--projection', nargs="*",
                         help=PROJ, choices=projection.PROJECTIONS)
     parser.add_argument("-f", choices=projection.PROJECTIONS,

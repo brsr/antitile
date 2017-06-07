@@ -6,6 +6,7 @@ polyhedra to approximate the sphere
 """
 import argparse
 import csv
+import glob
 from sys import stdin
 import numpy as np
 from antitile import off, tiling
@@ -28,8 +29,11 @@ def main():
                    'angle_aspect_max', 'solid_angle_min', 'solid_angle_max']
 
     lines = [header]
-    handles = [(fn, open(fn)) for fn in args.filename]
-    if not handles:
+    if len(args.filename) == 1 and '*' in args.filename[0]:
+        handles = ((fn, open(fn)) for fn in glob.iglob(args.filename[0]))
+    elif args.filename:
+        handles = ((fn, open(fn)) for fn in args.filename)
+    else:
         handles = [('stdin', stdin)]
     for fn, h in handles:
         with h as handle:

@@ -4,6 +4,7 @@
 Subdivide a tiling or polyhedra using a similar grid
 """
 import argparse
+import warnings
 from sys import stdin
 from antitile import sgs, off, tiling, projection
 
@@ -85,13 +86,26 @@ def main():
         with file as f:
             vertices, faces, fc, _e, _ec, _v, _vc = off.load_off(f)
         base = tiling.Tiling(vertices, faces)
+        classIlist = ['edges', 'aspect', 'angle', 'angle_aspect']
+        is_tri_grid = all(base.face_size <= 3)
+        if args.b == 0 and args.k in classIlist and is_tri_grid:
+            warnings.warn(args.k + " is optimal for a large range of k for "
+                          "class I subdivision on triangle grid. "
+                          "using -k=energy instead.")
+            k = 'energy'
+        elif args.k == 'bent' and is_tri_grid:
+            warnings.warn("bentness always == 0 for triangular faces. "
+                          "Using -k=energy instead.")
+            k = 'energy'
+        else:
+            k = args.k
         if args.factor:
             poly = sgs.build_sgs_rep(base, frequency, args.projection,
-                                     tweak=args.tweak, k=args.k,
+                                     tweak=args.tweak, k=k,
                                      normalize=not args.no_normalize)
         else:
             poly = sgs.build_sgs(base, frequency, args.projection,
-                                 tweak=args.tweak, k=args.k,
+                                 tweak=args.tweak, k=k,
                                  normalize=not args.no_normalize)
         vertcolor = poly.group.astype(int)
         facecolor = poly.face_group.astype(int)
