@@ -40,7 +40,7 @@ CENTER = np.array([0, 0, 1])
 HEIGHTS = {'ico': np.sqrt((5 + 2*np.sqrt(5))/15),
            'oct': 1/np.sqrt(3),
            'tet': 1/3,
-           'cube': 1/np.sqrt(3),
+           'cube': 1/np.sqrt(2),
            'di': 0}
 
 def base_3d(z, shape=TRIANGLE):

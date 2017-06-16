@@ -10,6 +10,7 @@ The package includes a number of scripts. These can be piped together with progr
 * `sgs.py`: Similar grid subdivision of tilings
 * `balloon.py`: Balloon tiling of the sphere
 * `cellular.py`: Colors polyhedra using cellular automata
+* `nslerp.py`: Naive slerp surfaces
 * `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
 * `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 
