@@ -69,7 +69,8 @@ def main():
                         help="use quadrilateral instead of triangle")    
     parser.add_argument("-t", action="store_true",
                         help="use nslerp2 instead of nslerp (quads only)")    
-        
+    #the default (-z=oct, no -q) is a subsurface of the Cayley Cubic
+    
     args = parser.parse_args()
     base = base_3d(args.z, shape=SQUARE if args.q else TRIANGLE)[:-1]
     n = (2*args.factor+1)*args.freq
