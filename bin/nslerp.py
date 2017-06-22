@@ -70,6 +70,10 @@ def main():
     parser.add_argument("-t", action="store_true",
                         help="use nslerp2 instead of nslerp (quads only)")    
     #the default (-z=oct, no -q) is a subsurface of the Cayley Cubic
+    #x^2 + y^2 + z^2 + 2 x y z - 1 = 0
+    #-qt (any -z) also gives a nice surface, a scaled version of
+    #x^4 + y^4 + z^4 - 2 x^2 y^2 + 2 y^2 z^2 + 2 z^2 x^2 - 4 z^2 = 0 
+    #the rest are awful messes that probably aren't algebraic surfaces
     
     args = parser.parse_args()
     base = base_3d(args.z, shape=SQUARE if args.q else TRIANGLE)[:-1]
