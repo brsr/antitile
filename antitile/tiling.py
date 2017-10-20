@@ -99,7 +99,7 @@ class Tiling:
         n_r = len(redges)
         n = len(self.vertices)
         return sparse.coo_matrix((np.ones(n_r), (redges[:, 0], redges[:, 1])),
-                                 shape=(n, n))
+                                 shape=(n, n), dtype=np.int8)
 
     @property
     def face_adjacency(self):

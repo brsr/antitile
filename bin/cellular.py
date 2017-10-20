@@ -7,16 +7,17 @@ import argparse
 import warnings
 from sys import stdin
 import numpy as np
-import pandas as pd
+#import pandas as pd
 from scipy import sparse
 from antitile import off, tiling
 
 def ca_step(state, rule, adj):
-    x, y, _ = sparse.find(adj)
-    nbx = state[x]
-    px = pd.DataFrame(data=nbx, index=y)
-    neighbors = px.groupby(px.index).sum()
-    result = np.squeeze(neighbors.values) - 128*state
+    neighbors = adj.dot(state)
+    #x, y, _ = sparse.find(adj)
+    #nbx = state[x]
+    #px = pd.DataFrame(data=nbx, index=y)
+    #neighbors = px.groupby(px.index).sum()
+    result = np.squeeze(neighbors) - 128*state
     return np.in1d(result, rule)
 
 def ruleparse(string):
