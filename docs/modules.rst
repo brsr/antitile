@@ -1,18 +1,18 @@
 Modules
 =======
-.. automodule:: breakdown, 
-.. automodule:: flat, 
-.. automodule:: off, 
-.. automodule:: projection, 
-.. automodule:: sgs, 
-.. automodule:: tiling, 
-.. automodule:: xmath
+.. automodule:: antitile.breakdown
+.. automodule:: antitile.flat
+.. automodule:: antitile.off
+.. automodule:: antitile.projection
+.. automodule:: antitile.sgs
+.. automodule:: antitile.tiling
+.. automodule:: antitile.xmath
 
-.. automodule:: view_off
-.. automodule:: cellular
-.. automodule:: factor
-.. automodule:: sgs
-.. automodule:: sgsstats
-.. automodule:: balloon
-.. automodule:: breakdown
-.. automodule:: nslerp
+.. automodule:: bin.view_off
+.. automodule:: bin.cellular
+.. automodule:: bin.factor
+.. automodule:: bin.sgs
+.. automodule:: bin.sgsstats
+.. automodule:: bin.balloon
+.. automodule:: bin.breakdown
+.. automodule:: bin.nslerp

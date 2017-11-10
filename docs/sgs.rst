@@ -5,10 +5,12 @@ Motivation
 ----------
 
 .. toctree::
+
    sgs-planar
-   sgs-arb
    sgs-transformations
-   sgs-spherical
-   sgs-a-dihedra
-   sgs-a-henahedron
-   sgs-a-mixed
+   
+sgs-spherical
+sgs-arbitrary   
+sgs-a-dihedra
+sgs-a-henahedron
+sgs-a-mixed
