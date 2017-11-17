@@ -14,8 +14,10 @@ Applications and closely related topics include:
 * As a topic of study in itself: for example, the 2014 discovery that the (icosahedral) Goldberg polyhedra form a fourth class of convex equilateral polyhedra http://www.pnas.org/content/111/8/2920.abstract
 
 .. toctree::
+
    sgs-planar
    sgs-arb
+   sgs-transformations
    sgs-spherical
    sgs-a-dihedra
    sgs-a-henahedron
