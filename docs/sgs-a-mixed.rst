@@ -3,14 +3,25 @@ Towards subdivision of mixed grids
 
 Conway polyhedron operations
 ----------------------------
-John Conway developed a system of operators for dividing and transforming polyhedra into other polyhedra: George Hart expanded and promoted it. While useful, there are quite a few operators (Wikipedia lists almost 40, not including composite operators), and their definitions are often arbitrary without much apparent structure among them. One is reminded of the (possibly apocryphal) quote from Enrico Fermi: "If I could remember the names of all these particles, I'd be a botanist." The SGS system doesn't succeed in subsuming all the Conway operators, but it does provide structure to some of them.
+John Conway developed a system of operators for dividing and transforming 
+polyhedra into other polyhedra: George Hart expanded and promoted it. While 
+useful, there are quite a few operators (Wikipedia lists almost 40, not 
+including composite operators), and their definitions are often arbitrary 
+without much apparent structure among them. One is reminded of the (possibly 
+apocryphal) quote from Enrico Fermi: "If I could remember the names of all 
+these particles, I'd be a botanist." The SGS system doesn't succeed in 
+subsuming all the Conway operators, but it does provide structure to some of 
+them.
 
-* SGS operator - Conway operator / dual Conway operator
-* :math:`\Box(1,1)` - j (join) / a (ambo)
-* :math:`\Box(2,0)` - o (ortho) / e (expand)
-* :math:`\Delta(1,1)` - n (needle) / z (zip) [neither in Hart's list]
-* :math:`\Delta(2,0)` - u (subdivide) / c (chamfer) [neither in Hart's list]
-* :math:`\Delta(2,1)` - v (volute) / w (whirl) [neither in Hart's list]
+=================== =============== ====================================
+SGS operator        Conway operator Dual Conway operator
+=================== =============== ====================================
+:math:`\Box(1,1)`   j (join)        a (ambo)
+:math:`\Box(2,0)`   o (ortho)       e (expand)
+:math:`\Delta(1,1)` n (needle)      z (zip) [neither in Hart's list]
+:math:`\Delta(2,0)` u (subdivide)   c (chamfer) [neither in Hart's list]
+:math:`\Delta(2,1)` v (volute)      w (whirl) [neither in Hart's list]
+=================== =============== ====================================
 
 Simultaneous Delta and Box operators on a mixed triangle-quad grid
 ------------------------------------------------------------------
