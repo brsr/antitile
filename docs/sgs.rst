@@ -6,6 +6,7 @@ https://arxiv.org/abs/1705.02848
 https://books.google.com/books?id=HLi4CQAAQBAJ&lpg=PA130&ots=ls1r5QkM51&dq=goldberg-coxeter&pg=PA130#v=onepage&q=goldberg-coxeter&f=false
 
 Applications and closely related topics include:
+
 * Architecture: Geodesic domes
 * Geodesy: Geodesic grids and the quad sphere
 * Biology: The structure of viral capsids

@@ -1,5 +1,8 @@
+Modules and scripts
+===================
+
 Modules
-=======
+-------
 .. automodule:: antitile.breakdown
 .. automodule:: antitile.flat
 .. automodule:: antitile.off
@@ -8,6 +11,8 @@ Modules
 .. automodule:: antitile.tiling
 .. automodule:: antitile.xmath
 
+Scripts
+-------
 .. automodule:: bin.view_off
 .. automodule:: bin.cellular
 .. automodule:: bin.factor
