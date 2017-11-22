@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name='antitile',
-      version='20170616',
+      version='20171122',
       description='Tiling subdivision scripts, for use with Antiprism',
       url='http://github.com/brsr/antitile',
       author='B R S Recht',
@@ -12,7 +12,7 @@ setup(name='antitile',
       license='MIT',
       packages=['antitile'],
       keywords="""tiling tesselation subdivision geodesic grid goldberg
-               polyhedra sphere polyhedron geometry buckyball""",
+               polyhedra sphere polyhedron geometry buckyball coxeter""",
       install_requires=['numpy', 'scipy', 'matplotlib', 'pandas'],
       classifiers=[
         'Development Status :: 3 - Alpha',
@@ -26,7 +26,7 @@ setup(name='antitile',
         'Topic :: Scientific/Engineering :: Mathematics'
       ],
       scripts = ['bin/view_off.py', 'bin/balloon.py', 'bin/breakdown.py',
-                 'bin/sgsstats.py', 'bin/cellular.py', 'bin/sgs.py',
+                 'bin/gcostats.py', 'bin/cellular.py', 'bin/gcopoly.py',
                  'bin/factor.py', 'bin/nslerp.py'],
       #data_files
       include_package_data=True,

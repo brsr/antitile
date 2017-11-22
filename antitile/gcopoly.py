@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Subdivide a tiling or polyhedra using a similar grid
+Goldberg-Coxeter Operation on POLYhedra
 
 Attributes:
     MEASURES: A map from the measure's name to a function that can be used
@@ -115,7 +115,7 @@ def _find_dupe_verts(base, bf, group, freq, bkdns):
     renumbered = xmath.renumber(unique_index)
     return renumbered[verts], unique_index
 
-class SGS(tiling.Tiling):
+class GCOPoly(tiling.Tiling):
     """Similar grid subdivision of a tiling.
     Args:
         base: Tiling/polyhedron to base the subdivision on. If the tiling has
@@ -205,8 +205,8 @@ class SGS(tiling.Tiling):
             self.face_bf = face_bf[unique_f]
             self.face_group = face_group[unique_f]
 
-def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
-    """Wrapper around the SGS constructor that performs parallel projection
+def build_gco(base, frequency, proj, k=1, tweak=False, normalize=True):
+    """Wrapper around the GCOPoly constructor that performs parallel projection
     and normalization.
 
     Args:
@@ -220,7 +220,7 @@ def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
         normalize: Whether to normalize the polyhedron's vertices.
             True by default.
     """
-    poly = SGS(base, frequency, proj, tweak)
+    poly = GCOPoly(base, frequency, proj, tweak)
     if proj in projection.PARALLEL:
         if k in MEASURES:
             measure = MEASURES[k]
@@ -233,11 +233,11 @@ def build_sgs(base, frequency, proj, k=1, tweak=False, normalize=True):
     poly.k = k
     return poly
 
-def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
+def build_gco_rep(base, frequency, proj, k=1, tweak=False,
                   normalize=True):
-    """Wrapper around the SGS constructor that factors the frequency
+    """Wrapper around the GCOPoly constructor that factors the frequency
     and uses the factors to repeatedly subdivide the grid. Uses
-    lower-norm factors first. Also does everything `build_sgs` does.
+    lower-norm factors first. Also does everything `build_gco` does.
 
     Args:
         base: Base polyhedron/tiling.
@@ -271,7 +271,7 @@ def build_sgs_rep(base, frequency, proj, k=1, tweak=False,
         if f.anorm() <= 1:
             continue
         freq = f.tuple
-        result = build_sgs(result, freq, proj, k=k, tweak=tweak,
+        result = build_gco(result, freq, proj, k=k, tweak=tweak,
                            normalize=normalize)
     return result
 

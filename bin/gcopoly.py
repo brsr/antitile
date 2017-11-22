@@ -6,7 +6,7 @@ Subdivide a tiling or polyhedra using a similar grid
 import argparse
 import warnings
 from sys import stdin
-from antitile import sgs, off, tiling, projection
+from antitile import gcopoly, off, tiling, projection
 
 DESCRIPTION = """Similar grid subdivision: subdivide a tiling or
 polyhedron with a grid of similar triangles or squares."""
@@ -27,7 +27,7 @@ ADJ = ("""Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
 measurement of the polyhedron. Ignored unless -p=""" +
        ', '.join(projection.PARALLEL) + ". Default is 1. String values can be "
-       + ', '.join(n for n in sgs.MEASURES))
+       + ', '.join(n for n in gcopoly.MEASURES))
 #        energy: Minimizes the Thompson energy of the points.
 #        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
 #        edges: Minimizes the difference in edge length.
@@ -60,7 +60,7 @@ def posint(string):
 
 def kparser(string):
     """Parse the k-factor argument"""
-    return string if string in sgs.MEASURES else float(string)
+    return string if string in gcopoly.MEASURES else float(string)
 
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION, epilog=EPILOG)
@@ -100,11 +100,11 @@ def main():
         else:
             k = args.k
         if args.factor:
-            poly = sgs.build_sgs_rep(base, frequency, args.projection,
+            poly = gcopoly.build_gco_rep(base, frequency, args.projection,
                                      tweak=args.tweak, k=k,
                                      normalize=not args.no_normalize)
         else:
-            poly = sgs.build_sgs(base, frequency, args.projection,
+            poly = gcopoly.build_gco(base, frequency, args.projection,
                                  tweak=args.tweak, k=k,
                                  normalize=not args.no_normalize)
         vertcolor = poly.group.astype(int)

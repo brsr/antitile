@@ -1,15 +1,15 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tests for the sgs module in antitile.
+Tests for the gcopoly module in antitile.
 """
 
 import unittest
 import doctest
-from antitile import sgs
+from antitile import gcopoly
 
 def load_tests(loader, tests, ignore):
-    tests.addTests(doctest.DocTestSuite(sgs))
+    tests.addTests(doctest.DocTestSuite(gcopoly))
     return tests
 
 if __name__ == '__main__':
