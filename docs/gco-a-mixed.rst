@@ -5,6 +5,13 @@ The methods discussed up to now only handle polyhedra with a single type of
 face, either 3- or 4-sided. This section discusses the extension
 of the Goldberg-Coxeter operation to polyhedra with arbitrary faces.
 
+Triangulation
+-------------
+The easy way to apply GC operations to non-triangular faces is to triangulate
+the faces. This has the drawback that it can destroy symmetry if done naively:
+for instance, a square can easily be split into two triangles, but it no longer
+has D4 symmetry. Often triangulation is good enough for many applications.
+
 Conway polyhedron operations
 ----------------------------
     "If I could remember the names of all these particles, I'd be a botanist."
@@ -20,15 +27,16 @@ among them. [Brinkmann]_ has commented on this situation.
 The Goldberg-Coxeter operators correspond to some Conway operators
 or their duals.
 
-=================== =============== ====================================
-SGS operator        Conway operator Dual Conway operator
-=================== =============== ====================================
-:math:`\Box(1,1)`   j (join)        a (ambo)
-:math:`\Box(2,0)`   o=jj (ortho)    e=aa (expand)
-:math:`\Delta(1,1)` n (needle)      z (zip)
-:math:`\Delta(2,0)` u (subdivide)   c (chamfer)
-:math:`\Delta(2,1)` v (volute)      w (whirl)
-=================== =============== ====================================
+=================================== =============== ====================
+SGS operator                        Conway operator Dual Conway operator
+=================================== =============== ====================
+:math:`\Box(1,1)`                   j (join)        a (ambo)
+:math:`\Box(2,0)`                   o=jj (ortho)    e=aa (expand)
+:math:`\Delta(1,1)`                 n (needle)      z (zip)
+:math:`\Delta(2,0)`                 u (subdivide)   c (chamfer)
+:math:`\Delta(2,1)`                 v (volute)      w (whirl)
+:math:`\Delta(3,0) = \Delta^2(1,1)` kt=nn           tk = zz
+=================================== =============== ====================
 
 The :math:`\Delta` operators as defined only operate on triangles, and the
 :math:`\Box` operators on quadrilaterals, while the Conway operators work on

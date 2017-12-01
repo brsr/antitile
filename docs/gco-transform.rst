@@ -1,16 +1,45 @@
 Transformations between Euclidean and spherical triangles and quadrilaterals
 ============================================================================
 
-Review of spherical geometry
-----------------------------
+Preliminaries
+-------------
+For our purposes, triangles are specified by barycentric coordinates 
+:math:`\beta_i` where :math:`\beta_1 + \beta_2 + \beta_3 = 1`.
+
+:math:\mathbf v = \beta_1\mathbf v_1+\beta_2\mathbf v_2+\beta_3\mathbf v_3`
+
+Quadrilaterals are instead specified by what we'll call "xy coordinates"
+where :math:`x` and :math:`y` are between 0 and 1. 
+
+:math:`\mathbf v_1 + (v_2-v_1) x + (v_4-v_1) y + (v_1-v_2+v_3-v_4)xy`
+
+If the quadrilateral is a skew quadrilateral, x and y smoothly parameterize a 
+surface over that skew quadrilateral.
+
+:math:`\mathbf \hat v = \frac{\mathbf v^*}{\|\mathbf v^*\|}`
 
 Gnomonic
 --------
+The gnomonic projection was known to the ancient Greeks, and is the simplest 
+of the transformations listed here. It has the nice property that all lines in 
+Euclidean space are transformed into great circles on the sphere: that is, 
+geodesics stay geodesics. This is in fact the motivation for the name 
+"geodesic dome": Buckminster Fuller was originally using this projection to 
+project triangles on the sphere.
+
+In general, the gnomonic projection is defined as:
+* To sphere: :math:`\mathbf \hat{v} = \frac{\mathbf p}{\|\mathbf p\|}`
+* From sphere: :math:`\mathbf p = \frac{r\mathbf \hat{v}}
+                                       {\mathbf \hat{n} \cdot \mathbf\hat{v}}`
+where :math:`\mathbf p` is a point on a plane given in Hessian normal
+form by :math:`\mathbf \hat{n} \cdot \mathbf p = r`. Projection from Euclidean 
+space to the sphere is literally just normalizing the vector. 
+
 where :math:`\beta_i` are (planar) barycentric coordinates
 
 .. math::
    \mathbf v^* = \beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3, 
-   \, \mathbf \hat v = \frac{\mathbf v^*}{\|\mathbf v^*\|}
+   
 
 Spherical areal
 ---------------
