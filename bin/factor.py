@@ -10,12 +10,12 @@ from antitile import factor
 DOMAINS = {"i": factor.Integer,
            "g": factor.Gaussian,
            "e": factor.Eisenstein,
-           "n": factor.Nietsnesie}
+           "s": factor.Steineisen}
 
 DESC = """Factor various algebraic integers from Euclidean domains.
 Input is of the form a + b*u, where u is the unit in whichever domain.
 ([g]aussian: the imaginary unit, [e]isenstein: third root of unity,
-[n]ietsnesie: sixth root of unity, [i]nteger: zero)"""
+[s]teineisen: sixth root of unity, [i]nteger: zero)"""
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=DESC)
     parser.add_argument("a", type=int, help="First part of integer")

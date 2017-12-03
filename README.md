@@ -7,37 +7,37 @@ Manipulation of polyhedra and tilings using Python. This package is designed to 
 
 ## Usage
 The package includes a number of scripts. These can be piped together with programs from Antiprism:
-* `sgs.py`: Similar grid subdivision of tilings
+* `gcopoly.py`: The Goldberg-Coxeter subdivision operation of tilings
 * `balloon.py`: Balloon tiling of the sphere
 * `cellular.py`: Colors polyhedra using cellular automata
 * `nslerp.py`: Naive slerp surfaces
-* `sgsstats.py`: Statistics of the polyhedra/tiling, focused on the use of SGS tilings to model the sphere (see also `off_report` in Antiprism)
+* `gcostats.py`: Statistics of the polyhedra/tiling, focused on the use of GCO to model the sphere (see also `off_report` in Antiprism)
 * `view_off.py`: A viewer for OFF files using matplotlib, allowing for export to SVG (see also `antiview` in Antiprism)
 
 These are free-standing:
 * `breakdown.py`: Visualize breakdown structures
-* `factor.py`: Factors Gaussian, Eisenstein, Nietsnesie (Eisenstein expressed with the 6th root of unity instead of 3rd), and regular integers.
+* `factor.py`: Factors Gaussian, Eisenstein, Steineisen (Eisenstein expressed with the 6th root of unity instead of 3rd), and regular integers.
 
 OFF files for the regular icosahedron, octahedron, tetrahedron, cube, and 3- and 4-edged dihedra are included in the `data` folder in the source.
 
 ## Examples
 Statistics of a geodesic polyhedron (created using what geodesic dome people call Method 1):
 
-    sgs.py -a 5 -b 3 icosahedron.off | sgsstats.py
+    gcopoly.py -a 5 -b 3 icosahedron.off | sgsstats.py
 
 Visualize a Goldberg polyhedron, with color:
 
-    sgs.py -a 5 -b 3 icosahedron.off | off_color -v M -m group_color.txt | pol_recip | view_off.py
+    gcopoly.py -a 5 -b 3 icosahedron.off | off_color -v M -m group_color.txt | pol_recip | view_off.py
 
 Create a quadrilateral-faced similar grid subdivision polyhedron, put it into canonical form (so the faces are all flat), and color it using Conway's Game of Life with random initial condition:
 
-	sgs.py -a 5 -b 3 cube.off | canonical | off_color test.off -f n | cellular.py -v -b=3 -s=2,3
+	gcopoly.py -a 5 -b 3 cube.off | canonical | off_color test.off -f n | cellular.py -v -b=3 -s=2,3
 	view_off.py cellular100.off 
 	# or whatever the last file is if it reaches steady state early
 
-`sgs.py` can subdivide non-orientable surfaces too, at least for Class I and II subdivisions. Here, the base is a Möbius strip-like surface with 12 faces:
+`gcopoly.py` can subdivide non-orientable surfaces too, at least for Class I and II subdivisions. Here, the base is a Möbius strip-like surface with 12 faces:
 
-	unitile2d 2 -s m -w 4 -l 1 | sgs.py -a 2 -b 2 -n | view_off.py	
+	unitile2d 2 -s m -w 4 -l 1 | gcopoly.py -a 2 -b 2 -n | view_off.py	
 	
 A quadrilateral balloon polyhedra, which happens to resemble a peeled coconut:
 

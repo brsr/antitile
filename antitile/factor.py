@@ -5,7 +5,7 @@ a + b u, where u is some unit and a and b are integers. Also implements
 the Euclidean algorithm to factor those elements.
     Gaussian: u = j
     Eisenstein: u = exp(2pi/3)
-    Nietsnesie: u = exp(pi/3) (isomorphic to Eisenstein but useful)
+    Steineisen: u = exp(pi/3) (isomorphic to Eisenstein but useful)
     (regular) Integers: b = 0, u = -1
 
 See https://en.wikipedia.org/wiki/Euclidean_domain for more info.
@@ -363,11 +363,11 @@ class Eisenstein(EuclideanInteger):
         return cls(k, 1)
 
 
-class Nietsnesie(EuclideanInteger):
-    """Class representing the Nietsnesie (Eisenstein backwards) integers,
+class Steineisen(EuclideanInteger):
+    """Class representing the Steineisen integers,
     a + bu where u = exp(j*pi/3) and a and b are integers. These are
     isomorphic to the Eisenstein integers but this parameterization
-    is more convenient for use with sgs.py.
+    is more convenient for use with gcopoly.py.
 
     See docs for EuclideanInteger for more information.
     """
@@ -388,12 +388,12 @@ class Nietsnesie(EuclideanInteger):
 
     def conjugate(self):
         a, b = self.a, self.b
-        return Nietsnesie(a + b, -b)
+        return Steineisen(a + b, -b)
 
     def __mul__(self, other):
         a, b = self.a, self.b
         c, d = other.a, other.b
-        return Nietsnesie(a*c - b*d, b*c + a*d + b*d)
+        return Steineisen(a*c - b*d, b*c + a*d + b*d)
 
     def __divmod__(self, other):
         a, b = self.a, self.b
@@ -405,7 +405,7 @@ class Nietsnesie(EuclideanInteger):
         y = (b*c - a*d)/an
         x = math.floor(x) if x > 0 else math.ceil(x)
         y = math.floor(y) if y > 0 else math.ceil(y)
-        div = Nietsnesie(x, y)
+        div = Steineisen(x, y)
         mod = self - div*other
         return div, mod
 
@@ -416,6 +416,6 @@ class Nietsnesie(EuclideanInteger):
             if kf % p == 0:
                 break
         else:
-            msg = "couldn't find test factor for {} in the Nietsnesies".format(p)
+            msg = "couldn't find test factor for {} in the Steineisens".format(p)
             raise Exception(msg)
         return cls(k, 1)

@@ -5,6 +5,7 @@ Generic polyhedron and tiling methods
 import warnings
 import numpy as np
 from scipy import sparse
+from scipy.sparse import csgraph
 from . import xmath
 
 class Tiling:
@@ -198,7 +199,7 @@ class Tiling:
                 reps |= revreps
             reps[np.diag_indices_from(reps)] = False
             comp[np.ix_(index, index)] = reps
-        ncp, cp = sparse.csgraph.connected_components(comp)
+        ncp, cp = csgraph.connected_components(comp)
         result = np.ones(n, dtype=bool)
         for i in range(ncp):
             index = cp == i

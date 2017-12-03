@@ -1,5 +1,5 @@
 Goldberg-Coxeter Operation on planar tilings
-==========================================
+============================================
 
 Square and triangular lattices
 ------------------------------
@@ -11,9 +11,10 @@ Relation to Gaussian and Eisenstein integers
 --------------------------------------------
 The vertices of square and triangular lattices match with the elements of
 certain integral domains [#]_ in the complex plane. The Gaussian integers form
-a square lattice, and the Eisenstein integers form a triangular lattice. For
-reasons that will be explained later, it is more convenient to parameterize the
-Eisenstein integers with :math:`u = e^{\pi i/3}`
+a square lattice, and the Eisenstein integers form a triangular lattice. To
+make the parameterization of the :math:`\Delta(a,b)` operator match the 
+traditional parameterization used by [Goldberg]_ and [Coxeter]_, the 
+Eisenstein integers can be paramaterized with :math:`u = e^{\pi i/3}`
 instead of the usual :math:`w = e^{2\pi i/3}`.
 This defines exactly the same points in the complex plane, but for the sake of 
 clarity, we'll call the version in terms of :math:`u` the Steineisen integers. 
@@ -75,17 +76,17 @@ The relationship between the two is simple: :math:`a + b w = a - b + bu`.
      - 3
      - 3
    * - Normal elements
-     - :math:`a > 0`, `b >= 0`
-     - :math:`a > 0`, `b >= 0`, `b <= a`
-     - :math:`a > 0`, `b >= 0`
+     - :math:`a > 0`, :math:`b \ge 0`
+     - :math:`a > 0`, :math:`b \ge 0`, :math:`b < a`
+     - :math:`a > 0`, :math:`b \ge 0`
    * - Breakdown polygon 
      - 0, :math:`x`, :math:`x(1+i)`, :math:`xi`
      - 0, :math:`x`, :math:`x(1+w)`
      - 0, :math:`x`, :math:`xu`
    * - Breakdown polygon center
-     - :math:`x(1+i)/2`
-     - :math:`x(2+w)/3`
-     - :math:`x(1+u)/3`
+     - :math:`x\frac{1+i}{2}`
+     - :math:`x\frac{2+w}{3}`
+     - :math:`x\frac{1+u}{3}`
      
 Elements :math:`x` and :math:`y` of a domain such that :math:`x = zy`, where 
 :math:`z` is a unit, are called associates. "Normal elements" are defined so 
@@ -136,7 +137,7 @@ consequences of this:
   into a sequence of operators. When :math:`x = a + bi` is an element of 
   the Gaussian integers, and :math:`x = z p_1^{n_1}p_2^{n_2} \cdots p_k^{n_k}`,
   then :math:`\Box(a,b) = 
-  \Box^{n_1}_{p_1}\Box^{n_2}_{p_2}\cdots\Box^{n_k}_{p_k}`, and similarly for
+  \Box^{n_1}(p_1)\Box^{n_2}(p_2)\cdots\Box^{n_k}(p_k)`, and similarly for
   the Steineisen integers and :math:`\Delta(a,b)`.
 
 :math:`\Delta_{1,0}` and :math:`\Box_{1,0}` are identity operators: 
@@ -151,15 +152,15 @@ In the terminology of geodesic domes,
 
 Chiral pairs correspond to conjugation of the complex number :math:`a+bi` or 
 :math:`a+bu`. That is, there exists some unit z such that 
-:math:`z(a-bi) = b+ai`, or :math:`z(a+b\overbar{u}) = b+au`. 
+:math:`z(a-bi) = b+ai`, or :math:`z(a+b\bar{u}) = b+au`. 
 Interestingly, the notation used in Conway notation for the chiral pair of an
 operator is an overbar, also used to denote complex conjugation.
 A consequence of this relation between chiral pairs is that the composed 
-operator :math:`\Delta(a,b)\Delta_{b,a}` will always be a Class I operator, 
+operator :math:`\Delta(a,b)\Delta(b,a)` will always be a Class I operator, 
 since a complex number times its conjugate is a real number. 
 For every Class III :math:`(a,b)`, there will exist three operators 
-:math:`\Delta(a,b)\Delta_{b,a}`, :math:`\Delta(a,b)\Delta(a,b)`, and
-:math:`\Delta_{b,a}\Delta_{b,a}` with the same algebraic norm. 
+:math:`\Delta(a,b)\Delta(b,a)`, :math:`\Delta(a,b)\Delta(a,b)`, and
+:math:`\Delta(b,a)\Delta(b,a)` with the same algebraic norm. 
 The same holds for :math:`\Box(a,b)`.
 
 On the plane, equality of operators holds in both a topological and geometric 
@@ -180,8 +181,7 @@ vertices in space:
 This actually turns out to be useful, because it allows us to 
 tweak the geometry.
 
-Notes/References
-----------------
+.. rubric:: Footnotes
 .. [#] A type of ring.
 .. [#] One benefit of using the Steineisen integers over the Eisenstein 
    integers is that the normal form for the Gaussian and Steineisen integers 

@@ -1,5 +1,5 @@
-Towards Goldberg-Coxeter operation on mixed polyhedra
-=====================================================
+Appendix: Towards Goldberg-Coxeter operation on mixed polyhedra
+===============================================================
 
 The methods discussed up to now only handle polyhedra with a single type of
 face, either 3- or 4-sided. This section discusses the extension
@@ -54,7 +54,7 @@ edges of the original polyhedron. The operators :math:`\Delta(a,b)` and
 
 #. The same number of vertices lie along the base edge.
 #. The same number of edges cross the base edge, excluding ones that meet a
-  vertex at the edge.
+   vertex at the edge.
 #. The same number of edges lie on the base edge. (only affects Class I.)
 #. Edges that cross the base edge do not create digons (faces with 2 edges).
 
@@ -90,7 +90,3 @@ Consequences of these rules include:
    :math:`\Delta(1,1)\Delta(1,1) = \Delta(3,0)`;
    :math:`\Box(1,2)\Box(1,2) = \Box(4,3)`;
    :math:`\Box(1,2)\Box(2,1) = \Box(5,0)`.
-
-References
-----------
-.. [Brinkmann] https://arxiv.org/abs/1705.02848

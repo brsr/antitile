@@ -11,6 +11,7 @@ import numpy as np
 from numpy.linalg import norm
 from scipy.optimize import minimize_scalar
 from scipy import sparse
+from scipy.sparse import csgraph
 from . import tiling, breakdown, projection, xmath, factor
 
 def _stitch(edge, faces, bkdns, freq):
@@ -102,7 +103,7 @@ def _find_dupe_verts(base, bf, group, freq, bkdns):
     conns = sparse.coo_matrix((np.ones(len(matches)),
                                (matches[:, 0], matches[:, 1])),
                               shape=(vno, vno))
-    ncp, cp = sparse.csgraph.connected_components(conns)
+    ncp, cp = csgraph.connected_components(conns)
     verts = np.arange(vno, dtype=int)
     for i in range(ncp):
         component = np.argwhere(cp == i).flatten()
