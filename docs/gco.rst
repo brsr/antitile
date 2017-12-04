@@ -3,18 +3,19 @@ Goldberg-Coxeter Operations on Polyhedra and Tilings
 The Goldberg-Coxeter (GC) operation can be used to subdivide the faces of a
 polyhedron or tiling with triangular or square faces. Geodesic subdivision is
 another name for the method on triangular faces; this method can be attributed
-to Goldberg, Coxeter, Fuller, Caspar, and Klug. [Goldberg]_ [Caspar]_ 
-[Coxeter]_ [Brinkmann]_ This method often
+to Goldberg_, Coxeter_, Fuller, or Caspar_ and Klug, depending on whether
+you're a mathematician or a scientist :) [Hart2012]_ is a good
+reference for the beginner. This method often
 produces polyhedra with nice geometric qualities, for instance,
 local symmetry preservation, minimal distortion, etc.
 
-Strictly, the GC operation defined in e.g. [Deza2015]_ is defined on
-a planar graph: however, planar graphs are closely related to polyhedra and
-tilings. Where the literature describes the subdivision of vertices of a
-planar graph, this program implements the subdivision of faces of a polyhedron
-or tiling. One is (the skeleton of) the dual of the other; also, with 
-polyhedra, it is necessary to consider geometric questions like the exact 
-placement of vertices that aren't an issue with graphs.
+Strictly, the GC operation defined in e.g. [Deza2004]_ and [Deza2015]_ is 
+defined on a planar graph: however, planar graphs are closely related to 
+polyhedra and tilings. Where the literature describes the subdivision of 
+vertices of a planar graph, this program implements the subdivision of faces 
+of a polyhedron or tiling. One is (the skeleton of) the dual of the other; 
+also, with polyhedra, it is necessary to consider geometric questions 
+like the exact placement of vertices that aren't an issue with graphs.
 
 Notation
 --------
@@ -22,7 +23,8 @@ This text uses :math:`\Delta(a,b)` for the triangular GC operator and
 :math:`\Box(a,b)` for the quadrilateral GC operator. This program deviates 
 from the parameterization of the triangular GC operation used in 
 chemistry-oriented texts such as [Deza2015]_: it uses the traditional 
-parameterization for geodesic domes and Goldberg polyhedra. 
+parameterization for geodesic domes and Goldberg polyhedra, used in e.g.
+[Goldberg]_ and [Coxeter]_. 
 
 Applications
 ------------

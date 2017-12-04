@@ -1,8 +1,8 @@
 Goldberg-Coxeter Operation on arbitrary tilings and polyhedra
 =============================================================
 
-Transformations between triangles and quadrilaterals
-----------------------------------------------------
+Coordinate form
+---------------
 For our purposes, triangles are specified by barycentric coordinates 
 :math:`\beta_i` where :math:`\beta_1 + \beta_2 + \beta_3 = 1`.
 
@@ -17,3 +17,7 @@ If the quadrilateral is a skew quadrilateral, x and y smoothly parameterize a
 surface over that skew quadrilateral.
 
 :math:`\mathbf \hat v = \frac{\mathbf v^*}{\|\mathbf v^*\|}`
+
+Linear index form
+-----------------
+

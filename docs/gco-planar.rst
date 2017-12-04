@@ -123,11 +123,15 @@ An element of these domains is prime if:
 Defining the operators
 ----------------------
 We define :math:`\Delta(a,b)` for the triangular GC operator and 
-:math:`\Box(a,b)` for the quadrilateral GC operator.
-:math:`\Delta(a,b)` corresponds to the equivalence class of associates in the 
-Steineisen integers, and :math:`\Box(a,b)` corresponds to the equivalence 
-class of associates in the Gaussian integers. There are some very nice 
-consequences of this:
+:math:`\Box(a,b)` for the quadrilateral GC operator. The GC operation can be
+thought of as taking each face of the polyhedron and replacing it with the 
+corresponding breakdown polyhedron described above, using the Gaussian integers
+for :math:`\Box(a,b)` and Steineisen integers for :math:`\Delta(a,b)`.
+
+It has been shown that :math:`\Delta(a,b)` corresponds to the equivalence 
+class of associates in the Steineisen integers, and :math:`\Box(a,b)` 
+corresponds to the equivalence class of associates in the Gaussian integers. 
+There are some very nice consequences of this:
 
 * Composition of operators corresponds to multiplication of complex numbers.
   If :math:`\Delta(a,b)\Delta(c,d) = \Delta(e,f)`, then 
@@ -138,7 +142,8 @@ consequences of this:
   the Gaussian integers, and :math:`x = z p_1^{n_1}p_2^{n_2} \cdots p_k^{n_k}`,
   then :math:`\Box(a,b) = 
   \Box^{n_1}(p_1)\Box^{n_2}(p_2)\cdots\Box^{n_k}(p_k)`, and similarly for
-  the Steineisen integers and :math:`\Delta(a,b)`.
+  the Steineisen integers and :math:`\Delta(a,b)`. It also makes sense to 
+  talk about "prime" operators that can't be decomposed further.
 
 :math:`\Delta_{1,0}` and :math:`\Box_{1,0}` are identity operators: 
 where defined, they cause no change to the subdivision.
@@ -148,7 +153,8 @@ In the terminology of geodesic domes,
 - Class I operators have :math:`b=0`.
 - Class II operators have :math:`b=a`.
 - Class III operators are all others, and occur in chiral pairs.
-  :math:`\Delta(a,b)` is the chiral pair of :math:`\Delta(b,a)`. [#]_ 
+  :math:`\Delta(a,b)` is the chiral pair of :math:`\Delta(b,a)`, and the same
+  for :math:`\Box(a,b)` and :math:`\Box(b,a)`. [#]_ 
 
 Chiral pairs correspond to conjugation of the complex number :math:`a+bi` or 
 :math:`a+bu`. That is, there exists some unit z such that 
