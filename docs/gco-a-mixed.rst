@@ -27,16 +27,16 @@ among them. [Brinkmann]_ has commented on this situation.
 The Goldberg-Coxeter operators correspond to some Conway operators
 or their duals.
 
-=================================== =============== ====================
-SGS operator                        Conway operator Dual Conway operator
-=================================== =============== ====================
-:math:`\Box(1,1)`                   j (join)        a (ambo)
-:math:`\Box(2,0)`                   o=jj (ortho)    e=aa (expand)
-:math:`\Delta(1,1)`                 n (needle)      z (zip)
-:math:`\Delta(2,0)`                 u (subdivide)   c (chamfer)
-:math:`\Delta(2,1)`                 v (volute)      w (whirl)
-:math:`\Delta(3,0) = \Delta^2(1,1)` kt=nn           tk = zz
-=================================== =============== ====================
+=================================== ===== ===== ===== =====
+SGS operator                        ?     d?d   d?    ?d
+=================================== ===== ===== ===== =====
+:math:`\Box(1,1)`                   j     a     a     j
+:math:`\Box(2,0) = \Box(1,1)`       o=jj  e=aa  aj    ja
+:math:`\Delta(1,1)`                 n     z     t     k
+:math:`\Delta(2,0)`                 u     c     du    dc
+:math:`\Delta(2,1)`                 v     w     dv    dw
+:math:`\Delta(3,0) = \Delta^2(1,1)` kt=nn tk=zz tn    nk
+=================================== ===== ===== ===== =====
 
 The :math:`\Delta` operators as defined only operate on triangles, and the
 :math:`\Box` operators on quadrilaterals, while the Conway operators work on
@@ -49,19 +49,22 @@ Rather than extending a :math:`\Delta` or :math:`\Box` operator to work on
 other faces, it's possible to divide a polyhedron by applying a certain
 :math:`\Delta` operator to the triangle faces, a certain :math:`\Box`
 operator to the quadrilateral faces, and dealing with what happens over the
-edges of the original polyhedron. The operators :math:`\Delta(a,b)` and 
-:math:`\Box(c,d)` are ''compatible'' if:
+edges of the original polyhedron. 
+
+Two Conway operators are ''compatible'' if:
 
 #. The same number of vertices lie along the base edge.
 #. The same number of edges cross the base edge, excluding ones that meet a
    vertex at the edge.
-#. The same number of edges lie on the base edge. (only affects Class I.)
+#. The same number of edges lie on the base edge.
 #. Edges that cross the base edge do not create digons (faces with 2 edges).
 
-The first 3 requirements can be distilled to these equations:
+For the operators :math:`\Delta(a,b)` and :math:`\Box(c,d)`, the first 3 
+requirements can be distilled to these equations:
 
 * :math:`\gcd(a, b) = \gcd(c, d) = g`
-* :math:`c + d + g = 2(a + b)` (implies c and d are not both odd)
+* :math:`c + d + g = 2(a + b)`. This equation has no solution if `c=d` or if
+  `c` and `d` are both odd numbers.
 
 The 4th requirement is more complicated.
 
@@ -71,17 +74,12 @@ Consequences of these rules include:
 #. Iff :math:`\Box(a,b)` is compatible with :math:`\Delta(c,d)`, then
    :math:`\Box(na,nb)` is compatible with :math:`\Delta(nc,nd)`
    for all positive integers n.
-#. By 1 and 2, :math:`\Box(n,0)` is compatible with :math:`\Delta(n,0)`
-   (Class I)
+#. :math:`\Box(n,0)` is compatible with :math:`\Delta(n,0)` (Class I)
 #. Iff :math:`\Box(a,b)` is compatible with :math:`\Delta(c,d)`, then
-   :math:`\Box(b,a)` is compatible with :math:`\Delta(d,c)` (symmetry).
-#. :math:`\Box(1,2)` is compatible with :math:`\Delta(1,1)` (by inspection)
-#. By 5 and 2, :math:`\Delta(n,n)` is compatible with :math:`\Box(n,2n)`
+   :math:`\Box(b,a)` is compatible with :math:`\Delta(d,c)`.
+#. :math:`\Delta(n,n)` is compatible with :math:`\Box(n,2n)`
    and :math:`\Box(2n,n)` (Class II triangles)
-#. :math:`\Box(1,1)` has 2 vertices lying on the base edge, no edges crossing
-   the base edge, and no edges lying on the base edge. There is no compatible
-   :math:`\Delta`.
-#. By 7 and 2, :math:`\Box(n,n)` is not compatible with any :math:`\Delta`.
+#. :math:`\Box(n,n)` is not compatible with any :math:`\Delta`.
    (Class II squares)
 #. If :math:`\Box(a_1,b_1)` is compatible with :math:`\Delta(c_1,d_1)`, and
    :math:`\Box(a_2,b_2)` is compatible with :math:`\Delta(c_2,d_2)`, it does

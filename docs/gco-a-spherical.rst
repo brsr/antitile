@@ -10,8 +10,8 @@ amenable to programming idioms.
 There are a number of ways to numerically specify points on a sphere. By far
 the most common is by latitude and longitude, which appear on every modern map
 of the Earth and probably some other planets. Latitude and longitude are
-familiar and convenient, but it is complicated to perform extended geometry
-calculations using latitude and longitude.
+familiar and convenient, but performing extended geometry calculations using 
+latitude and longitude is a complicated task.
 
 Doing spherical geometry using a 3-component unit vector is more convenient
 in a number of ways: the equations are often simpler, and there are no
@@ -118,8 +118,9 @@ This program uses this definition for the normal to a Euclidean polygon:
 .. math::
    \mathbf \hat n = \frac{\sum v_i \times v_{i+1}}{\|\dots\|}`
 
-This definition allows for a somewhat sensible extension to skew polygons:
-it points in the general direction that's expected.
+`i` should be treated as if it's :math:`\mod n`: it loops around. This 
+definition allows for a somewhat sensible extension to skew polygons:
+the normal points in the general direction that's expected.
 
 The normal will be outward-facing if the points are ordered counterclockwise,
 and inward-facing if the points are ordered clockwise.
