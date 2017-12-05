@@ -1,7 +1,7 @@
 Goldberg-Coxeter Operation on spherical polyhedra
 =================================================
 In this section, we'll use :math:`\mathbf v^*` to denote a pre-normalized 
-vector: :math:`\mathbf \hat{v} = \frac{\mathbf v^*}{\|\mathbf v^*\|}`
+vector: :math:`\hat{\mathbf v} = \frac{\mathbf v^*}{\|\mathbf v^*\|}`
 
 Gnomonic
 --------
@@ -14,12 +14,12 @@ project triangles on the sphere.
 
 In general, the gnomonic projection is defined as:
 
-* To sphere: :math:`\mathbf \hat{v} = \frac{\mathbf p}{\|\mathbf p\|}`
-* From sphere: :math:`\mathbf p = \frac{r\mathbf \hat{v}}
-  {\mathbf \hat{n} \cdot \mathbf\hat{v}}`
+* To sphere: :math:`\hat{\mathbf v} = \frac{\mathbf p}{\|\mathbf p\|}`
+* From sphere: :math:`\mathbf p = \frac{r\hat{\mathbf v}}
+  {\hat{\mathbf n} \cdot \hat{\mathbf v}}`
   
 where :math:`\mathbf p` is a point on a plane given in Hessian normal
-form by :math:`\mathbf \hat{n} \cdot \mathbf p = r`. Projection from Euclidean 
+form by :math:`\hat{\mathbf n} \cdot \mathbf p = r`. Projection from Euclidean 
 space to the sphere is literally just normalizing the vector. 
 
 For the Goldberg-Coxeter operation, this amounts to just normalizing 
@@ -31,7 +31,7 @@ the vectors produced by the coordinate form:
 .. math::
    \mathbf v^* = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) x + 
    (\mathbf v_4-\mathbf v_1) y + 
-   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy`
+   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy
 
 where :math:`\beta_i` are (planar) barycentric coordinates and :math:`x,y` are
 x-y quadrilateral coordinates. 
@@ -40,7 +40,7 @@ The case of barycentric coordinates can be thought of as generalized
 barycentric coordinates, where :math:`\mathbf v = \sum\beta_i\mathbf v_i` 
 still holds but :math:`\sum \beta_i` is not necessarily `=1`. If the 
 generalized coordinates are :math:`\beta^\prime_i`, then 
-:math:`\beta^\prime_i = \frac{\beta_1}
+:math:`\beta^\prime_i = \frac{\beta_i}
 {\beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3}`. On the 
 interior of the triangle, :math:`\sum \beta^\prime_i > 1`.
 
@@ -55,32 +55,40 @@ spherical area (solid angle) of the spherical triangle and
 :math:`\Omega_i = \beta_i\Omega` be the area of the smaller triangle 
 opposite vertex :math:`v_i`.
 
-The equation to find :math:`\mathbf \hat{v}` is much more complicated than
+The equation to find :math:`\hat{\mathbf v}` is much more complicated than
 that for barycentric coordinates. Let 
-:math:`h_i = \sin\Omega_i\left(1+\mathbf v_{i-1}\cdot\mathbf v_{i+1}\right)`, 
+:math:`h_i = \sin\Omega_i
+\left(1+\mathbf{\hat{v}}_{i-1} \cdot \mathbf{\hat{v}}_{i+1}\right)`, 
 and
-:math:`\mathbf g_{i} = \left(1+\cos \Omega_{i}\right) \mathbf v_{i-1} \times 
-\mathbf v_{i+1} - \sin\Omega_{i}\left(\mathbf v_{i-1} + \mathbf v_{i+1}\right)`
+:math:`\mathbf g_{i} = \left(1+\cos \Omega_{i}\right) 
+\mathbf{\hat{v}}_{i-1} \times \mathbf{\hat{v}}_{i+1} - 
+\sin\Omega_{i}\left(\mathbf{\hat{v}}_{i-1} + \mathbf{\hat{v}}_{i+1}\right)`
 where the subscripts loop around: 0 should be interpreted as 3 and 4 should be 
 interpreted as 1. Then 
 
 .. math::
    \mathbf G = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix}
+
+.. math::
    \mathbf h = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T
    
-such that :math:`\mathbf G \mathbf \hat{v} = \mathbf h` To clarify, 
-:math:`\mathbf G` is the 3x3 matrix where the `i`th column is 
+such that :math:`\mathbf G \hat{\mathbf v} = \mathbf h`. To clarify, 
+:math:`\mathbf G` is the 3x3 matrix where the ith column is 
 :math:`\mathbf g_i`, and :math:`\mathbf h` is the column vector where the 
-`i`th element is :math:`h_i`. The vector :math:`\mathbf \hat{v}` can be solved for 
-using standard matrix methods.
+ith element is :math:`h_i`. The vector :math:`\hat{\mathbf v}` 
+can be solved for using standard matrix methods.
 
 Naive Slerp
 -----------
+Only applicable to equilateral faces
+
 Triangle:
-:math:`\mathbf v^* = \sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i`
+:math:`\mathbf v^* = 
+\sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i`
 
 Quadrilateral 1:
-:math:`\mathbf v^* = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)}  \mathbf v_i`
+:math:`\mathbf v^* = 
+\sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)}  \mathbf v_i`
 where
 :math:`\gamma_1 = (1-x)(1-y)`,
 :math:`\gamma_2 = x(1-y)`, 
@@ -104,7 +112,7 @@ Great circle intersection
 Method 2
 
 Summary of methods
--------
+------------------
 
 ==================================== ======================== ==============
 Method                               Input                    Face size
@@ -133,7 +141,7 @@ the highly-symmetric operator :math:`\Box(1,1)` (which creates one vertex at
 the centroid of a face) four times and then :math:`\Box(4,1)` once with 
 a simple method like Gnomonic.
 
-`geodesic` in Antitile performs class II and III subdivision by finding the 
+``geodesic`` in Antitile performs class II and III subdivision by finding the 
 smallest class I operator that can be decomposed into the desired operator
 and some other factor. Effectively, given :math:`\Delta(a,b)`, it finds the 
 smallest n such that :math:`\Delta(a,b)\Delta(c,d) = \Delta(n,0)` for some c 
@@ -155,7 +163,7 @@ Euclidean space. The second is to canonicalize the polyhedron. As per
   and
 * The faces are flat (not skew)
 
-The `canonical` program in Antiprism performs canonicalization via a simple
+The ``canonical`` program in Antiprism performs canonicalization via a simple
 iterative process. The vertices of the faces probably do not lie on the
 unit sphere. If a polyhedron created by Goldberg-Coxeter
 operations is to be canonicalized, the choice of method does not matter except
