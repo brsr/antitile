@@ -28,12 +28,13 @@ For the Goldberg-Coxeter operation, this amounts to just normalizing
 the vectors produced by the coordinate form:
 
 .. math::
-   \mathbf v^* = \beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3
+   \mathbf v^* = 
+   \beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3
 
 .. math::
    \mathbf v^* = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) x +
    (\mathbf v_4-\mathbf v_1) y +
-   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy`
+   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy
 
 where :math:`\beta_i` are (planar) barycentric coordinates and :math:`x,y` are
 x-y quadrilateral coordinates.
@@ -69,6 +70,8 @@ interpreted as 1. Then
 
 .. math::
    \mathbf G = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix}
+
+.. math::
    \mathbf h = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T
 
 such that :math:`\mathbf G \mathbf \hat{v} = \mathbf h` To clarify,
@@ -93,10 +96,12 @@ Let :math:`\cos(w) = \mathbf v_i \cdot \mathbf v_{i+1}` for all :math:`i`. (As
 usual, the subscripts loop around.)
 
 Triangle:
-:math:`\mathbf v^* = \sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i`
+:math:`\mathbf v^* = 
+\sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i`
 
 Quadrilateral 1:
-:math:`\mathbf v^* = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)}  \mathbf v_i`
+:math:`\mathbf v^* = 
+\sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)}  \mathbf v_i`
 where
 :math:`\gamma_1 = (1-x)(1-y)`,
 :math:`\gamma_2 = x(1-y)`,
@@ -158,7 +163,7 @@ two antipodal vertices on the sphere.
 the sphere.)
 
 Summary of methods
--------
+------------------
 .. list-table::
    :header-rows: 1
 
@@ -207,7 +212,7 @@ the highly-symmetric operator :math:`\Box(1,1)` (which creates one vertex at
 the centroid of a face) four times and then :math:`\Box(4,1)` once with
 a simple method like Gnomonic.
 
-`geodesic` in Antitile performs class II and III subdivision by finding the
+``geodesic`` in Antitile performs class II and III subdivision by finding the 
 smallest class I operator that can be decomposed into the desired operator
 and some other factor. Effectively, given :math:`\Delta(a,b)`, it finds the
 smallest n such that :math:`\Delta(a,b)\Delta(c,d) = \Delta(n,0)` for some c
@@ -229,7 +234,7 @@ Euclidean space. The second is to canonicalize the polyhedron. As per
   and
 * The faces are flat (not skew)
 
-The `canonical` program in Antiprism performs canonicalization via a simple
+The ``canonical`` program in Antiprism performs canonicalization via a simple
 iterative process. The vertices of the faces probably do not lie on the
 unit sphere. If a polyhedron created by Goldberg-Coxeter
 operations is to be canonicalized, the choice of method does not matter except
