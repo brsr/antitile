@@ -144,23 +144,46 @@ optimization on `k`.
 
 Great circle intersection
 -------------------------
-This is the only method that directly uses the linear indexes defined in the
-previous chapter. In the geodesic dome world, this is called Method 2,
-although this description is considerably more complicated to accomodate
-Class III grids.
+This method draws great circles between points on the edges of the polygon,
+and uses the points of intersections of those great circles to determine
+the vertices. This is the only method that directly uses the linear indexes 
+defined in the previous chapter. In the geodesic dome world, this is called 
+Method 2, although this description is considerably more complicated to 
+accomodate Class III grids and quad faces.
 
-Using slerp, calculate the points :math:`\mathbf{\hat{b}}_{i,j,k}` where each
-line from the breakdown structure crosses the face edge. `i` is the coordinate
-of the linear index, `j` is the linear index, and `k` is which end of the line.
-The line corresponds to a great circle normal given by :math:`\mathbf{n}_{i,j}
-= \frac{\mathbf{\hat{b}}_{i,j,0} \times \mathbf{\hat{b}}_{i,j,1}}{\|\dots\|}`. 
-The intersection of two planes is a line: the intersection of two great circles is
-two antipodal vertices on the sphere. 
+Specify the linear index as :math:`\ell = (e,f,g)` for triangular faces or
+:math:`\ell = (e,f)` for quad faces. Using slerp, calculate the points 
+:math:`\mathbf{\hat{b}}_{i,j,k}` where each line from the breakdown structure 
+crosses the face edge. `i` is the coordinate of the linear index, `j` is the 
+linear index (:math:`\ell_i = j`), and `k` is which point of intersection with 
+the polygon. The line corresponds to a great circle normal given by 
+:math:`\mathbf{\hat{n}}_{i,j}
+= \frac{\mathbf{\hat{b}}_{i,j,0} \times \mathbf{\hat{b}}_{i,j,1}}{\|\dots\|}`.
 
-:math:`\mathbf{v}_{j} = \mathbf{n}_{i,j} \times \mathbf{n}_{i+1,j}`
+We are going to calculate the intersection of these great circle normals. 
+The intersection of two planes is a line: the intersection of two great 
+circles is two antipodal points. We need to choose the point on the correct 
+side of the sphere. Let :math:`\mathbf{c}` be the centroid of the face: then 
+:math:`\mathbf{v}` is on the right side of the sphere if :math:`\mathbf{v} 
+\dot \mathbf{c} >0`. If not, just multiply :math:`\mathbf{v}` times -1 to put 
+it on the right side. 
 
-(You may need to multiply by `-1` to put the vertices on the right side of
-the sphere.)
+For quad faces, there are only two intersecting great 
+circles, so the new vertices are :math:`\mathbf{v^*}_{\ell} = 
+\mathbf{\hat{n}}_{1,\ell_{1}} \times \mathbf{\hat{n}}_{2,\ell_{2}}` (possibly
+times -1).
+
+For triangular faces, there are three intersecting great circles, and unlike
+on the plane, on the sphere they do not necessarily intersect in the same
+place. Each pair of great circles forms a vertex of a triangle as
+:math:`\mathbf{\hat{v}}_{\ell, m} = \frac{\mathbf{\hat{n}}_{m,\ell_{m}} \times 
+\mathbf{\hat{n}}_{m+1,\ell_{m+1}}}{\|\dots\|}`, 
+Make sure all the :math:`\mathbf{\hat{v}}_{\ell, m}` lie on the correct side
+of the sphere, and then take the centroid of that triangle to get the vertex:
+:math:`\mathbf{v^*}_{\ell} = \sum_m \mathbf{v}_{\ell, m}`. (It is not
+strictly necessary to take the centroid: the sum of the unnormalized 
+:math:`\mathbf{v}_{\ell, m}` will also be a point somewhere within the 
+triangle.)
 
 Summary of methods
 ------------------
