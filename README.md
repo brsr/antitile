@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/antitile/badge/?version=latest)](http://antitile.readthedocs.io/en/latest/?badge=latest)
+
 # antitile
 Manipulation of polyhedra and tilings using Python. This package is designed to work with [Antiprism](https://github.com/antiprism/antiprism) but can be used on its own.
 
