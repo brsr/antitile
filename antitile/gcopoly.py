@@ -257,7 +257,7 @@ def build_gco_rep(base, frequency, proj, k=1, tweak=False,
     if len(fsu) != 1:
         raise ValueError('cannot perform repeated subdivision on mixed grid')
     elif fsu[0] == 3:
-        element = factor.Nietsnesie
+        element = factor.Steineisen
     elif fsu[0] == 4:
         element = factor.Gaussian
     else:

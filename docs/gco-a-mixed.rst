@@ -31,7 +31,7 @@ or their duals.
 SGS operator                        ?     d?d   d?    ?d
 =================================== ===== ===== ===== =====
 :math:`\Box(1,1)`                   j     a     a     j
-:math:`\Box(2,0) = \Box(1,1)`       o=jj  e=aa  aj    ja
+:math:`\Box(2,0) = \Box^2(1,1)`     o=jj  e=aa  aj    ja
 :math:`\Delta(1,1)`                 n     z     t     k
 :math:`\Delta(2,0)`                 u     c     du    dc
 :math:`\Delta(2,1)`                 v     w     dv    dw
@@ -66,7 +66,7 @@ requirements can be distilled to these equations:
 * :math:`c + d + g = 2(a + b)`. This equation has no solution if `c=d` or if
   `c` and `d` are both odd numbers.
 
-The 4th requirement is more complicated.
+The 4th requirement is more complicated to put in equational form.
 
 Consequences of these rules include:
 

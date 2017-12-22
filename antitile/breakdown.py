@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Breakdown structures
+Breakdown structures / master polygons
 """
 import numpy as np
 from . import flat, xmath
