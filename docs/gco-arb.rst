@@ -10,6 +10,7 @@ the operators are chiral, they depend on an underlying orientable surface.
 Definition of GC operation
 ---------------------------
 The GC operation comprises these steps:
+
 * Choose a master polygon corresponding to :math:`\Box(a,b)` or
   :math:`\Delta(a,b)`.
 * Replace each face of the base polyhedron with a stretched,

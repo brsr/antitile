@@ -150,6 +150,7 @@ calculation of the face normal.
 
 Sometimes the best polyhedron comes from a compromise of the central and
 parallel projections. Choose a constant `k`, typically between 0 and 1, then:
+
 .. math::
    \mathbf \hat v = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
 
