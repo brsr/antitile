@@ -64,12 +64,16 @@ The relationship between the two is simple: :math:`a + b w = a - b + bu`.
    * - Divisor `t` for prime test
      - 4
      - 3
-   * - Master polygon
+   * - Master polygon vertices
      - 0, :math:`x`, :math:`x(1+i)`, :math:`xi`
      - 0, :math:`x`, :math:`xu`
    * - Master polygon center
      - :math:`x\frac{1+i}{2}`
      - :math:`x\frac{1+u}{3}`
+   * - Example master polygon (3,2) construction 
+       (center marked with white circle) 
+     - .. image:: 3_2_on_square_grid.svg
+     - .. image:: 3_2_on_tri_grid.svg
 
 Elements :math:`x` and :math:`y` of a domain such that :math:`x = zy`, where
 :math:`z` is a unit, are called associates. "Normal elements" are defined so

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<svg height="600" width="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+	<clipPath id="bounds">
+		<rect x="10" y="10" width="580" height="580"/>
+	</clipPath>
+</defs>
+<circle cx="300" cy="300" r="290" fill="skyblue" stroke="none" />
+<path d="M 590,300 A 290,145 0 0 0 10,300" 
+fill="none" stroke="grey" clip-path="url(#bounds)"/>
+
+<path d="M 10,300
+A 290,290 0 0 0 590,300
+A 290,145 0 0 1 10,300"
+fill="orange" stroke="black"/>
+
+<path d="M 10,300
+A 290,290 0 0 1 590,300"
+fill="none" stroke="black"/>
+
+<circle cx="300" cy="155" r="5" fill="grey" stroke="grey" />
+
+<circle cx="10" cy="300" r="5" fill="black" stroke="black" />
+<circle cx="300" cy="445" r="5" fill="black" stroke="black" />
+<circle cx="590" cy="300" r="5" fill="black" stroke="black" />
+
+</svg>
+<!--10-gon:
+ 300.0 	 445.0 
+ 470.5 	 417.3 
+ 575.8 	 344.8 
+ 575.8 	 255.2 
+ 470.5 	 182.7 
+ 300.0 	 155.0 
+ 129.5 	 182.7 
+ 24.2 	 255.2 
+ 24.2 	 344.8 
+ 129.5 	 417.3 
+-->

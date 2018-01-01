@@ -16,24 +16,36 @@ There are also some disk-specific transformations, accessible with
 and scaling the `r` variable. Unlike Naive Slerp, there are points where the
 transformation is not smooth.
 
-Triangular:
+**Triangular:**
 
 .. math::
     r = 1 - 3 \min(\beta_i)
 
-Quadrilateral:
+**Quadrilateral:**
 
 .. math::
     r = \max(|2x - 1|, |2y - 1|)
 
-These disk operations can be projected with a k factor the same
-as naive slerp, although here we require k to be `>0`: otherwise,
-all points would be projected onto the great circle.
-
 Dihedra
 -------
+.. figure:: 3-dihedron.svg
+   :align: right
+   :figwidth: 25%
+   
+   The 3-dihedron 
+   
+.. figure:: 4-dihedron.svg
+   :align: right
+   :figwidth: 25%
+   
+   The 4-dihedron 
+   
 With the transformations defined above, performing the GC operation on a
-dihedron is fairly straightforward. The only caveat has to do with the
+dihedron is fairly straightforward. These disk operations can be projected 
+with a k factor the same as naive slerp, although here we require k to be 
+`>0`: otherwise, all points would be projected onto the great circle.
+
+The only caveat has to do with the
 presence of vertices with valence 2. On the quadrilateral, the valence-2 
 vertex and its adjacent edges can be smoothed into a single edge. On the 
 triangle, this produces dangling faces, which can be removed. In both cases, 
@@ -46,8 +58,15 @@ polyhedron. (Thank you, I'll be here all night.)
 
 Monohedron
 ----------
+.. figure:: monohedron.svg
+   :align: right
+   :figwidth: 25%
+   
+   The monohedron.
+   
 The spherical monohedron is the "polyhedron" with one face, one vertex, and no 
-edges: the entire sphere is one big face. Topologically, we can tile this 
+edges: the entire sphere is one big face. (Hey, it satisfies the Euler 
+equations.) Topologically, we can tile this 
 surface by taking the disk defined earlier and collapsing the boundary to a 
 single point. This amounts to projecting the disk in the manner of a 
 map projection of the entire Earth, which is a well-studied problem. Given 
@@ -55,12 +74,12 @@ map projection of the entire Earth, which is a well-studied problem. Given
 (\sin(\phi) \cos(\theta), \sin(\phi) \sin(\theta), \cos(\phi))`, 
 two useful projections used in cartograph can be described as such:
 
-Lambert azimuthal equal-area
+**Lambert azimuthal equal-area:**
 
 .. math::
     \phi = 2 \arcsin(\|\mathbf v\|)
 
-Azimuthal equal-distance
+**Azimuthal equal-distance:**
 
 .. math::
     \phi = \pi \|\mathbf v\|
