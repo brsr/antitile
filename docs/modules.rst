@@ -3,8 +3,6 @@ Modules and scripts
 
 Modules
 -------
-.. automodule:: antitile
-   :members:
 .. automodule:: antitile.breakdown
    :members:
 .. automodule:: antitile.flat

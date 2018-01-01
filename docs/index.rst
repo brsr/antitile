@@ -16,9 +16,10 @@ in its own section.
    gallery
    modules
 
-Indices and tables
-==================
+.. htmlonly::
+  Indices and tables
+  ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+  * :ref:`genindex`
+  * :ref:`modindex`
+  * :ref:`search`

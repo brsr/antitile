@@ -63,7 +63,7 @@ For the operators :math:`\Delta(a,b)` and :math:`\Box(c,d)`, the first 3
 requirements can be distilled to these equations:
 
 * :math:`\gcd(a, b) = \gcd(c, d) = g`
-* :math:`c + d + g = 2(a + b)`. This equation has no solution if `c=d` or if
+* :math:`c + d + g = 2(a + b)`. This equation has no solution if 
   `c` and `d` are both odd numbers.
 
 The 4th requirement is more complicated to put in equational form.

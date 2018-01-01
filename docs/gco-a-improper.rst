@@ -34,38 +34,43 @@ Dihedra
 -------
 With the transformations defined above, performing the GC operation on a
 dihedron is fairly straightforward. The only caveat has to do with the
-presence of vertices with valence 2. On the quadrilateral, this produces
-a degenerate edge: a valence-2 vertex and its edges can be replaced with
-a single edge. On the triangle, this produces dangling faces, which can be
-removed. In both cases, one can also add or switch edges so that the
-vertex is no longer degenerate.
+presence of vertices with valence 2. On the quadrilateral, the valence-2 
+vertex and its adjacent edges can be smoothed into a single edge. On the 
+triangle, this produces dangling faces, which can be removed. In both cases, 
+one can also add or switch edges so that the vertex is no longer degenerate.
 
 The process of doing the GC operation on a dihedron resembles stitching
 together two flat sheets and inflating them, like the children's novelty
 the whoopi cushion. The dual of that could be called a Whoopi Goldberg
 polyhedron. (Thank you, I'll be here all night.)
 
-Henahedron
+Monohedron
 ----------
-The henahedron is the "polyhedron" with one face, one vertex, and no edges:
-the entire sphere is one big face. Topologically, we can take the disk defined
-earlier and collapse the boundary to a single point. This amounts to
-projecting the disk in the manner of a map projection. Given :math:`\theta =
-\arctan2(v_x, v_y)` and :math:`\mathbf{\hat{v}} = (\sin(\phi) \cos(\theta),
-\sin(\phi) \sin(\theta), \cos(\phi))`, two useful projections used in
-cartograph can be described as such:
+The spherical monohedron is the "polyhedron" with one face, one vertex, and no 
+edges: the entire sphere is one big face. Topologically, we can tile this 
+surface by taking the disk defined earlier and collapsing the boundary to a 
+single point. This amounts to projecting the disk in the manner of a 
+map projection of the entire Earth, which is a well-studied problem. Given 
+:math:`\theta = \arctan2(v_x, v_y)` and :math:`\mathbf{\hat{v}} = 
+(\sin(\phi) \cos(\theta), \sin(\phi) \sin(\theta), \cos(\phi))`, 
+two useful projections used in cartograph can be described as such:
 
 Lambert azimuthal equal-area
 
 .. math::
-    \phi = 2 arcsin(\|\mathbf v\|)
+    \phi = 2 \arcsin(\|\mathbf v\|)
 
 Azimuthal equal-distance
 
 .. math::
     \phi = \pi \|\mathbf v\|
 
-Because of the radical change to the boundary, many small-parameter GC
+Really any continuous, monotonic function of :math:`\|\mathbf v\|` that 
+maps 0 to 0 and 1 to :math:`\pi` could be used to calculate :math:`\phi`.
+
+We'll call these "balloon polyhedra" by analogy with blowing up a balloon.
+``balloon.py`` can be used to calculate these. Because of the radical change 
+to the boundary, many small-parameter GC
 operations produce the same polyhedron. Quad faces may be reduced to triangle
 faces, and triangle faces may be reduced to degenerate faces. Many produced
 polyhedra are not convex. Class III polyhedra tend to have dangling faces.

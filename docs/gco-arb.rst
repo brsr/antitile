@@ -26,7 +26,7 @@ Coordinate form
 To transform the master polygon to the target face polygon, this program
 generally uses a standardized coordinate form.
 
-Triangles can be are specified by barycentric coordinates
+**Triangles** can be are specified by barycentric coordinates
 :math:`\beta_i` where :math:`\beta_1 + \beta_2 + \beta_3 = 1`, and then the
 corresponding vertex is given by
 :math:`\mathbf v = \beta_1\mathbf v_1+\beta_2\mathbf v_2+\beta_3\mathbf v_3`.
@@ -35,17 +35,20 @@ by using e.g. the Moore–Penrose inverse to solve the system given by
 :math:`\beta_1 + \beta_2 + \beta_3 = 1` and
 :math:`\mathbf v = \beta_1\mathbf v_1+\beta_2\mathbf v_2+\beta_3\mathbf v_3`.
 
-Quadrilaterals are instead specified by what we'll call "xy coordinates"
-where :math:`x` and :math:`y` are between 0 and 1. :math:`\mathbf v_1 +
-(\mathbf v_2-\mathbf v_1) x + (\mathbf v_4-\mathbf v_1) y
-+ (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy`. Unlike triangles,
-quadrilaterals may have points that do not share a common plane: they may be
-skew quadrilaterals. If the quadrilateral is a skew quadrilateral,
-`x` and `y` smoothly parameterize a surface over that skew quadrilateral. In
-this program, we don't need to find the xy coordinates for a point in an
-arbitrary quadrilateral. There are some occasions where the xy coordinates are
-determined for a square in the plane, in which case they can be converted
-by rotation and scaling.
+**Quadrilaterals** are instead specified by what we'll call "xy coordinates"
+where :math:`x` and :math:`y` are between 0 and 1. That transformation is:
+
+.. math::
+   \mathbf v = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) x + (\mathbf v_4-\mathbf v_1) y
+   + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy
+
+Unlike triangles, quadrilaterals may have points that do not share a common 
+plane: they may be skew quadrilaterals. If the quadrilateral is a skew 
+quadrilateral, `x` and `y` smoothly parameterize a surface over that skew 
+quadrilateral. In this program, we don't need to find the xy coordinates for 
+a point in an arbitrary quadrilateral. There are some occasions where the xy 
+coordinates are determined for a square in the plane, 
+in which case they can be converted by rotation and scaling.
 
 Linear index form
 -----------------
@@ -79,21 +82,18 @@ intersect that that vertex.
 Given the Gaussian or Eisenstein coordinates of the vertices
 in the master polygon, they can be directly converted to linear indexes.
 
-Triangular: When the vertex is :math:`c + du`, in normal form,
+**Triangular:** When the vertex is :math:`c + du`, in normal form,
 and the master triangle is given by (a, b), then the linear indexes satisfy
 :math:`\sum \ell_i = 2a+b`, with
 
 .. math::
-   \ell_1 = b + c + d
-   \ell_2 = a - c
-   \ell_3 = a - d
+   \mathbf \ell = (b + c + d, a - c, a - d)
 
-Quadrilateral: When the vertex is :math:`c + di`, in normal form,
+**Quadrilateral:** When the vertex is :math:`c + di`, in normal form,
 and the master square is given by (a, b), then
 
 .. math::
-   \ell_1 = c + a
-   \ell_2 = d
+   \mathbf \ell = (c + a, d)
 
 The primary use for linear index in the ``gcopoly`` program is "stitching"
 neighboring polygons together at their edges. This operation is easy to
@@ -121,7 +121,6 @@ Surfaces with boundaries present a problem because there are tiles that don't
 have a neighboring tile for each edge. In the language of [Deza2004]_, the
 skeleton graph of this tiling has vertices with degree 2; that paper doesn't
 even define their operation on such graphs.
-
 As mentioned earlier, this program leaves in vertices that are outside the
 master polygon but are connected to vertexes inside it. Correspondingly,
 the program will retain those vertices when it transforms the master polygon.

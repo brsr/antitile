@@ -327,7 +327,6 @@ def triangles_method2(lindex, base_pts, freq):
 
     >>> np.round(triangles_method2(_TEST_TRI_LINDEX[1:3], _TEST_SKEW_TRI,
     ...                            _TEST_FREQ), 6)
-
     array([[[ 0.205392,  0.183498,  0.051016],
             [ 0.34558 ,  0.317059,  0.10024 ],
             [ 0.098942,  0.085439,  0.03013 ]],
@@ -371,7 +370,8 @@ def tri_intersections(lindex, base_pts, freq, tweak=False):
     Returns:
         Array of shape (..., 3)
 
-    >>> tri_intersections(_TEST_TRI_LINDEX, _TEST_SKEW_TRI, _TEST_FREQ)
+    >>> tri_intersections(_TEST_TRI_LINDEX, _TEST_SKEW_TRI, _TEST_FREQ, 
+    ...                   tweak=True)
     array([[ 0.8       ,  0.6       ,  0.        ],
            [ 0.73045891,  0.65102869,  0.20524575],
            [ 0.59608649,  0.79682621,  0.09756895],
@@ -410,17 +410,17 @@ def square_naive_slerp(xy, base_pts):
     Returns:
         An array of shape [..., 3], representing points in 3d-space.
 
-    >>> square_naive_slerp(_TEST_XY, _TEST_EQ_Q)
-    array([[ 0.70710678,  0.        ,  0.70710678],
-           [ 0.        ,  0.70710678,  0.70710678],
-           [-0.70710678,  0.        ,  0.70710678],
-           [ 0.        , -0.70710678,  0.70710678],
-           [ 0.40824829,  0.40824829,  0.81649658],
-           [ 0.        ,  0.        ,  0.84529946],
-           [-0.40824829, -0.40824829,  0.81649658],
-           [ 0.54634285,  0.25231132,  0.79865417],
-           [ 0.164878  , -0.164878  ,  0.84066882],
-           [-0.25231132, -0.54634285,  0.79865417]])
+    >>> np.round(square_naive_slerp(_TEST_XY, _TEST_EQ_Q), 6)
+    array([[ 0.707107,  0.      ,  0.707107],
+           [ 0.      ,  0.707107,  0.707107],
+           [-0.707107,  0.      ,  0.707107],
+           [ 0.      , -0.707107,  0.707107],
+           [ 0.408248,  0.408248,  0.816497],
+           [ 0.      ,  0.      ,  0.845299],
+           [-0.408248, -0.408248,  0.816497],
+           [ 0.546343,  0.252311,  0.798654],
+           [ 0.164878, -0.164878,  0.840669],
+           [-0.252311, -0.546343,  0.798654]])
 
     """
     angle = xmath.central_angle_equilateral(base_pts)
@@ -444,18 +444,17 @@ def square_naive_slerp_2(xy, base_pts):
     Returns:
         An array of shape [..., 3], representing points in 3d-space.
 
-    >>> square_naive_slerp_2(_TEST_XY, _TEST_EQ_Q)
-    array([[ 0.70710678,  0.        ,  0.70710678],
-           [ 0.        ,  0.70710678,  0.70710678],
-           [-0.70710678,  0.        ,  0.70710678],
-           [ 0.        , -0.70710678,  0.70710678],
-           [ 0.40824829,  0.40824829,  0.81649658],
-           [ 0.        ,  0.        ,  0.94280904],
-           [-0.40824829, -0.40824829,  0.81649658],
-           [ 0.54634285,  0.25231132,  0.79865417],
-           [ 0.16975918, -0.16975918,  0.9222064 ],
-           [-0.25231132, -0.54634285,  0.79865417]])
-
+    >>> np.round(square_naive_slerp_2(_TEST_XY, _TEST_EQ_Q), 6)
+    array([[ 0.707107,  0.      ,  0.707107],
+           [ 0.      ,  0.707107,  0.707107],
+           [-0.707107,  0.      ,  0.707107],
+           [ 0.      , -0.707107,  0.707107],
+           [ 0.408248,  0.408248,  0.816497],
+           [-0.      , -0.      ,  0.942809],
+           [-0.408248, -0.408248,  0.816497],
+           [ 0.546343,  0.252311,  0.798654],
+           [ 0.169759, -0.169759,  0.922206],
+           [-0.252311, -0.546343,  0.798654]])
     """
     angle = xmath.central_angle_equilateral(base_pts)
     x, y = xy[..., 0], xy[..., 1]
@@ -577,8 +576,7 @@ def square_intersections(lindex, base_pts, freq):
 
 #extra crap
 def bary_tri(tri, vertices):
-    """Transforms a triangle back into barycentric
-    coordinates. Only elements [..., :2] are used.
+    """Transforms a triangle back into barycentric coordinates. 
 
     Args:
         tri: Triangle to calculate barycentric coordinates with respect to.
@@ -587,22 +585,22 @@ def bary_tri(tri, vertices):
     Returns:
         Array of barycentric coordinates
 
-    >>> bary_tri(_TEST_TRI_PTS, _TEST_SKEW_TRI)
-    array([[ 1.        ,  0.        ,  0.        ],
-           [ 0.        ,  1.        ,  0.        ],
-           [ 0.        ,  0.        ,  1.        ],
-           [ 0.5       ,  0.5       ,  0.        ],
-           [ 0.        ,  0.5       ,  0.5       ],
-           [ 0.5       ,  0.        ,  0.5       ],
-           [ 0.33333333,  0.33333333,  0.33333333]])
+    >>> np.round(np.abs(bary_tri(_TEST_TRI_PTS, _TEST_SKEW_TRI)), 6)
+    array([[ 1.      ,  0.      ,  0.      ],
+           [ 0.      ,  1.      ,  0.      ],
+           [ 0.      ,  0.      ,  1.      ],
+           [ 0.5     ,  0.5     ,  0.      ],
+           [ 0.      ,  0.5     ,  0.5     ],
+           [ 0.5     ,  0.      ,  0.5     ],
+           [ 0.333333,  0.333333,  0.333333]])
     """
     afill = np.ones(vertices.shape[:-1])
-    a = np.concatenate([vertices[..., :2], afill[..., np.newaxis]], axis=-1)
+    a = np.concatenate([vertices, afill[..., np.newaxis]], axis=-1)
     bfill = np.ones(tri.shape[:-1])
-    b = np.concatenate([tri[..., :2], bfill[..., np.newaxis]], axis=-1)
-    #couldn't make np.linalg.solve cooperate here.
+    b = np.concatenate([tri, bfill[..., np.newaxis]], axis=-1)
+    #couldn't make np.linalg.lstsq cooperate here.
     #this should be OK numerically
-    ainv = np.linalg.inv(a)
+    ainv = np.linalg.pinv(a)
     return b.dot(ainv)
 
 def to_sph_areal_coords(pts, triangle):

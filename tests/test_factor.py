@@ -16,7 +16,7 @@ class TestFactor(unittest.TestCase):
         self.domains = [factor.Integer,
                        factor.Gaussian,
                        factor.Eisenstein,
-                       factor.Nietsnesie]
+                       factor.Steineisen]
 
     def test_multiplication(self):
         for d in self.domains:

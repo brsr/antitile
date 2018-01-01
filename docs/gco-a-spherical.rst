@@ -1,5 +1,5 @@
-Appendix: Spherical geometry with vectors
-=========================================
+Appendix: Spherical (and other) geometry with vectors
+=====================================================
 In the geometric dome world, geometry is usually synthetic rather than
 analytic. That is, geometric constructions are usually expressed in terms of
 step-by-step geometric constructions rather than in equations and numeric
@@ -125,3 +125,18 @@ the normal points in the general direction that's expected.
 
 The normal will be outward-facing if the points are ordered counterclockwise,
 and inward-facing if the points are ordered clockwise.
+
+Face bentness
+-------------
+There's no standard measure of face bentness, so this program uses an ad-hoc 
+measure that seems to work well. This program measures the bentness of a face 
+with 4 or more vertices by these steps:
+
+* Let :math:`\mathbf x_i = \mathbf{v}_i - \bar{\mathbf{v}}`, where 
+  :math:`\bar{\mathbf{v}}` is the (Euclidean) average of the points
+* Calculate the SVD decomposition of the matrix that has :math:`\mathbf x_i`
+  as rows (or columns). We only need the singular values: since we're in
+  3d space, there will be 3 singular values.
+* The "bentness" is the smallest singular value divided by the sum of the 
+  other two singular values.
+  

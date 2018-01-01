@@ -9,7 +9,10 @@ might not cover every method ever written, but it expresses the major
 methods in analytic form and introduces a couple new ones.
 
 In this section, we'll use :math:`\mathbf v^*` to denote a pre-normalized
-vector: :math:`\mathbf \hat{v} = \frac{\mathbf v^*}{\|\mathbf v^*\|}`
+vector: 
+
+.. math::
+   \hat{\mathbf v} = \frac{\mathbf{v}^*}{\|\mathbf{v}^*\|}
 
 Gnomonic
 --------
@@ -27,12 +30,12 @@ this is particularly bad for larger faces e.g. on the tetrahedron.
 
 In general, the gnomonic projection is defined as:
 
-* To sphere: :math:`\mathbf \hat{v} = \frac{\mathbf p}{\|\mathbf p\|}`
-* From sphere: :math:`\mathbf p = \frac{r\mathbf \hat{v}}
-  {\mathbf \hat{n} \cdot \mathbf\hat{v}}`
+* To sphere: :math:`\hat{\mathbf v} = \frac{\mathbf p}{\|\mathbf p\|}`
+* From sphere: :math:`\mathbf p = \frac{r\hat{\mathbf v}}
+  {\hat{\mathbf n} \cdot \hat{\mathbf v}}`
 
 where :math:`\mathbf p` is a point on a plane given in Hessian normal
-form by :math:`\mathbf \hat{n} \cdot \mathbf p = r`. Projection from Euclidean
+form by :math:`\hat{\mathbf n} \cdot \mathbf p = r`. Projection from Euclidean
 space to the sphere is literally just normalizing the vector.
 
 For the Goldberg-Coxeter operation, this amounts to just normalizing
@@ -51,10 +54,10 @@ where :math:`\beta_i` are (planar) barycentric coordinates and :math:`x,y` are
 x-y quadrilateral coordinates.
 
 The case of barycentric coordinates can be thought of as generalized
-barycentric coordinates, where :math:`\mathbf v = \sum\beta_i\mathbf v_i`
-still holds but :math:`\sum \beta_i` is not necessarily `=1`. If the
-generalized coordinates are :math:`\beta^\prime_i`, then
-:math:`\beta^\prime_i = \frac{\beta_1}
+barycentric coordinates, where :math:`\mathbf v = 
+\sum\beta^\prime_i\mathbf v_i` still holds but :math:`\sum \beta^\prime_i` 
+is not necessarily `=1`. If the generalized coordinates are 
+:math:`\beta^\prime_i`, then :math:`\beta^\prime_i = \frac{\beta_1}
 {\beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3}`. On the
 interior of the triangle, :math:`\sum \beta^\prime_i > 1`.
 
@@ -72,7 +75,7 @@ spherical area (solid angle) of the spherical triangle and
 opposite vertex :math:`v_i`.
 
 While this method introduces less bunching-up than the gnomonic method,
-the equation to find :math:`\mathbf \hat{v}` given :math:`\beta_i` is much
+the equation to find :math:`\hat{\mathbf v}` given :math:`\beta_i` is much
 more complicated than for barycentric coordinates. Let
 :math:`h_i = \sin\Omega_i\left(1+\mathbf v_{i-1}\cdot\mathbf v_{i+1}\right)`,
 and
@@ -87,12 +90,12 @@ interpreted as 1. Then
 .. math::
    \mathbf h = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T
 
-such that :math:`\mathbf G \mathbf \hat{v} = \mathbf h` To clarify,
-:math:`\mathbf G` is the 3x3 matrix where the `i`th column is
+such that :math:`\mathbf G \hat{\mathbf v} = \mathbf h`. To clarify,
+:math:`\mathbf G` is the 3x3 matrix where the ith column is
 :math:`\mathbf g_i`, and :math:`\mathbf h` is the column vector where the
-`i`th element is :math:`h_i`. The vector :math:`\mathbf \hat{v}` can be solved for
-using standard matrix methods. (This mess can be derived from the formula
-for solid angle in the appendix.)
+ith element is :math:`h_i`. The vector :math:`\hat{\mathbf v}` 
+can be solved for using standard matrix methods. 
+(This mess can be derived from the formula for solid angle in the appendix.)
 
 Naive Slerp
 -----------
@@ -110,39 +113,44 @@ name. The Naive Slerp methods reduce to slerp on the edges of the face.
 Let :math:`\cos(w) = \mathbf v_i \cdot \mathbf v_{i+1}` for all :math:`i`. (As
 usual, the subscripts loop around.)
 
-Triangle:
-:math:`\mathbf v^* =
-\sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i`
+**Triangle:**
 
-Quadrilateral 1:
-:math:`\mathbf v^* =
-\sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)}  \mathbf v_i`
-where
-:math:`\gamma_1 = (1-x)(1-y)`,
-:math:`\gamma_2 = x(1-y)`,
-:math:`\gamma_3 = xy`,
-:math:`\gamma_4 = (1-x)y`
+.. math::
+   \mathbf v^* = \sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i
 
-Quadrilateral 2:
-:math:`\mathbf v^* = \sum_{i=1}^4\frac{s_i}{\sin^2(w)}  \mathbf v_i`
-where
-:math:`s_1 = \sin (w(1-x))\sin (w(1-y))`,
-:math:`s_2 = \sin (wx)\sin (w(1-y))`,
-:math:`s_3 = \sin (wx)\sin (wy)`,
-:math:`s_4 = \sin (w(1-x))\sin (wy)`
+**Quadrilateral 1:**
 
-Because the projected edges already lie on the sphere, there is a lot of
-freedom in how to adjust :math:`\mathbf v^*` to lie on the sphere.
-The easiest is just to centrally project the vertices, that is, to normalize
+.. math::
+   \mathbf v^* = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)} \mathbf v_i
+   
+* :math:`\gamma_1 = (1-x)(1-y)`,
+* :math:`\gamma_2 = x(1-y)`,
+* :math:`\gamma_3 = xy`,
+* :math:`\gamma_4 = (1-x)y`
+
+**Quadrilateral 2:**
+
+.. math::
+   \mathbf v^* = \sum_{i=1}^4\frac{s_i}{\sin^2(w)}  \mathbf v_i
+   
+* :math:`s_1 = \sin (w(1-x))\sin (w(1-y))`,
+* :math:`s_2 = \sin (wx)\sin (w(1-y))`,
+* :math:`s_3 = \sin (wx)\sin (wy)`,
+* :math:`s_4 = \sin (w(1-x))\sin (wy)`
+
+Because the projected edges already lie on the sphere, there is a lot of 
+freedom in how to adjust :math:`\mathbf v^*` to lie on the sphere. The 
+easiest is just to centrally project the vertices, that is, to normalize 
 :math:`\mathbf v^*` like we have been. Another option is to perform a parallel
 projection along the face normal. (See appendix for a formula for the "normal"
 to a skew face.) We need the parallel distance `p` from the vertex to the
-sphere surface in the direction of the face normal \mathbf \hat{n}, such that
-:math:`\mathbf \hat v = \mathbf v^* + p\mathbf \hat{n}`. That is given by:
+sphere surface in the direction of the face normal :math:`\hat{\mathbf n}`, 
+such that :math:`\hat{\mathbf v} = \mathbf v^* + p\hat{\mathbf n}`. 
+`p` is given by:
 
 .. math::
-   p = -\mathbf v^* \cdot \mathbf \hat{n} +
-   \sqrt{1+\mathbf v^* \cdot \mathbf \hat{n}-\mathbf v^* \cdot \mathbf v^*}
+   p = -\mathbf v^* \cdot \hat{\mathbf n} +
+   \sqrt{1+\mathbf v^* \cdot \hat{\mathbf n}-\mathbf v^* \cdot \mathbf v^*}
 
 `p` can also be approximated as :math:`\widetilde{p} = 1 - \|\mathbf v^*\|
 \leq p`, which is somewhat fewer operations and doesn't require
@@ -152,13 +160,17 @@ Sometimes the best polyhedron comes from a compromise of the central and
 parallel projections. Choose a constant `k`, typically between 0 and 1, then:
 
 .. math::
-   \mathbf \hat v = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
+   \hat{\mathbf v} = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
 
 `p` may be replaced by :math:`\widetilde{p}`. 
 
 If our goal is to optimize a measurement of the polyhedron, we can do a 
 1-variable optimization on `k`, which is usually more tractable than 
 the multivariate optimization of the location of every vertex.
+
+(Technically, you can project in almost any direction, not just that of
+the face normal, but most other choices don't produce anything remotely
+symmetric.)
 
 Great circle intersection
 -------------------------
@@ -185,7 +197,7 @@ The intersection of two planes is a line: the intersection of two great
 circles is two antipodal points. We need to choose the point on the correct
 side of the sphere. Let :math:`\mathbf{c}` be the centroid of the face: then
 :math:`\mathbf{v}` is on the right side of the sphere if :math:`\mathbf{v}
-\dot \mathbf{c} >0`. If not, just multiply :math:`\mathbf{v}` times -1 to put
+\cdot \mathbf{c} >0`. If not, just multiply :math:`\mathbf{v}` times -1 to put
 it on the right side.
 
 For quad faces, there are only two intersecting great
@@ -259,10 +271,10 @@ a simple method like Gnomonic.
 smallest class I operator that can be decomposed into the desired operator
 and some other factor. Effectively, given :math:`\Delta(a,b)`, it finds the
 smallest `n` such that :math:`\Delta(a,b)\Delta(c,d) = \Delta(n,0)` for some
-`c` and `d`. That is given by :math:`n = \frac{t(a,b)}{\hcf{a,b}}`,
-where hcf is the highest common factor. It calculates :math:`\Delta(n,0)` using
-method 2 and then uses the vertices from that that are shared with
-:math:`\Delta(a,b)`.
+`c` and `d`. That is given by :math:`n = \frac{t(a,b)}{\gcd(a,b)}`,
+where `gcd` is the greatest common divisor. 
+It calculates :math:`\Delta(n,0)` using method 2 and then uses the 
+vertices from that that are shared with :math:`\Delta(a,b)`.
 
 Skew faces
 ----------
@@ -315,13 +327,13 @@ out the winner, but some patterns emerge:
 * Spherical areal performs well for certain measures on large faces, 
   e.g. edge length ratio and face area for the tetrahedron
 * No method (aside from canonicalization) consistently creates all 
-  quadrilateral faces with 0 bentness.
+  perfectly planar quadrilateral faces.
   
 Due to symmetry, all methods produce the same results for parameters (1,0), 
 (1,1), and (2,0). With :math:`\Delta(3,0)`, gc and naive slerp (with any k 
 value) produce the same results.
   
-[Altschuler]_ suggests (although doesn't prove) that the closer a geodesic
+[Altschuler]_ conjectures that the closer a geodesic
 sphere is to being class I, the lower its Thomson energy will be. This seems
 to be the case for most other measurements: Class I operations produces lower 
 Thomson energy, edge length ratios, differences in aspect ratio, 

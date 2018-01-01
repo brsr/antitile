@@ -85,7 +85,7 @@ the zero element): all associated elements belong to the same equivalence
 class. The "normal element" is the preferred label :math:`x` for that
 equivalence class.
 
-All three of these domains are Euclidean domains. That means that all non-zero
+Both these domains are Euclidean domains. That means that all non-zero
 elements have a unique factorization into prime elements and units, and
 what's more, they can be factored using an extension of the Euclidean
 division algorithm on the natural integers. A prime element can only be
@@ -134,9 +134,9 @@ where defined, they cause no change to the subdivision.
 
 In the terminology of geodesic domes,
 
-- Class I operators have :math:`b=0`.
-- Class II operators have :math:`b=a`.
-- Class III operators are all others, and occur in chiral pairs.
+- **Class I** operators have :math:`b=0`.
+- **Class II** operators have :math:`b=a`.
+- **Class III** operators are all others, and occur in chiral pairs.
   :math:`\Delta(a,b)` is the chiral pair of :math:`\Delta(b,a)`, and the same
   for :math:`\Box(a,b)` and :math:`\Box(b,a)`.
 
