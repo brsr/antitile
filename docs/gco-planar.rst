@@ -64,14 +64,19 @@ The relationship between the two is simple: :math:`a + b w = a - b + bu`.
    * - Divisor `t` for prime test
      - 4
      - 3
+   * - Class sine
+     - :math:`C = \sin^2(2\theta) = \frac{4a^2b^2}{(a^2+b^2)^2}
+       = -\frac{(x^2-x^2)^2}{4|x|^4}`
+     - :math:`C = \sin^2(3\theta) = \frac{27a^2b^2(a+b)^2}{4(a^2+ab+b^2)^3}
+       = -\frac{(x^3-x^3)^2}{4|x|^6}`
    * - Master polygon vertices
      - 0, :math:`x`, :math:`x(1+i)`, :math:`xi`
      - 0, :math:`x`, :math:`xu`
    * - Master polygon center
      - :math:`x\frac{1+i}{2}`
      - :math:`x\frac{1+u}{3}`
-   * - Example master polygon (3,2) construction 
-       (center marked with white circle) 
+   * - Example master polygon (3,2) construction
+       (center marked with white circle)
      - .. image:: 3_2_on_square_grid.svg
      - .. image:: 3_2_on_tri_grid.svg
 
@@ -143,6 +148,11 @@ In the terminology of geodesic domes,
 - **Class III** operators are all others, and occur in chiral pairs.
   :math:`\Delta(a,b)` is the chiral pair of :math:`\Delta(b,a)`, and the same
   for :math:`\Box(a,b)` and :math:`\Box(b,a)`.
+
+Here we also introduce the ''class sine'', to have a smooth measure of
+how much like a class I or class II operator a given operator is. If an
+operator is Class I, :math:`C=0`; if Class II, :math:`C=1`, and Class III
+is in between.
 
 Chiral pairs correspond to conjugation of the complex number :math:`a+bi` or
 :math:`a+bu`. That is, there exists some unit z such that

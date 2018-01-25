@@ -9,7 +9,7 @@ might not cover every method ever written, but it expresses the major
 methods in analytic form and introduces a couple new ones.
 
 In this section, we'll use :math:`\mathbf v^*` to denote a pre-normalized
-vector: 
+vector:
 
 .. math::
    \hat{\mathbf v} = \frac{\mathbf{v}^*}{\|\mathbf{v}^*\|}
@@ -54,9 +54,9 @@ where :math:`\beta_i` are (planar) barycentric coordinates and :math:`x,y` are
 x-y quadrilateral coordinates.
 
 The case of barycentric coordinates can be thought of as generalized
-barycentric coordinates, where :math:`\mathbf v = 
-\sum\beta^\prime_i\mathbf v_i` still holds but :math:`\sum \beta^\prime_i` 
-is not necessarily `=1`. If the generalized coordinates are 
+barycentric coordinates, where :math:`\mathbf v =
+\sum\beta^\prime_i\mathbf v_i` still holds but :math:`\sum \beta^\prime_i`
+is not necessarily `=1`. If the generalized coordinates are
 :math:`\beta^\prime_i`, then :math:`\beta^\prime_i = \frac{\beta_1}
 {\beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3}`. On the
 interior of the triangle, :math:`\sum \beta^\prime_i > 1`.
@@ -93,8 +93,8 @@ interpreted as 1. Then
 such that :math:`\mathbf G \hat{\mathbf v} = \mathbf h`. To clarify,
 :math:`\mathbf G` is the 3x3 matrix where the ith column is
 :math:`\mathbf g_i`, and :math:`\mathbf h` is the column vector where the
-ith element is :math:`h_i`. The vector :math:`\hat{\mathbf v}` 
-can be solved for using standard matrix methods. 
+ith element is :math:`h_i`. The vector :math:`\hat{\mathbf v}`
+can be solved for using standard matrix methods.
 (This mess can be derived from the formula for solid angle in the appendix.)
 
 Naive Slerp
@@ -122,7 +122,7 @@ usual, the subscripts loop around.)
 
 .. math::
    \mathbf v^* = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)} \mathbf v_i
-   
+
 * :math:`\gamma_1 = (1-x)(1-y)`,
 * :math:`\gamma_2 = x(1-y)`,
 * :math:`\gamma_3 = xy`,
@@ -132,20 +132,20 @@ usual, the subscripts loop around.)
 
 .. math::
    \mathbf v^* = \sum_{i=1}^4\frac{s_i}{\sin^2(w)}  \mathbf v_i
-   
+
 * :math:`s_1 = \sin (w(1-x))\sin (w(1-y))`,
 * :math:`s_2 = \sin (wx)\sin (w(1-y))`,
 * :math:`s_3 = \sin (wx)\sin (wy)`,
 * :math:`s_4 = \sin (w(1-x))\sin (wy)`
 
-Because the projected edges already lie on the sphere, there is a lot of 
-freedom in how to adjust :math:`\mathbf v^*` to lie on the sphere. The 
-easiest is just to centrally project the vertices, that is, to normalize 
+Because the projected edges already lie on the sphere, there is a lot of
+freedom in how to adjust :math:`\mathbf v^*` to lie on the sphere. The
+easiest is just to centrally project the vertices, that is, to normalize
 :math:`\mathbf v^*` like we have been. Another option is to perform a parallel
 projection along the face normal. (See appendix for a formula for the "normal"
 to a skew face.) We need the parallel distance `p` from the vertex to the
-sphere surface in the direction of the face normal :math:`\hat{\mathbf n}`, 
-such that :math:`\hat{\mathbf v} = \mathbf v^* + p\hat{\mathbf n}`. 
+sphere surface in the direction of the face normal :math:`\hat{\mathbf n}`,
+such that :math:`\hat{\mathbf v} = \mathbf v^* + p\hat{\mathbf n}`.
 `p` is given by:
 
 .. math::
@@ -162,10 +162,10 @@ parallel projections. Choose a constant `k`, typically between 0 and 1, then:
 .. math::
    \hat{\mathbf v} = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
 
-`p` may be replaced by :math:`\widetilde{p}`. 
+`p` may be replaced by :math:`\widetilde{p}`.
 
-If our goal is to optimize a measurement of the polyhedron, we can do a 
-1-variable optimization on `k`, which is usually more tractable than 
+If our goal is to optimize a measurement of the polyhedron, we can do a
+1-variable optimization on `k`, which is usually more tractable than
 the multivariate optimization of the location of every vertex.
 
 (Technically, you can project in almost any direction, not just that of
@@ -272,8 +272,8 @@ smallest class I operator that can be decomposed into the desired operator
 and some other factor. Effectively, given :math:`\Delta(a,b)`, it finds the
 smallest `n` such that :math:`\Delta(a,b)\Delta(c,d) = \Delta(n,0)` for some
 `c` and `d`. That is given by :math:`n = \frac{t(a,b)}{\gcd(a,b)}`,
-where `gcd` is the greatest common divisor. 
-It calculates :math:`\Delta(n,0)` using method 2 and then uses the 
+where `gcd` is the greatest common divisor.
+It calculates :math:`\Delta(n,0)` using method 2 and then uses the
 vertices from that that are shared with :math:`\Delta(a,b)`.
 
 Skew faces
@@ -302,12 +302,12 @@ Choosing a method
 -----------------
 Which method is better depends on your criteria. If your only criteria is
 speed, gnomonic is the simplest and fastest to run, and produces reasonable
-results on typical cases like the icosahedron and cube. 
+results on typical cases like the icosahedron and cube.
 
-A common criteria is to have a polyhedron that minimizes some measure of 
+A common criteria is to have a polyhedron that minimizes some measure of
 deviation. That could be a number of things:
 
-* Thomson energy	
+* Thomson energy
 * Edge length (spherical or euclidean)
 * Aspect ratio for each face (spherical or euclidean)
 * Face area (spherical or euclidean, only well-defined for non-skew faces)
@@ -316,32 +316,53 @@ deviation. That could be a number of things:
 Often the objective will be to minimize either the maximum value or the ratio
 of maximum to minimum values. This package includes, in the ``data`` directory,
 a csv file containing measurements of polyhedra produced by GC operations
-on the icosahedron, octahedron, tetrahedron, and cube. No method always comes 
+on the icosahedron, octahedron, tetrahedron, and cube. No method always comes
 out the winner, but some patterns emerge:
 
 * Gnomonic doesn't ourperform any other method (except on speed)
-* Naive slerp often outperforms all other methods. This is true when the 
-  k-factor is fixed at 1 and moreso when k-factor is optimized
+* Naive slerp often outperforms all other methods. This is true when the
+  k-factor is fixed at 1 and moreso when k-factor is optimized.
+* For Class I grids, all methods except Gnomonic and Areal produce optimal
+  edge lengths on reasonably small faces.
+* Great circle works very well for Class I grids, especially with the tweak
+  mentioned above.
 * On quad faces, the first Naive Slerp generally outperforms the second.
 * ``geodesic`` in Antiprism performs well with regards to edge length ratio.
-* Spherical areal performs well for certain measures on large faces, 
+* Spherical areal performs well for certain measures on large faces,
   e.g. edge length ratio and face area for the tetrahedron
-* No method (aside from canonicalization) consistently creates all 
+* No method (aside from canonicalization) consistently creates all
   perfectly planar quadrilateral faces.
-  
-Due to symmetry, all methods produce the same results for parameters (1,0), 
-(1,1), and (2,0). With :math:`\Delta(3,0)`, gc and naive slerp (with any k 
-value) produce the same results.
-  
-[Altschuler]_ conjectures that the closer a geodesic
-sphere is to being class I, the lower its Thomson energy will be. This seems
-to be the case for most other measurements: Class I operations produces lower 
-Thomson energy, edge length ratios, differences in aspect ratio, 
+
+Due to symmetry, all methods produce the same results for parameters (1,0),
+(1,1), and (2,0). With :math:`\Delta(3,0)`, great circle and naive slerp
+(with any k value) produce the same results.
+
+[Altschuler]_ conjectures that for a geodesic sphere is to being class I,
+the lower its Thomson energy will be. This seems to be true for most other
+measurements, and quadrilateral faces: given GC operators with the same norm,
+the operators with the lower class sine seem to produce lower
+Thomson energy, edge length ratios, differences in aspect ratio,
 face area ratios, and so forth.
 
-As a side note, often the geometries produced by the GC operation on a 
-triangle-faced seed are convex polyhedra. In that case, the stitching 
-operation outlined in the last section can be replaced with the operation of 
-taking the convex hull of vertices. Almost all GC operations on an icosahedron 
-or octahedron under all methods and reasonable values for `k` produce a 
-convex polyhedron. 
+To demonstrate, here is a table with metrics for :math:`\Delta(5,3)I` and
+:math:`\Delta(7,0)I` for a number of methods. Both have a T-value of 49, 492
+vertices, and 980 faces. `k` values other than 1 are chosen to optimize one of
+the metrics. E is the Thomson energy of the vertices: Eo = 115005.2559 is
+approximately the optimal Thomson energy for 492 vertices, found using
+``repel`` in Antiprism. "Edge ratio" is the length of longest edge divided by
+the smallest edge, minus one. "Face ratio" is the area of the largest face
+divided by the smallest face, minus one.
+
+.. csv-table:: Metrics on :math:`\Delta(5,3)I` and :math:`\Delta(7,0)I`
+               for various methods
+   :header-rows: 1
+   :file: icosahedron_T_49.csv
+
+Convexity
+---------
+As a side note, often the geometries produced by the GC operation on a
+triangle-faced seed are convex polyhedra. In that case, the stitching
+operation outlined in the last section can be replaced with the operation of
+taking the convex hull of vertices. Almost all GC operations on an icosahedron
+or octahedron under all methods and reasonable values for `k` produce a
+convex polyhedron.
