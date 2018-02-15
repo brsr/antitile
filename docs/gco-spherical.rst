@@ -87,7 +87,6 @@ interpreted as 1. Then
 .. math::
    \mathbf G = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix}
 
-.. math::
    \mathbf h = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T
 
 such that :math:`\mathbf G \hat{\mathbf v} = \mathbf h`. To clarify,
