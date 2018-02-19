@@ -17,30 +17,23 @@ Chamber structure
 -----------------
 .. figure:: Triangle_chambers.svg
    :align: right
-   :figwidth: image
+   :figwidth: 25%
 
    Chambers of a triangular face.
 
 .. figure:: edge_chambers.svg
    :align: right
-   :figwidth: image
+   :figwidth: 25%
 
-   Chamber structure of a Conway operator.
+   Chambers adjacent to an edge.
 
 [Brinkmann]_ observed that Conway operators can be described in terms of
 chambers. Each face may be divided into chambers by identifying the face center
-and drawing lines from there to each vertex and edge midpoint. The operator
-may then be specified by a structure within those chambers. Here
-we'll draw the chamber structure of an operator as in the figure to the right:
-
-* The two nodes on the left and right are vertices of the seed.
-* The blue line from left to right is an edge of the seed.
-* The two nodes on the top and bottom are face centers of the seed.
-* The contents of the white and grey chambers are the same, rotated.
-
-If an operator is achiral, the grey chamber is a reflection of the adjacent
-white chamber. Technically we only need the upper-left white chamber for
-achiral operators or the upper white and grey chambers for chiral operators,
+and drawing lines from there to each vertex and edge midpoint.
+The operator may then be specified by a structure within those chambers. If an
+operator is achiral, the grey chamber is a reflection of the adjacent white
+chamber. Technically we only need the upper-left white chamber for achiral
+operators or the upper white and grey chambers for chiral operators,
 but showing both sides of the edge will make things easier later on.
 
 There is some freedom in where vertices are placed within the chambers.
@@ -107,3 +100,30 @@ dealing with digons and order-2 vertices
 
 Table of values
 ---------------
+
+======== ==== = ======= = = = == == == ==== === === ===
+Operator g    a b       c x y b3 b4 b6 b'3  b'4 b'5 b'6
+======== ==== = ======= = = = == == == ==== === === ===
+S        1    1 0       0 1 1
+d        1    0 0       1 1 1
+j        2    1 0       1 1 1               1
+k        3    1 0       1 2 1          2
+g        5    1 2       1 1 1 2                 2
+p        5    1 2       0 1 1    2          2
+c        4    1 2       0 1 1 2                     1
+l        5    1 2       0 2 1 2             2
+q        6    1 3       0 1 1 2  1              2
+K0       6    1 2       1 2 1 2             3
+K        7    1 2       1 3 1 2        2    2
+L0       6    1 2       0 2 1    2     2    1
+L        7    1 2       0 3 1    2     4
+w        7    1 4       0 1 1 4                     2
+(kk)0    8    1 2       1 3 2 2        1    4
+X        10   1 3       1 2 2    2  1  4    2
+m        3n+3 1 n       1 2 n    n     2n+2
+M        3n+1 1 n       1 1 n    n     2n-2 2
+Δ even   T    1 T/3-1   1 1 1       b  b'
+Δ odd    T    1 (T-1)/3 0 1 1       b  b'
+☐ even   T    1 T/2-1   1 1 1    b          b'
+☐ odd    T    1 (T-1)/2 0 1 1    b          b'
+======== ==== = ======= = = = == == == ==== === === ===
