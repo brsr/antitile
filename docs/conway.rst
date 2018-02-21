@@ -80,7 +80,13 @@ A more elaborate representation is as an infinite linear operator. Let `e` and
 
 where :math:`\sum b_i = b`, :math:`\sum b'_i = b'`, all :math:`b_i` and
 :math:`b'_i` are nonnegative integers, and x and y are positive integers. The
-subscripts `i/x` should be interpreted as 0 if i/x is not an integer.
+subscripts `i/x` should be interpreted as 0 if `i/x` is not an integer.
+
+.. image:: edge_chambers_bowtie.svg
+   :alt:   Chambers of the bowtie operator (B)
+
+.. image:: edge_chambers_waffle.svg
+   :alt:   Chambers of the waffle operator (W)
 
 Relation to the Goldberg-Coxeter operation
 ------------------------------------------
@@ -101,29 +107,31 @@ dealing with digons and order-2 vertices
 Table of values
 ---------------
 
-======== ==== = ======= = = = == == == ==== === === ===
-Operator g    a b       c x y b3 b4 b6 b'3  b'4 b'5 b'6
-======== ==== = ======= = = = == == == ==== === === ===
-S        1    1 0       0 1 1
-d        1    0 0       1 1 1
-j        2    1 0       1 1 1               1
-k        3    1 0       1 2 1          2
-g        5    1 2       1 1 1 2                 2
-p        5    1 2       0 1 1    2          2
-c        4    1 2       0 1 1 2                     1
-l        5    1 2       0 2 1 2             2
-q        6    1 3       0 1 1 2  1              2
-K0       6    1 2       1 2 1 2             3
-K        7    1 2       1 3 1 2        2    2
-L0       6    1 2       0 2 1    2     2    1
-L        7    1 2       0 3 1    2     4
-w        7    1 4       0 1 1 4                     2
-(kk)0    8    1 2       1 3 2 2        1    4
-X        10   1 3       1 2 2    2  1  4    2
-m        3n+3 1 n       1 2 n    n     2n+2
-M        3n+1 1 n       1 1 n    n     2n-2 2
-Δ even   T    1 T/3-1   1 1 1       b  b'
-Δ odd    T    1 (T-1)/3 0 1 1       b  b'
-☐ even   T    1 T/2-1   1 1 1    b          b'
-☐ odd    T    1 (T-1)/2 0 1 1    b          b'
-======== ==== = ======= = = = == == == ==== === === ===
+======== ============ = =============== = = = ================================
+Operator g            a b               c x y :math:`b_i` & :math:`b'_i`
+======== ============ = =============== = = = ================================
+S        1            1 0               0 1 1
+d        1            0 0               1 1 1
+j        2            1 0               1 1 1 :math:`b'_4=1`
+k        3            1 0               1 2 1 :math:`b'_3=2`
+g        5            1 2               1 1 1 :math:`b_3=2, b'_5=2`
+p        5            1 2               0 1 1 :math:`b_4=2, b'_4=2`
+c        4            1 2               0 1 1 :math:`b_3=2, b'_6=1`
+l        5            1 2               0 2 1 :math:`b_3=2, b'_4=2`
+q        6            1 3               0 1 1 :math:`b_3=2, b_4=1, b'_5=2`
+K0       6            1 2               1 2 1 :math:`b_3=2, b'_4=3`
+K        7            1 2               1 3 1 :math:`b_3=2, b'_3=2, b'_4=2`
+L0       6            1 2               0 2 1 :math:`b_4=2, b'_3=2, b'_4=1`
+L        7            1 2               0 3 1 :math:`b_4=2, b'_3=4`
+w        7            1 4               0 1 1 :math:`b_3=4, b'_6=2`
+J=(kk)0  8            1 2               1 3 2 :math:`b_3=2, b'_3=1, b'_4=4`
+X        10           1 3               1 2 2 :math:`b_4=2, b_6=1, b'_3=4, b'_4=2`
+m        :math:`3n+3` 1 `n`             1 2 n :math:`b_4=n, b'_3=2n+2`
+M        :math:`3n+1` 1 `n`             1 1 n :math:`b_4=n, b'_3=2n-2, b'_4=2`
+Δ even   `T`          1 :math:`T/3-1`   1 1 1 :math:`b_6=b, b'_3=b'`
+Δ odd    `T`          1 :math:`(T-1)/3` 0 1 1 :math:`b_6=b, b'_3=b'`
+☐ even   `T`          1 :math:`T/2-1`   1 1 1 :math:`b_4=b, b'_4=b'`
+☐ odd    `T`          1 :math:`(T-1)/2` 0 1 1 :math:`b_4=b'_4=b`
+Waffle   9            1 4               1 1 1 :math:`b_3=2, b_4=2, b'_4=2, b'_5=2`
+Bowtie   10           1 5               1 1 1 :math:`b_3=4, b_4=1, b'_3=2, b'_7=2`
+======== ============ = =============== = = = ================================

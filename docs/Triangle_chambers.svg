@@ -2,7 +2,15 @@
 <svg width="176" height="155"
 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <polygon points="88,10 166,145 10,145" fill="white" stroke="black" />
-<polygon points="88,10 88,100 127,78" fill="lightgrey" stroke="black" />
-<polygon points="166,145 88,100 88,145" fill="lightgrey" stroke="black" />
-<polygon points="10,145 88,100 49,78" fill="lightgrey" stroke="black" />
+<polygon points="88,10 88,100 127,78" fill="lightgrey" stroke="none" />
+<polygon points="166,145 88,100 88,145" fill="lightgrey" stroke="none" />
+<polygon points="10,145 88,100 49,78" fill="lightgrey" stroke="none" />
+<polygon points="88,10 166,145 10,145" fill="none" stroke="black" stroke-width="2"/>
+<line x1="88" y1="100" x2="88" y2="10" stroke="blue"/>
+<line x1="88" y1="100" x2="166" y2="145" stroke="blue"/>
+<line x1="88" y1="100" x2="10" y2="145" stroke="blue"/>
+<circle cx="88" cy="100" r="5" fill="white" stroke="blue"/>
+<circle cx="88" cy="10" r="5" fill="black" stroke="black"/>
+<circle cx="166" cy="145" r="5" fill="black" stroke="black"/>
+<circle cx="10" cy="145" r="5" fill="black" stroke="black"/>
 </svg>
