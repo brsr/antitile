@@ -3,21 +3,14 @@
 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <polygon points="100,10 10,100, 100,190 190,100" fill="white" stroke="none"/>
 <polygon points="100,10 100,190 10,100 190,100" fill="lightgrey" stroke="none"/>
-<polygon points="100,10 10,100, 100,190 190,100" fill="none" stroke="black" stroke-width="2"/>
-<line x1="10" y1="100" x2="190" y2="100" stroke="blue"/>
-<line x1="70" y1="100" x2="130" y2="100" stroke="black" stroke-width="2"/>
-
-<path d="M 50,60 70,100 50,140" fill="none" stroke="black" stroke-width="2"/>
-<path d="M 150,60 130,100 150,140" fill="none" stroke="black" stroke-width="2"/>
-
+<polygon points="100,10 10,100, 100,190 190,100" fill="none" stroke="blue"/>
+<line x1="10" y1="100" x2="190" y2="100" stroke="black" stroke-width="2"/>
+<line x1="70" y1="100" x2="100" y2="190" stroke="black" stroke-width="2"/>
+<line x1="130" y1="100" x2="100" y2="10" stroke="black" stroke-width="2"/>
 <circle cx="100" cy="10" r="5" fill="black" stroke="black"/>
 <circle cx="100" cy="190" r="5" fill="black" stroke="black"/>
 <circle cx="10" cy="100" r="5" fill="black" stroke="black"/>
-<circle cx="50" cy="60" r="5" fill="black" stroke="black"/>
 <circle cx="70" cy="100" r="5" fill="black" stroke="black"/>
-<circle cx="50" cy="140" r="5" fill="black" stroke="black"/>
-<circle cx="150" cy="60" r="5" fill="black" stroke="black"/>
 <circle cx="130" cy="100" r="5" fill="black" stroke="black"/>
-<circle cx="150" cy="140" r="5" fill="black" stroke="black"/>
 <circle cx="190" cy="100" r="5" fill="black" stroke="black"/>
 </svg>

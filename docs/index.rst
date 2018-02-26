@@ -2,8 +2,7 @@ Welcome to antitile's documentation!
 ====================================
 
 Antitile is a package for manipulation of polyhedra and tilings using Python.
-It is designed to work with `Antiprism
-<https://github.com/antiprism/antiprism>`_ but can be used on its own.
+It is designed to work with [Antiprism]_ but can be used on its own.
 
 The bulk of this package pertains to Goldberg-Coxeter operations, as described
 in its own section.
@@ -27,6 +26,8 @@ Indices and tables
 
 .. rubric:: References
 
+.. [Antiprism] http://www.antiprism.com/
+.. [Polyhedronisme] http://levskaya.github.io/polyhedronisme/
 .. [Brinkmann] https://arxiv.org/abs/1705.02848
 .. [Deza2004] M. Deza and M. Dutour. Goldberg-Coxeter constructions for 3-
    and 4-valent plane graphs. The Electronic Journal of Combinatorics,
