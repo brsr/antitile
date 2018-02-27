@@ -30,65 +30,82 @@ an operator that preserves the base vertices, for consistency's sake.)
 
 An operator that cannot be expressed in terms of operators aside from `d` and
 `r` is "primitive". For instance, `k` (Kis) and `j` (Join) are primitive,
-but `m` (Meta) is not; it is equal to `kj`.
+but `m` (Meta) is not (it is equal to `kj`).
 
 Chamber structure
 -----------------
+.. _facechambers:
 .. figure:: Triangle_chambers.svg
    :align: right
    :figwidth: 25%
 
    Chambers of a triangular face.
 
+.. _edgechambers:
 .. figure:: edge_chambers.svg
    :align: right
    :figwidth: 25%
 
    Chambers adjacent to an edge.
 
-[Brinkmann]_ observed that Conway operators can be described in terms of
-chambers. Each face may be divided into chambers by identifying the face center
-and drawing lines from there to each vertex and edge midpoint.
-The operator may then be specified by a structure within those chambers. If an
+[Brinkmann]_ et al. observed that Conway operators can be described in terms
+of chambers. Each face may be divided into chambers by identifying the face
+center and drawing lines from there to each vertex and edge midpoint, as in
+:numref:`facechambers`. Similarly, each vertex of degree `n` is surrounded
+by `n` white and `n` grey chambers. Each edge has a white and grey chamber on
+each side of the edge, as shown in :numref:`edgechambers`.
+
+The operator may then be specified by a structure of vertices and edges within
+those chambers, possibly with edges crossing from one edge to another. If an
 operator is achiral, the grey chamber is a reflection of the adjacent white
-chamber. Technically we only need the upper-left white chamber for achiral
-operators or the upper white and grey chambers for chiral operators,
+chamber. A list of operators with their chamber structures is listed at the
+end of this text. In this text, we show the two chambers adjacent to each
+side of a seed edge. Technically we only need the upper-left white chamber for
+achiral operators or the upper white and grey chambers for chiral operators,
 but showing both sides of the edge will make things easier later on.
 
 There is some freedom in where vertices are placed within the chambers.
 This is more apparent with chiral operators. Often the operator is drawn
 so that most of the vertices lie on the seed edge, but this is not necessary.
-For instance, the image on the left is a chamber diagram for how George Hart
+For instance, :numref:`propeller` is a chamber diagram for how George Hart
 originally drew his propeller operator (see [HartPropeller]_),
-but the image on the right is topologically
+but :numref:`propellersq` is topologically
 equivalent and emphasizes the operator's relationship with a square grid.
 
-.. image:: edge_chambers_propeller.svg
+.. _propeller:
+.. figure:: edge_chambers_propeller.svg
+   :align: center
 
-.. image:: edge_chambers_propeller-square_grid.svg
+   George Hart's drawing of the chambers for the operator `p` (Propeller)
+
+.. _propellersq:
+.. figure:: edge_chambers_propeller-square_grid.svg
+   :align: center
+
+   Grid drawing of the chambers for the operator `p` (Propeller)
 
 Operators on counts
 -------------------
-When `x` is the operator, :math:`[v,e,f]` are the vertices, edges, and faces of
-the seed, and :math:`[v',e',f']` are the vertices, edges, and faces of the
-result, then :math:`[v',e',f'] = \mathbf{M}_x [v,e,f]`.
+In abstract algebraic terms, Conway operators form a monoid: a group without
+an inverse, or a semigroup with an identity element. Let :math:`[v,e,f]` be
+the count of vertices, edges, and faces of the seed, and :math:`v_i` and
+:math:`f_i` be the count of vertices/faces of order `i` such that
+:math:`\sum v_i = v` and :math:`\sum f_i = f`. There is a series of monoids and
+homomorphisms between the monoids, as so:
 
-.. math::
-   \mathbf{M}_x = \begin{bmatrix}
-   a & b & c \\
-   0 & g & 0 \\
-   a' & b' & c' \end{bmatrix}
+* Conway operator `x` (acts on polyhedra)
+* Infinite-dimensional linear operator :math:`L_x` (acts on :math:`v_i, e, f_i`)
+* 3x3 matrix :math:`M_x` (acts on :math:`[v,e,f]`)
+* Eigenvalues of :math:`M_x`
 
-where a + a' = 1, c + c' = 1, and g= b + b' + 1, and a, a', b, b', c, and c'
-are all nonnegative integers. a, a', c, c' to be {0, 1}, and g is a positive
-integer.
+Each bullet will be handled in turn.
 
+The action of the operator on the vertices of degree `i`, edges, and faces with
+`i` sides can be described with an infinite linear operator :math:`L_x`. This
+operator can be determined by counting elements off the chamber structure.
 
-A more elaborate representation is as an infinite linear operator. Let `e` and
-`e'` be the count of edges before and after like above, but now :math:`v_i` and
-:math:`v'_i` are the count of vertexes of order `i` before and after, antipodal
-:math:`f_i` and :math:`f'_i` are the count of faces with `i` sides.
-:math:`\sum v_i = v`, and so on for the rest of these.
+The result of the above takes the following form.
+Variables marked with a prime are the result of the operator.
 
 .. math::
    e' &= ge
@@ -97,13 +114,43 @@ A more elaborate representation is as an infinite linear operator. Let `e` and
 
    f'_i &= a' v_{i/k} + e b'_i + c' f_{i/\ell}
 
-where :math:`\sum b_i = b`, :math:`\sum b'_i = b'`, all :math:`b_i` and
-:math:`b'_i` are nonnegative integers, and `k` and :math:`\ell` are positive
-integers. The subscripts `i/k` should be interpreted as
-0 if `i/k` is not an integer.
+where `a`, `a'`, `c`, and `c'` are in {0, 1}, g is a positive integer, all
+:math:`b_i` and :math:`b'_i` are nonnegative integers, and `k` and :math:`\ell`
+are positive integers. The subscripted values :math:`v_{i/k}` should be
+interpreted as 0 if `i/k` is not an integer.
+
+Under the constraint that the operator preserves the Euler characteristic,
+it can be shown that a + a' = 1, c + c' = 1, and g= b + b' + 1
+where :math:`\sum b_i = b` and :math:`\sum b'_i = b'`. Also, since :math:`b_i`
+and :math:`b'_i` are nonnegative integers that sum to a positive integer,
+only a finite number of their values can be non-zero.
+
+The matrix form :math:`M_x` can be obtained from :math:`L_x` by summing
+:math:`\sum v_i = v` and :math:`\sum f_i = f`, or from counting elements
+directly from the chamber structure without distinguishing between vertices and
+faces of different degrees. (The conversion from :math:`L_x` to :math:`M_x` is
+itself a linear operator.) The matrix takes the form:
+
+.. math::
+   \mathbf{M}_x = \begin{bmatrix}
+   a & b & c \\
+   0 & g & 0 \\
+   a' & b' & c' \end{bmatrix}
+
+This matrix has three eigenvalues: `1`, `g`, and `(a-c)`.
 
 Relation to the Goldberg-Coxeter operation
 ------------------------------------------
+
+Chirality
+---------
+The composition of a chiral operator and an achiral operator is always
+chiral, but:
+
+* Two chiral operators can produce an achiral operator: `prp`
+* Two chiral operators can produce a chiral operator: `pg`, `prg`
+
+The bowtie operator, where `rB = Bd`
 
 Extensions
 ----------

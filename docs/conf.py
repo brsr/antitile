@@ -114,6 +114,7 @@ html_sidebars = {
     ]
 }
 
+numfig = True
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -170,6 +171,3 @@ texinfo_documents = [
      author, 'antitile', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
