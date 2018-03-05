@@ -129,14 +129,14 @@ Count elements lying on or crossing the outer edge of the chamber structure as
 half. It may help to draw an adjacent chamber, particularly when determining
 the number of sides on a face. The result of the counting process can be
 described in the following operator form;
-variables marked with a prime are the result of the operator.
+variables in capital letters are the result of the operator.
 
 .. math::
-   e' &= ge
+   E &= ge
 
-   v'_i &= a v_{i/k} + e b_i + c f_{i/\ell}
+   V_i &= a v_{i/k} + e b_i + c f_{i/\ell}
 
-   f'_i &= a' v_{i/k} + e b'_i + c' f_{i/\ell}
+   F_i &= a' v_{i/k} + e b'_i + c' f_{i/\ell}
 
 where `a`, :math:`a'`, `c`, and :math:`c'` are either 0 or 1, `g` is a
 positive integer, all :math:`b_i` and :math:`b'_i` are nonnegative integers,
@@ -146,14 +146,29 @@ and `k` and :math:`\ell` are positive integers. The subscripted values like
 Under the constraint that the operator preserves the Euler characteristic,
 it can be shown that :math:`a + a' = 1`, :math:`c + c' = 1`, and
 :math:`g= b + b' + 1` where :math:`\sum b_i = b` and :math:`\sum b'_i = b'`.
-Also, since :math:`b_i` and :math:`b'_i` are nonnegative integers,
-only a finite number of their values can be non-zero. This makes the
-operator form more manageable than it appears at first glance.
+Also, since :math:`b_i` and :math:`b'_i` are nonnegative integers, only a
+finite number of their values can be non-zero. This makes the operator form
+more manageable than the term "infinite linear operator" may suggest; in
+reality, nearly all applications will only use a finite number of different
+vertex and face degrees.
 
-The dual operator :math:`L_d` has the form :math:`e' = e, v'_i = f_i,
-f_i = v_i`. With a little manipulation, it is easy to see that if :math:`L_x`
-has values `a`, :math:`b_i`, `c`, etc,
-then applications of the dual operator have related
+Applying the handshake lemma gives relations between the values:
+
+.. math::
+   2g &= 2ak + 2c\ell + \sum i b_i
+
+   4g &= 2k + 2\ell + \sum i (b_i + b'_i)
+
+If the polyhedron doesn't have degenerate features (e.g digons or degree-2
+vertices), :math:`i \ge 3`. Together with characteristics from above, a
+series of inequalities can be derived:
+
+.. math::
+   2k + 2\ell - 2 \le g + 1 \le 2a + 3b + 2c \le 2g
+
+The dual operator :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
+With a little manipulation, it is easy to see that if :math:`L_x` has values
+`a`, :math:`b_i`, `c`, etc, then applications of the dual operator have related
 forms. :math:`L_x L_d`'s values exchange `a` with `c`, :math:`a'` with
 :math:`c'`, and `k` with :math:`\ell`. :math:`L_d L_x`'s values exchange `a`
 with :math:`a'`, `c` with :math:`c'`, and each :math:`b_i` with each
@@ -207,6 +222,11 @@ operator has even parity, otherwise it has odd parity. Like multiplication of
 natural numbers, the composition of any operator with an even operator is
 even, and the composition of two odd operators is odd.
 
+For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
+`g` is the product of the `g`s for each operator, and the quantity `a-c` is
+the product of each operator's `a-c`. For the matrix form, composition is just
+the usual matrix multiplication: :math:`M_xy = M_x M_y`.
+
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
    :align: right
@@ -219,17 +239,16 @@ None of these homomorphisms are injections: there are certain
 Examples for :math:`M_x` are easy to come by: where `n = kd`, :math:`M_k = M_n`.
 For an example where the operators are not related by duality,
 :math:`M_l = M_p`. For :math:`L_x`, :math:`L_{prp} = L_{pp}` but `prp` is not
-the same as `pp` (one's chiral, one's not). For the
-operator depicted in :numref:`waffle`, :math:`L_W = L_{Wd}`. (This is a newly
-named operator, introduced in this text.)
+the same as `pp` (one's chiral, one's not). For the operator depicted in
+:numref:`waffle`, :math:`W \ne Wd`, but :math:`L_W = L_{Wd}`.
+(This is a newly named operator, introduced in this text.)
 
 Some further consequences of these representations:
 
 * If `x=xd`, the operator is even. If `x=dxd`, the operator is odd.
 * Operators where `g` is a prime number are primitive.
-* Since there are no odd operators with `g=2`, odd operators where `g=2p`,
-  where p is prime, are primitive. The same applies to odd operators with
-  `g=3p`.
+* There are no odd operators with `g=2`, so therefore odd operators
+  with `g=2p`, where p is prime, are primitive.
 
 Chirality
 ---------
