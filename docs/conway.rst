@@ -460,10 +460,10 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - .. image:: edge_chambers_join-kis-kis.svg
      - .. math::
           \begin{bmatrix}
-          1 & 2 & 0 \\
+          1 & 2 & 1 \\
           0 & 8 & 0 \\
-          0 & 5 & 1 \end{bmatrix}
-     - :math:`k=3`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=1`, :math:`b'_4=4`
+          0 & 5 & 0 \end{bmatrix}
+     - :math:`k=3`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=4`, :math:`b'_4=1`
      -
    * - :math:`X` (Cross)
      - N
@@ -472,8 +472,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           \begin{bmatrix}
           1 & 3 & 1 \\
           0 & 10 & 0 \\
-          0 & 6 & 1 \end{bmatrix}
-     - :math:`k=2`, :math:`\ell=2`, :math:`b_4=2`, :math:`b_6=1`, :math:`b'_3=4`, :math:`b'_4=2`
+          0 & 6 & 0 \end{bmatrix}
+     - :math:`k=2`, :math:`b_4=2`, :math:`b_6=1`, :math:`b'_3=4`, :math:`b'_4=2`
      -
    * - :math:`W` (Waffle) (New)
      - N
