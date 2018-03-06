@@ -157,7 +157,7 @@ Applying the handshake lemma gives relations between the values:
 .. math::
    2g &= 2ak + 2c\ell + \sum i b_i
 
-   4g &= 2k + 2\ell + \sum i (b_i + b'_i)
+   2g &= 2a'k + 2c'\ell + \sum i b'_i
 
 If the polyhedron doesn't have degenerate features (e.g digons or degree-2
 vertices), :math:`i \ge 3`. Together with characteristics from above, a
@@ -165,6 +165,10 @@ series of inequalities can be derived:
 
 .. math::
    2k + 2\ell - 2 \le g + 1 \le 2a + 3b + 2c \le 2g
+
+All these relations are necessary but not sufficient. The values :math:`g=3,
+a=1, c=0, k=1, \ell=1, b_4 = 1, b'_4=1` satisfy the relations, but do not appear
+to correspond to any Conway operator. (However, see the "Extensions" section.)
 
 The dual operator :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
 With a little manipulation, it is easy to see that if :math:`L_x` has values
@@ -223,9 +227,38 @@ natural numbers, the composition of any operator with an even operator is
 even, and the composition of two odd operators is odd.
 
 For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
-`g` is the product of the `g`s for each operator, and the quantity `a-c` is
-the product of each operator's `a-c`. For the matrix form, composition is just
-the usual matrix multiplication: :math:`M_xy = M_x M_y`.
+`g` is the product of the `g` values for each operator, and the quantity `a-c`
+is the product of each operator's `a-c`. For the matrix form, composition is
+just the usual matrix multiplication: :math:`M_xy = M_x M_y`. Explicitly, let
+:math:`g,a,b_i,b'_i,c,k,\ell` be the values for :math:`L_y`;
+:math:`G,A,B_i,B'_i,C,K,L` for :math:`L_x`; and
+:math:`\gamma,\alpha,\beta_i,\beta'_i,\sigma,\kappa,\lambda` for :math:`L_xy`:
+
+.. math::
+   \gamma &= Gg
+
+   \alpha &= Aa + Ca'
+
+   \beta_i &= A b_{i/K} + g B_i + C b'_{i/L}
+
+   \beta'_i &= A' b_{i/K} + g B'_i + C' b'_{i/L}
+
+   \sigma &= Ac + Cc'
+
+.. math::
+   \kappa &= \left\{
+    \begin{array}{ll}
+      kK & if a=1\\
+      kL & if a=0
+    \end{array}
+   \right.
+
+   \lambda &= \left\{
+    \begin{array}{ll}
+      \ell K & if c=1\\
+      \ell L & if c=0
+    \end{array}
+   \right.
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
