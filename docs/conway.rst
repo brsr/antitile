@@ -166,8 +166,9 @@ series of inequalities can be derived:
 .. math::
    2k + 2\ell - 2 \le g + 1 \le 2a + 3b + 2c \le 2g
 
-All these relations are necessary but not sufficient. The values :math:`g=3,
-a=1, c=0, k=1, \ell=1, b_4 = 1, b'_4=1` satisfy the relations, but do not appear
+All these relations taken together  are necessary but not sufficient. The values
+:math:`g=3`, :math:`a=1`, :math:`c=0`, :math:`k=1`, :math:`\ell=1`,
+:math:`b_4=1`, :math:`b'_4=1` satisfy the relations, but do not appear
 to correspond to any Conway operator. (However, see the "Extensions" section.)
 
 The dual operator :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
@@ -220,19 +221,20 @@ The matrix :math:`M_x` has three eigenvalues: `1`, `g`, and `(a-c)`. Thus, its
 determinant is `g(a-c)`. The first eigenvalue is constant and the second is the
 edge multiplier defined earlier. The third is either equal to -1, 0, or 1.
 The dual operator interchanges -1 and 1, which gives some motivation to using
-operators with `a=1` as the representative operators over those with `a=0`.
-Operators can be thought of as having a parity based on `a` and `c`: if a=c, the
-operator has even parity, otherwise it has odd parity. Like multiplication of
-natural numbers, the composition of any operator with an even operator is
+operators with `a=1` as the representative operators over those with `a=-1`.
+Operators can be thought of as having a parity based on `a` and `c`: if `a=c`,
+the operator has even parity, otherwise it has odd parity. Like multiplication
+of natural numbers, the composition of any operator with an even operator is
 even, and the composition of two odd operators is odd.
 
 For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
-`g` is the product of the `g` values for each operator, and the quantity `a-c`
-is the product of each operator's `a-c`. For the matrix form, composition is
-just the usual matrix multiplication: :math:`M_xy = M_x M_y`. Explicitly, let
-:math:`g,a,b_i,b'_i,c,k,\ell` be the values for :math:`L_y`;
-:math:`G,A,B_i,B'_i,C,K,L` for :math:`L_x`; and
-:math:`\gamma,\alpha,\beta_i,\beta'_i,\sigma,\kappa,\lambda` for :math:`L_xy`:
+`g` is the product of the `g` values for each operator, and the quantity `(a-c)`
+is the product of each operator's `(a-c)`. For the matrix form, composition is
+just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`. Explicitly, let
+:math:`g, a, b_i, b'_i, c, k, \ell` be the values for :math:`L_y`;
+:math:`G, A, B_i, B'_i, C, K, L` for :math:`L_x`; and
+:math:`\gamma, \alpha, \beta_i, \beta'_i, \sigma, \kappa, \lambda`
+for :math:`L_{xy}`:
 
 .. math::
    \gamma &= Gg
@@ -248,15 +250,15 @@ just the usual matrix multiplication: :math:`M_xy = M_x M_y`. Explicitly, let
 .. math::
    \kappa &= \left\{
     \begin{array}{ll}
-      kK & if a=1\\
-      kL & if a=0
+      Kk & if a=1\\
+      Lk & if a=0
     \end{array}
    \right.
 
    \lambda &= \left\{
     \begin{array}{ll}
-      \ell K & if c=1\\
-      \ell L & if c=0
+      K \ell & if c=1\\
+      L \ell & if c=0
     \end{array}
    \right.
 
@@ -285,19 +287,19 @@ Some further consequences of these representations:
 
 Chirality
 ---------
-It may be possible to introduce another invariant into these operators and
-distinguish operators not discerned by :math:`L_x` or :math:`M_x`. The most
-desirable may be a measure for chirality; in theory that would distinguish,
-e.g. `pp` vs `prp`. However, this does not appear as simple as assigning
-achiral operators to 0 and :math:`\pm 1` to chiral operators. The composition
-of a chiral operator and an achiral operator is always chiral, but:
-
 .. _bowtie:
 .. figure:: edge_chambers_bowtie.svg
    :align: right
    :figwidth: 25%
 
    The bowtie operator (B)
+
+It may be possible to introduce another invariant into these operators and
+distinguish operators not discerned by :math:`L_x` or :math:`M_x`. The most
+desirable may be a measure for chirality; in theory that would distinguish,
+e.g. `pp` vs `prp`. However, this does not appear as simple as assigning
+achiral operators to 0 and :math:`\pm 1` to chiral operators. The composition
+of a chiral operator and an achiral operator is always chiral, but:
 
 * Two chiral operators can produce an achiral operator: `prp`
 * Two chiral operators can produce a chiral operator: `pp`, `pg`, `prg`
@@ -314,24 +316,25 @@ operator. In the master polygon, identify two vertices and the center: this is
 the chamber structure of the operator.
 
 Many of the named Conway operators are GC operations, or related by duality.
-GC operators are also a good source of examples; in a 2-parameter family, it's
-often easy to find an operator with a desired quality. GC operators are
-characterized by a "trianglation number" `T`, and it turns out this
-is identical to the Conway operator edge factor `g`.
+GC operators are also a good source of examples; in the 2-parameter families,
+it's often easy to find an operator with a desired quality.
+GC operators have an invariant `T`, the "trianglation number",
+which is identical to the Conway operator edge factor `g`.
 
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
 Extensions
 ----------
-allow a, a', c, c' to be {0, 1/2, 1}
+With some care, Conway operators can be applied to any polyhedron or tiling,
+including those with holes. Chiral operators may only be applied to orientable
+polyhedra. Planar tilings may be easier to analyze by taking a finite section
+and treating it as a torus. There is no canonical form defined for non-spherical
+polyhedra or tilings, however.
 
-.. math::
-   e' &= ge
+Alternating Conway operations - alternation and snub (8.6 and 8.4 in Coxeter)
 
-   v'_i &= a (v_{i/k_1} + v_{i/k_2})/2 + e b_i + c (f_{i/\ell_1} + f_{i/\ell_2})/2
-
-   f'_i &= a' (v_{i/k_1} + v_{i/k_2})/2 + e b'_i + c'(f_{i/\ell_1} + f_{i/\ell_2})/2
+allow a, a', c, c' to be {0, 1/2, 1}, allow k and \ell in N/2
 
 dealing with digons and order-2 vertices
 
@@ -592,6 +595,9 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 
 Open questions
 --------------
-* Are there any operators such that `rx = dxd`?
+* Are there any operators such that `rx = dxd`? (They would have to be odd
+  operators.)
+* Is/are there an/other condition/s that can be added to the values for
+  :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there a good invariant related to the chirality of a Conway operator?
 * What other invariants need to be added to fully characterize Conway operators?
