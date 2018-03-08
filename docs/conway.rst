@@ -332,7 +332,15 @@ polyhedra. Planar tilings may be easier to analyze by taking a finite section
 and treating it as a torus. There is no canonical form defined for non-spherical
 polyhedra or tilings, however.
 
-Alternating Conway operations - alternation and snub (8.6 and 8.4 in Coxeter)
+In [Coxeter8]_ (specifically section 8.6), Coxeter defines an alternation
+operation `h` on polyhedra with only even-sided faces. Each face is replaced
+with a face with half as many sides, and alternate vertices are either retained
+as part of the faces or converted into vertices with number of sides equal to
+the degree of the seed vertex. (He also defines a snub operation in section 8.4,
+different from the `s` snub Conway defined, that is equivalent to `ht`.) The
+alternation operation converts quadrilateral faces into digons. Usually the
+digons are converted into edges, but for now, let digons be digons.
+
 
 allow a, a', c, c' to be {0, 1/2, 1}, allow k and \ell in N/2
 

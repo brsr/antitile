@@ -64,6 +64,8 @@ Indices and tables
 .. [Coxeter] H.S.M. Coxeter. Virus macromolecules and geodesic domes. In J.C.
    Butcher, editor, A spectrum of mathematics, pages 98–107.
    Oxford University Press, 1971.
+.. [Coxeter8] H.S.M. Coxeter. Truncation. In Regular Polytopes, pages 145-164
+   3rd ed, Dover, 1973.
 .. [Tarnai] T. Tarnai, F. Kovacs, P.W. Fowler, and S.D. Guest. Wrapping the
    cube and other polyhedra. Proceedings of the Royal Society A,
    468:2652–2666, 2012.
