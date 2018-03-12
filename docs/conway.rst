@@ -32,10 +32,20 @@ An operator that cannot be expressed in terms of operators aside from `d` and
 `r` is "primitive". For instance, `k` (Kis) and `j` (Join) are primitive,
 but `m` (Meta) is not (it is equal to `kj`).
 
+Conway operations are usually applied to convex (spherical) polyhedra, and less
+often on planar tilings. With some care, Conway operators can be applied to any
+polyhedron or tiling, including those with holes. Chiral operators may only be
+applied to orientable polyhedra. Planar tilings may be easier to analyze by
+taking a finite section and treating it as a torus. Convex polyhedra may be
+put into "canonical form" such that all faces are flat, all edges are tangent
+to the unit sphere, and the centroid of the polyhedron is at the origin.
+There is no canonical form yet described for non-spherical polyhedra or
+tilings, however, which may complicate analysis of other polyhedra.
+
 Chamber structure
 -----------------
 .. _facechambers:
-.. figure:: Triangle_chambers.svg
+.. figure:: triangle_chambers.svg
    :align: right
    :figwidth: 25%
 
@@ -326,11 +336,26 @@ which is identical to the Conway operator edge factor `g`.
 
 Extensions
 ----------
-With some care, Conway operators can be applied to any polyhedron or tiling,
-including those with holes. Chiral operators may only be applied to orientable
-polyhedra. Planar tilings may be easier to analyze by taking a finite section
-and treating it as a torus. There is no canonical form defined for non-spherical
-polyhedra or tilings, however.
+.. _facealtchambers:
+.. figure:: square_alternating_chambers.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers of a quadrilateral face.
+
+.. _edgealtchambers:
+.. figure:: edge_chambers_alternating.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers adjacent to an edge.
+
+.. _semi:
+.. figure:: edge_chambers_alternating_semi.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers of the Coxeter semi operator (without digon reduction)
 
 In [Coxeter8]_ (specifically section 8.6), Coxeter defines an alternation
 operation `h` on polyhedra with only even-sided faces. Each face is replaced
@@ -341,17 +366,52 @@ different from the `s` snub Conway defined, that is equivalent to `ht`.) The
 alternation operation converts quadrilateral faces into digons. Usually the
 digons are converted into edges, but for now, let digons be digons.
 
+This motivates the definition of "alternating operators" and an "alternating
+chamber" structure, as depicted in :numref:`facealtchambers` and
+:numref:`edgealtchambers`. This structure is only applicable to polyhedra with
+even-sided faces. The dual operators of those are applicable to polyhedra with
+even-degree vertices. (There may be some operators that are only applicable to
+polyhedra satisfying both criteria.)
 
-allow a, a', c, c' to be {0, 1/2, 1}, allow k and \ell in N/2
+Allow `a`, :math:`a'`, `c`, :math:`c'`,
+:math:`a_1, a_2, c_1, c_2, a'_1, a'_2, c'_1, c'_2` to be `\{0, 1/2, 1\}`.
+:math:`a_1 + a_2 = a`, and so on.
+Allow :math:`k_i` and :math:`\ell_i` in
+:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`
 
-dealing with digons and order-2 vertices
+.. math::
+   E &= ge
+
+   V_i &= a_1 v_{i/k_1} + a_2 v_{i/k_2} + e b_i + c_1 f_{i/\ell_1} + c_2 f_{i/\ell_2}
+
+   F_i &= a'_1 v_{i/k_1} + a'_2 v_{i/k_2} + e b'_i + c'_1 f_{i/\ell_1} + c'_2 f_{i/\ell_2}
+
+If :math:`k_1 = k_2 = k`, write :math:`a v_{i/k}` instead of
+:math:`a_1 v_{i/k_1} + a_2 v_{i/k_2}` for simplicity's sake (and similarly for
+the other terms).
+
+If any :math:`k_i` or :math:`\ell_i` = 1/2, the operator creates digons or
+degree-2 vertices when applied to degree-4 vertices or quadrilateral faces.
+
+The operation of smoothing digons and degree-2 vertices cannot be represented
+as a chamber structure, or in the form :math:`L_x` or :math:`M_x`. Neither can
+operations that create digons or degree-2 be altered to smooth those features
+while retaining the ability to be represented as :math:`L_x` or :math:`M_x`.
+The issue is that the smoothing operator not only removes degree-2 features, but
+also affects the degree of adjacent features, and may affect some features of a
+certain degree while leaving others alone. An adjusted :math:`M_x` may be
+specified as a 5x3 matrix from :math:`\langle v,e,f,v_4,f_4 \rangle` to
+:math:`\langle v,e,f \rangle`,
+but this is a linear map between two different spaces, not a linear operator,
+and isn't as useful compared to the usual :math:`M_x`. (For instance,
+you can't multiply the matrices together to represent operator composition.)
 
 Table of operators
 ------------------
 Where not specified, :math:`k` and :math:`\ell` are 1, and
 :math:`b_i` and :math:`b'_i` are 0.
 
-.. list-table::
+.. list-table:: Conway operators
 
    * - Operator
      - Chiral?
@@ -600,6 +660,73 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & (T-1)/2 & 1 \end{bmatrix}
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
+
+In the following section, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
+are written as just :math:`k` or :math:`\ell`.
+
+.. list-table:: Alternating operators
+
+   * - Operator
+     - Degenerate?
+     - Chambers
+     - Matrix
+     - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
+   * - Alternation, Hemi, Semi
+     - Digons
+     - .. image:: edge_chambers_alternating_semi.svg
+     - .. math::
+          \begin{bmatrix}
+          1/2 & 0 & 0 \\
+          0 & 1 & 0 \\
+          1/2 & 0 & 1 \end{bmatrix}
+     - :math:`k = 2`, :math:`\ell = 1/2`
+   * - Alternating Truncate
+     - N
+     - .. image:: edge_chambers_alternating_truncate.svg
+     - .. math::
+          \begin{bmatrix}
+          1/2 & 1 & 0 \\
+          0 & 2 & 0 \\
+          1/2 & 0 & 1 \end{bmatrix}
+     - :math:`\ell = 3/2`, :math:`b_4=1`
+   * - Alternating `dld`
+     - N
+     - .. image:: edge_chambers_alternating_dld.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 0 \\
+          0 & 3 & 0 \\
+          0 & 1 & 1 \end{bmatrix}
+     - :math:`\ell = 3/2`, :math:`b_4=1`, :math:`b'_3=1`
+   * - Alternating Ortho
+     - Degree-2 vertices
+     - .. image:: edge_chambers_alternating_ortho.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 1 \\
+          0 & 3 & 0 \\
+          0 & 1 & 0 \end{bmatrix}
+     - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
+   * - Alternating Meta/Ortho
+     - N
+     - .. image:: edge_chambers_alternating_metaortho.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 1 \\
+          0 & 5 & 0 \\
+          0 & 3 & 0 \end{bmatrix}
+     - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
+       :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
+   * - Alternating Meta/Join
+     - N
+     - .. image:: edge_chambers_alternating_metajoin.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 1 \\
+          0 & 5 & 0 \\
+          0 & 3 & 0 \end{bmatrix}
+     - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
+       :math:`b_3=1`, :math:`b'_3=3`
 
 Open questions
 --------------

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="200"
+xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<polygon points="10,190, 190,190 10,10 190,10" fill="white" stroke="blue"/>
+<polygon points="10,190, 10,10 190,190 190,10" fill="lightgrey" stroke="blue"/>
+<rect x="10" y="10" width="180" height="180" fill="none" stroke="black" stroke-width="2"/>
+<circle cx="100" cy="100" r="5" fill="white" stroke="blue"/>
+<circle cx="10" cy="10" r="5" fill="black" stroke="black"/>
+<circle cx="10" cy="190" r="5" fill="black" stroke="black"/>
+<circle cx="190" cy="190" r="5" fill="black" stroke="black"/>
+<circle cx="190" cy="10" r="5" fill="black" stroke="black"/>
+</svg>
