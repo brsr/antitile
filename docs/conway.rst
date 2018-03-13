@@ -314,9 +314,11 @@ of a chiral operator and an achiral operator is always chiral, but:
 * Two chiral operators can produce an achiral operator: `prp`
 * Two chiral operators can produce a chiral operator: `pp`, `pg`, `prg`
 
-Further confusing things are operators where r and d interact.
-The bowtie operator in :numref:`bowtie` is a simple example of this: `rB = Bd`.
-(This is a newly named operator, introduced in this text.)
+Further confusing things are operators where r and d interact. Some
+operators have `xd = x`, while some have `xd = rx`. The `gyro` operator is one
+example of the latter, and the bowtie operator in :numref:`bowtie` is another,
+maybe easier-to-visualize example.
+(Bowtie is a newly named operator, introduced in this text.)
 
 Relation to the Goldberg-Coxeter operation
 ------------------------------------------
@@ -370,14 +372,18 @@ This motivates the definition of "alternating operators" and an "alternating
 chamber" structure, as depicted in :numref:`facealtchambers` and
 :numref:`edgealtchambers`. This structure is only applicable to polyhedra with
 even-sided faces. The dual operators of those are applicable to polyhedra with
-even-degree vertices. (There may be some operators that are only applicable to
-polyhedra satisfying both criteria.)
+even-degree vertices, and should be visualized as having chambers on the left
+and right rather than top and bottom.
 
-Allow `a`, :math:`a'`, `c`, :math:`c'`,
-:math:`a_1, a_2, c_1, c_2, a'_1, a'_2, c'_1, c'_2` to be `\{0, 1/2, 1\}`.
-:math:`a_1 + a_2 = a`, and so on.
-Allow :math:`k_i` and :math:`\ell_i` in
-:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`
+The alternating chambers have :math:`L_x` and :math:`M_x` representations, and
+can be determined with a similar counting argument.
+Allow :math:`a`, :math:`a_1`, :math:`a_2`, :math:`c`, :math:`c_1`, :math:`c_2`,
+:math:`a'`, :math:`a'_1`, :math:`a'_2`, :math:`c'`, :math:`c'_1`, :math:`c'_2`
+to take the values `\{0, 1/2, 1\}`. :math:`a_1 + a_2 = a`, and so on.
+Allow :math:`k_i` and :math:`\ell_i` to take values in
+:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. (:math:`k_i` or
+:math:`\ell_i = 1/2` will result in digons or degree-2 vertices when applied to
+quad faces or degree-4 vertices; this will be elaborated below.) Then:
 
 .. math::
    E &= ge
@@ -388,23 +394,29 @@ Allow :math:`k_i` and :math:`\ell_i` in
 
 If :math:`k_1 = k_2 = k`, write :math:`a v_{i/k}` instead of
 :math:`a_1 v_{i/k_1} + a_2 v_{i/k_2}` for simplicity's sake (and similarly for
-the other terms).
+the other terms). The matrix form is the same as before (but some values may
+have different values). A set of equalities and inequalities similar to those
+derived above, and composition rules for these alternating operators, can be
+derived for alternating operators in the same manner. In fact, some alternating
+operators may fill in gaps where no operator exists for :math:`L_x` or :math:`M_x` 
+as defined above; see "alternating subdivide" in the list of operators below.
 
 If any :math:`k_i` or :math:`\ell_i` = 1/2, the operator creates digons or
-degree-2 vertices when applied to degree-4 vertices or quadrilateral faces.
-
-The operation of smoothing digons and degree-2 vertices cannot be represented
+degree-2 vertices when applied to degree-4 vertices or quadrilateral faces. The
+operation of smoothing digons and degree-2 vertices cannot be represented
 as a chamber structure, or in the form :math:`L_x` or :math:`M_x`. Neither can
 operations that create digons or degree-2 be altered to smooth those features
 while retaining the ability to be represented as :math:`L_x` or :math:`M_x`.
 The issue is that the smoothing operator not only removes degree-2 features, but
 also affects the degree of adjacent features, and may affect some features of a
-certain degree while leaving others alone. An adjusted :math:`M_x` may be
-specified as a 5x3 matrix from :math:`\langle v,e,f,v_4,f_4 \rangle` to
-:math:`\langle v,e,f \rangle`,
+certain degree while leaving others alone.
+An adjusted :math:`M_x` may be specified as a 5x3 matrix from
+:math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
 but this is a linear map between two different spaces, not a linear operator,
 and isn't as useful compared to the usual :math:`M_x`. (For instance,
 you can't multiply the matrices together to represent operator composition.)
+Alternately, the operators can be further restricted to
+polyhedra with faces or vertices of degree 6 or more.
 
 Table of operators
 ------------------
@@ -468,7 +480,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 5 & 0 \\
           0 & 2 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b'_5=2`
-     - `g = gd = ds = dsd`
+     - `g = rgd = ds = rdsd`
    * - `p` (Propeller)
      - Y
      - .. image:: edge_chambers_propeller.svg
@@ -689,7 +701,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 0 \\
           1/2 & 0 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_4=1`
-   * - Alternating `dld`
+   * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_dld.svg
      - .. math::
