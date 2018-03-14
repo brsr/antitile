@@ -315,7 +315,7 @@ of a chiral operator and an achiral operator is always chiral, but:
 * Two chiral operators can produce a chiral operator: `pp`, `pg`, `prg`
 
 Further confusing things are operators where r and d interact. Some
-operators have `xd = x`, while some have `xd = rx`. The `gyro` operator is one
+operators have `xd = x`, while some have `xd = rxr`. The `gyro` operator is one
 example of the latter, and the bowtie operator in :numref:`bowtie` is another,
 maybe easier-to-visualize example.
 (Bowtie is a newly named operator, introduced in this text.)
@@ -381,7 +381,7 @@ Allow :math:`a`, :math:`a_1`, :math:`a_2`, :math:`c`, :math:`c_1`, :math:`c_2`,
 :math:`a'`, :math:`a'_1`, :math:`a'_2`, :math:`c'`, :math:`c'_1`, :math:`c'_2`
 to take the values `\{0, 1/2, 1\}`. :math:`a_1 + a_2 = a`, and so on.
 Allow :math:`k_i` and :math:`\ell_i` to take values in
-:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. (:math:`k_i` or
+:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. (Any :math:`k_i` or
 :math:`\ell_i = 1/2` will result in digons or degree-2 vertices when applied to
 quad faces or degree-4 vertices; this will be elaborated below.) Then:
 
@@ -398,8 +398,9 @@ the other terms). The matrix form is the same as before (but some values may
 have different values). A set of equalities and inequalities similar to those
 derived above, and composition rules for these alternating operators, can be
 derived for alternating operators in the same manner. In fact, some alternating
-operators may fill in gaps where no operator exists for :math:`L_x` or :math:`M_x` 
-as defined above; see "alternating subdivide" in the list of operators below.
+operators may fill in some gaps where no operator exists for :math:`L_x` or
+:math:`M_x` as defined earlier;
+see "alternating subdivide" in the list of operators below.
 
 If any :math:`k_i` or :math:`\ell_i` = 1/2, the operator creates digons or
 degree-2 vertices when applied to degree-4 vertices or quadrilateral faces. The
@@ -480,7 +481,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 5 & 0 \\
           0 & 2 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b'_5=2`
-     - `g = rgd = ds = rdsd`
+     - `g = rgdr = ds = rdsdr`
    * - `p` (Propeller)
      - Y
      - .. image:: edge_chambers_propeller.svg
@@ -610,7 +611,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 10 & 0 \\
           0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
-     - `rB=Bd`
+     - `rBr=Bd`
    * - :math:`m_n` (Meta)
      - N
      -
@@ -742,7 +743,7 @@ are written as just :math:`k` or :math:`\ell`.
 
 Open questions
 --------------
-* Are there any operators such that `rx = dxd`? (They would have to be odd
+* Are there any operators such that `rxr = dxd`? (They would have to be odd
   operators.)
 * Is/are there an/other condition/s that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
