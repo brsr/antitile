@@ -701,10 +701,10 @@ are written as just :math:`k` or :math:`\ell`.
           1/2 & 1 & 0 \\
           0 & 2 & 0 \\
           1/2 & 0 & 1 \end{bmatrix}
-     - :math:`\ell = 3/2`, :math:`b_4=1`
+     - :math:`\ell = 3/2`, :math:`b_3=1`
    * - Alternating Subdivide
      - N
-     - .. image:: edge_chambers_alternating_dld.svg
+     - .. image:: edge_chambers_alternating_subdivide.svg
      - .. math::
           \begin{bmatrix}
           1 & 1 & 0 \\
@@ -740,6 +740,15 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \end{bmatrix}
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
        :math:`b_3=1`, :math:`b'_3=3`
+   * - Alternating Subdivide/Quinto
+     - N
+     - .. image:: edge_chambers_alternating_subdividequinto.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 2 & 0 \\
+          0 & 5 & 0 \\
+          0 & 2 & 1 \end{bmatrix}
+     - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
 
 Open questions
 --------------
