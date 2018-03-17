@@ -33,14 +33,7 @@ An operator that cannot be expressed in terms of operators aside from `d` and
 but `m` (Meta) is not (it is equal to `kj`).
 
 Conway operations are usually applied to convex (spherical) polyhedra, and less
-often on planar tilings. With some care, Conway operators can be applied to any
-polyhedron or tiling, including those with holes. Chiral operators may only be
-applied to orientable polyhedra. Planar tilings may be easier to analyze by
-taking a finite section and treating it as a torus. Convex polyhedra may be
-put into "canonical form" such that all faces are flat, all edges are tangent
-to the unit sphere, and the centroid of the polyhedron is at the origin.
-There is no canonical form yet described for non-spherical polyhedra or
-tilings, however, which may complicate analysis of other polyhedra.
+often on planar tilings. Planar tilings can be easier to visualize.
 
 Chamber structure
 -----------------
@@ -295,6 +288,14 @@ Some further consequences of these representations:
 * There are no odd operators with `g=2`, so therefore odd operators
   with `g=2p`, where p is prime, are primitive.
 
+In summary, the assumptions made in this section are:
+
+#. The operator has a chamber structure like described in [Brinkmann]_.
+#. The operator preserves the Euler characteristic of the seed polyhedron.
+#. The operator acts on, and produces, a polyhedron with vertices and faces of
+   degree 3 or more.
+#. The operator affects all vertices, edges, and faces of the seed uniformly.
+
 Chirality
 ---------
 .. _bowtie:
@@ -336,8 +337,8 @@ which is identical to the Conway operator edge factor `g`.
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-Extensions
-----------
+Extension - Alternating Operators
+---------------------------------
 .. _facealtchambers:
 .. figure:: square_alternating_chambers.svg
    :align: right
@@ -360,7 +361,9 @@ Extensions
    Alternating chambers of the Coxeter semi operator (without digon reduction)
 
 In [Coxeter8]_ (specifically section 8.6), Coxeter defines an alternation
-operation `h` on polyhedra with only even-sided faces. Each face is replaced
+operation `h` on regular polyhedra with only even-sided faces. (He actually
+defines it on general polytopes, but let's not complicate things by considering
+higher dimensions.) Each face is replaced
 with a face with half as many sides, and alternate vertices are either retained
 as part of the faces or converted into vertices with number of sides equal to
 the degree of the seed vertex. (He also defines a snub operation in section 8.4,
@@ -373,51 +376,125 @@ chamber" structure, as depicted in :numref:`facealtchambers` and
 :numref:`edgealtchambers`. This structure is only applicable to polyhedra with
 even-sided faces. The dual operators of those are applicable to polyhedra with
 even-degree vertices, and should be visualized as having chambers on the left
-and right rather than top and bottom.
+and right rather than top and bottom. Some of these operators can be described
+by using one Conway operator for the top half and one for the bottom,
+or one for the left half and one for the right.
 
-The alternating chambers have :math:`L_x` and :math:`M_x` representations, and
-can be determined with a similar counting argument.
-Allow :math:`a`, :math:`a_1`, :math:`a_2`, :math:`c`, :math:`c_1`, :math:`c_2`,
-:math:`a'`, :math:`a'_1`, :math:`a'_2`, :math:`c'`, :math:`c'_1`, :math:`c'_2`
-to take the values `\{0, 1/2, 1\}`. :math:`a_1 + a_2 = a`, and so on.
-Allow :math:`k_i` and :math:`\ell_i` to take values in
-:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. (Any :math:`k_i` or
-:math:`\ell_i = 1/2` will result in digons or degree-2 vertices when applied to
-quad faces or degree-4 vertices; this will be elaborated below.) Then:
+These operators depend on the ability to partition vertices into
+two disjoint sets, none of which are adjacent to a vertex
+in the same set; i.e. it applies to bipartite graphs. By basic graph theory,
+planar bipartite graphs have faces of even degree. However, this does not mean
+that the two sets of vertexes have the same size, let alone that the sets of
+vertices of a certain degree will have a nice partition. The cube and many other
+small even-faced polyhedra do partition into two equal sets of vertices, so
+beware that examining simple, highly-symmetric polyhedra can be misleading.
 
-.. math::
-   E &= ge
+Because an alternating operator may transform alternate vertices differently,
+and because the size of the sets of alternate vertices (in general or of a
+given degree) don't have a fixed ratio or relation, alternating operators do
+not in general have representations as :math:`L_x` and :math:`M_x`, at least
+as defined earlier. However, alternating operators that have the same effect on
+alternating vertices (or faces) can be accommodated in this form. In fact, some
+alternating operators may fill in some gaps where no operator exists for
+:math:`L_x` or :math:`M_x` as defined earlier, given the constraints; see e.g.
+"alternating subdivide" in the list of operators below. The change needed is
+to allow :math:`k` and :math:`\ell` to take values in
+:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`.
 
-   V_i &= a_1 v_{i/k_1} + a_2 v_{i/k_2} + e b_i + c_1 f_{i/\ell_1} + c_2 f_{i/\ell_2}
+Even for the operators that don't fit into the format, the values defined in
+:math:`L_x` or :math:`M_x` suggest a way to semi-quantitatively describe these
+operators. Allow :math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take
+values in :math:`\{0, 1/2?, 1\}`, where :math:`1/2?` denotes that the
+exact value depends on the seed polyhedron, but it is `1/2` or near `1/2`
+for many polyhedra. Also define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and
+:math:`\ell_2`, multipliers for the degree of the alternating seed vertices or
+faces respectively, which may also take values in :math:`\mathbb{N}/2`.
 
-   F_i &= a'_1 v_{i/k_1} + a'_2 v_{i/k_2} + e b'_i + c'_1 f_{i/\ell_1} + c'_2 f_{i/\ell_2}
-
-If :math:`k_1 = k_2 = k`, write :math:`a v_{i/k}` instead of
-:math:`a_1 v_{i/k_1} + a_2 v_{i/k_2}` for simplicity's sake (and similarly for
-the other terms). The matrix form is the same as before (but some values may
-have different values). A set of equalities and inequalities similar to those
-derived above, and composition rules for these alternating operators, can be
-derived for alternating operators in the same manner. In fact, some alternating
-operators may fill in some gaps where no operator exists for :math:`L_x` or
-:math:`M_x` as defined earlier;
-see "alternating subdivide" in the list of operators below.
-
-If any :math:`k_i` or :math:`\ell_i` = 1/2, the operator creates digons or
-degree-2 vertices when applied to degree-4 vertices or quadrilateral faces. The
-operation of smoothing digons and degree-2 vertices cannot be represented
-as a chamber structure, or in the form :math:`L_x` or :math:`M_x`. Neither can
-operations that create digons or degree-2 be altered to smooth those features
-while retaining the ability to be represented as :math:`L_x` or :math:`M_x`.
-The issue is that the smoothing operator not only removes degree-2 features, but
-also affects the degree of adjacent features, and may affect some features of a
-certain degree while leaving others alone.
-An adjusted :math:`M_x` may be specified as a 5x3 matrix from
-:math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
+If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
+Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
+degree-4 vertices. (The same applies to the :math:`k_i` and :math:`\ell_i`
+forms.) The operation of smoothing degree-2 vertices and faces
+cannot be represented as a chamber structure, or in the form :math:`L_x` or
+:math:`M_x`. Neither can operations that create degree-2 vertices and faces
+be altered to smooth those features while retaining the ability to be
+represented as :math:`L_x` or :math:`M_x`. The issue is that the smoothing
+operator not only removes degree-2 features, but also affects the degree of
+adjacent features, and may affect some features of a certain degree while
+leaving others alone. An adjusted :math:`M_x` may be specified as a 5x3 matrix
+from :math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
 but this is a linear map between two different spaces, not a linear operator,
 and isn't as useful compared to the usual :math:`M_x`. (For instance,
 you can't multiply the matrices together to represent operator composition.)
 Alternately, the operators can be further restricted to
 polyhedra with faces or vertices of degree 6 or more.
+
+In the list of assumptions at the end of the "Operators on counts" section,
+these operators may violate 1, 3, and 4.
+
+
+Extension - Topology
+--------------------
+With some care, Conway operators can be applied to any polyhedron or tiling,
+including those with holes. Non-orientable polyhedra may be used as seeds for
+achiral operators, as well. Planar tilings may be easier to analyze by
+taking a finite section and treating it as a torus. Convex polyhedra may be
+put into "canonical form" such that all faces are flat, all edges are tangent
+to the unit sphere, and the centroid of the polyhedron is at the origin.
+There is no canonical form yet described for non-spherical polyhedra or
+tilings, however, which may complicate analysis.
+
+In the topology of surfaces, the connected sum `A#B` can be thought of as
+removing a disk from A and B and stitching them together along the created
+boundary. If `B` has the topology of a sphere, then `A#B` has the topology of
+`A`: a connected sum with a sphere does not change the topology. The
+classification theorem of closed surfaces states that closed surfaces have the
+topology of either a sphere or a connected sum of a number of toruses and/or
+cross-caps.
+
+We can think of the operator chamber diagrams we've described so far (even the
+alternating ones) as having the topology of a sphere: identify the two edges
+on the left and the two edges on the right. Then, the operation can be described
+as taking the connected sum of the operator chamber diagrams with each face of
+the seed polyhedron. Thus assumption 2 in the list of assumptions at the
+end of the "Operators on counts" section: taking the connected sum with a
+sphere does not change the topology, so the operation does not change the Euler
+characteristic.
+
+.. _skeleton:
+.. figure:: edge_chambers_skeleton.svg
+   :align: right
+   :figwidth: 25%
+
+   Chambers of skeletonize operation.
+
+However, operators that alter the topology can be described, introducing holes
+or other features to a polyhedron. The simplest operator of this kind is the
+skeletonize operator depicted in :numref:`skeleton`. Edges and vertices are
+retained, but faces are removed. The red crosses indicate that the base faces
+are not retained or replaced with vertices: they are removed entirely. If `G` is
+the genus of the seed polyhedron, the genus of the resulting "polyhedron" (no
+longer a surface, somewhat a surface with boundary) is
+`G - f`. The :math:`L_x` form is obvious, as is the :math:`M_x` form:
+
+.. math::
+   \begin{bmatrix}
+   1 & 0 & 0 \\
+   0 & 1 & 0 \\
+   0 & 0 & 0 \end{bmatrix} .
+
+Instead of annihilating the face completely, one can hollow out a space in its
+center and leave behind a border. This can be done with the `leonardo` command
+in Antiprism, or the hollow/skeletonize/`h` operator in Polyhedronisme (not to
+be confused with the skeletonize defined above, or the semi operator from the
+last section). Although the operations differ in exactly how the new faces are
+specified, they both resemble cutting out each face and stitching in a torus in
+its place along the outermost circle of the torus. To represent this, we have
+to extrude the chamber structure out into a sort of 3d prism.
+
+(add: L_x and M_x forms)
+
+One could also create operators that add multiple holes per edge, or add
+cross-caps.
 
 Table of operators
 ------------------
@@ -689,18 +766,27 @@ are written as just :math:`k` or :math:`\ell`.
      - .. image:: edge_chambers_alternating_semi.svg
      - .. math::
           \begin{bmatrix}
-          1/2 & 0 & 0 \\
+          1/2? & 0 & 0 \\
           0 & 1 & 0 \\
-          1/2 & 0 & 1 \end{bmatrix}
-     - :math:`k = 2`, :math:`\ell = 1/2`
+          1/2? & 0 & 1 \end{bmatrix}
+     - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
+   * - Alternating Bisect
+     - Digons
+     - .. image:: edge_chambers_alternating_bisect.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 0 \\
+          0 & 2 & 0 \\
+          0 & 1 & 1 \end{bmatrix}
+     - :math:`b'_3 = 1`, :math:`\ell = 1/2`
    * - Alternating Truncate
      - N
      - .. image:: edge_chambers_alternating_truncate.svg
      - .. math::
           \begin{bmatrix}
-          1/2 & 1 & 0 \\
+          1/2? & 1 & 0 \\
           0 & 2 & 0 \\
-          1/2 & 0 & 1 \end{bmatrix}
+          1/2? & 0 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_3=1`
    * - Alternating Subdivide
      - N
