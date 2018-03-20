@@ -10,8 +10,8 @@ letters `abdegjkmost`, and more are available depending on your software. For
 instance, a truncated cube may be denoted `tC`, where `t` is the truncate
 operation and `C` is a cube. Initially there was not much theory supporting
 Conway operations, but [Brinkmann]_'s paper provides a framework. This text
-is an attempt to use Brinkmann's work to find ways to better quantify and
-analyze Conway operators.
+is an attempt to use Brinkmann's work to find ways to quantify, analyze,
+and expand Conway operators.
 
 Preliminaries
 -------------
@@ -34,6 +34,9 @@ but `m` (Meta) is not (it is equal to `kj`).
 
 Conway operations are usually applied to convex (spherical) polyhedra, and less
 often on planar tilings. Planar tilings can be easier to visualize.
+
+Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
+vertices.
 
 Chamber structure
 -----------------
@@ -378,14 +381,17 @@ even-sided faces. The dual operators of those are applicable to polyhedra with
 even-degree vertices, and should be visualized as having chambers on the left
 and right rather than top and bottom. Some of these operators can be described
 by using one Conway operator for the top half and one for the bottom,
-or one for the left half and one for the right.
+or one for the left half and one for the right. Like Conway operators, the
+chamber structure of `xd` is that of `x` rotated a quarter turn; but now,
+the direction of rotation matters, and depends on how the alternating vertices
+(or faces) of the underlying polyhedron are specified.
 
-These operators depend on the ability to partition vertices into
-two disjoint sets, none of which are adjacent to a vertex
-in the same set; i.e. it applies to bipartite graphs. By basic graph theory,
-planar bipartite graphs have faces of even degree. However, this does not mean
-that the two sets of vertexes have the same size, let alone that the sets of
-vertices of a certain degree will have a nice partition. The cube and many other
+These operators depend on the ability to partition vertices into two disjoint
+sets, none of which are adjacent to a vertex in the same set; i.e. it applies
+to bipartite graphs. By basic graph theory, planar bipartite graphs have faces
+of even degree. However, this does not mean that the two sets of vertexes have
+the same size, let alone that the sets of vertices of a given degree will
+have a convenient partition. The cube and many other
 small even-faced polyhedra do partition into two equal sets of vertices, so
 beware that examining simple, highly-symmetric polyhedra can be misleading.
 
@@ -414,7 +420,8 @@ If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
 Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
 degree-4 vertices. (The same applies to the :math:`k_i` and :math:`\ell_i`
 forms.) The operation of smoothing degree-2 vertices and faces
-cannot be represented as a chamber structure, or in the form :math:`L_x` or
+cannot be represented as a chamber structure (assumption 1),
+or in the form :math:`L_x` or
 :math:`M_x`. Neither can operations that create degree-2 vertices and faces
 be altered to smooth those features while retaining the ability to be
 represented as :math:`L_x` or :math:`M_x`. The issue is that the smoothing
@@ -429,23 +436,29 @@ Alternately, the operators can be further restricted to
 polyhedra with faces or vertices of degree 6 or more.
 
 In the list of assumptions at the end of the "Operators on counts" section,
-these operators may violate 1, 3, and 4.
+alternating operators may violate 3 and 4, and 1 if they create degree-2
+vertices or faces.
 
+This concept could be extended to k-partite graphs, but :math:`k(k-1)/2`
+chamber structures would have to be specified (which would get a little
+unmanagable).
 
 Extension - Topology
 --------------------
-With some care, Conway operators can be applied to any polyhedron or tiling,
-including those with holes. Non-orientable polyhedra may be used as seeds for
-achiral operators, as well. Planar tilings may be easier to analyze by
+With some care, Conway operators can be applied to any polyhedron or tiling;
+toruses, polyhedra with multiple holes, planar tilings, hyperbolic tilings,
+and even non-orientable polyhedra, although the latter is restricted to the
+achiral operators. Planar tilings may be easier to analyze by
 taking a finite section and treating it as a torus. Convex polyhedra may be
 put into "canonical form" such that all faces are flat, all edges are tangent
 to the unit sphere, and the centroid of the polyhedron is at the origin.
 There is no canonical form yet described for non-spherical polyhedra or
 tilings, however, which may complicate analysis.
 
-In the topology of surfaces, the connected sum `A#B` can be thought of as
-removing a disk from A and B and stitching them together along the created
-boundary. If `B` has the topology of a sphere, then `A#B` has the topology of
+In the topology of surfaces, the connected sum `A#B` of two surfaces `A` and `B`
+can be thought of as removing a disk from A and B and stitching them together
+along the created boundary.
+If `B` has the topology of a sphere, then `A#B` has the topology of
 `A`: a connected sum with a sphere does not change the topology. The
 classification theorem of closed surfaces states that closed surfaces have the
 topology of either a sphere or a connected sum of a number of toruses and/or
@@ -483,18 +496,41 @@ longer a surface, somewhat a surface with boundary) is
    0 & 0 & 0 \end{bmatrix} .
 
 Instead of annihilating the face completely, one can hollow out a space in its
-center and leave behind a border. This can be done with the `leonardo` command
-in Antiprism, or the hollow/skeletonize/`h` operator in Polyhedronisme (not to
-be confused with the skeletonize defined above, or the semi operator from the
-last section). Although the operations differ in exactly how the new faces are
-specified, they both resemble cutting out each face and stitching in a torus in
-its place along the outermost circle of the torus. To represent this, we have
-to extrude the chamber structure out into a sort of 3d prism.
+center and leave behind a solid border. This can be done with the ``leonardo``
+command in Antiprism, or the hollow/skeletonize/`h` operator in Polyhedronisme
+(not to be confused with the skeletonize defined above, or the semi operator
+from the last section). Although the operations differ in exactly how the new
+faces are specified, topologically they both resemble a process like so:
 
-(add: L_x and M_x forms)
+* Duplicate the polyhedron as a slightly smaller polyhedron inside itself.
+* For each face, remove the corresponding faces of the larger and smaller
+  polyhedra. Take a torus and remove its outer half. Stitch the upper and lower
+  boundary circles of this torus to the larger and smaller polyhedra where the
+  faces were.
 
-One could also create operators that add multiple holes per edge, or add
-cross-caps.
+To represent this, we have to extrude the chamber structure out into a sort of
+3d prism. The operator we'll describe here is essentially a process of replacing
+each seed edge with a rectangular prism oriented with one edge along the seed
+edge, somewhat like a 3d version of loft (`l`). (It is not the operation
+performed by ``leonardo`` or Polyhedronisme, unfortunately; ``leonardo`` seems
+to create overlapping faces.) In :math:`L_x` terms, :math:`k` and
+:math:`\ell` are 1, :math:`b_4 = 2` and :math:`b'_4 = 4`, and :math:`M_x` is:
+
+.. math::
+   \begin{bmatrix}
+   2 & 2 & 0 \\
+   0 & 8 & 0 \\
+   0 & 4 & 0 \end{bmatrix} .
+
+If the seed polyhedron has Euler characteristic 2 (genus 0),
+the result has Euler characteristic `4-2f`. The genus is `f-1`, not `f`,
+because one torus is needed to connect the two copies of the sphere into
+a (topologically) spherical surface.
+
+One could also create operators that add arbitrary numbers of holes per edge,
+or add cross-caps (e.g. based on the a star polyhedron with Euler
+characteristic 1, like the tetrahemihexahedron, although such operators
+probably have more theoretical uses than aesthetic or practical ones).
 
 Table of operators
 ------------------
