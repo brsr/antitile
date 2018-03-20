@@ -439,9 +439,10 @@ In the list of assumptions at the end of the "Operators on counts" section,
 alternating operators may violate 3 and 4, and 1 if they create degree-2
 vertices or faces.
 
-This concept could be extended to k-partite graphs, but :math:`k(k-1)/2`
-chamber structures would have to be specified (which would get a little
-unmanagable).
+This concept could be extended to k-partite graphs. By the four-color theorem,
+the largest `k` that is necessary for a spherical tiling is 4, although larger
+values could be used. :math:`k(k-1)/2` interrelated chamber structures would
+have to be specified, which would get a little unmanageable for large `k`.
 
 Extension - Topology
 --------------------
