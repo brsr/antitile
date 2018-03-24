@@ -70,8 +70,10 @@ side of a seed edge. Technically we only need the upper-left white chamber for
 achiral operators or the upper white and grey chambers for chiral operators,
 but showing both sides of the edge will make things easier later on.
 
-For a given operator `x`, the chamber structure of `xd` is simply the
-chamber structure of `x` rotated one quarter turn.
+The chamber structure of the composed operator `xy` can be drawn by applying `x`
+to the edges of the chamber structure of `y`. In particular, for a given
+operator `x`, the chamber structure of `xd` is simply the chamber structure
+of `x` rotated one quarter turn.
 
 There is some freedom in where vertices are placed within the chambers.
 This is more apparent with chiral operators. Often the operator is drawn
@@ -410,9 +412,8 @@ to allow :math:`k` and :math:`\ell` to take values in
 Even for the operators that don't fit into the format, the values defined in
 :math:`L_x` or :math:`M_x` suggest a way to semi-quantitatively describe these
 operators. Allow :math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take
-values in :math:`\{0, 1/2?, 1\}`, where :math:`1/2?` denotes that the
-exact value depends on the seed polyhedron, but it is `1/2` or near `1/2`
-for many polyhedra. Also define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and
+values in :math:`\{0, ?, 1\}`, where :math:`?` is the undefined value.
+Also define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and
 :math:`\ell_2`, multipliers for the degree of the alternating seed vertices or
 faces respectively, which may also take values in :math:`\mathbb{N}/2`.
 
@@ -430,10 +431,20 @@ adjacent features, and may affect some features of a certain degree while
 leaving others alone. An adjusted :math:`M_x` may be specified as a 5x3 matrix
 from :math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
 but this is a linear map between two different spaces, not a linear operator,
-and isn't as useful compared to the usual :math:`M_x`. (For instance,
-you can't multiply the matrices together to represent operator composition.)
-Alternately, the operators can be further restricted to
-polyhedra with faces or vertices of degree 6 or more.
+and isn't as useful compared to the usual :math:`M_x`.
+(For instance, you can't multiply the matrices together to represent operator
+composition.) Alternately, the operators can be further restricted to
+polyhedra with faces or vertices of a certain degree.
+
+Let `$` denote the smoothing operator that reduces degree-2 features, and `@`
+denote the operator that exchanges the alternation of the vertices of a seed
+polyhedron.
+All of the operators :math:`\Box_{a,b}` create a polyhedron with only
+quadrilateral faces. Join (:math:`j=\Box_{1,1}`) is interesting to examine
+within the context of alternating operators.
+`jd = @j`.
+All Conway operators can be expressed as `$xj`, where `x` is some alternating
+operator.
 
 In the list of assumptions at the end of the "Operators on counts" section,
 alternating operators may violate 3 and 4, and 1 if they create degree-2
@@ -803,9 +814,9 @@ are written as just :math:`k` or :math:`\ell`.
      - .. image:: edge_chambers_alternating_semi.svg
      - .. math::
           \begin{bmatrix}
-          1/2? & 0 & 0 \\
+          ? & 0 & 0 \\
           0 & 1 & 0 \\
-          1/2? & 0 & 1 \end{bmatrix}
+          ? & 0 & 1 \end{bmatrix}
      - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
    * - Alternating Bisect
      - Digons
@@ -821,10 +832,28 @@ are written as just :math:`k` or :math:`\ell`.
      - .. image:: edge_chambers_alternating_truncate.svg
      - .. math::
           \begin{bmatrix}
-          1/2? & 1 & 0 \\
+          ? & 1 & 0 \\
           0 & 2 & 0 \\
-          1/2? & 0 & 1 \end{bmatrix}
+          ? & 0 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_3=1`
+   * - Alternating Pre-Join-Stake
+     - N
+     - .. image:: edge_chambers_alternating_prestake0.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 0 \\
+          0 & 3 & 0 \\
+          0 & 1 & 1 \end{bmatrix}
+     - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
+   * - Alternating Pre-Join-Lace
+     - N
+     - .. image:: edge_chambers_alternating_prelace0.svg
+     - .. math::
+          \begin{bmatrix}
+          ? & 1 & 0 \\
+          0 & 3 & 0 \\
+          ? & 1 & 1 \end{bmatrix}
+     - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -843,6 +872,16 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
+   * - Alternating Pre-Join-Kis-Kis
+     - N
+     - .. image:: edge_chambers_alternating_prekiskis0.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 1 & 0 \\
+          0 & 4 & 0 \\
+          0 & 2 & 1 \end{bmatrix}
+     - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
+
    * - Alternating Meta/Ortho
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg

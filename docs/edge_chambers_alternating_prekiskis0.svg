@@ -4,12 +4,15 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <polygon points="10,100, 100,10 190,100" fill="lightgrey" stroke="none"/>
 <polygon points="10,100, 100,190 190,100" fill="white" stroke="none"/>
 <line x1="10" y1="100" x2="190" y2="100" stroke="black" stroke-width="2"/>
-<path d="M 145,55 10,100 145,145" fill="none" stroke="black" stroke-width="2"/>
 <polygon points="100,10 10,100, 100,190 190,100" fill="none" stroke="blue"/>
+<polygon points="145,55 10,100 145,145, 190,100" fill="none" stroke="black" stroke-width="2"/>
 <circle cx="100" cy="10" r="5" fill="white" stroke="blue"/>
 <circle cx="100" cy="190" r="5" fill="white" stroke="blue"/>
 <circle cx="10" cy="100" r="5" fill="black" stroke="black"/>
 <circle cx="190" cy="100" r="5" fill="black" stroke="black"/>
+<circle cx="145" cy="55" r="5" fill="black" stroke="black"/>
+<circle cx="145" cy="145" r="5" fill="black" stroke="black"/>
+
 <text x="6" y="90">1</text>
 <text x="186" y="90">2</text>
 </svg>
