@@ -342,6 +342,8 @@ which is identical to the Conway operator edge factor `g`.
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
+composition rules
+
 Extension - Alternating Operators
 ---------------------------------
 .. _facealtchambers:
@@ -766,7 +768,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & 2T/3 & 0 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
-     - :math:`\Delta_{2,0} = u`
+     - :math:`\Delta_{1,1} = n`,
+       :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`
    * - :math:`\Delta_{a,b}` if `T` not divisible by 3
      - If :math:`a \ne b` and :math:`b \ne 0`
      -
@@ -776,7 +779,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & 2(T-1)/3 & 1 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
-     - :math:`\Delta_{1,1} = n`, :math:`\Delta_{2,1} = dwd`
+     - :math:`\Delta_{2,0} = u`, :math:`\Delta_{2,1} = dwd`
    * - :math:`\Box_{a,b}` if `T` even
      - If :math:`a \ne b` and :math:`b \ne 0`
      -
@@ -787,7 +790,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T/2 & 0 \end{bmatrix}
      - :math:`b_4=b`, :math:`b'_4=b'`
      - :math:`\Box_{a,b} = \Box_{a,b}d`,
-       :math:`\Box_{1,1} = j`, :math:`\Box_{2,0} = o = j^2`
+       :math:`\Box_{1,1} = j`, :math:`\Box_{2,0} = o = j^2`,
+       :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`
    * - :math:`\Box_{a,b}` if `T` odd
      - If :math:`a \ne b` and :math:`b \ne 0`
      -
@@ -799,25 +803,16 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
 
-In the following section, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
+In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
 are written as just :math:`k` or :math:`\ell`.
 
-.. list-table:: Alternating operators
+.. list-table:: Pre-even alternating operators
 
    * - Operator
      - Degenerate?
      - Chambers
      - Matrix
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
-   * - Alternation, Hemi, Semi
-     - Digons
-     - .. image:: edge_chambers_alternating_semi.svg
-     - .. math::
-          \begin{bmatrix}
-          ? & 0 & 0 \\
-          0 & 1 & 0 \\
-          ? & 0 & 1 \end{bmatrix}
-     - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
    * - Alternating Bisect
      - Digons
      - .. image:: edge_chambers_alternating_bisect.svg
@@ -827,15 +822,6 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
-   * - Alternating Truncate
-     - N
-     - .. image:: edge_chambers_alternating_truncate.svg
-     - .. math::
-          \begin{bmatrix}
-          ? & 1 & 0 \\
-          0 & 2 & 0 \\
-          ? & 0 & 1 \end{bmatrix}
-     - :math:`\ell = 3/2`, :math:`b_3=1`
    * - Alternating Pre-Join-Stake
      - N
      - .. image:: edge_chambers_alternating_prestake0.svg
@@ -845,15 +831,6 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
-   * - Alternating Pre-Join-Lace
-     - N
-     - .. image:: edge_chambers_alternating_prelace0.svg
-     - .. math::
-          \begin{bmatrix}
-          ? & 1 & 0 \\
-          0 & 3 & 0 \\
-          ? & 1 & 1 \end{bmatrix}
-     - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -911,6 +888,41 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
+
+.. list-table:: Pre-odd alternating operators
+
+    * - Operator
+      - Degenerate?
+      - Chambers
+      - Matrix
+      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
+    * - Alternation, Hemi, Semi
+      - Digons
+      - .. image:: edge_chambers_alternating_semi.svg
+      - .. math::
+           \begin{bmatrix}
+           ? & 0 & 0 \\
+           0 & 1 & 0 \\
+           ? & 0 & 1 \end{bmatrix}
+      - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
+    * - Alternating Truncate
+      - N
+      - .. image:: edge_chambers_alternating_truncate.svg
+      - .. math::
+           \begin{bmatrix}
+           ? & 1 & 0 \\
+           0 & 2 & 0 \\
+           ? & 0 & 1 \end{bmatrix}
+      - :math:`\ell = 3/2`, :math:`b_3=1`
+    * - Alternating Pre-Join-Lace
+      - N
+      - .. image:: edge_chambers_alternating_prelace0.svg
+      - .. math::
+           \begin{bmatrix}
+           ? & 1 & 0 \\
+           0 & 3 & 0 \\
+           ? & 1 & 1 \end{bmatrix}
+      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
 
 Open questions
 --------------
