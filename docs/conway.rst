@@ -332,17 +332,32 @@ Relation to the Goldberg-Coxeter operation
 The Goldberg-Coxeter operation can be fairly simply extended to a Conway
 operator. In the master polygon, identify two vertices and the center: this is
 the chamber structure of the operator.
-
-Many of the named Conway operators are GC operations, or related by duality.
-GC operators are also a good source of examples; in the 2-parameter families,
-it's often easy to find an operator with a desired quality.
 GC operators have an invariant `T`, the "trianglation number",
 which is identical to the Conway operator edge factor `g`.
 
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-composition rules
+:math:`\Box_{a,b}` is an even operator iff :math:`a \equiv b \mod 2`, and odd
+otherwise. Similarly, :math:`\Delta_{a,b}` is even iff :math:`a \equiv b \mod 3`.
+If the operator is even, the resulting polyhedron will have only quadrilateral
+or triangular (respectively) faces; if odd, there will be one face at the face
+center of the same degree as the seed face.
+
+All of the nice qualities of GC operators carry over to this extension; for
+instance, they form a commutative submonoid of Conway operators, and can be
+decomposed in relation to the Gaussian or Eisenstein integers. Many of the
+named Conway operators are GC operations, or related by duality. GC operators
+are also a good source of examples; in the 2-parameter families, it's often
+easy to find an operator with a desired quality.
+
+The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
+:math:`\Delta_{1,1} = n = kd`. Any even :math:`\Box_{a,b}` can be
+One useful relation is that if a GC operator is even, it can be decomposed as
+so: :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
+:math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`. (These formula may result in
+negative values, which should be interpreted as per the section of these docs
+on the Goldberg-Coxeter operation.)
 
 Extension - Alternating Operators
 ---------------------------------
@@ -433,26 +448,74 @@ adjacent features, and may affect some features of a certain degree while
 leaving others alone. An adjusted :math:`M_x` may be specified as a 5x3 matrix
 from :math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
 but this is a linear map between two different spaces, not a linear operator,
-and isn't as useful compared to the usual :math:`M_x`.
-(For instance, you can't multiply the matrices together to represent operator
-composition.) Alternately, the operators can be further restricted to
-polyhedra with faces or vertices of a certain degree.
+and isn't as useful compared to the usual :math:`M_x`. (For instance, you can't
+multiply the matrices together to represent operator composition.) That being
+said, there are two special cases where things become more tractable:
+when the seed polyhedron has only quadrilateral faces,
+and when the seed polyhedron has faces of degree 6 or more.
+
+In general, alternating operators cannot be composed with other alternating or
+Conway operators, because those operators do not necessarily create
+even-degree faces or vertices. However, even :math:`\Box_{a,b}` operators
+create polyhedra with quadrilateral faces only. As mentioned earlier, all even
+:math:`\Box_{a,b}` can be decomposed into `j` (Join) and some other operator,
+so it's enough to examine `j`.
 
 Let `$` denote the smoothing operator that reduces degree-2 features, and `@`
 denote the operator that exchanges the alternation of the vertices of a seed
-polyhedron.
-All of the operators :math:`\Box_{a,b}` create a polyhedron with only
-quadrilateral faces. Join (:math:`j=\Box_{1,1}`) is interesting to examine
-within the context of alternating operators.
-`jd = @j`.
-All Conway operators can be expressed as `$xj`, where `x` is some alternating
-operator.
+polyhedron (equivalently, it reflects the alternating operator).
+In the operation `j`, designate the seed vertices as belonging to
+partition 1, and the created vertices at face centers as belonging to partition
+2. That is, in the edge-centered chamber structure, the vertices on the left
+and right are in partition 1, and the ones on the top and bottom are in
+partition 2. It is easy to see that, when giving consideration to the
+partitioning of vertices, `jd = @j`.
+
+The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
+If `x` is an alternating operator that retains both (or neither) partition of
+seed vertices (if `a` and `a'` are 0 or 1), then ` $xj` is even.  If `x` retains
+one partition but not the other (if `a` and `a'` are `?`), then `$xj` is odd.
+Accordingly, these sets of operators will be called pre-even and pre-odd.
+Although `$` does not in general have a :math:`M_x` form, in the expression
+`$xj` it either does nothing, removes an edge and a vertex, or removes an
+edge and a face. These operations can be represented by taking the matrix form
+of `xj` and subtracting the zero matrix, or these two following matrices,
+respectively:
+
+.. math::
+   \begin{bmatrix}
+   0 & 1 & 0 \\
+   0 & 1 & 0 \\
+   0 & 0 & 0 \end{bmatrix} ,
+   \begin{bmatrix}
+    0 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 1 & 0 \end{bmatrix} .
+
+In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
+some alternating operator. This is easier to see by going backwards from the
+operator. By symmetry, if `g` is odd, there is an edge that lies on or crosses
+the center point of the edge in the chamber structure. Otherwise, if `g` is
+even, either a vertex lies there or a face contains the center point. If `g`
+is odd, either split the edge with a degree-2 vertex at the center point, or
+replace the edge with a digon. (Don't confuse `g` being even with the operator
+itself being even.) Then the alternating chamber structure of `x`
+is just the white and grey chambers of `y`, stacked along their long edge. More
+specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
+a unique alternating operator `x`: if `g` is odd, then `y = $xj` for two
+alternating operators `x` corresponding to splitting the edge with a vertex or
+replacing an edge with a digon. (Even though it can be reduced further, the
+Conway operator form is usually preferable because including all those
+`$` and `j` operators would get tedious.) Corresponding to the pre-even and
+pre-odd nomenclature, an alternating operator `x` may be named "pre-(Name)"
+where (Name) is the name of `y`.
 
 In the list of assumptions at the end of the "Operators on counts" section,
 alternating operators may violate 3 and 4, and 1 if they create degree-2
 vertices or faces.
 
-This concept could be extended to k-partite graphs. By the four-color theorem,
+The concept of alternating operators could be extended to k-partite graphs.
+By the four-color theorem,
 the largest `k` that is necessary for a spherical tiling is 4, although larger
 values could be used. :math:`k(k-1)/2` interrelated chamber structures would
 have to be specified, which would get a little unmanageable for large `k`.
@@ -546,8 +609,28 @@ or add cross-caps (e.g. based on the a star polyhedron with Euler
 characteristic 1, like the tetrahemihexahedron, although such operators
 probably have more theoretical uses than aesthetic or practical ones).
 
-Table of operators
+Summary
 ------------------
+
+* Conway operators
+
+  * :math:`L_x`, :math:`M_x`, `g`, and parity are well defined
+
+* Pre-even alternating operators
+
+  * :math:`M_x`, `g`, and parity are well defined
+  * Violates assumption 1 and 4 (and 3 if degree-2 features created)
+
+* Pre-odd alternating operators
+
+  * :math:`M_x` is well defined if unknown values are allowed, `g` is well defined
+  * Violates assumption 1 and 4 (and 3 if degree-2 features created)
+
+* Topological operators
+
+  * :math:`L_x`, :math:`M_x`, and `g` are well defined
+  * Violates assumption 2 (Euler characteristic not preserved)
+
 Where not specified, :math:`k` and :math:`\ell` are 1, and
 :math:`b_i` and :math:`b'_i` are 0.
 
@@ -588,7 +671,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 2 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`b'_4=1`
-     - `j = jd = da = dad`
+     - `j = jd = da = dad` (`jd=@j` if alternating vertices)
    * - `k` (Kis)
      - N
      - .. image:: edge_chambers_kis.svg
@@ -791,7 +874,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_4=b`, :math:`b'_4=b'`
      - :math:`\Box_{a,b} = \Box_{a,b}d`,
        :math:`\Box_{1,1} = j`, :math:`\Box_{2,0} = o = j^2`,
-       :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`
+       :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`,
+       (:math:`\Box_{a,b}d = @\Box_{a,b}` if alternating vertices)
    * - :math:`\Box_{a,b}` if `T` odd
      - If :math:`a \ne b` and :math:`b \ne 0`
      -
@@ -822,7 +906,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
-   * - Alternating Pre-Join-Stake
+   * - Pre-Join-Stake
      - N
      - .. image:: edge_chambers_alternating_prestake0.svg
      - .. math::
@@ -840,7 +924,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_4=1`, :math:`b'_3=1`
-   * - Alternating Ortho
+   * - Pre-Gyro
      - Degree-2 vertices
      - .. image:: edge_chambers_alternating_ortho.svg
      - .. math::
@@ -849,7 +933,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
-   * - Alternating Pre-Join-Kis-Kis
+   * - Pre-Join-Kis-Kis
      - N
      - .. image:: edge_chambers_alternating_prekiskis0.svg
      - .. math::
@@ -858,8 +942,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 4 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
-
-   * - Alternating Meta/Ortho
+   * - Pre-Cross
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg
      - .. math::
@@ -905,7 +988,7 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 1 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
-    * - Alternating Truncate
+    * - Alternating Truncate (Pre-Chamfer)
       - N
       - .. image:: edge_chambers_alternating_truncate.svg
       - .. math::
@@ -914,7 +997,7 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 2 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`\ell = 3/2`, :math:`b_3=1`
-    * - Alternating Pre-Join-Lace
+    * - Pre-Join-Lace
       - N
       - .. image:: edge_chambers_alternating_prelace0.svg
       - .. math::
