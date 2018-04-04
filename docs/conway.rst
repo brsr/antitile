@@ -26,11 +26,11 @@ operator `x`, there also exist operators `xd`, `dx`, and `dxd`, some of which
 may be equal to `x`. Since the characteristics of the latter operators
 are closely related to `x`, this text will generally pick one operator from
 that collection and use that to represent the whole. (Usually the choice is
-an operator that preserves the base vertices, for consistency's sake.)
+an operator that preserves the base vertices, for arbitrary consistency's sake.)
 
 An operator that cannot be expressed in terms of operators aside from `d` and
-`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible,
-but `m` (Meta) is not (it is equal to `kj`).
+`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
+in terms of Conway operators, but `m` (Meta) is not (it is equal to `kj`).
 
 Conway operations are usually applied to convex (spherical) polyhedra, and less
 often on planar tilings. Planar tilings can be easier to visualize.
@@ -298,7 +298,7 @@ Some further consequences of these representations:
 
 * If a polyhedron has a prime number of edges, then the only Conway operators
   that can be used to express it in terms of another polyhedron are `S` and `d`.
-* Operators where `g` is a prime number are irreducible.
+* Operators where `g` is a prime number are irreducible in terms of Conway operators.
 * If `x=xd` or `x=rxdr`, :math:`\Lambda = 0`. If `x=dxd` or `x=rdxdr`,
   :math:`\Lambda = \pm 1`.
 * If an operator has :math:`\Lambda = \pm 1`, its decomposition cannot contain
@@ -307,7 +307,7 @@ Some further consequences of these representations:
   :math:`\Lambda = 0`.
 * There are no Conway operators with `g=2` and :math:`\Lambda = \pm 1`, so
   therefore operators with :math:`\Lambda = \pm 1` and `g=2p`, where p is prime,
-  are irreducible.
+  are irreducible in terms of Conway operators.
 
 In summary, the assumptions made in this section are:
 
@@ -490,10 +490,10 @@ partitioning of vertices, `jd = @j`.
 
 The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
 If `x` is an alternating operator that retains both (or neither) partition of
-seed vertices (if `a` and `a'` are 0 or 1), then ` $xj` has :math:`\Lambda = 0`.
+seed vertices (if `a` and `a'` are 0 or 1), then `$xj` has :math:`\Lambda = 0`.
 If `x` retains one partition but not the other (if `a` and `a'` are `?`),
 then `$xj` has :math:`\Lambda = \pm 1`. Accordingly, these sets of operators
-can be called pre-zero and pre-one.
+can be called pre-zero and pre-one operators.
 Although `$` does not in general have a :math:`M_x` form, in the expression
 `$xj` it either does nothing, removes an edge and a vertex, or removes an
 edge and a face. These operations can be represented by taking the matrix form
@@ -521,8 +521,9 @@ is just the white and grey chambers of `y`, stacked along their long edge. More
 specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
 an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at least) two
 alternating operators `x` corresponding to splitting the edge with a vertex or
-replacing an edge with a digon. (Even though it can be reduced further, the
-Conway operator form is usually preferable because including all those
+replacing an edge with a digon. 
+(Even though it can be reduced further in a larger set of operators, 
+the Conway operator form is usually preferable because including all those
 `$` and `j` operators would get tedious.) Corresponding to the pre-zero and
 pre-one nomenclature, an alternating operator `x` may be named "pre-(Name)"
 where (Name) is the name of `y`.
