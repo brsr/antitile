@@ -177,7 +177,7 @@ and because it suggests that features with degree 5 or more exist
 in balance with features of degree 3 (triangles and degree-3 vertices),
 and that in some sense degree 4 features come "for free".
 
-If the polyhedron doesn't have degenerate features (e.g digons or degree-2
+If the polyhedron doesn't have degree-2 features (e.g digons or degree-2
 vertices), :math:`i \ge 3`. Together with characteristics from above, a
 series of inequalities can be derived:
 
@@ -911,7 +911,7 @@ are written as just :math:`k` or :math:`\ell`.
 .. list-table:: Pre-zero alternating operators
 
    * - Operator
-     - Degenerate?
+     - Degree-2?
      - Chambers
      - Matrix
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
@@ -993,7 +993,7 @@ are written as just :math:`k` or :math:`\ell`.
 .. list-table:: Pre-one alternating operators
 
     * - Operator
-      - Degenerate?
+      - Degree-2?
       - Chambers
       - Matrix
       - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
