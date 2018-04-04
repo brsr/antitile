@@ -167,6 +167,16 @@ Applying the handshake lemma gives relations between the values:
 
    2g &= 2a'k + 2c'\ell + \sum i b'_i
 
+These can be manipulated into this form:
+
+.. math::
+   2k + 2l - 4 = \sum (4-i) (b_i + b'_i)
+
+which is interesting because it eliminates `g`, `a` and `c`,
+and because it suggests that features with degree 5 or more exist
+in balance with features of degree 3 (triangles and degree-3 vertices),
+and that in some sense degree 4 features come "for free".
+
 If the polyhedron doesn't have degenerate features (e.g digons or degree-2
 vertices), :math:`i \ge 3`. Together with characteristics from above, a
 series of inequalities can be derived:
@@ -225,21 +235,19 @@ horizontally or vertically.
    0 & g & 0 \\
    c & b & a \end{bmatrix}
 
-The matrix :math:`M_x` has three eigenvalues: `1`, `g`, and `(a-c)`. Thus, its
-determinant is `g(a-c)`. The first eigenvalue is constant and the second is the
-edge multiplier defined earlier. The third is either equal to -1, 0, or 1.
-The dual operator interchanges -1 and 1, which gives some motivation to using
-operators with `a=1` as the representative operators over those with `a=-1`.
-Operators can be thought of as having a parity based on `a` and `c`: if `a=c`,
-the operator has even parity, otherwise it has odd parity. Like multiplication
-of natural numbers, the composition of any operator with an even operator is
-even, and the composition of two odd operators is odd.
+The matrix :math:`M_x` has three eigenvalues: `1`, `g`, and
+:math:`\Lambda = a-c`. Thus, its determinant is :math:`g(a-c)`. The first
+eigenvalue is constant and the second is the edge multiplier defined earlier.
+The third, :math:`\Lambda`, is either equal to -1, 0, or 1. The dual operator
+interchanges :math:`\Lambda = -1` and :math:`\Lambda = 1`, which gives some
+motivation to using operators with `a=1` as the representative operators over
+those with `a=0`.
 
 For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
-`g` is the product of the `g` values for each operator, and the quantity `(a-c)`
-is the product of each operator's `(a-c)`. For the matrix form, composition is
-just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`. Explicitly, let
-:math:`g, a, b_i, b'_i, c, k, \ell` be the values for :math:`L_y`;
+`g` is the product of the `g` values for each operator, and :math:`\Lambda` is
+the product of each operator's :math:`\Lambda`. For the matrix form, composition
+is just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`. Explicitly,
+let :math:`g, a, b_i, b'_i, c, k, \ell` be the values for :math:`L_y`;
 :math:`G, A, B_i, B'_i, C, K, L` for :math:`L_x`; and
 :math:`\gamma, \alpha, \beta_i, \beta'_i, \sigma, \kappa, \lambda`
 for :math:`L_{xy}`:
@@ -288,10 +296,18 @@ the same as `pp` (one's chiral, one's not). For the operator depicted in
 
 Some further consequences of these representations:
 
-* If `x=xd`, the operator is even. If `x=dxd`, the operator is odd.
+* If a polyhedron has a prime number of edges, then the only Conway operators
+  that can be used to express it in terms of another polyhedron are `S` and `d`.
 * Operators where `g` is a prime number are primitive.
-* There are no odd operators with `g=2`, so therefore odd operators
-  with `g=2p`, where p is prime, are primitive.
+* If `x=xd` or `x=rxdr`, :math:`\Lambda = 0`. If `x=dxd` or `x=rdxdr`,
+  :math:`\Lambda = \pm 1`.
+* If an operator has :math:`\Lambda = \pm 1`, its decomposition cannot contain
+  any operators with :math:`\Lambda = 0`. Correspondingly, if an operator has
+  :math:`\Lambda = 0`, its decomposition must have at least one operator with
+  :math:`\Lambda = 0`.
+* There are no Conway operators with `g=2` and :math:`\Lambda = \pm 1`, so
+  therefore operators with :math:`\Lambda = \pm 1` and `g=2p`, where p is prime,
+  are primitive.
 
 In summary, the assumptions made in this section are:
 
@@ -321,9 +337,9 @@ of a chiral operator and an achiral operator is always chiral, but:
 * Two chiral operators can produce a chiral operator: `pp`, `pg`, `prg`
 
 Further confusing things are operators where r and d interact. Some
-operators have `xd = x`, while some have `xd = rxr`. The `gyro` operator is one
-example of the latter, and the bowtie operator in :numref:`bowtie` is another,
-maybe easier-to-visualize example.
+operators have `xd = x`, while some others have `xd = rxr`.
+The `gyro` operator is one example of the latter, and the bowtie operator
+in :numref:`bowtie` is another, maybe easier-to-visualize example.
 (Bowtie is a newly named operator, introduced in this text.)
 
 Relation to the Goldberg-Coxeter operation
@@ -338,11 +354,12 @@ which is identical to the Conway operator edge factor `g`.
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-:math:`\Box_{a,b}` is an even operator iff :math:`a \equiv b \mod 2`, and odd
-otherwise. Similarly, :math:`\Delta_{a,b}` is even iff :math:`a \equiv b \mod 3`.
-If the operator is even, the resulting polyhedron will have only quadrilateral
-or triangular (respectively) faces; if odd, there will be one face at the face
-center of the same degree as the seed face.
+:math:`\Box_{a,b}` has :math:`\Lambda = 0` iff :math:`a \equiv b \mod 2`, and
+:math:`\Lambda = 1` otherwise. Similarly, :math:`\Delta_{a,b}` has
+:math:`\Lambda = 0` iff :math:`a \equiv b \mod 3`. If the operator has
+:math:`\Lambda = 0`, the resulting polyhedron will have only quadrilateral
+or triangular (respectively) faces; if :math:`\Lambda = 1`, there will be one
+face at the face center of the same degree as the seed face.
 
 All of the nice qualities of GC operators carry over to this extension; for
 instance, they form a commutative submonoid of Conway operators, and can be
@@ -352,9 +369,9 @@ are also a good source of examples; in the 2-parameter families, it's often
 easy to find an operator with a desired quality.
 
 The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
-:math:`\Delta_{1,1} = n = kd`. Any even :math:`\Box_{a,b}` can be
-One useful relation is that if a GC operator is even, it can be decomposed as
-so: :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
+:math:`\Delta_{1,1} = n = kd`. One useful relation is that if a GC operator has
+:math:`\Lambda = 0`, it can be decomposed as so:
+:math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
 :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`. (These formula may result in
 negative values, which should be interpreted as per the section of these docs
 on the Goldberg-Coxeter operation.)
@@ -456,10 +473,11 @@ and when the seed polyhedron has faces of degree 6 or more.
 
 In general, alternating operators cannot be composed with other alternating or
 Conway operators, because those operators do not necessarily create
-even-degree faces or vertices. However, even :math:`\Box_{a,b}` operators
-create polyhedra with quadrilateral faces only. As mentioned earlier, all even
-:math:`\Box_{a,b}` can be decomposed into `j` (Join) and some other operator,
-so it's enough to examine `j`.
+even-degree faces or vertices. However, :math:`\Box_{a,b}` operators with
+:math:`\Lambda = 0` create polyhedra with quadrilateral faces only. As
+mentioned earlier, all :math:`\Box_{a,b}` with :math:`\Lambda = 0` can be
+decomposed
+into `j` (Join) and some other operator, so it's enough to examine `j`.
 
 Let `$` denote the smoothing operator that reduces degree-2 features, and `@`
 denote the operator that exchanges the alternation of the vertices of a seed
@@ -473,9 +491,10 @@ partitioning of vertices, `jd = @j`.
 
 The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
 If `x` is an alternating operator that retains both (or neither) partition of
-seed vertices (if `a` and `a'` are 0 or 1), then ` $xj` is even.  If `x` retains
-one partition but not the other (if `a` and `a'` are `?`), then `$xj` is odd.
-Accordingly, these sets of operators will be called pre-even and pre-odd.
+seed vertices (if `a` and `a'` are 0 or 1), then ` $xj` has :math:`\Lambda = 0`.
+If `x` retains one partition but not the other (if `a` and `a'` are `?`),
+then `$xj` has :math:`\Lambda = \pm 1`. Accordingly, these sets of operators
+can be called pre-zero and pre-one.
 Although `$` does not in general have a :math:`M_x` form, in the expression
 `$xj` it either does nothing, removes an edge and a vertex, or removes an
 edge and a face. These operations can be represented by taking the matrix form
@@ -498,16 +517,15 @@ operator. By symmetry, if `g` is odd, there is an edge that lies on or crosses
 the center point of the edge in the chamber structure. Otherwise, if `g` is
 even, either a vertex lies there or a face contains the center point. If `g`
 is odd, either split the edge with a degree-2 vertex at the center point, or
-replace the edge with a digon. (Don't confuse `g` being even with the operator
-itself being even.) Then the alternating chamber structure of `x`
+replace the edge with a digon. Then the alternating chamber structure of `x`
 is just the white and grey chambers of `y`, stacked along their long edge. More
 specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
 a unique alternating operator `x`: if `g` is odd, then `y = $xj` for two
 alternating operators `x` corresponding to splitting the edge with a vertex or
 replacing an edge with a digon. (Even though it can be reduced further, the
 Conway operator form is usually preferable because including all those
-`$` and `j` operators would get tedious.) Corresponding to the pre-even and
-pre-odd nomenclature, an alternating operator `x` may be named "pre-(Name)"
+`$` and `j` operators would get tedious.) Corresponding to the pre-zero and
+pre-one nomenclature, an alternating operator `x` may be named "pre-(Name)"
 where (Name) is the name of `y`.
 
 In the list of assumptions at the end of the "Operators on counts" section,
@@ -616,12 +634,12 @@ Summary
 
   * :math:`L_x`, :math:`M_x`, `g`, and parity are well defined
 
-* Pre-even alternating operators
+* Pre-zero alternating operators
 
   * :math:`M_x`, `g`, and parity are well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
 
-* Pre-odd alternating operators
+* Pre-one alternating operators
 
   * :math:`M_x` is well defined if unknown values are allowed, `g` is well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
@@ -890,7 +908,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
 are written as just :math:`k` or :math:`\ell`.
 
-.. list-table:: Pre-even alternating operators
+.. list-table:: Pre-zero alternating operators
 
    * - Operator
      - Degenerate?
@@ -972,7 +990,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
 
-.. list-table:: Pre-odd alternating operators
+.. list-table:: Pre-one alternating operators
 
     * - Operator
       - Degenerate?
@@ -1009,8 +1027,8 @@ are written as just :math:`k` or :math:`\ell`.
 
 Open questions
 --------------
-* Are there any operators such that `rxr = dxd`? (They would have to be odd
-  operators.)
+* Are there any operators such that `rxr = dxd`? (They would have to be
+  operators with :math:`\Lambda= \pm 1`.)
 * Is/are there an/other condition/s that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there a good invariant related to the chirality of a Conway operator?
