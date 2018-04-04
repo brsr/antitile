@@ -29,7 +29,7 @@ that collection and use that to represent the whole. (Usually the choice is
 an operator that preserves the base vertices, for consistency's sake.)
 
 An operator that cannot be expressed in terms of operators aside from `d` and
-`r` is "primitive". For instance, `k` (Kis) and `j` (Join) are primitive,
+`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible,
 but `m` (Meta) is not (it is equal to `kj`).
 
 Conway operations are usually applied to convex (spherical) polyhedra, and less
@@ -298,7 +298,7 @@ Some further consequences of these representations:
 
 * If a polyhedron has a prime number of edges, then the only Conway operators
   that can be used to express it in terms of another polyhedron are `S` and `d`.
-* Operators where `g` is a prime number are primitive.
+* Operators where `g` is a prime number are irreducible.
 * If `x=xd` or `x=rxdr`, :math:`\Lambda = 0`. If `x=dxd` or `x=rdxdr`,
   :math:`\Lambda = \pm 1`.
 * If an operator has :math:`\Lambda = \pm 1`, its decomposition cannot contain
@@ -307,7 +307,7 @@ Some further consequences of these representations:
   :math:`\Lambda = 0`.
 * There are no Conway operators with `g=2` and :math:`\Lambda = \pm 1`, so
   therefore operators with :math:`\Lambda = \pm 1` and `g=2p`, where p is prime,
-  are primitive.
+  are irreducible.
 
 In summary, the assumptions made in this section are:
 
@@ -344,7 +344,6 @@ in :numref:`bowtie` is another, maybe easier-to-visualize example.
 
 Relation to the Goldberg-Coxeter operation
 ------------------------------------------
-
 The Goldberg-Coxeter operation can be fairly simply extended to a Conway
 operator. In the master polygon, identify two vertices and the center: this is
 the chamber structure of the operator.
@@ -512,7 +511,7 @@ respectively:
     0 & 1 & 0 \end{bmatrix} .
 
 In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
-some alternating operator. This is easier to see by going backwards from the
+some alternating or Conway operator. This is easier to see by going backwards from the
 operator. By symmetry, if `g` is odd, there is an edge that lies on or crosses
 the center point of the edge in the chamber structure. Otherwise, if `g` is
 even, either a vertex lies there or a face contains the center point. If `g`
@@ -520,7 +519,7 @@ is odd, either split the edge with a degree-2 vertex at the center point, or
 replace the edge with a digon. Then the alternating chamber structure of `x`
 is just the white and grey chambers of `y`, stacked along their long edge. More
 specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
-a unique alternating operator `x`: if `g` is odd, then `y = $xj` for two
+an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at least) two
 alternating operators `x` corresponding to splitting the edge with a vertex or
 replacing an edge with a digon. (Even though it can be reduced further, the
 Conway operator form is usually preferable because including all those
@@ -1029,7 +1028,7 @@ Open questions
 --------------
 * Are there any operators such that `rxr = dxd`? (They would have to be
   operators with :math:`\Lambda= \pm 1`.)
-* Is/are there an/other condition/s that can be added to the values for
+* Are there other conditions that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there a good invariant related to the chirality of a Conway operator?
 * What other invariants need to be added to fully characterize Conway operators?
