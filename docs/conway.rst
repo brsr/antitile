@@ -1058,7 +1058,7 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 3 & 0 \\
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
-      -
+      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
       - :math:`xj = L_0`
 
 Open questions
