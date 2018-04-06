@@ -1036,8 +1036,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 1 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
-      -
-      -      
+      - .. image:: edge_chambers_alternating_dual_hemi.svg
+      - `$xj = S`, `$dxj = d`     
     * - Alternating Truncate (Pre-Chamfer)
       - N
       - .. image:: edge_chambers_alternating_truncate.svg
@@ -1047,8 +1047,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 2 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`\ell = 3/2`, :math:`b_3=1`
-      -
-      -      
+      - .. image:: edge_chambers_alternating_dual_prechamfer.svg
+      - `xj = c`, `dxjd = u`
     * - Pre-Join-Lace
       - N
       - .. image:: edge_chambers_alternating_prelace0.svg
@@ -1059,7 +1059,7 @@ are written as just :math:`k` or :math:`\ell`.
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
       -
-      -
+      - :math:`xj = L_0`
 
 Open questions
 --------------
