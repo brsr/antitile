@@ -654,11 +654,12 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 
 .. list-table:: Conway operators
 
-   * - Operator
+   * - Operator `x`
      - Chiral?
-     - Chambers
-     - Matrix
+     - Chambers of `x`
+     - Matrix :math:`M_x`
      - :math:`k, \ell`, :math:`b_i`, :math:`b'_i`
+     - Chambers of `dx`
      - Useful relations
    * - `S` (Seed, Identity)
      - N
@@ -669,17 +670,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
         0 & 1 & 0 \\
         0 & 0 & 1 \end{bmatrix}
      -
-     - `rr = S`
-   * - `d` (Dual)
-     - N
      - .. image:: edge_chambers_dual.svg
-     - .. math::
-          \begin{bmatrix}
-          0 & 0 & 1 \\
-          0 & 1 & 0 \\
-          1 & 0 & 0 \end{bmatrix}
-     -
-     - `dd = S`
+     - `rr = S`, `dd = S`
    * - `j` (Join)
      - N
      - .. image:: edge_chambers_join.svg
@@ -689,6 +681,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 2 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`b'_4=1`
+     - .. image:: edge_chambers_ambo.svg
      - `j = jd = da = dad` (`jd=@j` if alternating vertices)
    * - `k` (Kis)
      - N
@@ -699,6 +692,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 3 & 0 \\
           0 & 2 & 0 \end{bmatrix}
      - :math:`k=2`, :math:`b'_3=2`
+     - .. image:: edge_chambers_zip.svg
      - `k = nd = dz = dtd`
    * - `g` (Gyro)
      - Y
@@ -709,7 +703,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 5 & 0 \\
           0 & 2 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b'_5=2`
-     - `g = rgdr = ds = rdsdr`
+     - .. image:: edge_chambers_snub.svg
+     - `g` = `rgdr` = `ds` = `rdsdr`
    * - `p` (Propeller)
      - Y
      - .. image:: edge_chambers_propeller.svg
@@ -719,6 +714,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_4=2`, :math:`b'_4=2`
+     - .. image:: edge_chambers_dp.svg
      - `p = dpd`
    * - `c` (Chamfer)
      - N
@@ -729,6 +725,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 4 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`b_3=2`, :math:`b'_6=1`
+     - .. image:: edge_chambers_dc.svg
      - `c = dud`
    * - `l` (Loft)
      - N
@@ -740,6 +737,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 2 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`b_3=2`, :math:`b'_4=2`
      -
+     -
    * - `q` (Quinto)
      - N
      - .. image:: edge_chambers_quinto.svg
@@ -749,6 +747,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 6 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=1`, :math:`b'_5=2`
+     -
      -
    * - :math:`K_0` (Join-stake)
      - N
@@ -760,6 +759,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 3 & 0 \end{bmatrix}
      - :math:`k=2`, :math:`b_3=2`, :math:`b'_4=3`
      -
+     -
    * - :math:`K` (Stake)
      - N
      - .. image:: edge_chambers_stake.svg
@@ -769,6 +769,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 7 & 0 \\
           0 & 4 & 0 \end{bmatrix}
      - :math:`k=3`, :math:`b_3=2`, :math:`b'_3=2`, :math:`b'_4=2`
+     -
      -
    * - :math:`L_0` (Join-lace)
      - N
@@ -780,6 +781,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 3 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`b_4=2`, :math:`b'_3=2`, :math:`b'_4=1`
      -
+     -
    * - :math:`L` (Lace)
      - N
      - .. image:: edge_chambers_lace.svg
@@ -789,6 +791,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 7 & 0 \\
           0 & 4 & 1 \end{bmatrix}
      - :math:`k=3`, :math:`b_4=2`, :math:`b'_3=4`
+     -
      -
    * - :math:`w` (Whirl)
      - Y
@@ -800,6 +803,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=4`, :math:`b'_6=2`
      -
+     -
    * - :math:`J=(kk)_0` (Join-kis-kis)
      - N
      - .. image:: edge_chambers_join-kis-kis.svg
@@ -809,6 +813,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 8 & 0 \\
           0 & 5 & 0 \end{bmatrix}
      - :math:`k=3`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=4`, :math:`b'_4=1`
+     -
      -
    * - :math:`X` (Cross)
      - N
@@ -820,6 +825,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 6 & 0 \end{bmatrix}
      - :math:`k=2`, :math:`b_4=2`, :math:`b_6=1`, :math:`b'_3=4`, :math:`b'_4=2`
      -
+     -
    * - :math:`W` (Waffle) (New)
      - N
      - .. image:: edge_chambers_waffle.svg
@@ -830,6 +836,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
         0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=2`, :math:`b'_4=2`, :math:`b'_5=2`
      -
+     -
    * - :math:`B` (Bowtie) (New)
      - Y
      - .. image:: edge_chambers_bowtie.svg
@@ -839,6 +846,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 10 & 0 \\
           0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
+     -
      - `rBr=Bd`
    * - :math:`m_n` (Meta)
      - N
@@ -849,6 +857,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 3n+3 & 0 \\
           0 & 2n+2 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`\ell=n+1`, :math:`b_4=n`, :math:`b'_3=2n+2`
+     -
      - :math:`m_1 = m = kj`
    * - :math:`M_n` (Medial)
      - N
@@ -859,6 +868,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 3n+1 & 0 \\
           0 & 2n & 1 \end{bmatrix}
      - :math:`\ell=n`, :math:`b_4=n`, :math:`b'_3=2n-2`, :math:`b'_4=2`
+     -
      - :math:`M_1 = o = jj`
    * - :math:`\Delta_{a,b}` if `T` divisible by 3
      - If :math:`a \ne b` and :math:`b \ne 0`
@@ -869,8 +879,9 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & 2T/3 & 0 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
+     -
      - :math:`\Delta_{1,1} = n`,
-       :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`
+       :math:`\Delta_{a,b}` :math:`= n \Delta_{(2a+b)/3, (b-a)/3}`
    * - :math:`\Delta_{a,b}` if `T` not divisible by 3
      - If :math:`a \ne b` and :math:`b \ne 0`
      -
@@ -880,6 +891,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & 2(T-1)/3 & 1 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
+     -
      - :math:`\Delta_{2,0} = u`, :math:`\Delta_{2,1} = dwd`
    * - :math:`\Box_{a,b}` if `T` even
      - If :math:`a \ne b` and :math:`b \ne 0`
@@ -890,9 +902,10 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & T/2 & 0 \end{bmatrix}
      - :math:`b_4=b`, :math:`b'_4=b'`
+     -
      - :math:`\Box_{a,b} = \Box_{a,b}d`,
        :math:`\Box_{1,1} = j`, :math:`\Box_{2,0} = o = j^2`,
-       :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`,
+       :math:`\Box_{a,b}` :math:`= j\Box_{(a+b)/2,(b-a)/2}`,
        (:math:`\Box_{a,b}d = @\Box_{a,b}` if alternating vertices)
    * - :math:`\Box_{a,b}` if `T` odd
      - If :math:`a \ne b` and :math:`b \ne 0`
@@ -903,6 +916,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & T & 0 \\
           0 & (T-1)/2 & 1 \end{bmatrix}
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
+     -
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
 
 In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
