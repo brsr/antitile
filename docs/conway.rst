@@ -937,7 +937,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
      -
-     -     
+     - `$xj = k`    
    * - Pre-Join-Stake
      - N
      - .. image:: edge_chambers_alternating_prestake0.svg
@@ -948,7 +948,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 1 & 1 \end{bmatrix}
      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
      -
-     -     
+     - `xj = K`    
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -969,8 +969,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
-     -
-     -     
+     - 
+     - `$xj = g`. Not the same as Pre-Join-Lace of dual.    
    * - Pre-Join-Kis-Kis
      - N
      - .. image:: edge_chambers_alternating_prekiskis0.svg
@@ -981,7 +981,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 1 \end{bmatrix}
      - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
      -
-     -     
+     - :math:`xj = (kk)_0`    
    * - Pre-Cross
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg
@@ -993,7 +993,7 @@ are written as just :math:`k` or :math:`\ell`.
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
        :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
      -
-     -       
+     - `xj = X`      
    * - Alternating Meta/Join
      - N
      - .. image:: edge_chambers_alternating_metajoin.svg
@@ -1058,7 +1058,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 3 & 0 \\
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
-      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
+      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg 
+        Not the same as pre-gyro of dual!
       - :math:`xj = L_0`
 
 Open questions
