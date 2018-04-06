@@ -707,7 +707,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - `g` = `rgdr` = `ds` = `rdsdr`
    * - `p` (Propeller)
      - Y
-     - .. image:: edge_chambers_propeller.svg
+     - .. image:: edge_chambers_propeller-square_grid.svg
      - .. math::
           \begin{bmatrix}
           1 & 2 & 0 \\
