@@ -922,9 +922,11 @@ are written as just :math:`k` or :math:`\ell`.
 
    * - Operator
      - Degree-2?
-     - Chambers
+     - Chambers of `x`
      - Matrix
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
+     - Chambers of `dx`
+     - Useful relations     
    * - Alternating Bisect
      - Digons
      - .. image:: edge_chambers_alternating_bisect.svg
@@ -934,6 +936,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
+     -
+     -     
    * - Pre-Join-Stake
      - N
      - .. image:: edge_chambers_alternating_prestake0.svg
@@ -943,6 +947,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
+     -
+     -     
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -952,6 +958,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_4=1`, :math:`b'_3=1`
+     -
+     -     
    * - Pre-Gyro
      - Degree-2 vertices
      - .. image:: edge_chambers_alternating_ortho.svg
@@ -961,6 +969,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
+     -
+     -     
    * - Pre-Join-Kis-Kis
      - N
      - .. image:: edge_chambers_alternating_prekiskis0.svg
@@ -970,6 +980,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 4 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
+     -
+     -     
    * - Pre-Cross
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg
@@ -980,6 +992,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \end{bmatrix}
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
        :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
+     -
+     -       
    * - Alternating Meta/Join
      - N
      - .. image:: edge_chambers_alternating_metajoin.svg
@@ -990,6 +1004,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \end{bmatrix}
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
        :math:`b_3=1`, :math:`b'_3=3`
+     -
+     -       
    * - Alternating Subdivide/Quinto
      - N
      - .. image:: edge_chambers_alternating_subdividequinto.svg
@@ -999,14 +1015,18 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
+     -
+     -     
 
 .. list-table:: Pre-one alternating operators
 
     * - Operator
       - Degree-2?
-      - Chambers
+      - Chambers of `x`
       - Matrix
       - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
+      - Chambers of `dx`
+      - Useful relations    
     * - Alternation, Hemi, Semi
       - Digons
       - .. image:: edge_chambers_alternating_semi.svg
@@ -1016,6 +1036,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 1 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
+      -
+      -      
     * - Alternating Truncate (Pre-Chamfer)
       - N
       - .. image:: edge_chambers_alternating_truncate.svg
@@ -1025,6 +1047,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 2 & 0 \\
            ? & 0 & 1 \end{bmatrix}
       - :math:`\ell = 3/2`, :math:`b_3=1`
+      -
+      -      
     * - Pre-Join-Lace
       - N
       - .. image:: edge_chambers_alternating_prelace0.svg
@@ -1034,6 +1058,8 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 3 & 0 \\
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
+      -
+      -
 
 Open questions
 --------------
