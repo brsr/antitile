@@ -848,75 +848,71 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
      -
      - `rBr=Bd`
+      
+.. list-table:: Conway operator families
+      
+   * - Operator `x`
+     - Chiral?
+     - Matrix :math:`M_x`
+     - :math:`k, \ell`, :math:`b_i`, :math:`b'_i`
+     - Useful relations 
    * - :math:`m_n` (Meta)
      - N
-     -
      - .. math::
           \begin{bmatrix}
           1 & n & 1 \\
           0 & 3n+3 & 0 \\
           0 & 2n+2 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`\ell=n+1`, :math:`b_4=n`, :math:`b'_3=2n+2`
-     -
      - :math:`m_1 = m = kj`
    * - :math:`M_n` (Medial)
      - N
-     -
      - .. math::
           \begin{bmatrix}
           1 & n & 1 \\
           0 & 3n+1 & 0 \\
           0 & 2n & 1 \end{bmatrix}
      - :math:`\ell=n`, :math:`b_4=n`, :math:`b'_3=2n-2`, :math:`b'_4=2`
-     -
      - :math:`M_1 = o = jj`
    * - :math:`\Delta_{a,b}` if `T` divisible by 3
      - If :math:`a \ne b` and :math:`b \ne 0`
-     -
      - .. math::
           \begin{bmatrix}
           1 & T/3-1 & 1 \\
           0 & T & 0 \\
           0 & 2T/3 & 0 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
-     -
      - :math:`\Delta_{1,1} = n`,
        :math:`\Delta_{a,b}` :math:`= n \Delta_{(2a+b)/3, (b-a)/3}`
    * - :math:`\Delta_{a,b}` if `T` not divisible by 3
      - If :math:`a \ne b` and :math:`b \ne 0`
-     -
      - .. math::
           \begin{bmatrix}
           1 & (T-1)/3 & 0 \\
           0 & T & 0 \\
           0 & 2(T-1)/3 & 1 \end{bmatrix}
      - :math:`b_6=b`, :math:`b'_3=b'`
-     -
      - :math:`\Delta_{2,0} = u`, :math:`\Delta_{2,1} = dwd`
    * - :math:`\Box_{a,b}` if `T` even
      - If :math:`a \ne b` and :math:`b \ne 0`
-     -
      - .. math::
           \begin{bmatrix}
           1 & T/2-1 & 1 \\
           0 & T & 0 \\
           0 & T/2 & 0 \end{bmatrix}
      - :math:`b_4=b`, :math:`b'_4=b'`
-     -
      - :math:`\Box_{a,b} = \Box_{a,b}d`,
        :math:`\Box_{1,1} = j`, :math:`\Box_{2,0} = o = j^2`,
        :math:`\Box_{a,b}` :math:`= j\Box_{(a+b)/2,(b-a)/2}`,
        (:math:`\Box_{a,b}d = @\Box_{a,b}` if alternating vertices)
    * - :math:`\Box_{a,b}` if `T` odd
      - If :math:`a \ne b` and :math:`b \ne 0`
-     -
      - .. math::
           \begin{bmatrix}
           1 & (T-1)/2 & 0 \\
           0 & T & 0 \\
           0 & (T-1)/2 & 1 \end{bmatrix}
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
-     -
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
 
 In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
