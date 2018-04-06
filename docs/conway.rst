@@ -521,8 +521,8 @@ is just the white and grey chambers of `y`, stacked along their long edge. More
 specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
 an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at least) two
 alternating operators `x` corresponding to splitting the edge with a vertex or
-replacing an edge with a digon. 
-(Even though it can be reduced further in a larger set of operators, 
+replacing an edge with a digon.
+(Even though it can be reduced further in a larger set of operators,
 the Conway operator form is usually preferable because including all those
 `$` and `j` operators would get tedious.) Corresponding to the pre-zero and
 pre-one nomenclature, an alternating operator `x` may be named "pre-(Name)"
@@ -632,11 +632,11 @@ Summary
 
 * Conway operators
 
-  * :math:`L_x`, :math:`M_x`, `g`, and parity are well defined
+  * :math:`L_x`, :math:`M_x`, `g`, and :math:`\Lambda` are well defined
 
 * Pre-zero alternating operators
 
-  * :math:`M_x`, `g`, and parity are well defined
+  * :math:`M_x`, `g`, and :math:`\Lambda` are well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
 
 * Pre-one alternating operators
