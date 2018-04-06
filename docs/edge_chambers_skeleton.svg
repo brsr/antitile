@@ -7,9 +7,8 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <line x1="10" y1="100" x2="190" y2="100" stroke="black" stroke-width="2"/>
 <circle cx="10" cy="100" r="5" fill="black" stroke="black"/>
 <circle cx="190" cy="100" r="5" fill="black" stroke="black"/>
-<text x="100" y="12" font-size="30" stroke="none"
-  fill="red" alignment-baseline="middle" text-anchor="middle">+</text>
-  <text x="100" y="192" font-size="30" stroke="none" 
-    fill="red" alignment-baseline="middle" text-anchor="middle">+</text>
-
+<line x1="90" y1="10" x2="110" y2="10" stroke="red"/>
+<line x1="100" y1="0" x2="100" y2="20" stroke="red"/>
+<line x1="90" y1="190" x2="110" y2="190" stroke="red"/>
+<line x1="100" y1="180" x2="100" y2="200" stroke="red"/>
 </svg>
