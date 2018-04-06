@@ -927,7 +927,7 @@ are written as just :math:`k` or :math:`\ell`.
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
      - Chambers of `dx`
      - Useful relations     
-   * - Alternating Bisect
+   * - Pre-kis
      - Digons
      - .. image:: edge_chambers_alternating_bisect.svg
      - .. math::
@@ -936,7 +936,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
-     -
+     - .. image:: edge_chambers_alternating_dual_prekis.svg
      - `$xj = k`    
    * - Pre-Join-Stake
      - N
@@ -947,7 +947,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
-     -
+     - .. image:: edge_chambers_alternating_dual_prestake0.svg
      - `xj = K`    
    * - Alternating Subdivide
      - N
