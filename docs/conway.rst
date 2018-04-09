@@ -482,9 +482,10 @@ operators. Define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and :math:`\ell_2`,
 multipliers for the degree of the alternating seed vertices or faces
 respectively, which may also take values in :math:`\mathbb{N}/2`. Also, allow
 :math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take values in
-:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value. Expanding the
-"morality" from earlier, operators where `a` or `c` is `?` can be called
-"ugly" operators: the good, the bad, and the ugly.
+:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value (like NaN).
+Expanding the "morality" from earlier, operators where `a` or `c` is `?`
+can be called "ugly" operators, giving us the good, the bad, and the ugly.
+(Ugly is more a commentary on their analysis than their aesthetics.)
 
 If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
 Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
@@ -502,9 +503,9 @@ from :math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
 but this is a linear map between two different spaces, not a linear operator,
 and isn't as useful compared to the usual :math:`M_x`. (For instance, you can't
 multiply the matrices together to represent operator composition.) That being
-said, there are two special cases where things become more tractable:
-when the seed polyhedron has only quadrilateral faces,
-and when the seed polyhedron has faces of degree 6 or more.
+said, when the seed polyhedron has only quadrilateral faces, things become
+much more tractable. (This is also true when the seed polyhedron has only
+faces of degree 6 or more, but there are much fewer of those.)
 
 In general, alternating operators cannot be composed with other alternating or
 Conway operators, because those operators do not necessarily create
