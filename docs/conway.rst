@@ -107,7 +107,7 @@ homomorphisms between the monoids, as so:
 * Conway operator `x` (acts on polyhedra)
 * Infinite-dimensional linear operator :math:`L_x` (acts on :math:`v_i, e, f_i`)
 * 3x3 matrix :math:`M_x` (acts on :math:`[v,e,f]`)
-* Eigenvalues of :math:`M_x`
+* Inflation factor `g` and 2x2 matrix :math:`\Lambda_x`
 
 Each bullet will be handled in turn.
 
@@ -150,6 +150,43 @@ where `a`, :math:`a'`, `c`, and :math:`c'` are either 0 or 1, `g` is a
 positive integer, all :math:`b_i` and :math:`b'_i` are nonnegative integers,
 and `k` and :math:`\ell` are positive integers. The subscripted values like
 :math:`v_{i/k}` should be interpreted as 0 if `i/k` is not an integer.
+
+For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
+`g` is the product of the `g` values for each operator, and :math:`\Lambda` is
+the product of each operator's :math:`\Lambda`. For the matrix form, composition
+is just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`.
+
+Explicitly the composition of two operators `xy` can be described as so.
+Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the values for :math:`L_y`;
+:math:`G, A, A', B_i, B'_i, C, C', K, L` for :math:`L_x`; and
+:math:`\gamma, \alpha, \alpha', \beta_i, \beta'_i, \sigma, \sigma',
+\kappa, \lambda` for :math:`L_{xy}`:
+
+.. math::
+   \gamma &= Gg
+
+   \alpha &= Aa + Ca'
+
+   \beta_i &= A b_{i/K} + g B_i + C b'_{i/L}
+
+   \beta'_i &= A' b_{i/K} + g B'_i + C' b'_{i/L}
+
+   \sigma &= Ac + Cc'
+
+.. math::
+   \kappa &= \left\{
+    \begin{array}{ll}
+      Kk & if a=1\\
+      Lk & if a=0
+    \end{array}
+   \right.
+
+   \lambda &= \left\{
+    \begin{array}{ll}
+      K \ell & if c=1\\
+      L \ell & if c=0
+    \end{array}
+   \right.
 
 Under the constraint that the operator preserves the Euler characteristic,
 it can be shown that :math:`a + a' = 1`, :math:`c + c' = 1`, and
@@ -230,53 +267,53 @@ horizontally or vertically.
    c' & b' & a' \end{bmatrix}, \mathbf{M}_d \mathbf{M}_x  = \begin{bmatrix}
    a' & b' & c' \\
    0 & g & 0 \\
-   a & b & c \end{bmatrix}, \mathbf{M}_d \mathbf{M}_x \mathbf{M}_d = \begin{bmatrix}
+   a & b & c \end{bmatrix},
+   \mathbf{M}_d \mathbf{M}_x \mathbf{M}_d = \begin{bmatrix}
    c' & b' & a' \\
    0 & g & 0 \\
    c & b & a \end{bmatrix}
 
-The matrix :math:`M_x` has three eigenvalues: `1`, `g`, and
-:math:`\Lambda = a-c`. Thus, its determinant is :math:`g(a-c)`. The first
-eigenvalue is constant and the second is the edge multiplier defined earlier.
-The third, :math:`\Lambda`, is either equal to -1, 0, or 1. The dual operator
-interchanges :math:`\Lambda = -1` and :math:`\Lambda = 1`, which gives some
-motivation to using operators with `a=1` as the representative operators over
-those with `a=0`.
+It can be seen from the composition equations that for an operator xy, the
+expansion factor g is the product of the g values for operators `x` and `y`.
+It can also be seen that :math:`a, a', c, c'` form their own linear system,
+a submatrix of :math:`M_x`: let
+:math:`\Lambda_x = \begin{bmatrix} a & c \\ a' & c' \end{bmatrix}`,
+then :math:`\Lambda_{xy} = \Lambda_x \Lambda_y`.
 
-For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
-`g` is the product of the `g` values for each operator, and :math:`\Lambda` is
-the product of each operator's :math:`\Lambda`. For the matrix form, composition
-is just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`. Explicitly,
-let :math:`g, a, b_i, b'_i, c, k, \ell` be the values for :math:`L_y`;
-:math:`G, A, B_i, B'_i, C, K, L` for :math:`L_x`; and
-:math:`\gamma, \alpha, \beta_i, \beta'_i, \sigma, \kappa, \lambda`
-for :math:`L_{xy}`:
+.. list-table:: Possible values of :math:`\Lambda_x`
+   :align: right
 
-.. math::
-   \gamma &= Gg
+   * - :math:`\Lambda_x`
+     - :math:`\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}`
+     - :math:`\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}`
+     - :math:`\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}`
+     - :math:`\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}`
+   * - Determinant
+     - 1
+     - -1
+     - 0
+     - 0
+   * - Name
+     - Good Vertex-preserving (VP)
+     - Good Non-VP (NVP)
+     - Bad VP
+     - Bad NVP
 
-   \alpha &= Aa + Ca'
-
-   \beta_i &= A b_{i/K} + g B_i + C b'_{i/L}
-
-   \beta'_i &= A' b_{i/K} + g B'_i + C' b'_{i/L}
-
-   \sigma &= Ac + Cc'
-
-.. math::
-   \kappa &= \left\{
-    \begin{array}{ll}
-      Kk & if a=1\\
-      Lk & if a=0
-    \end{array}
-   \right.
-
-   \lambda &= \left\{
-    \begin{array}{ll}
-      K \ell & if c=1\\
-      L \ell & if c=0
-    \end{array}
-   \right.
+By cofactor expansion, :math:`\det (M_x) = g \det (\Lambda_x)`.
+:math:`\Lambda_x` has a determinant of -1, 0, or 1. (In fact, :math:`\Lambda_x`
+has two eigenvalues, one of which is always 1, and one of which may be -1, 0,
+or 1. :math:`M_x` has three eigenvalues: two it shares with :math:`\Lambda_x`,
+and one is `g`.) The dual operator has
+:math:`\det (M_x) = \det (\Lambda_x) = -1`, and it is easy to see that of the
+four possible :math:`\Lambda_x`, the first two and last two in the above table
+are related by the dual operator. One in each set preserves seed vertices
+(has `a=1`), the other does not (has `a=0`); call the first vertex-preserving
+(VP) and the second non-vertex-preserving (NVP). The sets themselves will be
+called good and bad, for the arbitrary choice of a convenient conceptual
+dichotomy. Bad operators have `a=c`, while good operators have :math:`a \ne c`.
+The composition of two good operators is good, while the composition of a bad
+operator and a good or bad operator is another bad operator; bad operators
+push out good. This can be referred to as the "morality" of the operator.
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
@@ -298,16 +335,14 @@ Some further consequences of these representations:
 
 * If a polyhedron has a prime number of edges, then the only Conway operators
   that can be used to express it in terms of another polyhedron are `S` and `d`.
-* Operators where `g` is a prime number are irreducible in terms of Conway operators.
-* If `x=xd` or `x=rxdr`, :math:`\Lambda = 0`. If `x=dxd` or `x=rdxdr`,
-  :math:`\Lambda = \pm 1`.
-* If an operator has :math:`\Lambda = \pm 1`, its decomposition cannot contain
-  any operators with :math:`\Lambda = 0`. Correspondingly, if an operator has
-  :math:`\Lambda = 0`, its decomposition must have at least one operator with
-  :math:`\Lambda = 0`.
-* There are no Conway operators with `g=2` and :math:`\Lambda = \pm 1`, so
-  therefore operators with :math:`\Lambda = \pm 1` and `g=2p`, where p is prime,
-  are irreducible in terms of Conway operators.
+* Operators where `g` is a prime number are irreducible in terms of
+  Conway operators other than `d`.
+* If `x=xd` or `x=rxdr`, `x` is bad. If `x=dxd` or `x=rdxdr`, `x` is good.
+* If an operator is good, its decomposition cannot contain
+  any operators with :math:`\Lambda = 0`. Correspondingly, if an operator is
+  bad, its decomposition must have at least one bad operator.
+* There are no good Conway operators with `g=2`, so therefore good operators
+  with `g=2p`, where p is prime, are irreducible in terms of Conway operators.
 
 In summary, the assumptions made in this section are:
 
@@ -353,11 +388,10 @@ which is identical to the Conway operator edge factor `g`.
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-:math:`\Box_{a,b}` has :math:`\Lambda = 0` iff :math:`a \equiv b \mod 2`, and
-:math:`\Lambda = 1` otherwise. Similarly, :math:`\Delta_{a,b}` has
-:math:`\Lambda = 0` iff :math:`a \equiv b \mod 3`. If the operator has
-:math:`\Lambda = 0`, the resulting polyhedron will have only quadrilateral
-or triangular (respectively) faces; if :math:`\Lambda = 1`, there will be one
+:math:`\Box_{a,b}` is bad iff :math:`a \equiv b \mod 2`, and good otherwise.
+Similarly, :math:`\Delta_{a,b}` is bad iff :math:`a \equiv b \mod 3`. If the
+operator is bad, the resulting polyhedron will have only quadrilateral
+or triangular (respectively) faces; if good, there will be one
 face at the face center of the same degree as the seed face.
 
 All of the nice qualities of GC operators carry over to this extension; for
@@ -368,8 +402,8 @@ are also a good source of examples; in the 2-parameter families, it's often
 easy to find an operator with a desired quality.
 
 The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
-:math:`\Delta_{1,1} = n = kd`. One useful relation is that if a GC operator has
-:math:`\Lambda = 0`, it can be decomposed as so:
+:math:`\Delta_{1,1} = n = kd`. One useful relation is that if a GC operator is
+bad, it can be decomposed as so:
 :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
 :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`. (These formula may result in
 negative values, which should be interpreted as per the section of these docs
@@ -444,11 +478,13 @@ to allow :math:`k` and :math:`\ell` to take values in
 
 Even for the operators that don't fit into the format, the values defined in
 :math:`L_x` or :math:`M_x` suggest a way to semi-quantitatively describe these
-operators. Allow :math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take
-values in :math:`\{0, ?, 1\}`, where :math:`?` is the undefined value.
-Also define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and
-:math:`\ell_2`, multipliers for the degree of the alternating seed vertices or
-faces respectively, which may also take values in :math:`\mathbb{N}/2`.
+operators. Define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and :math:`\ell_2`,
+multipliers for the degree of the alternating seed vertices or faces
+respectively, which may also take values in :math:`\mathbb{N}/2`. Also, allow
+:math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take values in
+:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value. Expanding the
+"morality" from earlier, operators where `a` or `c` is `?` can be called
+"ugly" operators: the good, the bad, and the ugly.
 
 If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
 Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
@@ -479,25 +515,23 @@ decomposed
 into `j` (Join) and some other operator, so it's enough to examine `j`.
 
 Let `$` denote the smoothing operator that reduces degree-2 features, and `@`
-denote the operator that exchanges the alternation of the vertices of a seed
-polyhedron (equivalently, it reflects the alternating operator).
+denote the operator that exchanges the alternation of the vertices (or faces)
+of a seed polyhedron (equivalently, it reflects the alternating operator).
 In the operation `j`, designate the seed vertices as belonging to
 partition 1, and the created vertices at face centers as belonging to partition
 2. That is, in the edge-centered chamber structure, the vertices on the left
 and right are in partition 1, and the ones on the top and bottom are in
 partition 2. It is easy to see that, when giving consideration to the
-partitioning of vertices, `jd = @j`.
+partitioning of vertices, `jd = @j`. The same applies for the partition of faces
+created by the ambo operator: `ad = @a`
 
 The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
-If `x` is an alternating operator that retains both (or neither) partition of
-seed vertices (if `a` and `a'` are 0 or 1), then `$xj` has :math:`\Lambda = 0`.
-If `x` retains one partition but not the other (if `a` and `a'` are `?`),
-then `$xj` has :math:`\Lambda = \pm 1`. Accordingly, these sets of operators
-can be called pre-zero and pre-one operators.
+If `x` is a good or bad alternating operator, then `$xj` is a bad operator.
+If `x` is an alternating ugly operator, then `$xj` is a good operator.
 Although `$` does not in general have a :math:`M_x` form, in the expression
 `$xj` it either does nothing, removes an edge and a vertex, or removes an
 edge and a face. These operations can be represented by taking the matrix form
-of `xj` and subtracting the zero matrix, or these two following matrices,
+of `xj` and subtracting the zero matrix or these two following matrices,
 respectively:
 
 .. math::
@@ -511,22 +545,21 @@ respectively:
     0 & 1 & 0 \end{bmatrix} .
 
 In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
-some alternating or Conway operator. This is easier to see by going backwards from the
-operator. By symmetry, if `g` is odd, there is an edge that lies on or crosses
-the center point of the edge in the chamber structure. Otherwise, if `g` is
-even, either a vertex lies there or a face contains the center point. If `g`
+some alternating or Conway operator. This is easier to see by going backwards
+from the operator. By symmetry, if `g` is odd, there is an edge that lies on or
+crosses the center point of the edge in the chamber structure. Otherwise, if `g`
+is even, either a vertex lies there or a face contains the center point. If `g`
 is odd, either split the edge with a degree-2 vertex at the center point, or
 replace the edge with a digon. Then the alternating chamber structure of `x`
 is just the white and grey chambers of `y`, stacked along their long edge. More
 specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
-an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at least) two
-alternating operators `x` corresponding to splitting the edge with a vertex or
-replacing an edge with a digon.
-(Even though it can be reduced further in a larger set of operators,
-the Conway operator form is usually preferable because including all those
-`$` and `j` operators would get tedious.) Corresponding to the pre-zero and
-pre-one nomenclature, an alternating operator `x` may be named "pre-(Name)"
-where (Name) is the name of `y`.
+an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at
+least) two alternating operators `x` corresponding to splitting the edge with a
+vertex or replacing an edge with a digon.
+(Even though it can be reduced further in a
+larger set of operators, the Conway operator form is usually preferable because
+including all those `$` and `j` operators would get tedious.) An alternating
+operator `x` may be named "pre-(Name)" where (Name) is the name of `y`.
 
 In the list of assumptions at the end of the "Operators on counts" section,
 alternating operators may violate 3 and 4, and 1 if they create degree-2
@@ -623,7 +656,7 @@ because one torus is needed to connect the two copies of the sphere into
 a (topologically) spherical surface.
 
 One could also create operators that add arbitrary numbers of holes per edge,
-or add cross-caps (e.g. based on the a star polyhedron with Euler
+or even add cross-caps (e.g. based on the a star polyhedron with Euler
 characteristic 1, like the tetrahemihexahedron, although such operators
 probably have more theoretical uses than aesthetic or practical ones).
 
@@ -632,14 +665,14 @@ Summary
 
 * Conway operators
 
-  * :math:`L_x`, :math:`M_x`, `g`, and :math:`\Lambda` are well defined
+  * :math:`L_x`, :math:`M_x`, `g`, and morality are well defined
 
-* Pre-zero alternating operators
+* Good and bad alternating operators
 
-  * :math:`M_x`, `g`, and :math:`\Lambda` are well defined
+  * :math:`M_x`, `g`, and morality are well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
 
-* Pre-one alternating operators
+* Ugly alternating operators
 
   * :math:`M_x` is well defined if unknown values are allowed, `g` is well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
@@ -682,7 +715,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 1 & 0 \end{bmatrix}
      - :math:`b'_4=1`
      - .. image:: edge_chambers_ambo.svg
-     - `j = jd = da = dad` (`jd=@j` if alternating vertices)
+     - `j = jd = da = dad` (`jd=@j` and `ad=@a` if considering partitions)
    * - `k` (Kis)
      - N
      - .. image:: edge_chambers_kis.svg
@@ -848,14 +881,14 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
      -
      - `rBr=Bd`
-      
+
 .. list-table:: Conway operator families
-      
+
    * - Operator `x`
      - Chiral?
      - Matrix :math:`M_x`
      - :math:`k, \ell`, :math:`b_i`, :math:`b'_i`
-     - Useful relations 
+     - Useful relations
    * - :math:`m_n` (Meta)
      - N
      - .. math::
@@ -918,7 +951,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
 are written as just :math:`k` or :math:`\ell`.
 
-.. list-table:: Pre-zero alternating operators
+.. list-table:: Good and bad alternating operators
 
    * - Operator
      - Degree-2?
@@ -926,7 +959,7 @@ are written as just :math:`k` or :math:`\ell`.
      - Matrix
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
      - Chambers of `dx`
-     - Useful relations     
+     - Useful relations
    * - Pre-kis
      - Digons
      - .. image:: edge_chambers_alternating_bisect.svg
@@ -937,7 +970,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 1 & 1 \end{bmatrix}
      - :math:`b'_3 = 1`, :math:`\ell = 1/2`
      - .. image:: edge_chambers_alternating_dual_prekis.svg
-     - `$xj = k`    
+     - `$xj = k`
    * - Pre-Join-Stake
      - N
      - .. image:: edge_chambers_alternating_prestake0.svg
@@ -948,7 +981,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 1 & 1 \end{bmatrix}
      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
      - .. image:: edge_chambers_alternating_dual_prestake0.svg
-     - `xj = K`    
+     - `xj = K`
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -958,8 +991,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
      - :math:`\ell = 3/2`, :math:`b_4=1`, :math:`b'_3=1`
+     - .. image:: edge_chambers_alternating_dual_subdivide.svg
      -
-     -     
    * - Pre-Gyro
      - Degree-2 vertices
      - .. image:: edge_chambers_alternating_ortho.svg
@@ -969,8 +1002,8 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
-     - 
-     - `$xj = g`. Not the same as Pre-Join-Lace of dual.    
+     -
+     - `$xj = g`. Not the same as Pre-Join-Lace of dual.
    * - Pre-Join-Kis-Kis
      - N
      - .. image:: edge_chambers_alternating_prekiskis0.svg
@@ -981,7 +1014,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 1 \end{bmatrix}
      - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
      -
-     - :math:`xj = (kk)_0`    
+     - :math:`xj = (kk)_0`
    * - Pre-Cross
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg
@@ -993,7 +1026,7 @@ are written as just :math:`k` or :math:`\ell`.
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
        :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
      -
-     - `xj = X`      
+     - `xj = X`
    * - Alternating Meta/Join
      - N
      - .. image:: edge_chambers_alternating_metajoin.svg
@@ -1005,7 +1038,7 @@ are written as just :math:`k` or :math:`\ell`.
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
        :math:`b_3=1`, :math:`b'_3=3`
      -
-     -       
+     -
    * - Alternating Subdivide/Quinto
      - N
      - .. image:: edge_chambers_alternating_subdividequinto.svg
@@ -1016,9 +1049,9 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
      -
-     -     
+     -
 
-.. list-table:: Pre-one alternating operators
+.. list-table:: Ugly alternating operators
 
     * - Operator
       - Degree-2?
@@ -1026,7 +1059,7 @@ are written as just :math:`k` or :math:`\ell`.
       - Matrix
       - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
       - Chambers of `dx`
-      - Useful relations    
+      - Useful relations
     * - Alternation, Hemi, Semi
       - Digons
       - .. image:: edge_chambers_alternating_semi.svg
@@ -1037,7 +1070,7 @@ are written as just :math:`k` or :math:`\ell`.
            ? & 0 & 1 \end{bmatrix}
       - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
       - .. image:: edge_chambers_alternating_dual_hemi.svg
-      - `$xj = S`, `$dxj = d`     
+      - `$xj = S`, `$dxj = d`
     * - Alternating Truncate (Pre-Chamfer)
       - N
       - .. image:: edge_chambers_alternating_truncate.svg
@@ -1058,14 +1091,15 @@ are written as just :math:`k` or :math:`\ell`.
            0 & 3 & 0 \\
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
-      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg 
+      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
+
         Not the same as pre-gyro of dual!
       - :math:`xj = L_0`
 
 Open questions
 --------------
 * Are there any operators such that `rxr = dxd`? (They would have to be
-  operators with :math:`\Lambda= \pm 1`.)
+  good operators.)
 * Are there other conditions that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there a good invariant related to the chirality of a Conway operator?
