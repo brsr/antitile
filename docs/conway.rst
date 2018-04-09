@@ -1093,9 +1093,7 @@ are written as just :math:`k` or :math:`\ell`.
            ? & 1 & 1 \end{bmatrix}
       - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
       - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
-
-        Not the same as pre-gyro of dual!
-      - :math:`xj = L_0`
+      - :math:`xj = L_0`. Not the same as pre-gyro of dual.
 
 Open questions
 --------------
