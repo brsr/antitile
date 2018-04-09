@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="200"
+xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<polygon points="10,100, 100,10 190,100" fill="lightgrey" stroke="none"/>
+<polygon points="10,100, 100,190 190,100" fill="white" stroke="none"/>
+<line x1="10" y1="100" x2="190" y2="100" stroke="blue"/>
+<line x1="100" y1="10" x2="100" y2="190" stroke="black" stroke-width="2"/>
+<path d="M 70,40 100,70 130,40" fill="none" stroke="black" stroke-width="2"/>
+<path d="M 70,160 100,130 130,160" fill="none" stroke="black" stroke-width="2"/>
+<polygon points="100,10 10,100, 100,190 190,100" fill="none" stroke="blue"/>
+<circle cx="100" cy="70" r="5" fill="black" stroke="black"/>
+<circle cx="100" cy="130" r="5" fill="black" stroke="black"/>
+<circle cx="100" cy="10" r="5" fill="black" stroke="black"/>
+<circle cx="100" cy="190" r="5" fill="black" stroke="black"/>
+<circle cx="10" cy="100" r="5" fill="white" stroke="blue"/>
+<circle cx="190" cy="100" r="5" fill="white" stroke="blue"/>
+<text x="6" y="90">1</text>
+<text x="186" y="90">2</text>
+</svg>
