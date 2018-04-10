@@ -398,7 +398,7 @@ All of the nice qualities of GC operators carry over to this extension; for
 instance, they form a commutative submonoid of Conway operators, and can be
 decomposed in relation to the Gaussian or Eisenstein integers. Many of the
 named Conway operators are GC operations, or related by duality. GC operators
-are also a good source of examples; in the 2-parameter families, it's often
+are also a nice source of examples; in the 2-parameter families, it's often
 easy to find an operator with a desired quality.
 
 The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
@@ -474,7 +474,10 @@ alternating operators may fill in some gaps where no operator exists for
 :math:`L_x` or :math:`M_x` as defined earlier, given the constraints; see e.g.
 "alternating subdivide" in the list of operators below. The change needed is
 to allow :math:`k` and :math:`\ell` to take values in
-:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`.
+:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. These values can be counted
+from the chamber diagram similarly to Conway operators, although it may be
+less straightforward. (In particular, edges that pass through a chamber without
+meeting a vertex shouldn't be counted.)
 
 Even for the operators that don't fit into the format, the values defined in
 :math:`L_x` or :math:`M_x` suggest a way to semi-quantitatively describe these
@@ -770,7 +773,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`b_3=2`, :math:`b'_4=2`
-     -
+     - .. image:: edge_chambers_dual_loft.svg
      -
    * - `q` (Quinto)
      - N
@@ -781,7 +784,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 6 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=1`, :math:`b'_5=2`
-     -
+     - .. image:: edge_chambers_dual_quinto.svg
      -
    * - :math:`K_0` (Join-stake)
      - N
@@ -792,7 +795,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 6 & 0 \\
           0 & 3 & 0 \end{bmatrix}
      - :math:`k=2`, :math:`b_3=2`, :math:`b'_4=3`
-     -
+     - .. image:: edge_chambers_dual_stake0.svg
      -
    * - :math:`K` (Stake)
      - N
@@ -803,7 +806,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 7 & 0 \\
           0 & 4 & 0 \end{bmatrix}
      - :math:`k=3`, :math:`b_3=2`, :math:`b'_3=2`, :math:`b'_4=2`
-     -
+     - .. image:: edge_chambers_dual_stake.svg
      -
    * - :math:`L_0` (Join-lace)
      - N
@@ -814,7 +817,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 6 & 0 \\
           0 & 3 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`b_4=2`, :math:`b'_3=2`, :math:`b'_4=1`
-     -
+     - .. image:: edge_chambers_dual_lace0.svg
      -
    * - :math:`L` (Lace)
      - N
@@ -825,7 +828,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 7 & 0 \\
           0 & 4 & 1 \end{bmatrix}
      - :math:`k=3`, :math:`b_4=2`, :math:`b'_3=4`
-     -
+     - .. image:: edge_chambers_dual_lace.svg
      -
    * - :math:`w` (Whirl)
      - Y
@@ -836,7 +839,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 7 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=4`, :math:`b'_6=2`
-     -
+     - .. image:: edge_chambers_dual_whirl.svg
      -
    * - :math:`J=(kk)_0` (Join-kis-kis)
      - N
@@ -847,7 +850,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 8 & 0 \\
           0 & 5 & 0 \end{bmatrix}
      - :math:`k=3`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=4`, :math:`b'_4=1`
-     -
+     - .. image:: edge_chambers_dual_kiskis0.svg
      -
    * - :math:`X` (Cross)
      - N
@@ -858,7 +861,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 10 & 0 \\
           0 & 6 & 0 \end{bmatrix}
      - :math:`k=2`, :math:`b_4=2`, :math:`b_6=1`, :math:`b'_3=4`, :math:`b'_4=2`
-     -
+     - .. image:: edge_chambers_dual_cross.svg
      -
    * - :math:`W` (Waffle) (New)
      - N
@@ -869,7 +872,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 9 & 0 \\
         0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=2`, :math:`b'_4=2`, :math:`b'_5=2`
-     -
+     - .. image:: edge_chambers_dual_waffle.svg
      -
    * - :math:`B` (Bowtie) (New)
      - Y
@@ -880,7 +883,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 10 & 0 \\
           0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
-     -
+     - .. image:: edge_chambers_dual_bowtie.svg
      - `rBr=Bd`
 
 .. list-table:: Conway operator families
@@ -1003,7 +1006,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
      - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
-     -
+     - .. image:: edge_chambers_alternating_dual_pregyro.svg
      - `$xj = g`. Not the same as Pre-Join-Lace of dual.
    * - Pre-Join-Kis-Kis
      - N
@@ -1014,7 +1017,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 4 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
-     -
+     - .. image:: edge_chambers_alternating_dual_prekiskis0.svg
      - :math:`xj = (kk)_0`
    * - Pre-Cross
      - N
@@ -1026,7 +1029,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \end{bmatrix}
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
        :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
-     -
+     - .. image:: edge_chambers_alternating_dual_precross.svg
      - `xj = X`
    * - Alternating Meta/Join
      - N
@@ -1038,7 +1041,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 3 & 0 \end{bmatrix}
      - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
        :math:`b_3=1`, :math:`b'_3=3`
-     -
+     - .. image:: edge_chambers_alternating_dual_mj.svg
      -
    * - Alternating Subdivide/Quinto
      - N
@@ -1049,7 +1052,7 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
-     -
+     - .. image:: edge_chambers_alternating_dual_uq.svg
      -
 
 .. list-table:: Ugly alternating operators
@@ -1101,5 +1104,5 @@ Open questions
   good operators.)
 * Are there other conditions that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
-* Is there a good invariant related to the chirality of a Conway operator?
+* Is there an invariant related to the chirality of an operator?
 * What other invariants need to be added to fully characterize Conway operators?
