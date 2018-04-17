@@ -107,7 +107,7 @@ homomorphisms between the monoids, as so:
 * Conway operator `x` (acts on polyhedra)
 * Infinite-dimensional linear operator :math:`L_x` (acts on :math:`v_i, e, f_i`)
 * 3x3 matrix :math:`M_x` (acts on :math:`[v,e,f]`)
-* Inflation factor `g` and 2x2 matrix :math:`\Lambda_x`
+* Inflation factor `g` and type
 
 Each bullet will be handled in turn.
 
@@ -150,11 +150,6 @@ where `a`, :math:`a'`, `c`, and :math:`c'` are either 0 or 1, `g` is a
 positive integer, all :math:`b_i` and :math:`b'_i` are nonnegative integers,
 and `k` and :math:`\ell` are positive integers. The subscripted values like
 :math:`v_{i/k}` should be interpreted as 0 if `i/k` is not an integer.
-
-For an operator `xy`, i.e. the composition of `x` and `y`, the expansion factor
-`g` is the product of the `g` values for each operator, and :math:`\Lambda` is
-the product of each operator's :math:`\Lambda`. For the matrix form, composition
-is just the usual matrix multiplication: :math:`M_{xy} = M_x M_y`.
 
 Explicitly the composition of two operators `xy` can be described as so.
 Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the values for :math:`L_y`;
@@ -278,42 +273,52 @@ expansion factor g is the product of the g values for operators `x` and `y`.
 It can also be seen that :math:`a, a', c, c'` form their own linear system,
 a submatrix of :math:`M_x`: let
 :math:`\Lambda_x = \begin{bmatrix} a & c \\ a' & c' \end{bmatrix}`,
-then :math:`\Lambda_{xy} = \Lambda_x \Lambda_y`.
+then :math:`\Lambda_{xy} = \Lambda_x \Lambda_y`. By cofactor expansion,
+:math:`\det (M_x) = g \det (\Lambda_x)`. :math:`\Lambda_x` has a determinant of
+-1, 0, or 1. (In fact, :math:`\Lambda_x` has two eigenvalues, one of which is
+always 1, and one of which may be -1, 0, or 1. :math:`M_x` has three
+eigenvalues: two it shares with :math:`\Lambda_x`, and one is `g`.) The dual
+operator has :math:`\det (M_x) = \det (\Lambda_x) = -1`, and it is easy to see
+that of the four possible :math:`\Lambda_x`, the first two and last two in the
+table below are related by the dual operator.
 
-.. list-table:: Possible values of :math:`\Lambda_x`
+.. list-table:: Operator types
    :align: right
 
+   * - Outline
+     - .. image:: edge_chambers_type_+0.svg
+     - .. image:: edge_chambers_type_-0.svg
+     - .. image:: edge_chambers_type_+2.svg
+     - .. image:: edge_chambers_type_-2.svg
    * - :math:`\Lambda_x`
      - :math:`\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}`
      - :math:`\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}`
      - :math:`\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}`
      - :math:`\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}`
-   * - Determinant
-     - 1
+   * - Signed Type
+     - +1
      - -1
-     - 0
-     - 0
-   * - Name
-     - Good Vertex-preserving (VP)
-     - Good Non-VP (NVP)
-     - Bad VP
-     - Bad NVP
+     - +0
+     - -0
 
-By cofactor expansion, :math:`\det (M_x) = g \det (\Lambda_x)`.
-:math:`\Lambda_x` has a determinant of -1, 0, or 1. (In fact, :math:`\Lambda_x`
-has two eigenvalues, one of which is always 1, and one of which may be -1, 0,
-or 1. :math:`M_x` has three eigenvalues: two it shares with :math:`\Lambda_x`,
-and one is `g`.) The dual operator has
-:math:`\det (M_x) = \det (\Lambda_x) = -1`, and it is easy to see that of the
-four possible :math:`\Lambda_x`, the first two and last two in the above table
-are related by the dual operator. One in each set preserves seed vertices
-(has `a=1`), the other does not (has `a=0`); call the first vertex-preserving
-(VP) and the second non-vertex-preserving (NVP). The sets themselves will be
-called good and bad, for the arbitrary choice of a convenient conceptual
-dichotomy. Bad operators have `a=c`, while good operators have :math:`a \ne c`.
-The composition of two good operators is good, while the composition of a bad
-operator and a good or bad operator is another bad operator; bad operators
-push out good. This can be referred to as the "morality" of the operator.
+It's instructive at this point to take a step back and simply look at the action
+on the seed vertices and faces that is represented by :math:`a, a', c`, and
+:math:`c'`. The "Outline" row above shows the possible results of the seed
+vertices and faces, whether they are retained or converted to vertices/faces.
+We'll add a sign to the zero determinant so that there is a distinct value for
+each outline, and call that the "Signed Type" of the operator. This is a little
+awkward from a mathematical perspective, but signed zero is a common concept in
+numerical computing. Since types of the same magnitude are related by the dual
+operator, often we won't be concerned with the sign, so we also define the
+"Type" as the absolute value of the signed type. Equivalently, "Type" is the
+absolute value of the determinant of :math:`\Lambda_x`. The type multiplies
+largely like expected, although the sign does not always commute.
+For all signed types `x`:
+
+* :math:`+1 * x = x` (retains sign of x)
+* :math:`-1 * x = -x` (opposite sign of x)
+* :math:`+0 * x = +0` (regardless of the sign of x)
+* :math:`-0 * x = -0` (regardless of the sign of x)
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
@@ -331,19 +336,6 @@ the same as `pp` (one's chiral, one's not). For the operator depicted in
 :numref:`waffle`, :math:`W \ne Wd`, but :math:`L_W = L_{Wd}`.
 (This is a newly named operator, introduced in this text.)
 
-Some further consequences of these representations:
-
-* If a polyhedron has a prime number of edges, then the only Conway operators
-  that can be used to express it in terms of another polyhedron are `S` and `d`.
-* Operators where `g` is a prime number are irreducible in terms of
-  Conway operators other than `d`.
-* If `x=xd` or `x=rxdr`, `x` is bad. If `x=dxd` or `x=rdxdr`, `x` is good.
-* If an operator is good, its decomposition cannot contain
-  any operators with :math:`\Lambda = 0`. Correspondingly, if an operator is
-  bad, its decomposition must have at least one bad operator.
-* There are no good Conway operators with `g=2`, so therefore good operators
-  with `g=2p`, where p is prime, are irreducible in terms of Conway operators.
-
 In summary, the assumptions made in this section are:
 
 #. The operator has a chamber structure like described in [Brinkmann]_.
@@ -351,6 +343,27 @@ In summary, the assumptions made in this section are:
 #. The operator acts on, and produces, a polyhedron with vertices and faces of
    degree 3 or more.
 #. The operator affects all vertices, edges, and faces of the seed uniformly.
+
+Decomposition
+-------------
+While the above representations do not allow for the decomposition of an
+arbitrary operator or polyhedron into a sequence of operators (or operators and
+a seed polyhedron), it does make some progress towards that goal.
+
+* If a polyhedron has a prime number of edges, then the only Conway operators
+  that can be used to express it in terms of another polyhedron are `S` and `d`.
+* Operators where `g` is a prime number are irreducible in terms of
+  Conway operators other than `d`.
+* By symmetry, if `g` is odd, there is an edge that lies on or
+  crosses the center point of the seed edge in the chamber structure.
+* If `x=xd` or `rxr=xd`, `x` has type 0.
+* If `x=dxd` or `rxr=dxd`, `x` has type 1 and `g` is odd.
+* If an operator has type 1, its decomposition cannot contain any operators of
+  type 0. Correspondingly, if an operator has type 0,
+  its decomposition must have at least one type 0 operator.
+* There are no type 1 Conway operators with `g=2`, so therefore type 1 operators
+  with `g=2p`, where p is prime, are irreducible in terms of Conway operators.
+  (However, see the section on alternating operators.)
 
 Chirality
 ---------
@@ -388,11 +401,11 @@ which is identical to the Conway operator edge factor `g`.
 * :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
 * :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-:math:`\Box_{a,b}` is bad iff :math:`a \equiv b \mod 2`, and good otherwise.
-Similarly, :math:`\Delta_{a,b}` is bad iff :math:`a \equiv b \mod 3`. If the
-operator is bad, the resulting polyhedron will have only quadrilateral
-or triangular (respectively) faces; if good, there will be one
-face at the face center of the same degree as the seed face.
+:math:`\Box_{a,b}` is type 0 iff :math:`a \equiv b \mod 2`, and type 1
+otherwise. Similarly, :math:`\Delta_{a,b}` is type 0 iff
+:math:`a \equiv b \mod 3`. If the operator is type 0, the resulting polyhedron
+will have only quadrilateral or triangular (respectively) faces; if type 1,
+there will be one face at the face center of the same degree as the seed face.
 
 All of the nice qualities of GC operators carry over to this extension; for
 instance, they form a commutative submonoid of Conway operators, and can be
@@ -403,7 +416,7 @@ easy to find an operator with a desired quality.
 
 The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
 :math:`\Delta_{1,1} = n = kd`. One useful relation is that if a GC operator is
-bad, it can be decomposed as so:
+of type 0, it can be decomposed as so:
 :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
 :math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`. (These formula may result in
 negative values, which should be interpreted as per the section of these docs
@@ -453,7 +466,10 @@ by using one Conway operator for the top half and one for the bottom,
 or one for the left half and one for the right. Like Conway operators, the
 chamber structure of `xd` is that of `x` rotated a quarter turn; but now,
 the direction of rotation matters, and depends on how the alternating vertices
-(or faces) of the underlying polyhedron are specified.
+(or faces) of the underlying polyhedron are specified. For the sake of
+simplicity, we'll only look at alternating operators on even-sided faces (
+vertex-alternating operators) instead of alternating operators on even-degree
+vertices (face-alternating operators).
 
 These operators depend on the ability to partition vertices into two disjoint
 sets, none of which are adjacent to a vertex in the same set; i.e. it applies
@@ -485,10 +501,12 @@ operators. Define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and :math:`\ell_2`,
 multipliers for the degree of the alternating seed vertices or faces
 respectively, which may also take values in :math:`\mathbb{N}/2`. Also, allow
 :math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take values in
-:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value (like NaN).
-Expanding the "morality" from earlier, operators where `a` or `c` is `?`
-can be called "ugly" operators, giving us the good, the bad, and the ugly.
-(Ugly is more a commentary on their analysis than their aesthetics.)
+:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value used as a
+special value (like NaN).
+(Vertex-alternating operators may have undefined a or a', while
+face-alternating operators may have undefined c or c'.)
+This carries through into the type definiton earlier:
+operators where `a` or `c` is `?` have type `?` (or undefined type).
 
 If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
 Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
@@ -510,15 +528,23 @@ said, when the seed polyhedron has only quadrilateral faces, things become
 much more tractable. (This is also true when the seed polyhedron has only
 faces of degree 6 or more, but there are much fewer of those.)
 
+The result of an alternating operator is just another polyhedron, so
+compositions where the Conway operator is on the left and the alternating
+operator is on the right are valid. The type of the operator, when defined,
+composes in the same way as for Conway operators. If the alternating operator
+is of undefined type, then it composes as so:
+
+* :math:`\pm 1 * ? = ?`
+* :math:`\pm 0 * ? = \pm 0`
+
 In general, alternating operators cannot be composed with other alternating or
 Conway operators, because those operators do not necessarily create
-even-degree faces or vertices. However, :math:`\Box_{a,b}` operators with
-:math:`\Lambda = 0` create polyhedra with quadrilateral faces only. As
-mentioned earlier, all :math:`\Box_{a,b}` with :math:`\Lambda = 0` can be
-decomposed
-into `j` (Join) and some other operator, so it's enough to examine `j`.
+even-degree faces or vertices. However, type 0 :math:`\Box_{a,b}` operators
+create polyhedra with quadrilateral faces only. As mentioned earlier, all type
+0 :math:`\Box_{a,b}` can be decomposed into `j` (Join) and some other operator,
+so it's enough to examine `xj`, where `x` is an alternating operator.
 
-Let `$` denote the smoothing operator that reduces degree-2 features, and `@`
+Let `$` denote the smoothing operator that removes degree-2 features, and `@`
 denote the operator that exchanges the alternation of the vertices (or faces)
 of a seed polyhedron (equivalently, it reflects the alternating operator).
 In the operation `j`, designate the seed vertices as belonging to
@@ -530,8 +556,8 @@ partitioning of vertices, `jd = @j`. The same applies for the partition of faces
 created by the ambo operator: `ad = @a`
 
 The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
-If `x` is a good or bad alternating operator, then `$xj` is a bad operator.
-If `x` is an alternating ugly operator, then `$xj` is a good operator.
+If `x` is type 0 or 1 alternating operator, then `$xj` is a type 0 operator.
+If `x` has undefined type operator, then `$xj` is a type 1 operator.
 Although `$` does not in general have a :math:`M_x` form, in the expression
 `$xj` it either does nothing, removes an edge and a vertex, or removes an
 edge and a face. These operations can be represented by taking the matrix form
@@ -550,8 +576,7 @@ respectively:
 
 In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
 some alternating or Conway operator. This is easier to see by going backwards
-from the operator. By symmetry, if `g` is odd, there is an edge that lies on or
-crosses the center point of the edge in the chamber structure. Otherwise, if `g`
+from the operator. Otherwise, if `g`
 is even, either a vertex lies there or a face contains the center point. If `g`
 is odd, either split the edge with a degree-2 vertex at the center point, or
 replace the edge with a digon. Then the alternating chamber structure of `x`
@@ -613,19 +638,27 @@ characteristic.
    Chambers of skeletonize operation.
 
 However, operators that alter the topology can be described, introducing holes
-or other features to a polyhedron. The simplest operator of this kind is the
-skeletonize operator depicted in :numref:`skeleton`. Edges and vertices are
-retained, but faces are removed. The red crosses indicate that the base faces
-are not retained or replaced with vertices: they are removed entirely. If `G` is
-the genus of the seed polyhedron, the genus of the resulting "polyhedron" (no
-longer a surface, somewhat a surface with boundary) is
-`G - f`. The :math:`L_x` form is obvious, as is the :math:`M_x` form:
+or other features to a polyhedron. This may require us to think of the chamber
+structure as having been extruded from a square into a square prism. One simple
+operator of this kind makes nested or offset copies of the polyhedron:
+obviously, this has :math:`M_x = n M_S = n I_3` where `n` is the number of
+copies produced, and :math:`k = \ell = 1`. As expected, the Euler
+characteristic of the result is the Euler characteristic of the seed times `n`.
+
+Another operator is the skeletonize operator depicted in :numref:`skeleton`.
+Edges and vertices are retained, but faces are removed. The red crosses
+indicate that the base faces are not retained or replaced with vertices: they
+are removed entirely. If `G` is the genus of the seed polyhedron, the genus of
+the resulting "polyhedron" (inasmuch as an object with no faces can be a
+polyhedron) is `G - f`. The :math:`M_x` form is obvious:
 
 .. math::
    \begin{bmatrix}
    1 & 0 & 0 \\
    0 & 1 & 0 \\
-   0 & 0 & 0 \end{bmatrix} .
+   0 & 0 & 0 \end{bmatrix}
+
+and :math:`k = \ell = 1`.
 
 Instead of annihilating the face completely, one can hollow out a space in its
 center and leave behind a solid border. This can be done with the ``leonardo``
@@ -645,8 +678,8 @@ To represent this, we have to extrude the chamber structure out into a sort of
 each seed edge with a rectangular prism oriented with one edge along the seed
 edge, somewhat like a 3d version of loft (`l`). (It is not the operation
 performed by ``leonardo`` or Polyhedronisme, unfortunately; ``leonardo`` seems
-to create overlapping faces.) In :math:`L_x` terms, :math:`k` and
-:math:`\ell` are 1, :math:`b_4 = 2` and :math:`b'_4 = 4`, and :math:`M_x` is:
+to create overlapping faces.) In terms of values, :math:`k=\ell=1`,
+:math:`b_4 = 2`, :math:`b'_4 = 4`, and :math:`M_x` is:
 
 .. math::
    \begin{bmatrix}
@@ -659,32 +692,37 @@ the result has Euler characteristic `4-2f`. The genus is `f-1`, not `f`,
 because one torus is needed to connect the two copies of the sphere into
 a (topologically) spherical surface.
 
-One could also create operators that add arbitrary numbers of holes per edge,
-or even add cross-caps (e.g. based on the a star polyhedron with Euler
-characteristic 1, like the tetrahemihexahedron, although such operators
-probably have more theoretical uses than aesthetic or practical ones).
+One could also create operators that add arbitrary numbers of holes per edge.
+(Operators that add cross-caps, e.g. based on a star polyhedron with Euler
+characteristic 1 such as the tetrahemihexahedron, may be possible. Such
+operators probably have more theoretical uses than aesthetic or practical ones,
+and good luck getting the faces to be flat and not intersect awkwardly.)
 
 Summary
 ------------------
 
 * Conway operators
 
-  * :math:`L_x`, :math:`M_x`, `g`, and morality are well defined
+  * :math:`L_x`, :math:`M_x`, `g`, and type are well defined
 
-* Good and bad alternating operators
+* Alternating operators with defined type
 
-  * :math:`M_x`, `g`, and morality are well defined
+  * :math:`M_x`, `g`, and type are well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
 
-* Ugly alternating operators
+* Alternating operators with undefined type
 
-  * :math:`M_x` is well defined if unknown values are allowed, `g` is well defined
+  * :math:`M_x` is well defined if undefined values are allowed for
+    :math:`a, a', c`, and :math:`c'`, `g` is well defined
   * Violates assumption 1 and 4 (and 3 if degree-2 features created)
 
 * Topological operators
 
-  * :math:`L_x`, :math:`M_x`, and `g` are well defined
-  * Violates assumption 2 (Euler characteristic not preserved)
+  * In general, :math:`L_x`, :math:`M_x`, `g`, and type are as well defined as
+    the corresponding type of non-topological operator (so all if a topological
+    Conway operator, etc.). Type may take values other than 0 and 1.
+  * Violates assumption 2 (Euler characteristic not preserved) and possibly
+    others
 
 Where not specified, :math:`k` and :math:`\ell` are 1, and
 :math:`b_i` and :math:`b'_i` are 0.
@@ -955,7 +993,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
 are written as just :math:`k` or :math:`\ell`.
 
-.. list-table:: Good and bad alternating operators
+.. list-table:: Alternating operators of defined type
 
    * - Operator
      - Degree-2?
@@ -1055,7 +1093,7 @@ are written as just :math:`k` or :math:`\ell`.
      - .. image:: edge_chambers_alternating_dual_uq.svg
      -
 
-.. list-table:: Ugly alternating operators
+.. list-table:: Alternating operators of undefined type
 
     * - Operator
       - Degree-2?
@@ -1101,7 +1139,7 @@ are written as just :math:`k` or :math:`\ell`.
 Open questions
 --------------
 * Are there any operators such that `rxr = dxd`? (They would have to be
-  good operators.)
+  type 1 operators.)
 * Are there other conditions that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there an invariant related to the chirality of an operator?
