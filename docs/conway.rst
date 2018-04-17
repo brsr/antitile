@@ -576,18 +576,19 @@ respectively:
 
 In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
 some alternating or Conway operator. This is easier to see by going backwards
-from the operator. Otherwise, if `g`
-is even, either a vertex lies there or a face contains the center point. If `g`
-is odd, either split the edge with a degree-2 vertex at the center point, or
-replace the edge with a digon. Then the alternating chamber structure of `x`
-is just the white and grey chambers of `y`, stacked along their long edge. More
-specifically, given a Conway operator `y`, if `g` is even, then `y = xj` for
-an alternating or Conway operator `x`: if `g` is odd, then `y = $xj` for (at
-least) two alternating operators `x` corresponding to splitting the edge with a
-vertex or replacing an edge with a digon.
-(Even though it can be reduced further in a
-larger set of operators, the Conway operator form is usually preferable because
-including all those `$` and `j` operators would get tedious.) An alternating
+from the operator. As mentioned earlier, if `g` is odd, there is an edge that
+lies on or crosses the center point of the seed edge in the chamber structure.
+Otherwise `g` is even and either a vertex lies there or a face contains the
+center point. If `g` is odd, either split the edge with a degree-2 vertex at the
+center point, or replace the edge with a digon. Then the alternating chamber
+structure of `x` is just the white and grey chambers of `y`, stacked along their
+long edge. More specifically, given a Conway operator `y`, if `g` is even, then
+`y = xj` for an alternating or Conway operator `x`: if `g` is odd, then `y = $xj`
+for (at least) two alternating operators `x` corresponding to splitting the edge
+with a vertex or replacing an edge with a digon.
+(Even though it can be reduced further in a larger set of operators, the Conway
+operator form is usually preferable because including all those `$` and `j`
+operators would get tedious.) An alternating
 operator `x` may be named "pre-(Name)" where (Name) is the name of `y`.
 
 In the list of assumptions at the end of the "Operators on counts" section,
