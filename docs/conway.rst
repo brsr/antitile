@@ -280,45 +280,27 @@ always 1, and one of which may be -1, 0, or 1. :math:`M_x` has three
 eigenvalues: two it shares with :math:`\Lambda_x`, and one is `g`.) The dual
 operator has :math:`\det (M_x) = \det (\Lambda_x) = -1`, and it is easy to see
 that of the four possible :math:`\Lambda_x`, the first two and last two in the
-table below are related by the dual operator.
+table below are related by the dual operator. With that motivation, we define the
+"Type" of the operator as the absolute value of the determinant of :math:`\Lambda_x`.
 
 .. list-table:: Operator types
    :align: right
 
    * - Outline
-     - .. image:: edge_chambers_type_+0.svg
-     - .. image:: edge_chambers_type_-0.svg
-     - .. image:: edge_chambers_type_+2.svg
-     - .. image:: edge_chambers_type_-2.svg
+     - .. image:: edge_chambers_outline_1_0.svg
+     - .. image:: edge_chambers_outline_0_1.svg
+     - .. image:: edge_chambers_outline_1_1.svg
+     - .. image:: edge_chambers_outline_0_0.svg
    * - :math:`\Lambda_x`
      - :math:`\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}`
      - :math:`\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}`
      - :math:`\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}`
      - :math:`\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}`
-   * - Signed Type
+   * - Determinant of :math:`\Lambda_x`
      - +1
      - -1
-     - +0
-     - -0
-
-It's instructive at this point to take a step back and simply look at the action
-on the seed vertices and faces that is represented by :math:`a, a', c`, and
-:math:`c'`. The "Outline" row above shows the possible results of the seed
-vertices and faces, whether they are retained or converted to vertices/faces.
-We'll add a sign to the zero determinant so that there is a distinct value for
-each outline, and call that the "Signed Type" of the operator. This is a little
-awkward from a mathematical perspective, but signed zero is a common concept in
-numerical computing. Since types of the same magnitude are related by the dual
-operator, often we won't be concerned with the sign, so we also define the
-"Type" as the absolute value of the signed type. Equivalently, "Type" is the
-absolute value of the determinant of :math:`\Lambda_x`. The type multiplies
-largely like expected, although the sign does not always commute.
-For all signed types `x`:
-
-* :math:`+1 * x = x` (retains sign of x)
-* :math:`-1 * x = -x` (opposite sign of x)
-* :math:`+0 * x = +0` (regardless of the sign of x)
-* :math:`-0 * x = -0` (regardless of the sign of x)
+     - 0
+     - 0
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
@@ -354,8 +336,8 @@ a seed polyhedron), it does make some progress towards that goal.
   that can be used to express it in terms of another polyhedron are `S` and `d`.
 * Operators where `g` is a prime number are irreducible in terms of
   Conway operators other than `d`.
-* By symmetry, if `g` is odd, there is an edge that lies on or
-  crosses the center point of the seed edge in the chamber structure.
+* By symmetry, if `g` is odd, there is an edge that lies on or crosses the 
+  center point of the seed edge in the chamber structure of the operator.
 * If `x=xd` or `rxr=xd`, `x` has type 0.
 * If `x=dxd` or `rxr=dxd`, `x` has type 1 and `g` is odd.
 * If an operator has type 1, its decomposition cannot contain any operators of
@@ -531,18 +513,19 @@ faces of degree 6 or more, but there are much fewer of those.)
 The result of an alternating operator is just another polyhedron, so
 compositions where the Conway operator is on the left and the alternating
 operator is on the right are valid. The type of the operator, when defined,
-composes in the same way as for Conway operators. If the alternating operator
-is of undefined type, then it composes as so:
+composes in the same way as for Conway operators. If an the alternating operator
+`y` is of undefined type, and `x` is a Conway operator, then 
 
-* :math:`\pm 1 * ? = ?`
-* :math:`\pm 0 * ? = \pm 0`
+* `xy` is of undefined type if `x` is type 1, and
+* `xy` is type 0 if `x` is type 0 
 
 In general, alternating operators cannot be composed with other alternating or
 Conway operators, because those operators do not necessarily create
 even-degree faces or vertices. However, type 0 :math:`\Box_{a,b}` operators
 create polyhedra with quadrilateral faces only. As mentioned earlier, all type
 0 :math:`\Box_{a,b}` can be decomposed into `j` (Join) and some other operator,
-so it's enough to examine `xj`, where `x` is an alternating operator.
+so to examine :math:`x\Box_{a,b}`, 
+where `x` is an alternating operator, it's enough to examine `xj`.
 
 Let `$` denote the smoothing operator that removes degree-2 features, and `@`
 denote the operator that exchanges the alternation of the vertices (or faces)
@@ -596,10 +579,11 @@ alternating operators may violate 3 and 4, and 1 if they create degree-2
 vertices or faces.
 
 The concept of alternating operators could be extended to k-partite graphs.
-By the four-color theorem,
-the largest `k` that is necessary for a spherical tiling is 4, although larger
-values could be used. :math:`k(k-1)/2` interrelated chamber structures would
-have to be specified, which would get a little unmanageable for large `k`.
+By the four-color theorem, the largest `k` that is necessary for a spherical 
+tiling is 4, although larger values could be used. :math:`k(k-1)/2` 
+interrelated chamber structures would have to be specified, which would get 
+a little unmanageable for large `k`. This scheme would no longer have an 
+expression in terms of :math:`L_x` or :math:`M_x`.
 
 Extension - Topology
 --------------------
