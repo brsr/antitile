@@ -9,8 +9,8 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="10" cy="190" r="5" fill="black" stroke="black"/>
 <circle cx="190" cy="190" r="5" fill="black" stroke="black"/>
 <circle cx="190" cy="10" r="5" fill="black" stroke="black"/>
-<text x="15" y="183">2</text>
-<text x="176" y="183">1</text>
-<text x="15" y="27">1</text>
-<text x="176" y="27">2</text>
+<text x="15" y="183">-</text>
+<text x="176" y="183">+</text>
+<text x="15" y="27">+</text>
+<text x="176" y="27">-</text>
 </svg>

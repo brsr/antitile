@@ -14,6 +14,6 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="145" cy="55" r="5" fill="black" stroke="black"/>
 <circle cx="145" cy="145" r="5" fill="black" stroke="black"/>
 
-<text x="6" y="90">1</text>
-<text x="186" y="90">2</text>
+<text x="6" y="90">+</text>
+<text x="186" y="90">-</text>
 </svg>

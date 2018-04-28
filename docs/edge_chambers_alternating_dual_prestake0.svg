@@ -13,6 +13,6 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="100" cy="190" r="5" fill="black" stroke="black"/>
 <circle cx="10" cy="100" r="5" fill="white" stroke="blue"/>
 <circle cx="190" cy="100" r="5" fill="white" stroke="blue"/>
-<text x="6" y="90">1</text>
-<text x="186" y="90">2</text>
+<text x="6" y="90">+</text>
+<text x="186" y="90">-</text>
 </svg>

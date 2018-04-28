@@ -1,39 +1,37 @@
-Notes on Conway operators
-=========================
+Notes on operations on polyhedra
+================================
 
-Conway originally defined a set of operations that could be performed on the
-Platonic solids to obtain the Archimedean and Catalan solids. Although some of
-the operations date back as early as Kepler, operations that obtain one
-polyhedron using another one as a seed as now known as Conway operations or
-Conway operators. Conway's original set of operations is denoted with the
-letters `abdegjkmost`, and more are available depending on your software. For
-instance, a truncated cube may be denoted `tC`, where `t` is the truncate
-operation and `C` is a cube. Initially there was not much theory supporting
-Conway operations, but [Brinkmann]_'s paper provides a framework. This text
+Operations on polyhedra to produce other polyhedra date back as far as Kepler.
+Conway defined a set of operations that could be performed on the Platonic
+solids to obtain the Archimedean and Catalan solids, and others added operators
+after him. Initially there was not much theory supporting operations on
+polyhedra, but [Brinkmann]_'s paper provides a framework. This text
 is an attempt to use Brinkmann's work to find ways to quantify, analyze,
-and expand Conway operators.
+and expand these operators.
 
 Preliminaries
 -------------
-This assumes some familiarity with Conway operators. See [HartConway]_ for a
-basic overview, or better still, spend some time playing with
-[Polyhedronisme]_ (a web app) or ``conway`` in [Antiprism]_.
-In general, this text uses the same terms as ``conway``.
+This assumes some familiarity with basic graph theory, solid geometry, and
+Conway operators. See [HartConway]_ for a basic overview of Conway operators, or
+better still, spend some time playing with [Polyhedronisme]_ (a web app) or
+``conway`` in [Antiprism]_. Some paper to doodle on is helpful too. In general,
+this text uses the same terms as ``conway``. Also beware that the term "Conway
+operator" is not well-defined; it can refer to any operation on a polyhedron,
+Conway's original set, operations that retain the symmetry of the seed
+polyhedron like Conway's operators, etc. depending on your source.
 
-Antiprism uses `S` (seed) for the identity operator. The dual operator is `d`,
-and the mirror-image operator is `r`. Both `dd` and `rr` equal `S`. For every
-operator `x`, there also exist operators `xd`, `dx`, and `dxd`, some of which
-may be equal to `x`. Since the characteristics of the latter operators
-are closely related to `x`, this text will generally pick one operator from
-that collection and use that to represent the whole. (Usually the choice is
-an operator that preserves the base vertices, for arbitrary consistency's sake.)
-
-An operator that cannot be expressed in terms of operators aside from `d` and
-`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
-in terms of Conway operators, but `m` (Meta) is not (it is equal to `kj`).
-
-Conway operations are usually applied to convex (spherical) polyhedra, and less
-often on planar tilings. Planar tilings can be easier to visualize.
+Operations on polyhedra are usually applied to convex (spherical) polyhedra,
+and less often on planar tilings. Planar tilings can be easier to visualize.
+With some care, operators can be applied to any polyhedron or tiling;
+toruses, polyhedra with multiple holes, planar tilings, hyperbolic tilings,
+and even non-orientable polyhedra, although the latter is restricted to the
+achiral operators. Planar tilings may be easier to analyze by
+taking a finite section and treating it as a torus. Convex polyhedra may be
+put into "canonical form" such that all faces are flat, all edges are tangent
+to the unit sphere, and the centroid of the polyhedron is at the origin.
+There is no canonical form guaranteed to exist for general non-convex
+polyhedra, however: in particular, there may be no position of the vertices
+such that all the faces are flat.
 
 Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
 vertices.
@@ -52,86 +50,222 @@ Chamber structure
    :align: right
    :figwidth: 25%
 
-   Chambers adjacent to an edge.
+   Chambers adjacent to an edge: what this text calls "chamber structure"
 
-[Brinkmann]_ et al. observed that Conway operators can be described in terms
-of chambers. Each face may be divided into chambers by identifying the face
-center and drawing lines from there to each vertex and edge midpoint, as in
-:numref:`facechambers`. Similarly, each vertex of degree `n` is surrounded
-by `n` white and `n` grey chambers. Each edge has a white and grey chamber on
-each side of the edge, as shown in :numref:`edgechambers`.
+[Brinkmann]_ et al. observed that Conway's operators, and operators like it,
+can be described in terms of chambers. Each face may be divided into chambers
+by identifying the face center and drawing lines from there to each vertex and
+edge midpoint, as in :numref:`facechambers`. Similarly, each vertex of degree
+`n` is surrounded by `n` white and `n` grey chambers. Each edge has a white and
+grey chamber on each side of the edge, as shown in :numref:`edgechambers`. The
+operator may then be specified by a structure of vertices and edges within
+those chambers, possibly with edges crossing from one chamber to another.
 
-The operator may then be specified by a structure of vertices and edges within
-those chambers, possibly with edges crossing from one edge to another. If an
-operator is achiral, the grey chamber is a reflection of the adjacent white
-chamber. A list of operators with their chamber structures is listed at the
-end of this text. In this text, we show the two chambers adjacent to each
-side of a seed edge. Technically we only need the upper-left white chamber for
-achiral operators or the upper white and grey chambers for chiral operators,
-but showing both sides of the edge will make things easier later on.
+[Brinkmann]_ et al. note that for all operators that can be expressed in terms
+of these chambers, the number of edges in the result polyhedron are an integer
+multiple of those in the seed polyhedron. They call this the inflation rate,
+and we'll denote it :math:`g`. It turns out that an edge-focused view of
+these operators is fruitful: we can view it as replacing each edge and its
+surroundings with a structure like that in :numref:`edgechambers`, possibly
+rotated or stretched, but maintaining orientation with respect to the
+polyhedron. Therefore (and since Brinkmann et al. don't actually introduce an
+overarching term for these operators) we'll call them edge replacement
+operators, or EROs. If an operator's grey chamber is a reflection of the white
+chamber, we call it achiral: otherwise the operator is chiral. (Brinkmann et al.
+call these local symmetry-preserving operations (LSP) and local operations
+that preserve orientation-preserving symmetries (LOPSP), respectively.)
 
 The chamber structure of the composed operator `xy` can be drawn by applying `x`
 to the edges of the chamber structure of `y`. In particular, for a given
-operator `x`, the chamber structure of `xd` is simply the chamber structure
+ERO `x`, the chamber structure of `xd` is simply the chamber structure
 of `x` rotated one quarter turn.
 
 There is some freedom in where vertices are placed within the chambers.
-This is more apparent with chiral operators. Often the operator is drawn
+This is more apparent with chiral EROs. Often an ERO is drawn
 so that most of the vertices lie on the seed edge, but this is not necessary.
-For instance, :numref:`propeller` is a chamber diagram for how George Hart
-originally drew his propeller operator (see [HartPropeller]_),
-but :numref:`propellersq` is topologically
-equivalent and emphasizes the operator's relationship with a square grid.
+For instance, see :numref:`propeller` for two topologically equivalent ways to
+draw George Hart's propeller operator (see [HartPropeller]_).
 
 .. _propeller:
-.. figure:: edge_chambers_propeller.svg
-   :align: center
+.. list-table:: Chambers for the operator `p` (Propeller)
 
-   George Hart's drawing of the chambers for the operator `p` (Propeller)
+   * - .. image:: edge_chambers_propeller.svg
+     - .. image:: edge_chambers_propeller-square_grid.svg
+   * - George Hart's original drawing
+     - Drawing emphasizing relationship with a square grid
 
-.. _propellersq:
-.. figure:: edge_chambers_propeller-square_grid.svg
-   :align: center
+Particular sets of edge-replacement operators
+---------------------------------------------
+Conway's original set of operations is denoted with the letters `abdegjkmost`.
+Some of these are reducible: `e=aa`, `o=jj`, `m=kj`, and `b=ta`.
 
-   Grid drawing of the chambers for the operator `p` (Propeller)
+The Goldberg-Coxeter operations :math:`\Box_{a,b}` and :math:`\Delta_{a,b}`
+described in :ref:`Goldberg-Coxeter Operations on Polyhedra and Tilings` can be
+fairly simply extended to a ERO. In terms of the complex plane used in
+:ref:`Master Polygons`, the chamber structure of :math:`\Box_{a,b}` is the
+section contained in the quadrilateral :math:`0, x(1-i)/2, x, x(1+i)/2` of a
+square grid on the Gaussian integers, where :math:`x=a+bi`. For
+:math:`\Delta_{a,b}`, the chamber structure is the quadrilateral section
+:math:`0, x(2-u)/3, x, x(1+u)/3` of a triangular grid on the Eisenstein
+integers, where :math:`x=a+bu` and :math:`u=\exp(i \pi /3)`. 
+GC operators have an invariant `T`, the "trianglation number",
+which is identical to the inflation factor `g`.
 
-Operators on counts
--------------------
-In abstract algebraic terms, Conway operators form a monoid: a group without
-an inverse, or a semigroup with an identity element. Let :math:`[v,e,f]` be
-the count of vertices, edges, and faces of the seed, and :math:`v_i` and
-:math:`f_i` be the count of vertices/faces of order `i` such that
-:math:`\sum v_i = v` and :math:`\sum f_i = f`. There is a series of monoids and
-homomorphisms between the monoids, as so:
+* :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
+* :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
 
-* Conway operator `x` (acts on polyhedra)
+All of the nice qualities of GC operators carry over to this extension; for
+instance, :math:`\Box_{a,b}` operators commute with each other, as do
+:math:`\Delta_{a,b}` operators, and the operators can be decomposed in relation
+to the Gaussian or Eisenstein integers respectively. Except for `g` and `s`,
+all of Conway's original operators are GC operations,
+related by duality, or compositions of GC operators or their duals.
+
+The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
+:math:`\Delta_{1,1} = n = kd`. One useful relation is that if
+:math:`a=b \mod 3`, :math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and if
+:math:`a=b \mod 2`, :math:`\Box_{a,b} = j \Box_{(a+b)/2,(b-a)/2}`.
+(These formula may result in negative values, which should be interpreted as
+per :ref:`Master Polygons`.)
+
+Alternating operators
+---------------------
+.. _facealtchambers:
+.. figure:: square_alternating_chambers.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers of a quadrilateral face.
+
+.. _edgealtchambers:
+.. figure:: edge_chambers_alternating.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers adjacent to an edge.
+
+.. _semi:
+.. figure:: edge_chambers_alternating_semi.svg
+   :align: right
+   :figwidth: 25%
+
+   Alternating chambers of the Coxeter semi operator (without digon reduction)
+
+In [Coxeter8]_ (specifically section 8.6), Coxeter defines an alternation
+operation `h` on regular polyhedra with only even-sided faces. (He actually
+defines it on general polytopes, but let's not complicate things by considering
+higher dimensions.) Each face is replaced
+with a face with half as many sides, and alternate vertices are either retained
+as part of the faces or converted into vertices with number of sides equal to
+the degree of the seed vertex. (He also defines a snub operation in section 8.4,
+different from the `s` snub Conway defined, that is equivalent to `ht`.) The
+alternation operation converts quadrilateral faces into digons. Usually the
+digons are converted into edges, but for now, let digons be digons.
+
+This motivates the definition of "alternating operators" and an "alternating
+chamber" structure, as depicted in :numref:`facealtchambers` and
+:numref:`edgealtchambers`. Like earlier, we can think of this as replacing each
+edge with :numref:`edgealtchambers`, stretched or rotated but maintaining
+orientation with respect to the polyhedron, so we can call these operators AEROs
+(alternating EROs) for short. This structure is only applicable to polyhedra
+with even-sided faces. The dual operators of those are applicable to polyhedra
+with even-degree vertices, and should be visualized as having chambers on the
+left and right rather than top and bottom. Like EROs, the chamber
+structure of `xd` is that of `x` rotated a quarter turn; but now, the direction
+of rotation matters, and depends on how the alternating vertices (or faces) of
+the underlying polyhedron are specified. For the sake of simplicity, we'll only
+look at AEROs on even-sided faces (vertex-AEROs, or VAEROs) instead of on
+even-degree vertices (face-AEROs, or FAEROs).
+
+VAEROs depend on the ability to partition vertices into two disjoint sets, none
+of which are adjacent to a vertex in the same set; i.e. it applies to bipartite
+graphs. We'll denote those sets as :math:`+` and :math:`-`. By basic graph
+theory, planar bipartite graphs have faces of even degree. However, this does
+not mean that the two sets of vertexes have the same size, let alone that the
+sets of vertices of a given degree will have a convenient partition. The cube
+and many other small even-faced polyhedra do partition into two equal sets of
+vertices, so beware that examining simple, highly-symmetric polyhedra can be
+misleading. (A section on AEROs briefly appeared on the Wikipedia page for
+Conway operators. It made some errors that seemed to result from assuming
+that the partitions were of equal size.)
+
+Strictly, since AEROs map polyhedra with even-sided faces to arbitrary
+polyhedra, they are not operators in the strict mathematical sense. (In
+particular, since AEROs do not necessarily produce even-sided faces or
+even-degree vertices, they cannot be composed together arbitrarily.) However,
+calling them "transformations" instead felt awkward, since the term "operator"
+is so commonly used. You can call them AERTs, VAERTs, and FAERTs instead if
+you like.
+
+Digons and degree-2 vertices are an unavoidable fact of certain VAEROs,
+particularly on quadrilateral faces. Two important special cases are where
+the seed polyhedron has only quadrilateral faces, and when it has only faces of
+degree 6 or more (although the latter case only appears in infinite tilings).
+In the former case, the degree-2 features can be uniformly smoothed out.
+In the latter, degree-2 features are not created.
+
+Other Operators
+---------------
+There are some important operations on polyhedra that don't fix into the
+edge-replacement schema.
+
+* `r`, the reflection operator. This produces the mirror image of the
+  polyhedron. If an operator `x` is chiral, `rxr` is its chiral pair.
+* `$`, the smoothing operator (newly defined here). This operator smooths
+  degree-2 vertices and digons, as produced by some AEROs. This operator is
+  recursive, and will smooth features until there are no degree-2 features
+  left to smooth. For instance, two vertices may be
+  connected by one edge and another edge split by a degree-2 vertex; one
+  smoothing iteration would smooth that degree-2 vertex into a single edge,
+  creating a digon, and the next would reduce the digon into a single edge.
+* `@`, the alternation operator (newly defined here).
+  This operator just exchanges the :math:`+` and :math:`-` partitions.
+  Applied to an operator, it reflects its chamber structure horizontally.
+
+Representations of operators
+----------------------------
+In abstract algebraic terms, EROs form a monoid: a group without an inverse, or
+a semigroup with an identity element. Let :math:`[v,e,f]` be the count of
+vertices, edges, and faces of the seed,
+and :math:`v_i` and :math:`f_i` be the count of vertices/faces of degree
+:math:`i` such that :math:`\sum v_i = v` and :math:`\sum f_i = f`.
+There is a series of monoids and homomorphisms between the monoids, as so:
+
+* ERO `x` (acts on polyhedra)
 * Infinite-dimensional linear operator :math:`L_x` (acts on :math:`v_i, e, f_i`)
 * 3x3 matrix :math:`M_x` (acts on :math:`[v,e,f]`)
-* Inflation factor `g` and type
+* Inflation factor `g` (acts on :math:`e`) and operator outline
+
+AEROs do not form a monoid (since in general they cannot be composed together)
+but do admit a similar representation. For VAEROs, the count of vertices of
+degree :math:`i` in the :math:`+` partition are denoted :math:`v^+_i` and those
+in the :math:`-` partition as :math:`v^-_i`. :math:`\sum v^+_i = v^+`, and
+similarly for :math:`-`. :math:`v^+_i + v^-_i = v_i`, and :math:`v^+ + v^- = v`.
+Partitions of :math:`f` for FAEROs are denoted similarly.
 
 Each bullet will be handled in turn.
 
-The action of the operator on the vertices of degree `i`, edges, and faces with
-`i` sides can be described with an infinite linear operator :math:`L_x`. This
-operator can be determined by counting elements off the chamber structure.
+The action of an ERO on the vertices of degree :math:`i`, edges, and faces with
+:math:`i` sides can be described with an infinite linear operator :math:`L_x`.
+This operator can be determined by counting elements off the chamber structure.
 Step by step:
 
 * Seed vertices are either retained or converted into faces centered on that
-  vertex. (Other options are precluded by symmetry). Let `a = 1` if the
+  vertex. (Other options are precluded by symmetry). Let :math:`a = 1` if the
   seed vertices are retained, and 0 otherwise. Also, the degree of the vertex
-  or face is either the same as the seed vertex, or a multiple of it; let `k`
-  be that multiple.
+  or face is either the same as the seed vertex, or a multiple of it;
+  let :math:`k` be that multiple.
 * Seed face centers are either retained (possibly of in a smaller face) or
   converted into vertices. (Again, other options are precluded by symmetry).
-  Let `c = 0` if the seed faces are retained, and 1 otherwise. Let :math:`\ell`
-  serve a similar role as `k` above: the degree of the vertex or face
-  corresponding to the seed face center is `k` times the degree of
+  Let :math:`c = 0` if the seed faces are retained, and 1 otherwise. Let
+  :math:`\ell` serve a similar role as :math:`k` above: the degree of the vertex
+  or face corresponding to the seed face center is :math:`k` times the degree of
+  the seed vertex.
 * Except for the faces or vertices corresponding to the seed vertices and face
-  centers, the added elements are in proportion to to the number of
-  edges in the seed. `g` is the count of added edges (the edge multiplier or
-  inflation rate from [Brinkmann]_ et al.),
-  :math:`b_i` is the number of vertices of degree i added,
-  and :math:`b'_i` is the number of faces of degree i added.
+  centers, the added elements are in proportion to to the number of edges in the
+  seed. :math:`g` is the count of added edges (the edge multiplier or inflation
+  rate), :math:`b_i` is the number of vertices of degree :math:`i` added, and
+  :math:`b'_i` is the number of faces of degree :math:`i` added.
 
 Count elements lying on or crossing the outer edge of the chamber structure as
 half. It may help to draw an adjacent chamber, particularly when determining
@@ -146,12 +280,30 @@ variables in capital letters are the result of the operator.
 
    F_i &= a' v_{i/k} + e b'_i + c' f_{i/\ell}
 
-where `a`, :math:`a'`, `c`, and :math:`c'` are either 0 or 1, `g` is a
-positive integer, all :math:`b_i` and :math:`b'_i` are nonnegative integers,
-and `k` and :math:`\ell` are positive integers. The subscripted values like
-:math:`v_{i/k}` should be interpreted as 0 if `i/k` is not an integer.
+where :math:`a`, :math:`a'`, `c`, and :math:`c'` are either 0 or 1, `g` is a
+positive integer, all :math:`b_i` and :math:`b'_i` are nonnegative integers, and
+:math:`k` and :math:`\ell` are positive integers. The subscripted values like
+:math:`v_{i/k}` should be interpreted as 0 if :math:`i/k` is not an integer.
 
-Explicitly the composition of two operators `xy` can be described as so.
+The only alteration needed to accommodate VAEROs is that the action on seed
+vertices may be different depending on which partition they are in. (Counting
+elements may be more complicated: it's possible to have an edge pass through
+one chamber without meeting any vertices.)
+
+.. math::
+   E &= ge
+
+   V_i &= a^+ v^+_{i/k^+} + a^- v^-_{i/k^-} + e b_i + c f_{i/\ell}
+
+   F_i &= a'^+ v^+_{i/k^+} + a'^- v^-_{i/k^-} + e b'_i + c' f_{i/\ell}
+
+:math:`a^+`, :math:`a^-`, :math:`a'^+`,  and :math:`a'^-` are either 0 or 1.
+:math:`k^+`, :math:`k^-` are positive integers and :math:`\ell` may take values
+in :math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. If :math:`a^+ = a^-` both
+may be written as :math:`a`, and similarly for :math:`a'` and :math:`k`.
+FAEROs would be described correspondingly.
+
+Explicitly the composition of two EROs `xy` can be described as so.
 Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the values for :math:`L_y`;
 :math:`G, A, A', B_i, B'_i, C, C', K, L` for :math:`L_x`; and
 :math:`\gamma, \alpha, \alpha', \beta_i, \beta'_i, \sigma, \sigma',
@@ -183,45 +335,57 @@ Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the values for :math:`L_y`;
     \end{array}
    \right.
 
-Under the constraint that the operator preserves the Euler characteristic,
+Under the constraint that an ERO preserves the Euler characteristic,
 it can be shown that :math:`a + a' = 1`, :math:`c + c' = 1`, and
 :math:`g= b + b' + 1` where :math:`\sum b_i = b` and :math:`\sum b'_i = b'`.
+For VAEROs, :math:`a^+ + a'^+ = 1` and :math:`a^- + a'^- = 1`.
 Also, since :math:`b_i` and :math:`b'_i` are nonnegative integers, only a
 finite number of their values can be non-zero. This makes the operator form
 more manageable than the term "infinite linear operator" may suggest; in
 reality, nearly all applications will only use a finite number of different
 vertex and face degrees.
 
-Applying the handshake lemma gives relations between the values:
+Applying the handshake lemma gives relations between the values for EROs:
 
 .. math::
    2g &= 2ak + 2c\ell + \sum i b_i
 
    2g &= 2a'k + 2c'\ell + \sum i b'_i
 
-These can be manipulated into this form:
+or for VAEROs:
 
 .. math::
-   2k + 2l - 4 = \sum (4-i) (b_i + b'_i)
+   2g &= a^+ k^+ + a^- k^- + 2c\ell + \sum i b_i
+
+   2g &= a'^+ k^+ + a'^- k^- + 2c'\ell + \sum i b'_i
+
+For both EROs and VAEROs (and FAEROs), these relations can be manipulated into
+the form
+
+.. math::
+   2k + 2\ell - 4 = \sum (4-i) (b_i + b'_i),
 
 which is interesting because it eliminates `g`, `a` and `c`,
 and because it suggests that features with degree 5 or more exist
 in balance with features of degree 3 (triangles and degree-3 vertices),
 and that in some sense degree 4 features come "for free".
 
-If the polyhedron doesn't have degree-2 features (e.g digons or degree-2
-vertices), :math:`i \ge 3`. Together with characteristics from above, a
-series of inequalities can be derived:
+With these relations, and the assumption that there are no degree 2 features
+and therefore :math:`i \ge 3`, a series of inequalities can be derived for EROs:
 
 .. math::
-   2k + 2\ell - 2 \le g + 1 \le 2a + 3b + 2c \le 2g
+   g + 1 \le 2a + 3b + 2c \le 2g
 
-All these relations taken together  are necessary but not sufficient. The values
-:math:`g=3`, :math:`a=1`, :math:`c=0`, :math:`k=1`, :math:`\ell=1`,
-:math:`b_4=1`, :math:`b'_4=1` satisfy the relations, but do not appear
-to correspond to any Conway operator. (However, see the "Extensions" section.)
+   2k + 2\ell \le g + 3
 
-The dual operator :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
+and for VAEROs:
+
+.. math::
+   1 \le a^+ + a^- + 2b + c \le 2g
+
+   k^+ + k^- + 2\ell \le 2g + 2
+
+The dual ERO :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
 With a little manipulation, it is easy to see that if :math:`L_x` has values
 `a`, :math:`b_i`, `c`, etc, then applications of the dual operator have related
 forms. :math:`L_x L_d`'s values exchange `a` with `c`, :math:`a'` with
@@ -231,8 +395,8 @@ with :math:`a'`, `c` with :math:`c'`, and each :math:`b_i` with each
 :math:`c'`, and :math:`a'` with `c`, `k` with :math:`\ell`,
 and each :math:`b_i` with each :math:`b'_i`.
 
-The matrix form :math:`M_x` can be obtained from :math:`L_x` by summing
-:math:`\sum v_i = v` and :math:`\sum f_i = f`, or from counting elements
+For EROs, the matrix form :math:`M_x` can be obtained from :math:`L_x` by
+summing :math:`\sum v_i = v` and :math:`\sum f_i = f`, or from counting elements
 directly from the chamber structure without distinguishing between vertices and
 faces of different degrees. (The conversion from :math:`L_x` to :math:`M_x` is
 itself a linear operator.) The matrix takes the form:
@@ -268,39 +432,216 @@ horizontally or vertically.
    0 & g & 0 \\
    c & b & a \end{bmatrix}
 
-It can be seen from the composition equations that for an operator xy, the
+VAEROs with :math:`a^+ = a^-` can also be written as a 3x3 matrix. In general,
+VAEROs can be written as a 4x3 matrix mapping :math:`[v^+,v^-,e,f]` to
+:math:`[v,e,f]`. FAEROs can be written as a 4x3 matrix as well, but that one
+mapping :math:`[v,e,f^+,f^-]` to :math:`[v,e,f]`. Since the :math:`e` row
+is zero except for the value :math:`g` in the :math:`e` column, there shouldn't
+be much ambiguity.
+
+.. math::
+   \mathbf{M}_x = \begin{bmatrix}
+   a^+ & a^- & b & c \\
+   0 & 0 & g & 0 \\
+   a'^+ & a'^- & b' & c' \end{bmatrix}
+
+It can be seen from the composition equations that for an ERO `xy`, the
 expansion factor g is the product of the g values for operators `x` and `y`.
 It can also be seen that :math:`a, a', c, c'` form their own linear system,
 a submatrix of :math:`M_x`: let
 :math:`\Lambda_x = \begin{bmatrix} a & c \\ a' & c' \end{bmatrix}`,
-then :math:`\Lambda_{xy} = \Lambda_x \Lambda_y`. By cofactor expansion,
-:math:`\det (M_x) = g \det (\Lambda_x)`. :math:`\Lambda_x` has a determinant of
--1, 0, or 1. (In fact, :math:`\Lambda_x` has two eigenvalues, one of which is
-always 1, and one of which may be -1, 0, or 1. :math:`M_x` has three
+then :math:`\Lambda_{xy} = \Lambda_x \Lambda_y`. :math:`\Lambda_x` represents
+the effect of the operator on the seed faces and vertices: this can also be
+represented as a drawing of those seed faces and vertices, called the "outline"
+of the operator. By cofactor
+expansion, :math:`\det (M_x) = g \det (\Lambda_x)`. :math:`\Lambda_x` has a
+determinant of -1, 0, or 1. (In fact, :math:`\Lambda_x` has two eigenvalues, one
+of which is always 1, and one of which may be -1, 0, or 1. :math:`M_x` has three
 eigenvalues: two it shares with :math:`\Lambda_x`, and one is `g`.) The dual
 operator has :math:`\det (M_x) = \det (\Lambda_x) = -1`, and it is easy to see
 that of the four possible :math:`\Lambda_x`, the first two and last two in the
 table below are related by the dual operator. With that motivation, we define the
-"Type" of the operator as the absolute value of the determinant of :math:`\Lambda_x`.
+"Type" of the operator as the absolute value of the determinant of
+:math:`\Lambda_x`.
 
-.. list-table:: Operator types
-   :align: right
+Like earlier, VAEROs with :math:`a^+ = a^-` are also associated with a 2x2
+matrix :math:`\Lambda_x`. All VAEROs are associated with a 3x2 matrix
+:math:`\Lambda_x = \left[\begin{array}{cc|c}a^+ & a^- & c \\ a'^+ & a'^- & c'\end{array}\right]`.
+FAEROs are associated with a 3x2 matrix
+:math:`\Lambda_x = \left[\begin{array}{c|cc}a & c^+ & c^- \\ a' & c'^+ & c'^-\end{array}\right]`.
+To reduce ambiguity, a vertical bar is included to separate the :math:`a` values
+from the :math:`c` values. VAEROs and FAEROs with :math:`a^+ \ne a^-`
+can be shoehorned into the 2x2 matrix form if the matrix is allowed to have
+undefined values for its entries, treated like NaN in floating-point numbers,
+which is denoted :math:`?`. 3x2 matrixes don't have determinants, so the
+type of a VAERO with :math:`a^+ \ne a^-` is not defined.
+
+.. list-table:: Outlines and their matrix representation
+   :header-rows: 1
+   :widths: 1 3 3 3
 
    * - Outline
-     - .. image:: edge_chambers_outline_1_0.svg
-     - .. image:: edge_chambers_outline_0_1.svg
-     - .. image:: edge_chambers_outline_1_1.svg
-     - .. image:: edge_chambers_outline_0_0.svg
-   * - :math:`\Lambda_x`
+     - Kind & Type
+     - 2x2 Matrix
+     - 3x2 Matrix
+   * - .. image:: outline_1_0.svg
+     - Any - 1
      - :math:`\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}1 & 1 & 0 \\ 0 & 0 & 1\end{array}\right]` or
+       :math:`\left[\begin{array}{c|cc}1 & 0 & 0 \\ 0 & 1 & 1\end{array}\right]`
+   * - .. image:: outline_0_1.svg
+     - Any - 1
      - :math:`\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}0 & 0 & 1 \\ 1 & 1 & 0\end{array}\right]` or
+       :math:`\left[\begin{array}{c|cc}0 & 1 & 1 \\ 1 & 0 & 0\end{array}\right]`
+   * - .. image:: outline_1_1.svg
+     - Any - 0
      - :math:`\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}`
+     - :math:`\begin{bmatrix} 1 & 1 & 1 \\ 0 & 0 & 0 \end{bmatrix}`
+   * - .. image:: outline_0_0.svg
+     - Any - 0
      - :math:`\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}`
-   * - Determinant of :math:`\Lambda_x`
-     - +1
-     - -1
-     - 0
-     - 0
+     - :math:`\begin{bmatrix} 0 & 0 & 0 \\ 1 & 1 & 1 \end{bmatrix}`
+   * - .. image:: outline_+_0.svg
+     - VAERO
+     - :math:`\begin{bmatrix} ? & 0 \\ ? & 1 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}1 & 0 & 0 \\ 0 & 1 & 1\end{array}\right]`
+   * - .. image:: outline_-_1.svg
+     - VAERO
+     - :math:`\begin{bmatrix} ? & 1 \\ ? & 0 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}0 & 1 & 1 \\ 1 & 0 & 0\end{array}\right]`
+   * - .. image:: outline_+_1.svg
+     - VAERO
+     - :math:`\begin{bmatrix} ? & 1 \\ ? & 0 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}1 & 0 & 1 \\ 0 & 1 & 0\end{array}\right]`
+   * - .. image:: outline_-_0.svg
+     - VAERO
+     - :math:`\begin{bmatrix} ? & 0 \\ ? & 1 \end{bmatrix}`
+     - :math:`\left[\begin{array}{cc|c}0 & 1 & 0 \\ 1 & 0 & 1\end{array}\right]`
+   * - .. image:: outline_0_+.svg
+     - FAERO
+     - :math:`\begin{bmatrix} 0 & ? \\ 1 & ? \end{bmatrix}`
+     - :math:`\left[\begin{array}{c|cc}0 & 1 & 0 \\ 1 & 0 & 1\end{array}\right]`
+   * - .. image:: outline_1_-.svg
+     - FAERO
+     - :math:`\begin{bmatrix} 1 & ? \\ 0 & ? \end{bmatrix}`
+     - :math:`\left[\begin{array}{c|cc}1 & 0 & 1 \\ 0 & 1 & 0\end{array}\right]`
+   * - .. image:: outline_1_+.svg
+     - FAERO
+     - :math:`\begin{bmatrix} 1 & ? \\ 0 & ? \end{bmatrix}`
+     - :math:`\left[\begin{array}{c|cc}1 & 1 & 0 \\ 0 & 0 & 1\end{array}\right]`
+   * - .. image:: outline_0_-.svg
+     - FAERO
+     - :math:`\begin{bmatrix} 0 & ? \\ 1 & ? \end{bmatrix}`
+     - :math:`\left[\begin{array}{c|cc}0 & 0 & 1 \\ 1 & 1 & 0\end{array}\right]`
+
+The composition of EROs affects their outlines like so:
+
+.. list-table:: ERO outline composition table
+   :header-rows: 1
+   :stub-columns: 1
+
+   * -
+     - .. image:: outline_1_0.svg
+     - .. image:: outline_0_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_0_0.svg
+   * - .. image:: outline_1_0.svg
+     - .. image:: outline_1_0.svg
+     - .. image:: outline_0_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_0_0.svg
+   * - .. image:: outline_0_1.svg
+     - .. image:: outline_0_1.svg
+     - .. image:: outline_1_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_1_1.svg
+   * - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+   * - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+
+In general, AEROs cannot be composed together, but the result of an AERO is just
+another polyhedron, so any AERO can be composed with an ERO on the left.
+
+.. list-table:: VAERO outline composition table
+   :header-rows: 1
+   :stub-columns: 1
+
+   * -
+     - .. image:: outline_+_0.svg
+     - .. image:: outline_-_1.svg
+     - .. image:: outline_-_0.svg
+     - .. image:: outline_+_1.svg
+   * - .. image:: outline_1_0.svg
+     - .. image:: outline_+_0.svg
+     - .. image:: outline_-_1.svg
+     - .. image:: outline_-_0.svg
+     - .. image:: outline_+_1.svg
+   * - .. image:: outline_0_1.svg
+     - .. image:: outline_-_1.svg
+     - .. image:: outline_+_0.svg
+     - .. image:: outline_+_1.svg
+     - .. image:: outline_-_0.svg
+   * - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+   * - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+
+.. list-table:: FAERO composition table
+   :header-rows: 1
+   :stub-columns: 1
+
+   * -
+     - .. image:: outline_0_+.svg
+     - .. image:: outline_1_-.svg
+     - .. image:: outline_0_-.svg
+     - .. image:: outline_1_+.svg
+   * - .. image:: outline_1_0.svg
+     - .. image:: outline_0_+.svg
+     - .. image:: outline_1_-.svg
+     - .. image:: outline_0_-.svg
+     - .. image:: outline_1_+.svg
+   * - .. image:: outline_0_1.svg
+     - .. image:: outline_1_-.svg
+     - .. image:: outline_0_+.svg
+     - .. image:: outline_1_+.svg
+     - .. image:: outline_0_-.svg
+   * - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+     - .. image:: outline_1_1.svg
+   * - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+     - .. image:: outline_0_0.svg
+
+Decomposition
+-------------
+An operator that cannot be expressed in terms of operators aside from `d` and
+`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
+in terms of EROs, but `m` (Meta) is not (it is equal to `kj`).
+The relations defined above can be used to help reduce an operator, with some
+caveats.
+
+All these relations taken together  are necessary but not sufficient. For
+instance, the values :math:`g=3`, :math:`a=1`, :math:`c=0`, :math:`k=1`,
+:math:`\ell=1`, :math:`b_4=1`, :math:`b'_4=1` satisfy the relations for EROs,
+but do not appear to correspond to any ERO.
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
@@ -309,8 +650,8 @@ table below are related by the dual operator. With that motivation, we define th
 
    The waffle operator (W)
 
-None of these homomorphisms are injections: there are certain
-:math:`L_x` or :math:`M_x` that correspond to more than one Conway operator.
+Furthermore, none of these homomorphisms are injections: there are certain
+:math:`L_x` or :math:`M_x` that correspond to more than one EROs.
 Examples for :math:`M_x` are easy to come by: where `n = kd`, :math:`M_k = M_n`.
 For an example where the operators are not related by duality,
 :math:`M_l = M_p`. For :math:`L_x`, :math:`L_{prp} = L_{pp}` but `prp` is not
@@ -318,34 +659,36 @@ the same as `pp` (one's chiral, one's not). For the operator depicted in
 :numref:`waffle`, :math:`W \ne Wd`, but :math:`L_W = L_{Wd}`.
 (This is a newly named operator, introduced in this text.)
 
-In summary, the assumptions made in this section are:
+The above representations do not give us a 100% reliable way to decompose an
+arbitrary operator into a sequence of operators, it does suggest a (clunky,
+trial-and-error filled) heuristic to reduce an operator into two operators by
+starting at the bottom of the homomorphism chain and going up.
 
-#. The operator has a chamber structure like described in [Brinkmann]_.
-#. The operator preserves the Euler characteristic of the seed polyhedron.
-#. The operator acts on, and produces, a polyhedron with vertices and faces of
-   degree 3 or more.
-#. The operator affects all vertices, edges, and faces of the seed uniformly.
+* Determine the :math:`g` of the two operators from the factors of the
+  :math:`g` of the operator to be factored.
+* Determine the outline (:math:`a, a', c, c'`) of the two operators.
+* Determine :math:`b, b'` for the two operators.
+* Determine :math:`k, \ell, b_i, b'_i`. for the two operators.
+* Figure out if the representations you've produced actually corresponds to
+  an ERO.
 
-Decomposition
--------------
-While the above representations do not allow for the decomposition of an
-arbitrary operator or polyhedron into a sequence of operators (or operators and
-a seed polyhedron), it does make some progress towards that goal.
+Some facts relating to decomposition that can be derived from what we have
+so far:
 
-* If a polyhedron has a prime number of edges, then the only Conway operators
+* If a polyhedron has a prime number of edges, then the only EROs
   that can be used to express it in terms of another polyhedron are `S` and `d`.
-* Operators where `g` is a prime number are irreducible in terms of
-  Conway operators other than `d`.
-* By symmetry, if `g` is odd, there is an edge that lies on or crosses the 
-  center point of the seed edge in the chamber structure of the operator.
+* Operators where `g` is a prime number are irreducible.
+* By symmetry, if `g` is odd, there is an edge that lies on or crosses the
+  center point of the seed edge in the chamber structure of the ERO.
 * If `x=xd` or `rxr=xd`, `x` has type 0.
 * If `x=dxd` or `rxr=dxd`, `x` has type 1 and `g` is odd.
 * If an operator has type 1, its decomposition cannot contain any operators of
   type 0. Correspondingly, if an operator has type 0,
-  its decomposition must have at least one type 0 operator.
-* There are no type 1 Conway operators with `g=2`, so therefore type 1 operators
-  with `g=2p`, where p is prime, are irreducible in terms of Conway operators.
-  (However, see the section on alternating operators.)
+  its decomposition must contain at least one type 0 operator.
+* There are no type 1 EROs with `g=2`, so therefore type 1 operators
+  with `g=2p`, where p is prime, are irreducible in terms of EROs.
+  (However, see the section below,
+  "All EROs can be expressed with smoothing, an AERO, and the join operator".)
 
 Chirality
 ---------
@@ -364,7 +707,8 @@ achiral operators to 0 and :math:`\pm 1` to chiral operators. The composition
 of a chiral operator and an achiral operator is always chiral, but:
 
 * Two chiral operators can produce an achiral operator: `prp`
-* Two chiral operators can produce a chiral operator: `pp`, `pg`, `prg`
+* Two chiral operators can produce another chiral operator:
+  `pp`, `pg`, `prg`, `gg`, `grg`
 
 Further confusing things are operators where r and d interact. Some
 operators have `xd = x`, while some others have `xd = rxr`.
@@ -372,180 +716,84 @@ The `gyro` operator is one example of the latter, and the bowtie operator
 in :numref:`bowtie` is another, maybe easier-to-visualize example.
 (Bowtie is a newly named operator, introduced in this text.)
 
-Relation to the Goldberg-Coxeter operation
-------------------------------------------
-The Goldberg-Coxeter operation can be fairly simply extended to a Conway
-operator. In the master polygon, identify two vertices and the center: this is
-the chamber structure of the operator.
-GC operators have an invariant `T`, the "trianglation number",
-which is identical to the Conway operator edge factor `g`.
+Operators that produce alternating polyhedra
+--------------------------------------------
 
-* :math:`\Box_{a,b}`: :math:`g = T = a^2 + b^2`
-* :math:`\Delta_{a,b}`: :math:`g = T = a^2 + ab + b^2`
+The alternation operator `@` just exchanges :math:`+` and :math:`-`, so its
+matrix form is a simple permutation matrix.
 
-:math:`\Box_{a,b}` is type 0 iff :math:`a \equiv b \mod 2`, and type 1
-otherwise. Similarly, :math:`\Delta_{a,b}` is type 0 iff
-:math:`a \equiv b \mod 3`. If the operator is type 0, the resulting polyhedron
-will have only quadrilateral or triangular (respectively) faces; if type 1,
-there will be one face at the face center of the same degree as the seed face.
+.. list-table:: Alternation operator `@` on bipartite structures
 
-All of the nice qualities of GC operators carry over to this extension; for
-instance, they form a commutative submonoid of Conway operators, and can be
-decomposed in relation to the Gaussian or Eisenstein integers. Many of the
-named Conway operators are GC operations, or related by duality. GC operators
-are also a nice source of examples; in the 2-parameter families, it's often
-easy to find an operator with a desired quality.
+   * - :math:`[v^+,v^-,e,f]` to :math:`[v^+,v^-,e,f]`
+     - :math:`[v,e,f^+,f^-]` to :math:`[v,e,f^+,f^-]`
+   * - .. math:: \mathbf{M}_@ = \begin{bmatrix}
+          0 & 1 & 0 & 0 \\
+          1 & 0 & 0 & 0 \\
+          0 & 0 & 1 & 0 \\
+          0 & 0 & 0 & 1 \end{bmatrix}
+     - .. math:: \mathbf{M}_@ = \begin{bmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & 1 & 0 & 0 \\
+          0 & 0 & 0 & 1 \\
+          0 & 0 & 1 & 0 \end{bmatrix}
 
-The simplest operators (aside from the identity) are :math:`\Box_{1,1} = j` and
-:math:`\Delta_{1,1} = n = kd`. One useful relation is that if a GC operator is
-of type 0, it can be decomposed as so:
-:math:`\Delta_{a,b} = n \Delta_{(2a+b)/3, (b-a)/3}`, and
-:math:`\Box_{a,b} = j\Box_{(a+b)/2,(b-a)/2}`. (These formula may result in
-negative values, which should be interpreted as per the section of these docs
-on the Goldberg-Coxeter operation.)
+When considered with the bipartite structure, the dual operator `d` can be
+considered to transform polyhedra with bipartite vertices into polyhedra with
+bipartite faces and vice versa. On operators, it converts VAEROs to FAEROs (and
+vice versa). Its matrix is also a simple permutation matrix.
 
-Extension - Alternating Operators
----------------------------------
-.. _facealtchambers:
-.. figure:: square_alternating_chambers.svg
-   :align: right
-   :figwidth: 25%
+.. list-table:: Dual operator `d` on bipartite structures
 
-   Alternating chambers of a quadrilateral face.
+   * - :math:`[v^+,v^-,e,f]` to  :math:`[v,e,f^+,f^-]`
+     - :math:`[v,e,f^+,f^-]` to :math:`[v^+,v^-,e,f]`
+   * - .. math:: \mathbf{M}_d = \begin{bmatrix}
+          0 & 0 & 0 & 1 \\
+          0 & 0 & 1 & 0 \\
+          1 & 0 & 0 & 0 \\
+          0 & 1 & 0 & 0 \end{bmatrix}
+     - .. math:: \mathbf{M}_d = \begin{bmatrix}
+          0 & 0 & 1 & 0 \\
+          0 & 0 & 0 & 1 \\
+          0 & 1 & 0 & 0 \\
+          1 & 0 & 0 & 0 \end{bmatrix}
 
-.. _edgealtchambers:
-.. figure:: edge_chambers_alternating.svg
-   :align: right
-   :figwidth: 25%
+The join operator `j` produces quadrilateral faces only. In fact, all type 0
+:math:`\Box_{a,b}` operators produce quadrilateral faces, but those can be
+reduced into :math:`j\Box_{c,d}` for some :math:`c, d`, so it's enough to look
+at `j` for those operators. One way to assign a bipartite structure to the
+vertices of `j` is to mark the seed vertices as :math:`+` and the vertices corresponding
+to the seed faces as :math:`-`. Expressed as a matrix from :math:`[v,e,f]` to
+:math:`[v^+,v^-,e,f]`:
 
-   Alternating chambers adjacent to an edge.
+.. math::
+   \mathbf{M}_j = \begin{bmatrix}
+   1 & 0 & 0 \\
+   0 & 0 & 1 \\
+   0 & 2 & 0 \\
+   0 & 1 & 0 \end{bmatrix}
 
-.. _semi:
-.. figure:: edge_chambers_alternating_semi.svg
-   :align: right
-   :figwidth: 25%
+The opposite bipartite structure would simply be the same matrix, flipped from
+left to right. This corresponds to applying the dual operator on the right:
+`jd = @j`, so the relation gets a little more complicated when considering
+alternating operators. The ambo operator produces bipartite faces,
+and since `a=dj`, it can be expressed in terms of `j`, `d`, and `@`.
 
-   Alternating chambers of the Coxeter semi operator (without digon reduction)
+There are some tilings where an bipartite structure can be defined on both
+the vertices and the faces. The square grid is one, as well as some regular
+hyperbolic tilings (in general, any regular tiling with Schläfli symbol {n,m}
+where n and m are both even). However, we haven't defined any operators
+that require both vertices and faces to have an bipartite structure, so it's
+enough to consider one at a time.
 
-In [Coxeter8]_ (specifically section 8.6), Coxeter defines an alternation
-operation `h` on regular polyhedra with only even-sided faces. (He actually
-defines it on general polytopes, but let's not complicate things by considering
-higher dimensions.) Each face is replaced
-with a face with half as many sides, and alternate vertices are either retained
-as part of the faces or converted into vertices with number of sides equal to
-the degree of the seed vertex. (He also defines a snub operation in section 8.4,
-different from the `s` snub Conway defined, that is equivalent to `ht`.) The
-alternation operation converts quadrilateral faces into digons. Usually the
-digons are converted into edges, but for now, let digons be digons.
-
-This motivates the definition of "alternating operators" and an "alternating
-chamber" structure, as depicted in :numref:`facealtchambers` and
-:numref:`edgealtchambers`. This structure is only applicable to polyhedra with
-even-sided faces. The dual operators of those are applicable to polyhedra with
-even-degree vertices, and should be visualized as having chambers on the left
-and right rather than top and bottom. Some of these operators can be described
-by using one Conway operator for the top half and one for the bottom,
-or one for the left half and one for the right. Like Conway operators, the
-chamber structure of `xd` is that of `x` rotated a quarter turn; but now,
-the direction of rotation matters, and depends on how the alternating vertices
-(or faces) of the underlying polyhedron are specified. For the sake of
-simplicity, we'll only look at alternating operators on even-sided faces (
-vertex-alternating operators) instead of alternating operators on even-degree
-vertices (face-alternating operators).
-
-These operators depend on the ability to partition vertices into two disjoint
-sets, none of which are adjacent to a vertex in the same set; i.e. it applies
-to bipartite graphs. By basic graph theory, planar bipartite graphs have faces
-of even degree. However, this does not mean that the two sets of vertexes have
-the same size, let alone that the sets of vertices of a given degree will
-have a convenient partition. The cube and many other
-small even-faced polyhedra do partition into two equal sets of vertices, so
-beware that examining simple, highly-symmetric polyhedra can be misleading.
-
-Because an alternating operator may transform alternate vertices differently,
-and because the size of the sets of alternate vertices (in general or of a
-given degree) don't have a fixed ratio or relation, alternating operators do
-not in general have representations as :math:`L_x` and :math:`M_x`, at least
-as defined earlier. However, alternating operators that have the same effect on
-alternating vertices (or faces) can be accommodated in this form. In fact, some
-alternating operators may fill in some gaps where no operator exists for
-:math:`L_x` or :math:`M_x` as defined earlier, given the constraints; see e.g.
-"alternating subdivide" in the list of operators below. The change needed is
-to allow :math:`k` and :math:`\ell` to take values in
-:math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. These values can be counted
-from the chamber diagram similarly to Conway operators, although it may be
-less straightforward. (In particular, edges that pass through a chamber without
-meeting a vertex shouldn't be counted.)
-
-Even for the operators that don't fit into the format, the values defined in
-:math:`L_x` or :math:`M_x` suggest a way to semi-quantitatively describe these
-operators. Define :math:`k_1`, :math:`k_2`, :math:`\ell_1`, and :math:`\ell_2`,
-multipliers for the degree of the alternating seed vertices or faces
-respectively, which may also take values in :math:`\mathbb{N}/2`. Also, allow
-:math:`a`, :math:`c`, :math:`a'`, and :math:`c'`, to take values in
-:math:`\{0, ?, 1\}`, where :math:`?` is the undefined value used as a
-special value (like NaN).
-(Vertex-alternating operators may have undefined a or a', while
-face-alternating operators may have undefined c or c'.)
-This carries through into the type definiton earlier:
-operators where `a` or `c` is `?` have type `?` (or undefined type).
-
-If :math:`\ell` = 1/2 , the operator creates digons from degree-4 faces.
-Similarly, if :math:`k = 1/2`, the operator creates degree-2 vertices from
-degree-4 vertices. (The same applies to the :math:`k_i` and :math:`\ell_i`
-forms.) The operation of smoothing degree-2 vertices and faces
-cannot be represented as a chamber structure (assumption 1),
-or in the form :math:`L_x` or
-:math:`M_x`. Neither can operations that create degree-2 vertices and faces
-be altered to smooth those features while retaining the ability to be
-represented as :math:`L_x` or :math:`M_x`. The issue is that the smoothing
-operator not only removes degree-2 features, but also affects the degree of
-adjacent features, and may affect some features of a certain degree while
-leaving others alone. An adjusted :math:`M_x` may be specified as a 5x3 matrix
-from :math:`\langle v,e,f,v_4,f_4 \rangle` to :math:`\langle v,e,f \rangle`,
-but this is a linear map between two different spaces, not a linear operator,
-and isn't as useful compared to the usual :math:`M_x`. (For instance, you can't
-multiply the matrices together to represent operator composition.) That being
-said, when the seed polyhedron has only quadrilateral faces, things become
-much more tractable. (This is also true when the seed polyhedron has only
-faces of degree 6 or more, but there are much fewer of those.)
-
-The result of an alternating operator is just another polyhedron, so
-compositions where the Conway operator is on the left and the alternating
-operator is on the right are valid. The type of the operator, when defined,
-composes in the same way as for Conway operators. If an the alternating operator
-`y` is of undefined type, and `x` is a Conway operator, then 
-
-* `xy` is of undefined type if `x` is type 1, and
-* `xy` is type 0 if `x` is type 0 
-
-In general, alternating operators cannot be composed with other alternating or
-Conway operators, because those operators do not necessarily create
-even-degree faces or vertices. However, type 0 :math:`\Box_{a,b}` operators
-create polyhedra with quadrilateral faces only. As mentioned earlier, all type
-0 :math:`\Box_{a,b}` can be decomposed into `j` (Join) and some other operator,
-so to examine :math:`x\Box_{a,b}`, 
-where `x` is an alternating operator, it's enough to examine `xj`.
-
-Let `$` denote the smoothing operator that removes degree-2 features, and `@`
-denote the operator that exchanges the alternation of the vertices (or faces)
-of a seed polyhedron (equivalently, it reflects the alternating operator).
-In the operation `j`, designate the seed vertices as belonging to
-partition 1, and the created vertices at face centers as belonging to partition
-2. That is, in the edge-centered chamber structure, the vertices on the left
-and right are in partition 1, and the ones on the top and bottom are in
-partition 2. It is easy to see that, when giving consideration to the
-partitioning of vertices, `jd = @j`. The same applies for the partition of faces
-created by the ambo operator: `ad = @a`
-
-The operator `$xj`, where `x` is an alternating operator, is a Conway operator.
-If `x` is type 0 or 1 alternating operator, then `$xj` is a type 0 operator.
-If `x` has undefined type operator, then `$xj` is a type 1 operator.
-Although `$` does not in general have a :math:`M_x` form, in the expression
-`$xj` it either does nothing, removes an edge and a vertex, or removes an
-edge and a face. These operations can be represented by taking the matrix form
-of `xj` and subtracting the zero matrix or these two following matrices,
-respectively:
+All EROs can be expressed with smoothing, an AERO, and the join operator
+------------------------------------------------------------------------
+The operator `$xj`, where `x` is a VAERO, is an ERO. If `x` is type 0 or 1
+VAERO, then `$xj` is a type 0 operator. If `x` has undefined type, then `$xj`
+is a type 1 operator. Although `$` does not in general have a :math:`M_x` form,
+in the expression `$xj` it either does nothing, removes an edge and a vertex,
+or removes an edge and a face. These operations can be represented by taking
+the matrix form of `xj` and subtracting the zero matrix or these two following
+matrices, respectively:
 
 .. math::
    \begin{bmatrix}
@@ -557,46 +805,29 @@ respectively:
     0 & 1 & 0 \\
     0 & 1 & 0 \end{bmatrix} .
 
-In fact, all Conway operators `y` can be expressed as `y = $xj`, where `x` is
-some alternating or Conway operator. This is easier to see by going backwards
-from the operator. As mentioned earlier, if `g` is odd, there is an edge that
-lies on or crosses the center point of the seed edge in the chamber structure.
-Otherwise `g` is even and either a vertex lies there or a face contains the
-center point. If `g` is odd, either split the edge with a degree-2 vertex at the
-center point, or replace the edge with a digon. Then the alternating chamber
-structure of `x` is just the white and grey chambers of `y`, stacked along their
-long edge. More specifically, given a Conway operator `y`, if `g` is even, then
-`y = xj` for an alternating or Conway operator `x`: if `g` is odd, then `y = $xj`
-for (at least) two alternating operators `x` corresponding to splitting the edge
-with a vertex or replacing an edge with a digon.
-(Even though it can be reduced further in a larger set of operators, the Conway
-operator form is usually preferable because including all those `$` and `j`
-operators would get tedious.) An alternating
-operator `x` may be named "pre-(Name)" where (Name) is the name of `y`.
+In fact, all EROs `y` can be expressed as `y = $xj`, where `x` is some VAERO or
+ERO. This is easier to see by going backwards from the operator. As mentioned
+earlier, if `g` is odd, there is an edge that lies on or crosses the center
+point of the seed edge in the chamber structure. Otherwise `g` is even and
+either a vertex lies there or a face contains the center point. If `g` is odd,
+either split the edge with a degree-2 vertex at the center point, or replace the
+edge with a digon. Then the alternating chamber structure of `x` is just the
+white and grey chambers of `y`, stacked along their long edge. More
+specifically, given an ERO `y`, if `g` is even, then `y = xj` for an ERO or
+VAERO `x`: if `g` is odd, then `y = $xj` for (at least) two VAEROs `x`
+corresponding to splitting the edge with a vertex or replacing an edge with a
+digon. (Even though it can be reduced further in a larger set of operators, the
+ERO form is usually preferable because including all those `$` and `j`
+operators would get tedious.) A VAERO `x` may be named "pre-(Name)" where
+(Name) is the name of `y`.
 
-In the list of assumptions at the end of the "Operators on counts" section,
-alternating operators may violate 3 and 4, and 1 if they create degree-2
-vertices or faces.
-
-The concept of alternating operators could be extended to k-partite graphs.
-By the four-color theorem, the largest `k` that is necessary for a spherical 
-tiling is 4, although larger values could be used. :math:`k(k-1)/2` 
-interrelated chamber structures would have to be specified, which would get 
-a little unmanageable for large `k`. This scheme would no longer have an 
-expression in terms of :math:`L_x` or :math:`M_x`.
+Note that since `xjd = x@j`, the ERO of the dual corresponds to the
+opposite-partition VAERO. EROs may also be decomposed into FAEROs with the form
+`y = $xa`, but since `a = dj` and `xd` has the chamber structure of `x` rotated,
+it's simpler to just look at VAEROs.
 
 Extension - Topology
 --------------------
-With some care, Conway operators can be applied to any polyhedron or tiling;
-toruses, polyhedra with multiple holes, planar tilings, hyperbolic tilings,
-and even non-orientable polyhedra, although the latter is restricted to the
-achiral operators. Planar tilings may be easier to analyze by
-taking a finite section and treating it as a torus. Convex polyhedra may be
-put into "canonical form" such that all faces are flat, all edges are tangent
-to the unit sphere, and the centroid of the polyhedron is at the origin.
-There is no canonical form yet described for non-spherical polyhedra or
-tilings, however, which may complicate analysis.
-
 In the topology of surfaces, the connected sum `A#B` of two surfaces `A` and `B`
 can be thought of as removing a disk from A and B and stitching them together
 along the created boundary.
@@ -606,13 +837,15 @@ classification theorem of closed surfaces states that closed surfaces have the
 topology of either a sphere or a connected sum of a number of toruses and/or
 cross-caps.
 
-We can think of the operator chamber diagrams we've described so far (even the
-alternating ones) as having the topology of a sphere: identify the two edges
-on the left and the two edges on the right. Then, the operation can be described
-as taking the connected sum of the operator chamber diagrams with each face of
-the seed polyhedron. Thus assumption 2 in the list of assumptions at the
-end of the "Operators on counts" section: taking the connected sum with a
-sphere does not change the topology, so the operation does not change the Euler
+In a topological sense, EROs and AEROs can be thought of as removing a disk from
+a surface and replacing it with the chamber structure. In a more elaborate
+sense, we can think of the operator chamber diagrams we've described so far
+(even the alternating ones) as having the topology of a sphere: identify the two
+edges on the left and the two edges on the right. Then, the operation can be
+described as taking the connected sum of the operator chamber diagrams with each
+face of the seed polyhedron. Thus assumption 2 in the list of assumptions at the
+end of the "Operators on counts" section: taking the connected sum with a sphere
+does not change the topology, so the operation does not change the Euler
 characteristic.
 
 .. _skeleton:
@@ -634,8 +867,8 @@ Another operator is the skeletonize operator depicted in :numref:`skeleton`.
 Edges and vertices are retained, but faces are removed. The red crosses
 indicate that the base faces are not retained or replaced with vertices: they
 are removed entirely. If `G` is the genus of the seed polyhedron, the genus of
-the resulting "polyhedron" (inasmuch as an object with no faces can be a
-polyhedron) is `G - f`. The :math:`M_x` form is obvious:
+the resulting "polyhedron" (inasmuch as an object with no faces can be
+considered a polyhedron) is `G - f`. The :math:`M_x` form is obvious:
 
 .. math::
    \begin{bmatrix}
@@ -683,36 +916,30 @@ characteristic 1 such as the tetrahemihexahedron, may be possible. Such
 operators probably have more theoretical uses than aesthetic or practical ones,
 and good luck getting the faces to be flat and not intersect awkwardly.)
 
-Summary
-------------------
+Extensions - Multiple chambers
+------------------------------
+The concept of AEROs could be extended to k-partite graphs. :math:`k(k-1)/2`
+interrelated chamber structures would have to be specified, which would get a
+little unmanageable for large `k`. For example, if k=3, there would need to be
+3 chambers: one from set 1 to set 2, one from set 2 to set 3, and one from set
+1 to 3. By the four-color theorem, the largest `k` that is necessary
+for a spherical tiling is 4, although larger `k` could be used.
 
-* Conway operators
+Some EROs have forms where they are applied to only vertices or faces of
+a certain order, such as :math:`t_3` to truncate vertices of order 3. These
+could be described by a set of 3 chamber structures: on an edge between
+order-3 vertices, on an edge from an order-3 vertex to a non-order-3 vertex
+(or vice versa), and on an edge between non-order-3 vertices.
 
-  * :math:`L_x`, :math:`M_x`, `g`, and type are well defined
+Neither of these schemes can be represented in the :math:`L_x` or :math:`M_x`
+forms defined earlier.
 
-* Alternating operators with defined type
-
-  * :math:`M_x`, `g`, and type are well defined
-  * Violates assumption 1 and 4 (and 3 if degree-2 features created)
-
-* Alternating operators with undefined type
-
-  * :math:`M_x` is well defined if undefined values are allowed for
-    :math:`a, a', c`, and :math:`c'`, `g` is well defined
-  * Violates assumption 1 and 4 (and 3 if degree-2 features created)
-
-* Topological operators
-
-  * In general, :math:`L_x`, :math:`M_x`, `g`, and type are as well defined as
-    the corresponding type of non-topological operator (so all if a topological
-    Conway operator, etc.). Type may take values other than 0 and 1.
-  * Violates assumption 2 (Euler characteristic not preserved) and possibly
-    others
-
+Listing of operators and transformations
+----------------------------------------
 Where not specified, :math:`k` and :math:`\ell` are 1, and
 :math:`b_i` and :math:`b'_i` are 0.
 
-.. list-table:: Conway operators
+.. list-table:: EROs
 
    * - Operator `x`
      - Chiral?
@@ -809,28 +1036,6 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=2`, :math:`b_4=1`, :math:`b'_5=2`
      - .. image:: edge_chambers_dual_quinto.svg
      -
-   * - :math:`K_0` (Join-stake)
-     - N
-     - .. image:: edge_chambers_join-stake.svg
-     - .. math::
-          \begin{bmatrix}
-          1 & 2 & 1 \\
-          0 & 6 & 0 \\
-          0 & 3 & 0 \end{bmatrix}
-     - :math:`k=2`, :math:`b_3=2`, :math:`b'_4=3`
-     - .. image:: edge_chambers_dual_stake0.svg
-     -
-   * - :math:`K` (Stake)
-     - N
-     - .. image:: edge_chambers_stake.svg
-     - .. math::
-          \begin{bmatrix}
-          1 & 2 & 1 \\
-          0 & 7 & 0 \\
-          0 & 4 & 0 \end{bmatrix}
-     - :math:`k=3`, :math:`b_3=2`, :math:`b'_3=2`, :math:`b'_4=2`
-     - .. image:: edge_chambers_dual_stake.svg
-     -
    * - :math:`L_0` (Join-lace)
      - N
      - .. image:: edge_chambers_join-lace.svg
@@ -852,6 +1057,17 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 4 & 1 \end{bmatrix}
      - :math:`k=3`, :math:`b_4=2`, :math:`b'_3=4`
      - .. image:: edge_chambers_dual_lace.svg
+     -
+   * - :math:`K` (Stake)
+     - N
+     - .. image:: edge_chambers_stake.svg
+     - .. math::
+            \begin{bmatrix}
+            1 & 2 & 1 \\
+            0 & 7 & 0 \\
+            0 & 4 & 0 \end{bmatrix}
+     - :math:`k=3`, :math:`b_3=2`, :math:`b'_3=2`, :math:`b'_4=2`
+     - .. image:: edge_chambers_dual_stake.svg
      -
    * - :math:`w` (Whirl)
      - Y
@@ -909,7 +1125,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - .. image:: edge_chambers_dual_bowtie.svg
      - `rBr=Bd`
 
-.. list-table:: Conway operator families
+.. list-table:: ERO families
 
    * - Operator `x`
      - Chiral?
@@ -975,10 +1191,10 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
 
-In the following two tables, when :math:`k_1=k_2` or :math:`\ell_1 = \ell_2`, both
-are written as just :math:`k` or :math:`\ell`.
+In the following two tables, when :math:`k^+=k^-`, both
+are written as just :math:`k`.
 
-.. list-table:: Alternating operators of defined type
+.. list-table:: VAEROs of defined type
 
    * - Operator
      - Degree-2?
@@ -995,7 +1211,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 0 & 0 \\
           0 & 2 & 0 \\
           0 & 1 & 1 \end{bmatrix}
-     - :math:`b'_3 = 1`, :math:`\ell = 1/2`
+     - :math:`b'_3 = 1`, :math:`\ell = 1/2`, :math:`k^+ = 3`
      - .. image:: edge_chambers_alternating_dual_prekis.svg
      - `$xj = k`
    * - Pre-Join-Stake
@@ -1006,7 +1222,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 1 & 0 \\
           0 & 3 & 0 \\
           0 & 1 & 1 \end{bmatrix}
-     - :math:`k_1=2`, :math:`k_2=1`, :math:`b_3=1`, :math:`b'_4=1`
+     - :math:`k^+=2`, :math:`b_3=1`, :math:`b'_4=1`
      - .. image:: edge_chambers_alternating_dual_prestake0.svg
      - `xj = K`
    * - Alternating Subdivide
@@ -1028,7 +1244,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 1 & 1 \\
           0 & 3 & 0 \\
           0 & 1 & 0 \end{bmatrix}
-     - :math:`k = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
+     - :math:`\ell = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
      - .. image:: edge_chambers_alternating_dual_pregyro.svg
      - `$xj = g`. Not the same as Pre-Join-Lace of dual.
    * - Pre-Join-Kis-Kis
@@ -1039,7 +1255,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 1 & 0 \\
           0 & 4 & 0 \\
           0 & 2 & 1 \end{bmatrix}
-     - :math:`k_1=3`, :math:`k_2=2`, :math:`b_3=1`, :math:`b'_3=2`
+     - :math:`k^+=3`, :math:`k^-=2`, :math:`b_3=1`, :math:`b'_3=2`
      - .. image:: edge_chambers_alternating_dual_prekiskis0.svg
      - :math:`xj = (kk)_0`
    * - Pre-Cross
@@ -1050,7 +1266,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 1 & 1 \\
           0 & 5 & 0 \\
           0 & 3 & 0 \end{bmatrix}
-     - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 3/2`,
+     - :math:`k^+=1`, :math:`k^-=2`, :math:`\ell = 3/2`,
        :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_4=1`
      - .. image:: edge_chambers_alternating_dual_precross.svg
      - `xj = X`
@@ -1062,7 +1278,7 @@ are written as just :math:`k` or :math:`\ell`.
           1 & 1 & 1 \\
           0 & 5 & 0 \\
           0 & 3 & 0 \end{bmatrix}
-     - :math:`k_1=1`, :math:`k_2=2`, :math:`\ell = 2`,
+     - :math:`k^+=1`, :math:`k^-=2`, :math:`\ell = 2`,
        :math:`b_3=1`, :math:`b'_3=3`
      - .. image:: edge_chambers_alternating_dual_mj.svg
      -
@@ -1076,9 +1292,9 @@ are written as just :math:`k` or :math:`\ell`.
           0 & 2 & 1 \end{bmatrix}
      - :math:`b_3=1`, :math:`b_5=1`, :math:`b'_4=2`
      - .. image:: edge_chambers_alternating_dual_uq.svg
-     -
+     - `xj = jg`
 
-.. list-table:: Alternating operators of undefined type
+.. list-table:: VAEROs of undefined type
 
     * - Operator
       - Degree-2?
@@ -1092,10 +1308,10 @@ are written as just :math:`k` or :math:`\ell`.
       - .. image:: edge_chambers_alternating_semi.svg
       - .. math::
            \begin{bmatrix}
-           ? & 0 & 0 \\
-           0 & 1 & 0 \\
-           ? & 0 & 1 \end{bmatrix}
-      - :math:`k_1 = 2`, :math:`k_2 = 1`, :math:`\ell = 1/2`
+           1 & 0 & 0 & 0 \\
+           0 & 0 & 1 & 0 \\
+           0 & 1 & 0 & 1 \end{bmatrix}
+      - :math:`k^+ = 2`,  :math:`\ell = 1/2`
       - .. image:: edge_chambers_alternating_dual_hemi.svg
       - `$xj = S`, `$dxj = d`
     * - Alternating Truncate (Pre-Chamfer)
@@ -1103,9 +1319,9 @@ are written as just :math:`k` or :math:`\ell`.
       - .. image:: edge_chambers_alternating_truncate.svg
       - .. math::
            \begin{bmatrix}
-           ? & 1 & 0 \\
-           0 & 2 & 0 \\
-           ? & 0 & 1 \end{bmatrix}
+           1 & 0 & 1 & 0 \\
+           0 & 0 & 2 & 0 \\
+           0 & 1 & 0 & 1 \end{bmatrix}
       - :math:`\ell = 3/2`, :math:`b_3=1`
       - .. image:: edge_chambers_alternating_dual_prechamfer.svg
       - `xj = c`, `dxjd = u`
@@ -1114,18 +1330,20 @@ are written as just :math:`k` or :math:`\ell`.
       - .. image:: edge_chambers_alternating_prelace0.svg
       - .. math::
            \begin{bmatrix}
-           ? & 1 & 0 \\
-           0 & 3 & 0 \\
-           ? & 1 & 1 \end{bmatrix}
-      - :math:`k_1=2`, :math:`k_2=1`, :math:`b_4=1`, :math:`b'_3=1`
+           1 & 0 & 1 & 0 \\
+           0 & 0 & 3 & 0 \\
+           0 & 1 & 1 & 1 \end{bmatrix}
+      - :math:`k^+=2`, :math:`b_4=1`, :math:`b'_3=1`
       - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
       - :math:`xj = L_0`. Not the same as pre-gyro of dual.
 
 Open questions
 --------------
+* Are there any irreducible operators other than `j` that produce only
+  quad faces?
 * Are there any operators such that `rxr = dxd`? (They would have to be
   type 1 operators.)
 * Are there other conditions that can be added to the values for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there an invariant related to the chirality of an operator?
-* What other invariants need to be added to fully characterize Conway operators?
+* What other invariants need to be added to fully characterize EROs and AEROs?
