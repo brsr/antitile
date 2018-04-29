@@ -107,7 +107,7 @@ section contained in the quadrilateral :math:`0, x(1-i)/2, x, x(1+i)/2` of a
 square grid on the Gaussian integers, where :math:`x=a+bi`. For
 :math:`\Delta_{a,b}`, the chamber structure is the quadrilateral section
 :math:`0, x(2-u)/3, x, x(1+u)/3` of a triangular grid on the Eisenstein
-integers, where :math:`x=a+bu` and :math:`u=\exp(i \pi /3)`. 
+integers, where :math:`x=a+bu` and :math:`u=\exp(i \pi /3)`.
 GC operators have an invariant `T`, the "trianglation number",
 which is identical to the inflation factor `g`.
 
@@ -299,12 +299,17 @@ one chamber without meeting any vertices.)
 
 :math:`a^+`, :math:`a^-`, :math:`a'^+`,  and :math:`a'^-` are either 0 or 1.
 :math:`k^+`, :math:`k^-` are positive integers and :math:`\ell` may take values
-in :math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`. If :math:`a^+ = a^-` both
-may be written as :math:`a`, and similarly for :math:`a'` and :math:`k`.
+in :math:`\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}`.
+
+We'll refer to :math:`g, a, a', b_i, b'_i, c, c', k, \ell` as the invariants of
+an ERO, and :math:`g, a^+, a'^+, b_i, b'_i, c, c', k^+, k^-, \ell` as the
+invariants of a VAERO. If :math:`a^+ = a^-` both may be written as :math:`a`,
+and similarly for :math:`a'` and :math:`k`. :math:`a'` and :math:`c'` may be
+omitted since they can be calculated from :math:`a` and :math:`c`.
 FAEROs would be described correspondingly.
 
 Explicitly the composition of two EROs `xy` can be described as so.
-Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the values for :math:`L_y`;
+Let :math:`g, a, a', b_i, b'_i, c, c' k, \ell` be the invariants for :math:`L_y`;
 :math:`G, A, A', B_i, B'_i, C, C', K, L` for :math:`L_x`; and
 :math:`\gamma, \alpha, \alpha', \beta_i, \beta'_i, \sigma, \sigma',
 \kappa, \lambda` for :math:`L_{xy}`:
@@ -386,12 +391,12 @@ and for VAEROs:
    k^+ + k^- + 2\ell \le 2g + 2
 
 The dual ERO :math:`L_d` has the form :math:`E = e, V_i = f_i, F_i = v_i`.
-With a little manipulation, it is easy to see that if :math:`L_x` has values
+With a little manipulation, it is easy to see that if :math:`L_x` has invariants
 `a`, :math:`b_i`, `c`, etc, then applications of the dual operator have related
-forms. :math:`L_x L_d`'s values exchange `a` with `c`, :math:`a'` with
-:math:`c'`, and `k` with :math:`\ell`. :math:`L_d L_x`'s values exchange `a`
+forms. :math:`L_x L_d`'s invariants exchange `a` with `c`, :math:`a'` with
+:math:`c'`, and `k` with :math:`\ell`. :math:`L_d L_x`'s invariants exchange `a`
 with :math:`a'`, `c` with :math:`c'`, and each :math:`b_i` with each
-:math:`b'_i`. Finally, :math:`L_d L_x L_d`'s values exchange `a` with
+:math:`b'_i`. Finally, :math:`L_d L_x L_d`'s invariants exchange `a` with
 :math:`c'`, and :math:`a'` with `c`, `k` with :math:`\ell`,
 and each :math:`b_i` with each :math:`b'_i`.
 
@@ -446,7 +451,7 @@ be much ambiguity.
    a'^+ & a'^- & b' & c' \end{bmatrix}
 
 It can be seen from the composition equations that for an ERO `xy`, the
-expansion factor g is the product of the g values for operators `x` and `y`.
+expansion factor g is the product of the g invariants for operators `x` and `y`.
 It can also be seen that :math:`a, a', c, c'` form their own linear system,
 a submatrix of :math:`M_x`: let
 :math:`\Lambda_x = \begin{bmatrix} a & c \\ a' & c' \end{bmatrix}`,
@@ -876,7 +881,8 @@ considered a polyhedron) is `G - f`. The :math:`M_x` form is obvious:
    0 & 1 & 0 \\
    0 & 0 & 0 \end{bmatrix}
 
-and :math:`k = \ell = 1`.
+and :math:`k = \ell = 1`. (Technically :math:`\ell` could be any value, but it
+makes sense to retain it as a measure of the hole created.)
 
 Instead of annihilating the face completely, one can hollow out a space in its
 center and leave behind a solid border. This can be done with the ``leonardo``
@@ -896,7 +902,7 @@ To represent this, we have to extrude the chamber structure out into a sort of
 each seed edge with a rectangular prism oriented with one edge along the seed
 edge, somewhat like a 3d version of loft (`l`). (It is not the operation
 performed by ``leonardo`` or Polyhedronisme, unfortunately; ``leonardo`` seems
-to create overlapping faces.) In terms of values, :math:`k=\ell=1`,
+to create overlapping faces.) In terms of invariants, :math:`k=\ell=1`,
 :math:`b_4 = 2`, :math:`b'_4 = 4`, and :math:`M_x` is:
 
 .. math::
@@ -921,8 +927,8 @@ Extensions - Multiple chambers
 The concept of AEROs could be extended to k-partite graphs. :math:`k(k-1)/2`
 interrelated chamber structures would have to be specified, which would get a
 little unmanageable for large `k`. For example, if k=3, there would need to be
-3 chambers: one from set 1 to set 2, one from set 2 to set 3, and one from set
-1 to 3. By the four-color theorem, the largest `k` that is necessary
+3 chambers: one on edges from set 1 to set 2, one from set 2 to set 3, and one
+from set 1 to 3. By the four-color theorem, the largest `k` that is necessary
 for a spherical tiling is 4, although larger `k` could be used.
 
 Some EROs have forms where they are applied to only vertices or faces of
@@ -940,6 +946,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 :math:`b_i` and :math:`b'_i` are 0.
 
 .. list-table:: EROs
+   :header-rows: 1
 
    * - Operator `x`
      - Chiral?
@@ -1126,6 +1133,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - `rBr=Bd`
 
 .. list-table:: ERO families
+   :header-rows: 1
 
    * - Operator `x`
      - Chiral?
@@ -1194,7 +1202,8 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
 In the following two tables, when :math:`k^+=k^-`, both
 are written as just :math:`k`.
 
-.. list-table:: VAEROs of defined type
+.. list-table:: VAEROs
+   :header-rows: 1
 
    * - Operator
      - Degree-2?
@@ -1203,6 +1212,28 @@ are written as just :math:`k`.
      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
      - Chambers of `dx`
      - Useful relations
+   * - Alternation, Hemi, Semi
+     - Digons
+     - .. image:: edge_chambers_alternating_semi.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & 0 & 1 & 0 \\
+          0 & 1 & 0 & 1 \end{bmatrix}
+     - :math:`k^+ = 2`,  :math:`\ell = 1/2`
+     - .. image:: edge_chambers_alternating_dual_hemi.svg
+     - `$xj = S`, `$dxj = d`
+   * - Alternating Truncate (Pre-Chamfer)
+     - N
+     - .. image:: edge_chambers_alternating_truncate.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 1 & 0 \\
+          0 & 0 & 2 & 0 \\
+          0 & 1 & 0 & 1 \end{bmatrix}
+     - :math:`\ell = 3/2`, :math:`b_3=1`
+     - .. image:: edge_chambers_alternating_dual_prechamfer.svg
+     - `xj = c`, `dxjd = u`
    * - Pre-kis
      - Digons
      - .. image:: edge_chambers_alternating_bisect.svg
@@ -1224,7 +1255,7 @@ are written as just :math:`k`.
           0 & 1 & 1 \end{bmatrix}
      - :math:`k^+=2`, :math:`b_3=1`, :math:`b'_4=1`
      - .. image:: edge_chambers_alternating_dual_prestake0.svg
-     - `xj = K`
+     - `xj = jk`
    * - Alternating Subdivide
      - N
      - .. image:: edge_chambers_alternating_subdivide.svg
@@ -1247,6 +1278,17 @@ are written as just :math:`k`.
      - :math:`\ell = 1/2`, :math:`b_3=1`, :math:`b'_6=1`
      - .. image:: edge_chambers_alternating_dual_pregyro.svg
      - `$xj = g`. Not the same as Pre-Join-Lace of dual.
+   * - Pre-Join-Lace
+     - N
+     - .. image:: edge_chambers_alternating_prelace0.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 1 & 0 \\
+          0 & 0 & 3 & 0 \\
+          0 & 1 & 1 & 1 \end{bmatrix}
+     - :math:`k^+=2`, :math:`b_4=1`, :math:`b'_3=1`
+     - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
+     - :math:`xj = L_0`. Not the same as pre-gyro of dual.
    * - Pre-Join-Kis-Kis
      - N
      - .. image:: edge_chambers_alternating_prekiskis0.svg
@@ -1294,56 +1336,13 @@ are written as just :math:`k`.
      - .. image:: edge_chambers_alternating_dual_uq.svg
      - `xj = jg`
 
-.. list-table:: VAEROs of undefined type
-
-    * - Operator
-      - Degree-2?
-      - Chambers of `x`
-      - Matrix
-      - :math:`k_i, \ell_i`, :math:`b_i`, :math:`b'_i`
-      - Chambers of `dx`
-      - Useful relations
-    * - Alternation, Hemi, Semi
-      - Digons
-      - .. image:: edge_chambers_alternating_semi.svg
-      - .. math::
-           \begin{bmatrix}
-           1 & 0 & 0 & 0 \\
-           0 & 0 & 1 & 0 \\
-           0 & 1 & 0 & 1 \end{bmatrix}
-      - :math:`k^+ = 2`,  :math:`\ell = 1/2`
-      - .. image:: edge_chambers_alternating_dual_hemi.svg
-      - `$xj = S`, `$dxj = d`
-    * - Alternating Truncate (Pre-Chamfer)
-      - N
-      - .. image:: edge_chambers_alternating_truncate.svg
-      - .. math::
-           \begin{bmatrix}
-           1 & 0 & 1 & 0 \\
-           0 & 0 & 2 & 0 \\
-           0 & 1 & 0 & 1 \end{bmatrix}
-      - :math:`\ell = 3/2`, :math:`b_3=1`
-      - .. image:: edge_chambers_alternating_dual_prechamfer.svg
-      - `xj = c`, `dxjd = u`
-    * - Pre-Join-Lace
-      - N
-      - .. image:: edge_chambers_alternating_prelace0.svg
-      - .. math::
-           \begin{bmatrix}
-           1 & 0 & 1 & 0 \\
-           0 & 0 & 3 & 0 \\
-           0 & 1 & 1 & 1 \end{bmatrix}
-      - :math:`k^+=2`, :math:`b_4=1`, :math:`b'_3=1`
-      - .. image:: edge_chambers_alternating_dual_prejoinlace.svg
-      - :math:`xj = L_0`. Not the same as pre-gyro of dual.
-
 Open questions
 --------------
 * Are there any irreducible operators other than `j` that produce only
   quad faces?
 * Are there any operators such that `rxr = dxd`? (They would have to be
   type 1 operators.)
-* Are there other conditions that can be added to the values for
+* Are there other conditions that can be added to the invariants for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there an invariant related to the chirality of an operator?
 * What other invariants need to be added to fully characterize EROs and AEROs?
