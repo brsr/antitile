@@ -639,9 +639,10 @@ Decomposition
 -------------
 An operator that cannot be expressed in terms of operators aside from `d` and
 `r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
-in terms of EROs, but `m` (Meta) is not (it is equal to `kj`).
-The relations defined above can be used to help reduce an operator, with some
-caveats.
+in terms of EROs, but `m` (Meta) is not (it is equal to `kj`). A polyhedron that
+cannot be expressed in terms of another polyhedron and one or more EROs other 
+than `S` and `d` is an irreducible polyhedron. The relations defined above 
+can be used to help reduce an operator, with some caveats.
 
 All these relations taken together  are necessary but not sufficient. For
 instance, the values :math:`g=3`, :math:`a=1`, :math:`c=0`, :math:`k=1`,
@@ -680,20 +681,20 @@ starting at the bottom of the homomorphism chain and going up.
 Some facts relating to decomposition that can be derived from what we have
 so far:
 
-* If a polyhedron has a prime number of edges, then the only EROs
-  that can be used to express it in terms of another polyhedron are `S` and `d`.
+* If a polyhedron has a prime number of edges, it is irreducible.
 * Operators where `g` is a prime number are irreducible.
 * By symmetry, if `g` is odd, there is an edge that lies on or crosses the
-  center point of the seed edge in the chamber structure of the ERO.
+  center point of the seed edge in the chamber structure of the ERO. If `g` is even,
+  a vertex or face center lies at the center, and that vertex or face center has even degree.
 * If `x=xd` or `rxr=xd`, `x` has type 0.
 * If `x=dxd` or `rxr=dxd`, `x` has type 1 and `g` is odd.
-* If an operator has type 1, its decomposition cannot contain any operators of
-  type 0. Correspondingly, if an operator has type 0,
-  its decomposition must contain at least one type 0 operator.
-* There are no type 1 EROs with `g=2`, so therefore type 1 operators
+* If an ERO has type 1, its decomposition cannot contain any EROs of
+  type 0. Correspondingly, if an ERO has type 0,
+  its decomposition must contain at least one type 0 ERO.
+* There are no type 1 EROs with `g=2`, so therefore type 1 EROs
   with `g=2p`, where p is prime, are irreducible in terms of EROs.
   (However, see the section below,
-  "All EROs can be expressed with smoothing, an AERO, and the join operator".)
+  :ref:`All EROs can be expressed with smoothing, an AERO, and the join operator`.)
 
 Chirality
 ---------
@@ -716,7 +717,8 @@ of a chiral operator and an achiral operator is always chiral, but:
   `pp`, `pg`, `prg`, `gg`, `grg`
 
 Further confusing things are operators where r and d interact. Some
-operators have `xd = x`, while some others have `xd = rxr`.
+operators have `xd = x`, while some others have `xd = rxr`. (Some have 
+`x = dxd`, but none with `rxr = dxd` have been observed or proven/disproven to exist.)
 The `gyro` operator is one example of the latter, and the bowtie operator
 in :numref:`bowtie` is another, maybe easier-to-visualize example.
 (Bowtie is a newly named operator, introduced in this text.)
@@ -1338,9 +1340,9 @@ are written as just :math:`k`.
 
 Open questions
 --------------
-* Are there any irreducible operators other than `j` that produce only
+* Are there any irreducible EROs other than `j` that produce only
   quad faces?
-* Are there any operators such that `rxr = dxd`? (They would have to be
+* Are there any chiral EROs such that `rxr = dxd`? (They would have to be
   type 1 operators.)
 * Are there other conditions that can be added to the invariants for
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
