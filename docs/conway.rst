@@ -716,8 +716,8 @@ of a chiral operator and an achiral operator is always chiral, but:
 * Two chiral operators can produce another chiral operator:
   `pp`, `pg`, `prg`, `gg`, `grg`
 
-Further confusing things are operators where r and d interact. Some
-operators have `xd = x`, while some others have `xd = rxr`. (Some have 
+Further confusing things are chiral EROs where r and d interact. Some
+chiral EROs have `xd = x`, while some others have `xd = rxr`. (Some have 
 `x = dxd`, but none with `rxr = dxd` have been observed or proven/disproven to exist.)
 The `gyro` operator is one example of the latter, and the bowtie operator
 in :numref:`bowtie` is another, maybe easier-to-visualize example.
