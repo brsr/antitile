@@ -31,7 +31,8 @@ put into "canonical form" such that all faces are flat, all edges are tangent
 to the unit sphere, and the centroid of the polyhedron is at the origin.
 There is no canonical form guaranteed to exist for general non-convex
 polyhedra, however: in particular, there may be no position of the vertices
-such that all the faces are flat.
+such that all the faces are flat or convex. The "Bicone" operator introduced 
+in this text creates concave faces when applied to a planar tiling.
 
 Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
 vertices.
@@ -1036,6 +1037,17 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=2`, :math:`b'_6=1`
      - .. image:: edge_chambers_dc.svg
      - `c = dud`
+   * - Bicone
+     - N
+     - .. image:: edge_chambers_bicone.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 2 & 0 \\
+          0 & 5 & 0 \\
+          0 & 2 & 1 \end{bmatrix}
+     - :math:`k=2`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=2`
+     - .. image:: edge_chambers_dual_bicone.svg
+     - `x = dxd`
    * - `l` (Loft)
      - N
      - .. image:: edge_chambers_loft.svg
