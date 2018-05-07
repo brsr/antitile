@@ -364,8 +364,7 @@ or for VAEROs:
 
    2g &= a'^+ k^+ + a'^- k^- + 2c'\ell + \sum i b'_i
 
-For both EROs and VAEROs (and FAEROs), these relations can be manipulated into
-the form
+For EROs, these relations can be manipulated into the form
 
 .. math::
    2k + 2\ell - 4 = \sum (4-i) (b_i + b'_i),
@@ -373,7 +372,9 @@ the form
 which is interesting because it eliminates `g`, `a` and `c`,
 and because it suggests that features with degree 5 or more exist
 in balance with features of degree 3 (triangles and degree-3 vertices),
-and that in some sense degree 4 features come "for free".
+and that in some sense degree 4 features come "for free". The relationship
+for VAEROs is the same except replace :math:`2k` with :math:`k^+ + k^-`. 
+(For FAEROs, replace :math:`2\ell` with :math:`\ell^+ + \ell^-`.) 
 
 With these relations, and the assumption that there are no degree 2 features
 and therefore :math:`i \ge 3`, a series of inequalities can be derived for EROs:
@@ -382,6 +383,8 @@ and therefore :math:`i \ge 3`, a series of inequalities can be derived for EROs:
    g + 1 \le 2a + 3b + 2c \le 2g
 
    2k + 2\ell \le g + 3
+
+   0 \le 2k + 2\ell - 4 \le b_3 + b'_3
 
 and for VAEROs:
 
@@ -663,7 +666,12 @@ For an example where the operators are not related by duality,
 :math:`M_l = M_p`. For :math:`L_x`, :math:`L_{prp} = L_{pp}` but `prp` is not
 the same as `pp` (one's chiral, one's not). For the operator depicted in
 :numref:`waffle`, :math:`W \ne Wd`, but :math:`L_W = L_{Wd}`.
-(This is a newly named operator, introduced in this text.)
+(This is a newly named operator, introduced in this text.) A general 
+counterexample would be operators with sufficiently large `g` based on 
+:math:`\Box_{a,b}`, with a single square face (not touching the seed vertices 
+or face centers) divided into two triangles:
+the counts of vertices of each degree, faces of each degree, and edges would be
+the same no matter which faces was chosen, but the operators would be different.
 
 The above representations do not give us a 100% reliable way to decompose an
 arbitrary operator into a sequence of operators, it does suggest a (clunky,
@@ -683,6 +691,11 @@ so far:
 
 * If a polyhedron has a prime number of edges, it is irreducible.
 * Operators where `g` is a prime number are irreducible.
+* As above, :math:`\Box_{a,b}` has :math:`g=a^2+b^2`. By Fermat's theorem on the sum of two squares,
+  a prime :math:`p` can be expressed as :math:`p=a^2+b^2` if and only if :math:`p \cong 1 \mod 4`. 
+  There are an infinite number of primes satisfying :math:`p \cong 1 \mod 4`, therefore there are
+  an infinite number of irreducible :math:`\Box_{a,b}` operators, and in general the set of
+  irreducible EROs is infinite.
 * By symmetry, if `g` is odd, there is an edge that lies on or crosses the
   center point of the seed edge in the chamber structure of the ERO. If `g` is even,
   a vertex or face center lies at the center, and that vertex or face center has even degree.
