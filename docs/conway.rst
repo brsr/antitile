@@ -31,7 +31,7 @@ put into "canonical form" such that all faces are flat, all edges are tangent
 to the unit sphere, and the centroid of the polyhedron is at the origin.
 There is no canonical form guaranteed to exist for general non-convex
 polyhedra, however: in particular, there may be no position of the vertices
-such that all the faces are flat or convex. The "Bicone" operator introduced 
+such that all the faces are flat or convex. The "Lozenge" operator introduced 
 in this text creates concave faces when applied to a planar tiling.
 
 Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
@@ -639,6 +639,29 @@ another polyhedron, so any AERO can be composed with an ERO on the left.
      - .. image:: outline_0_0.svg
      - .. image:: outline_0_0.svg
 
+The invariants `g` and `b` also describe the center of the chamber structure. 
+In particular, an ERO with both :math:`g` and :math:`b` odd is not possible.
+
+.. list-table:: Chamber center
+   :header-rows: 1
+   :stub-columns: 2   
+    
+   * - :math:`g`
+     - :math:`b`
+     - Description
+   * - Even
+     - Even
+     - A face with even degree lies at the center
+   * - Even
+     - Odd
+     - A vertex with even degree lies at the center
+   * - Odd
+     - Even
+     - An edge crosses the center
+   * - Odd
+     - Odd
+     - Excluded by symmetry
+
 Decomposition
 -------------
 An operator that cannot be expressed in terms of operators aside from `d` and
@@ -648,11 +671,6 @@ cannot be expressed in terms of another polyhedron and one or more EROs other
 than `S` and `d` is an irreducible polyhedron. The relations defined above 
 can be used to help reduce an operator, with some caveats.
 
-All these relations taken together  are necessary but not sufficient. For
-instance, the values :math:`g=3`, :math:`a=1`, :math:`c=0`, :math:`k=1`,
-:math:`\ell=1`, :math:`b_4=1`, :math:`b'_4=1` satisfy the relations for EROs,
-but do not appear to correspond to any ERO.
-
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
    :align: right
@@ -660,6 +678,8 @@ but do not appear to correspond to any ERO.
 
    The waffle operator (W)
 
+We haven't proven that the relations given in the previous section are sufficient
+to discern invariants that do or do not correspond to an actual ERO.
 Furthermore, none of these homomorphisms are injections: there are certain
 :math:`L_x` or :math:`M_x` that correspond to more than one EROs.
 Examples for :math:`M_x` are easy to come by: where `n = kd`, :math:`M_k = M_n`.
@@ -697,16 +717,13 @@ so far:
   There are an infinite number of primes satisfying :math:`p \cong 1 \mod 4`, therefore there are
   an infinite number of irreducible :math:`\Box_{a,b}` operators, and in general the set of
   irreducible EROs is infinite.
-* By symmetry, if `g` is odd, there is an edge that lies on or crosses the
-  center point of the seed edge in the chamber structure of the ERO. If `g` is even,
-  a vertex or face center lies at the center, and that vertex or face center has even degree.
 * If `x=xd` or `rxr=xd`, `x` has type 0.
-* If `x=dxd` or `rxr=dxd`, `x` has type 1 and `g` is odd.
+* If `x=dxd` or `rxr=dxd`, `x` has type 1, :math:`g` is odd, and :math:`b=b'` is even.
 * If an ERO has type 1, its decomposition cannot contain any EROs of
   type 0. Correspondingly, if an ERO has type 0,
   its decomposition must contain at least one type 0 ERO.
-* There are no type 1 EROs with `g=2`, so therefore type 1 EROs
-  with `g=2p`, where p is prime, are irreducible in terms of EROs.
+* There are no type 1 EROs with :math:`g=2`, so therefore type 1 EROs
+  with :math:`g=2p`, where p is prime, are irreducible in terms of EROs.
   (However, see the section below,
   :ref:`All EROs can be expressed with smoothing, an AERO, and the join operator`.)
 
@@ -1037,16 +1054,16 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=2`, :math:`b'_6=1`
      - .. image:: edge_chambers_dc.svg
      - `c = dud`
-   * - Bicone
+   * - Lozenge
      - N
-     - .. image:: edge_chambers_bicone.svg
+     - .. image:: edge_chambers_lozenge.svg
      - .. math::
           \begin{bmatrix}
           1 & 2 & 0 \\
           0 & 5 & 0 \\
           0 & 2 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=2`
-     - .. image:: edge_chambers_dual_bicone.svg
+     - .. image:: edge_chambers_dual_lozenge.svg
      - `x = dxd`
    * - `l` (Loft)
      - N
