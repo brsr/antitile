@@ -639,8 +639,9 @@ another polyhedron, so any AERO can be composed with an ERO on the left.
      - .. image:: outline_0_0.svg
      - .. image:: outline_0_0.svg
 
-The invariants `g` and `b` also describe the center of the chamber structure. 
-In particular, an ERO with both :math:`g` and :math:`b` odd is not possible.
+For EROs, the parity of the invariants :math:`g` and :math:`b` also describe the center of the chamber structure. 
+In particular, an ERO with both :math:`g` and :math:`b` odd is not possible. 
+(This does not apply to AEROs, which have different symmetry structure.)
 
 .. list-table:: Chamber center
    :header-rows: 1
