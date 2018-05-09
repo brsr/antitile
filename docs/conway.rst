@@ -713,11 +713,6 @@ so far:
 
 * If a polyhedron has a prime number of edges, it is irreducible.
 * Operators where `g` is a prime number are irreducible.
-* As above, :math:`\Box_{a,b}` has :math:`g=a^2+b^2`. By Fermat's theorem on the sum of two squares,
-  a prime :math:`p` can be expressed as :math:`p=a^2+b^2` if and only if :math:`p \cong 1 \mod 4`. 
-  There are an infinite number of primes satisfying :math:`p \cong 1 \mod 4`, therefore there are
-  an infinite number of irreducible :math:`\Box_{a,b}` operators, and in general the set of
-  irreducible EROs is infinite.
 * If `x=xd` or `rxr=xd`, `x` has type 0.
 * If `x=dxd` or `rxr=dxd`, `x` has type 1, :math:`g` is odd, and :math:`b=b'` is even.
 * If an ERO has type 1, its decomposition cannot contain any EROs of
@@ -727,6 +722,51 @@ so far:
   with :math:`g=2p`, where p is prime, are irreducible in terms of EROs.
   (However, see the section below,
   :ref:`All EROs can be expressed with smoothing, an AERO, and the join operator`.)
+* :math:`\Box_{a,b}` that correspond to the Gaussian primes, and :math:`\Delta_{a,b}`
+  that correspond to the Eisenstein primes, are irreducible in terms of EROs. (Proof below.) 
+  As a consequence of this, there are an infinite number of irreducible EROs.
+
+Proof of the last statement: A Gaussian integer :math:`a + bi` is prime if its square norm
+:math:`a^2 + b^2` is prime or the square of a prime. In the first case, that prime has
+the form :math:`p=4n+1`; in the latter, :math:`p=4n+3`. Remember that the squared norm of
+the integer is just the inflation factor `g` for the corresponding operator. If `g` is prime,
+the operator is irreducible. If `g` is the square of a prime, the operator :math:`\Box_{a,b}` is
+type 1, specifically, :math:`\det(\Lambda_{\Box_{a,b}}) = 1`. Suppose the operator can be 
+decomposed into :math:`\Box_{a,b} = xy`, where `x` and `y` both have inflation factor :math:`g' = \sqrt(g)`. 
+Without loss of generality, assume :math:`\det(\Lambda_x) = \det(\Lambda_y) = 1`. Their matrix forms are:
+
+.. math::
+   \mathbf{M}_x \mathbf{M}_y = \begin{bmatrix}
+   1 & b & 0 \\
+   0 & g' & 0 \\
+   0 & b' & 1 \end{bmatrix} \begin{bmatrix}
+   1 & B & 0 \\
+   0 & g' & 0 \\
+   0 & B' & 1 \end{bmatrix}
+   = \begin{bmatrix}
+   1 & B+bg' & 0 \\
+   0 & g & 0 \\
+   0 & B'+b'g' & 1 \end{bmatrix}
+   = \mathbf{M}_{\Box_{a,b}} = \begin{bmatrix}
+   1 & (T-1)/2 & 0 \\
+   0 & T & 0 \\
+   0 & (T-1)/2 & 1 \end{bmatrix}
+
+therefore, :math:`B+bg' = B'+b'g'`. It can be demonstrated using the ERO invariant inequalities from earlier that the 
+only solution to this that could correspond to an actual ERO is :math:`b=b'` and :math:`B=B'`. 
+:math:`g' = p = 4n + 3`, so :math:`b, b', B, B'` must all be odd. As mentioned earlier, there are no EROs with both `b` and `g` odd, so we have a contradiction, and :math:`\Box_{a,b}` is irreducible.
+
+The proof for :math:`\Delta_{a,b}` is analogous. An Eisenstein integer :math:`a + bu`, :math:`u=\exp(\pi i/3)`, is prime 
+if its square norm :math:`a^2 + ab + b^2` is prime or the square of a prime. The prior (except for :math:`(1 + u)`, which
+we corresponds to the ERO `n` which we already know is irreducible) have the form :math:`p=3n+1`; the latter, :math:`p=3n+2`. When the prime is of the latter form, the ERO is type 1 with :math:`\det(\Lambda_{\Delta_{a,b}}) = 1` and its matrix form is:
+
+.. math::
+   \mathbf{M}_{\Delta_{a,b}} = \begin{bmatrix}
+          1 & (T-1)/3 & 0 \\
+          0 & T & 0 \\
+          0 & 2(T-1)/3 & 1 \end{bmatrix}. 
+   
+Define `x` and `y` as before: then :math:`2(B+bg') = B'+b'g'`. Using the inequalities to exclude other choices, :math:`B' = 2B` and :math:`b' = 2b`. `g = 3n + 2`, but `g = b+ b' + 1 = 3b+1`: there is no simultaneous integer solution to both equations, so we have a contradiction, and :math:`\Delta_{a,b}` is irreducible.
 
 Chirality
 ---------
