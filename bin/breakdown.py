@@ -66,7 +66,7 @@ def plot_base(ax, shape, line_pts_n=50, color='blue'):
 
 def breakdown_into_bary(n=4, m=2, line_pts_n=50, degenerate=False):
     base_bary = np.eye(3)
-    frame = breakdown.frame_triangle(base_bary, n, m)
+    frame = breakdown.frame_triangle(n, m, base_bary)
     if not degenerate:
         frame = frame.reshape((-1, 2, 3))
         norm = np.linalg.norm(frame[:, 0]-frame[:, 1], axis=-1)
@@ -275,7 +275,7 @@ def main():
         for pt, lin in zip(pts, lindex_here):
             ax.annotate(','.join(str(x) for x in lin), xy=pt[:2],
                         textcoords='data', zorder=100)
-        
+
     if z == 0 and len(names) == 1:
         inv = inverse(pts)
         invlines = inverse(lines)
