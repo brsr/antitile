@@ -939,7 +939,10 @@ dual) an n-prism is a truncated n-hosohedron. Therefore the octahedron is a
 kis 4-dihedron and the cube is a truncated 4-hosohedron.
 This is interesting because the octahedron is also an ambo tetrahedron,
 and the cube a join tetrahedron: if we admit degenerate polyhedra,
-there are some polyhedra with two unequal reductions into operators and seeds.
+there are some polyhedra with two unequal reductions into operators and seeds. 
+We can also apply AEROs: an n-sided pyramid is an alternating-truncated n-hosohedron.
+Thus a tetrahedron is an alternating-truncated 3-hosohedron (and a cube is a join 
+alternating-truncate 3-hosohedron, etc.)
 
 Operators may also be applied to surfaces with boundary, although the behavior
 of the operator at the boundary needs to be specified. In general,
