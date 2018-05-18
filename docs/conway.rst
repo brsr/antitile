@@ -677,6 +677,8 @@ expressed as some series of operators and T.
 The relations defined above can be used to help reduce an operator, with some
 caveats. We haven't proven that the relations given in the previous section are
 sufficient to discern invariants that do or do not correspond to an actual ERO.
+(For instance, :math:`g=4, a=1, c=0, b_4 = 1, b'_3=2, k=2, \ell=1` satisfies 
+the relations, but doesn't appear to correspond to any ERO.)
 Furthermore, none of these homomorphisms are injections: there are certain
 :math:`L_x` or :math:`M_x` that correspond to more than one EROs.
 Examples for :math:`M_x` are easy to come by: where `n = kd`, :math:`M_k = M_n`.
