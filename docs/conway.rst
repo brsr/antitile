@@ -5,9 +5,13 @@ Operations on polyhedra to produce other polyhedra date back as far as Kepler.
 Conway defined a set of operations that could be performed on the Platonic
 solids to obtain the Archimedean and Catalan solids, and others added operators
 after him. Initially there was not much theory supporting operations on
-polyhedra, but [Brinkmann]_'s paper provides a framework. This text
-is an attempt to use Brinkmann's work to find ways to quantify, analyze,
-and expand these operators.
+polyhedra, but [Brinkmann]_'s paper provides a framework.
+
+This text is an attempt to use Brinkmann's work to find ways to quantify,
+analyze, and expand these operators. In particular, it focuses on operators on
+that can be described in terms of a linear operator on the counts of vertices,
+edges, and faces. These linear operators can be used to examine the composition
+and decomposition of operations on polyhedra.
 
 Preliminaries
 -------------
@@ -20,9 +24,15 @@ operator" is not well-defined; it can refer to any operation on a polyhedron,
 Conway's original set, operations that retain the symmetry of the seed
 polyhedron like Conway's operators, etc. depending on your source.
 
-Until we get to the extensions section, we'll limit ourselves to operations on
-convex polyhedra. As a sphere looks like a plane if you zoom in enough, it can
-be useful to visualize operators on a planar grid,
+By Steinitz's theorem, the edges of a convex polyhedron form a
+3-vertex-connected planar graph, and all 3-vertex-connected planar graphs
+can be realized as a convex polyhedron. Convex polyhedra are topologically
+equivalent to spheres. The convex polyhedra are a subset of the
+non-self-intersecting polyhedra, or (in Grunbaum's terminology) acoptic
+polyhedra, where faces may be concave. There are also other surfaces
+such as toroidal polyhedra (containing topological holes).
+In general, we'll limit ourselves to operations on convex polyhedra.
+However, it can be useful to visualize operators on a planar grid,
 which can be thought of as a zoomed-in section of a large convex polyhedra.
 
 Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
@@ -89,7 +99,20 @@ draw George Hart's propeller operator (see [HartPropeller]_).
 Particular sets of edge-replacement operators
 ---------------------------------------------
 Conway's original set of operations is denoted with the letters `abdegjkmost`.
-Some of these are reducible: `e=aa`, `o=jj`, `m=kj`, and `b=ta`.
+Some of these are reducible: `e=aa`, `o=jj`, `m=kj`, and `b=ta`. Borrowing an
+idea from ring theory, we refer to `d` (dual) and `S` (seed, identity) as the
+units of the EROs, and operators that are related by `d` are called associates.
+At most 4 operators can be associated with each other, corresponding to `x`,
+`xd`, `dx`, and `dxd`. Because these operators are so closely related to each
+other, in the listing at the end of this text one operator from a set of
+associates is chosen to represent all of them.
+Conway's operators are associated as so:
+
+* `j=jd`, `a=dj=djd`
+* `k`, `t=dkd` (as well as `n=kd` and `z=dk`)
+* `g`, `s=dgd` (as well as `rgr=gd` and `rsr=sd`)
+* `m=md`, `b=dm=dmd`
+* `o=od`, `e=do=dod`
 
 The Goldberg-Coxeter operations :math:`\Box_{a,b}` and :math:`\Delta_{a,b}`
 described in :ref:`Goldberg-Coxeter Operations on Polyhedra and Tilings` can be
@@ -198,7 +221,7 @@ In the latter, degree-2 features are not created.
 
 Other Operators
 ---------------
-There are some important operations on polyhedra that don't fix into the
+There are some important operations on polyhedra that don't fit into the
 edge-replacement schema.
 
 * `r`, the reflection operator. This produces the mirror image of the
@@ -213,6 +236,22 @@ edge-replacement schema.
 * `@`, the alternation operator (newly defined here).
   This operator just exchanges the :math:`+` and :math:`-` partitions.
   Applied to an operator, it reflects its chamber structure horizontally.
+
+.. _lozenge:
+.. figure:: edge_chambers_lozenge.svg
+   :align: right
+   :figwidth: 25%
+
+   The lozenge operator
+
+There are some operators that can be described like an ERO but violate one
+or another constraint. One example is the lozenge operator depicted in
+:numref:`lozenge`. Its problem is that its result is never a 3-vertex-connected
+graph: it is only 2-connected. Thus, the result is not a convex polyhedron.
+(It may be expressible as a concave polyhedron, however.) We'll call operators
+like this pseudo-EROs, and denote them with latin letters rotated 180 degrees,
+so lozenge is `⅂`. (This is to emphasize their separateness, and not at all
+because we're running out of letters.)
 
 Representations of operators
 ----------------------------
@@ -654,18 +693,13 @@ In particular, an ERO with both :math:`g` and :math:`b` odd is not possible.
      - Odd
      - Excluded by symmetry
 
-Decomposition
--------------
-An operator that cannot be expressed in terms of operators aside from `d` and
-`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
-in terms of EROs, but `m` (Meta) is not (it is equal to `kj`). A polyhedron that
-cannot be expressed in terms of another polyhedron and one or more EROs other
-than `S` and `d` is an irreducible polyhedron. An interesting fact: the only
-platonic solid that is irreducible is the tetrahedron; the others can be
-expressed as some operation on the tetrahedron (`O = aT`, `C = jT`, `I = sT`,
-`D = gT`). Consequently, all of the Archimedean and Catalan solids can be
-expressed as some series of operators and T.
-
+Unfortunately, all these relations taken together are insufficient to discern
+invariants that do or do not correspond to an actual ERO.
+For instance, :math:`g=4, a=1, c=0, b_4 = 1, b'_3=2, k=2, \ell=1` satisfies
+the relations, but doesn't appear to correspond to any ERO. Furthermore,
+the pseudo-ERO Lozenge satisfies the relations.
+(The inequalities given above only rely on the graph having minimum degree 3,
+which is necessary for a graph to be 3-vertex-connected but not sufficient.)
 
 .. _waffle:
 .. figure:: edge_chambers_waffle.svg
@@ -674,11 +708,6 @@ expressed as some series of operators and T.
 
    The waffle operator (W)
 
-The relations defined above can be used to help reduce an operator, with some
-caveats. We haven't proven that the relations given in the previous section are
-sufficient to discern invariants that do or do not correspond to an actual ERO.
-(For instance, :math:`g=4, a=1, c=0, b_4 = 1, b'_3=2, k=2, \ell=1` satisfies 
-the relations, but doesn't appear to correspond to any ERO.)
 Furthermore, none of these homomorphisms are injections: there are certain
 :math:`L_x` or :math:`M_x` that correspond to more than one EROs.
 Examples for :math:`M_x` are easy to come by: where `n = kd`, :math:`M_k = M_n`.
@@ -692,79 +721,6 @@ counterexample would be operators with sufficiently large `g` based on
 or face centers) divided into two triangles:
 the counts of vertices of each degree, faces of each degree, and edges would be
 the same no matter which faces was chosen, but the operators would be different.
-
-The above representations do not give us a 100% reliable way to decompose an
-arbitrary operator into a sequence of operators, it does suggest a (clunky,
-trial-and-error filled) heuristic to reduce an operator into two operators by
-starting at the bottom of the homomorphism chain and going up.
-
-* Determine the :math:`g` of the two operators from the factors of the
-  :math:`g` of the operator to be factored.
-* Determine the outline (:math:`a, a', c, c'`) of the two operators.
-* Determine :math:`b, b'` for the two operators.
-* Determine :math:`k, \ell, b_i, b'_i`. for the two operators.
-* Figure out if the representations you've produced actually corresponds to
-  an ERO.
-
-Some facts relating to decomposition that can be derived from what we have
-so far:
-
-* If a polyhedron has a prime number of edges, it is irreducible.
-* Operators where `g` is a prime number are irreducible.
-* If `x=xd` or `rxr=xd`, `x` has type 0.
-* If `x=dxd` or `rxr=dxd`, `x` has type 1, :math:`g` is odd, and :math:`b=b'` is even.
-* If an ERO has type 1, its decomposition cannot contain any EROs of
-  type 0. Correspondingly, if an ERO has type 0,
-  its decomposition must contain at least one type 0 ERO.
-* There are no type 1 EROs with :math:`g=2`, so therefore type 1 EROs
-  with :math:`g=2p`, where p is prime, are irreducible in terms of EROs.
-  (However, see the section below,
-  :ref:`All EROs can be expressed with smoothing, an AERO, and the join operator`.)
-* :math:`\Box_{a,b}` that correspond to the Gaussian primes, and :math:`\Delta_{a,b}`
-  that correspond to the Eisenstein primes, are irreducible in terms of EROs. (Proof below.)
-  As a consequence of this, there are an infinite number of irreducible EROs.
-
-Proof of the last statement: A Gaussian integer :math:`a + bi` is prime if its square norm
-:math:`a^2 + b^2` is prime or the square of a prime. In the first case, that prime has
-the form :math:`p=4n+1`; in the latter, :math:`p=4n+3`. Remember that the squared norm of
-the integer is just the inflation factor `g` for the corresponding operator. If `g` is prime,
-the operator is irreducible. If `g` is the square of a prime, the operator :math:`\Box_{a,b}` is
-type 1, specifically, :math:`\det(\Lambda_{\Box_{a,b}}) = 1`. Suppose the operator can be
-decomposed into :math:`\Box_{a,b} = xy`, where `x` and `y` both have inflation factor :math:`g' = \sqrt(g)`.
-Without loss of generality, assume :math:`\det(\Lambda_x) = \det(\Lambda_y) = 1`. Their matrix forms are:
-
-.. math::
-   \mathbf{M}_x \mathbf{M}_y = \begin{bmatrix}
-   1 & b & 0 \\
-   0 & g' & 0 \\
-   0 & b' & 1 \end{bmatrix} \begin{bmatrix}
-   1 & B & 0 \\
-   0 & g' & 0 \\
-   0 & B' & 1 \end{bmatrix}
-   = \begin{bmatrix}
-   1 & B+bg' & 0 \\
-   0 & g & 0 \\
-   0 & B'+b'g' & 1 \end{bmatrix}
-   = \mathbf{M}_{\Box_{a,b}} = \begin{bmatrix}
-   1 & (T-1)/2 & 0 \\
-   0 & T & 0 \\
-   0 & (T-1)/2 & 1 \end{bmatrix}
-
-therefore, :math:`B+bg' = B'+b'g'`. It can be demonstrated using the ERO invariant inequalities from earlier that the
-only solution to this that could correspond to an actual ERO is :math:`b=b'` and :math:`B=B'`.
-:math:`g' = p = 4n + 3`, so :math:`b, b', B, B'` must all be odd. As mentioned earlier, there are no EROs with both `b` and `g` odd, so we have a contradiction, and :math:`\Box_{a,b}` is irreducible.
-
-The proof for :math:`\Delta_{a,b}` is analogous. An Eisenstein integer :math:`a + bu`, :math:`u=\exp(\pi i/3)`, is prime
-if its square norm :math:`a^2 + ab + b^2` is prime or the square of a prime. The prior (except for :math:`(1 + u)`, which
-we corresponds to the ERO `n` which we already know is irreducible) have the form :math:`p=3n+1`; the latter, :math:`p=3n+2`. When the prime is of the latter form, the ERO is type 1 with :math:`\det(\Lambda_{\Delta_{a,b}}) = 1` and its matrix form is:
-
-.. math::
-   \mathbf{M}_{\Delta_{a,b}} = \begin{bmatrix}
-          1 & (T-1)/3 & 0 \\
-          0 & T & 0 \\
-          0 & 2(T-1)/3 & 1 \end{bmatrix}.
-
-Define `x` and `y` as before: then :math:`2(B+bg') = B'+b'g'`. Using the inequalities to exclude other choices, :math:`B' = 2B` and :math:`b' = 2b`. `g = 3n + 2`, but `g = b+ b' + 1 = 3b+1`: there is no simultaneous integer solution to both equations, so we have a contradiction, and :math:`\Delta_{a,b}` is irreducible.
 
 Chirality
 ---------
@@ -893,8 +849,8 @@ white and grey chambers of `y`, stacked along their long edge. More
 specifically, given an ERO `y`, if `g` is even, then `y = xj` for an ERO or
 VAERO `x`: if `g` is odd, then `y = $xj` for (at least) two VAEROs `x`
 corresponding to splitting the edge with a vertex or replacing an edge with a
-digon. (Even though it can be reduced further in a larger set of operators, the
-ERO form is usually preferable because including all those `$` and `j`
+digon. (Even though it can be reduced further in a larger set of operators,
+the ERO form is usually preferable because including all those `$` and `j`
 operators would get tedious.) A VAERO `x` may be named "pre-(Name)" where
 (Name) is the name of `y`.
 
@@ -902,6 +858,115 @@ Note that since `xjd = x@j`, the ERO of the dual corresponds to the
 opposite-partition VAERO. EROs may also be decomposed into FAEROs with the form
 `y = $xa`, but since `a = dj` and `xd` has the chamber structure of `x` rotated,
 it's simpler to just look at VAEROs.
+
+Decomposition
+-------------
+An operator that cannot be expressed in terms of operators aside from `d` and
+`r` is "irreducible". For instance, `k` (Kis) and `j` (Join) are irreducible
+in terms of EROs, but `m` (Meta) is not (it is equal to `kj`). A polyhedron that
+cannot be expressed in terms of another polyhedron and one or more EROs other
+than the units `S` and `d` is an irreducible polyhedron. An interesting fact:
+the only platonic solid that is irreducible is the tetrahedron; the others can
+be expressed as some operation on the tetrahedron (`O = aT`, `C = jT`,
+`I = sT`, `D = gT`). Consequently, all of the Archimedean and Catalan
+solids can be expressed as some series of operators and T.
+
+It is an open question whether the decomposition of an ERO in terms of
+other EROs is unique (up to associates). However,
+if we allow other operators, there are examples of a non-unique decomposition.
+
+* `xj = jk`, where `x` is the Pre-Join-Stake VAERO.
+* `j⅂ = lj`, where `⅂` is the lozenge operator (a pseudo-ERO).
+
+The relations defined earlier can be used to help reduce an operator,
+with some caveats.
+The above representations do not give us a 100% reliable way to decompose an
+arbitrary operator into a sequence of operators, it does suggest a
+(trial-and-error filled) heuristic to reduce an operator into two operators
+by starting at the bottom of the homomorphism chain and going up.
+
+* Determine the :math:`g` of the two operators from the factors of the
+  :math:`g` of the operator to be factored.
+* Determine the outline (:math:`a, a', c, c'`) of the two operators.
+* Determine :math:`b, b'` for the two operators.
+* Determine :math:`k, \ell, b_i, b'_i`. for the two operators.
+* Figure out if the representations you've produced actually corresponds to
+  an ERO.
+
+Some facts relating to decomposition that can be derived from what we have
+so far:
+
+* If a polyhedron has a prime number of edges, it is irreducible.
+* Operators where `g` is a prime number are irreducible.
+* If `x=xd` or `rxr=xd`, `x` has type 0.
+* If `x=dxd` or `rxr=dxd`, `x` has type 1, :math:`g` is odd, and :math:`b=b'`
+  is even.
+* If an ERO has type 1, its decomposition cannot contain any EROs of
+  type 0. Correspondingly, if an ERO has type 0,
+  its decomposition must contain at least one type 0 ERO.
+* There are no type 1 EROs with :math:`g=2`, so therefore type 1 EROs
+  with :math:`g=2p`, where p is prime, are irreducible in terms of EROs.
+  (However, see the section below, :ref:`All EROs can be expressed with
+  smoothing, an AERO, and the join operator`.)
+* :math:`\Box_{a,b}` that correspond to the Gaussian primes,
+  and :math:`\Delta_{a,b}` that correspond to the Eisenstein primes,
+  are irreducible in terms of EROs. (Proof below.)
+  As a consequence of this, there are an infinite number of irreducible EROs.
+
+Proof of the last statement: A Gaussian integer :math:`a + bi` is prime if its
+square norm :math:`a^2 + b^2` is prime or the square of a prime. In the first
+case, that prime has the form :math:`p=4n+1`; in the latter, :math:`p=4n+3`.
+Remember that the squared norm of the integer is just the inflation factor `g`
+for the corresponding operator. If `g` is prime, the operator is irreducible.
+If `g` is the square of a prime, the operator :math:`\Box_{a,b}` is type 1,
+specifically, :math:`\det(\Lambda_{\Box_{a,b}}) = 1`. Suppose the operator can
+be decomposed into :math:`\Box_{a,b} = xy`, where `x` and `y` both have
+inflation factor :math:`g' = \sqrt(g)`. Without loss of generality, assume
+:math:`\det(\Lambda_x) = \det(\Lambda_y) = 1`. Their matrix forms are:
+
+.. math::
+   \mathbf{M}_x \mathbf{M}_y = \begin{bmatrix}
+   1 & b & 0 \\
+   0 & g' & 0 \\
+   0 & b' & 1 \end{bmatrix} \begin{bmatrix}
+   1 & B & 0 \\
+   0 & g' & 0 \\
+   0 & B' & 1 \end{bmatrix}
+   = \begin{bmatrix}
+   1 & B+bg' & 0 \\
+   0 & g & 0 \\
+   0 & B'+b'g' & 1 \end{bmatrix}
+   = \mathbf{M}_{\Box_{a,b}} = \begin{bmatrix}
+   1 & (T-1)/2 & 0 \\
+   0 & T & 0 \\
+   0 & (T-1)/2 & 1 \end{bmatrix}
+
+therefore, :math:`B+bg' = B'+b'g'`. It can be demonstrated using the ERO
+invariant inequalities from earlier that the only solution to this that could
+correspond to an actual ERO is :math:`b=b'` and :math:`B=B'`.
+:math:`g' = p = 4n + 3`, so :math:`b, b', B, B'` must all be odd. As mentioned
+earlier, there are no EROs with both `b` and `g` odd, so we have a
+contradiction, and :math:`\Box_{a,b}` is irreducible.
+
+The proof for :math:`\Delta_{a,b}` is analogous. An Eisenstein integer
+:math:`a + bu`, :math:`u=\exp(\pi i/3)`, is prime if its square norm
+:math:`a^2 + ab + b^2` is prime or the square of a prime. The prior (except
+for :math:`(1 + u)`, which we corresponds to the ERO `n` which we already
+know is irreducible) have the form :math:`p=3n+1`; the latter, :math:`p=3n+2`.
+When the prime is of the latter form, the ERO is type 1 with
+:math:`\det(\Lambda_{\Delta_{a,b}}) = 1` and its matrix form is:
+
+.. math::
+   \mathbf{M}_{\Delta_{a,b}} = \begin{bmatrix}
+          1 & (T-1)/3 & 0 \\
+          0 & T & 0 \\
+          0 & 2(T-1)/3 & 1 \end{bmatrix}.
+
+Define `x` and `y` as before: then :math:`2(B+bg') = B'+b'g'`. Using the
+inequalities to exclude other choices, :math:`B' = 2B` and :math:`b' = 2b`.
+`g = 3n + 2`, but `g = b+ b' + 1 = 3b+1`:
+there is no simultaneous integer solution to both equations,
+so we have a contradiction, and :math:`\Delta_{a,b}` is irreducible.
 
 Extension - Operations on different polyhedra
 ----------------------------------------------
@@ -915,20 +980,12 @@ It's worth noting that applying :math:`\Delta` to the regular triangular grid
 on the plane, or :math:`\Box` to the regular square grid on the plane,
 just creates a topologically equivalent grid on the plane.
 
-.. _lozenge:
-.. figure:: edge_chambers_lozenge.svg
-   :align: right
-   :figwidth: 25%
-
-   The lozenge operator
-
 Convex polyhedra may be put into "canonical form" such that all faces are flat,
 all edges are tangent to the unit sphere, and the centroid of the polyhedron is
 at the origin. As a consequence, all faces are convex.
 There is no canonical form guaranteed to exist for general non-convex
 polyhedra, however: in particular, there may be no position of the vertices
-such that all the faces are flat or convex. The "Lozenge" operator in
-:numref:`lozenge` creates concave faces when applied to a planar tiling.
+such that all the faces are flat or convex.
 
 Some operators can be applied to degenerate spherical polyhedra (dihedra and
 hosohedra) with a result that is a convex polyhedron. Specifically, operators
@@ -941,16 +998,23 @@ dual) an n-prism is a truncated n-hosohedron. Therefore the octahedron is a
 kis 4-dihedron and the cube is a truncated 4-hosohedron.
 This is interesting because the octahedron is also an ambo tetrahedron,
 and the cube a join tetrahedron: if we admit degenerate polyhedra,
-there are some polyhedra with two unequal reductions into operators and seeds. 
-We can also apply AEROs: an n-sided pyramid is an alternating-truncated n-hosohedron.
-Thus a tetrahedron is an alternating-truncated 3-hosohedron (and a cube is a join 
-alternating-truncate 3-hosohedron, etc.)
+there are some polyhedra with two unequal reductions into operators and seeds.
+We can also apply AEROs: an n-sided pyramid is an alternating-truncated
+n-hosohedron. Thus a tetrahedron is an alternating-truncated 3-hosohedron
+(and a cube is a join alternating-truncated 3-hosohedron, etc.)
 
-Operators may also be applied to surfaces with boundary, although the behavior
-of the operator at the boundary needs to be specified. In general,
-this amounts to dropping incomplete faces or faces that cross over
-the boundary, and dropping some related edges and vertices. We
-lose the relationship with :math:`L_x` and :math:`M_x` by dropping those faces.
+EROs may also be applied to surfaces with boundary, although the behavior
+of the operator at the boundary needs to be specified. In general, this amounts
+to dropping incomplete faces or faces that cross over the boundary, and dropping
+some related edges and vertices. We lose the relationship with :math:`L_x` and
+:math:`M_x` because not every edge is transformed in the same way: edges
+adjacent to one face are different than edges adjacent to two. In general,
+operators applied to a surface with boundary are not even associative. For
+example, start with a single square face. Applying `o` splits the square into
+four squares, but `jj` either annihilates the face entirely or creates stuff
+outside the boundary of the original face, depending. (``conway`` in Antiprism
+does the former.) EROs are also problematic on kaleidoscopes or other
+tilings where 3 or more faces meet at an edge.
 
 Extension - Operations that alter topology
 ------------------------------------------
@@ -969,10 +1033,20 @@ sense, we can think of the operator chamber diagrams we've described so far
 (even the alternating ones) as having the topology of a sphere: identify the two
 edges on the left and the two edges on the right. Then, the operation can be
 described as taking the connected sum of the operator chamber diagrams with each
-face of the seed polyhedron. Thus assumption 2 in the list of assumptions at the
-end of the "Operators on counts" section: taking the connected sum with a sphere
-does not change the topology, so the operation does not change the Euler
-characteristic.
+face of the seed polyhedron. Thus one of the assumptions for EROs:
+taking the connected sum with a sphere does not change the topology,
+so the operation does not change the Euler characteristic.
+
+However, operators that alter the topology can be described, introducing holes
+or other features to a polyhedron. This may require us to think of the chamber
+structure as having been extruded from a square into a square prism. One simple
+operator of this kind makes nested or offset copies of the polyhedron, which
+we'll call "copy" and denote :math:`ɔ_n`. Obviously, this has
+:math:`M_ɔ = n M_S = n I_3` where `n` is the number of copies produced, and
+:math:`k = \ell = 1`. As expected, the Euler characteristic of the result is
+the Euler characteristic of the seed times `n`. The n=0 case implies an
+"annihilate" operator that returns the empty
+"polyhedron" with 0 vertices, edges, and faces.
 
 .. _skeleton:
 .. figure:: edge_chambers_skeleton.svg
@@ -981,15 +1055,8 @@ characteristic.
 
    Chambers of skeletonize operation.
 
-However, operators that alter the topology can be described, introducing holes
-or other features to a polyhedron. This may require us to think of the chamber
-structure as having been extruded from a square into a square prism. One simple
-operator of this kind makes nested or offset copies of the polyhedron:
-obviously, this has :math:`M_x = n M_S = n I_3` where `n` is the number of
-copies produced, and :math:`k = \ell = 1`. As expected, the Euler
-characteristic of the result is the Euler characteristic of the seed times `n`.
-
-Another operator is the skeletonize operator depicted in :numref:`skeleton`.
+Another operator is the skeletonize operator depicted in :numref:`skeleton`,
+denoted `ƨ` (a reversed s).
 Edges and vertices are retained, but faces are removed. The red crosses
 indicate that the base faces are not retained or replaced with vertices: they
 are removed entirely. If `G` is the genus of the seed polyhedron, the genus of
@@ -1019,18 +1086,17 @@ faces are specified, topologically they both resemble a process like so:
   faces were.
 
 To represent this, we have to extrude the chamber structure out into a sort of
-3d prism. The operator we'll describe here is essentially a process of replacing
-each seed edge with a rectangular prism oriented with one edge along the seed
-edge, somewhat like a 3d version of loft (`l`). (It is not the operation
-performed by ``leonardo`` or Polyhedronisme, unfortunately; ``leonardo`` seems
-to create overlapping faces.) In terms of invariants, :math:`k=\ell=1`,
-:math:`b_4 = 2`, :math:`b'_4 = 4`, and :math:`M_x` is:
+3d prism. We'll call this operator hollow, and notate it `ɥ`. It is not the
+operation performed by ``leonardo`` or Polyhedronisme,
+but it can be represented in ``wythoff`` using the notation
+``[V,VF]0_1v1_0v,1v1f,1V``). In terms of invariants, :math:`k=2`,
+:math:`\ell=1`, :math:`b_5 = 2`, :math:`b'_4 = 3`, and :math:`M_x` is:
 
 .. math::
    \begin{bmatrix}
-   2 & 2 & 0 \\
-   0 & 8 & 0 \\
-   0 & 4 & 0 \end{bmatrix} .
+   1 & 2 & 0 \\
+   0 & 7 & 0 \\
+   1 & 3 & 0 \end{bmatrix} .
 
 If the seed polyhedron has Euler characteristic 2 (genus 0),
 the result has Euler characteristic `4-2f`. The genus is `f-1`, not `f`,
@@ -1058,13 +1124,16 @@ could be described by a set of 3 chamber structures: on an edge between
 order-3 vertices, on an edge from an order-3 vertex to a non-order-3 vertex
 (or vice versa), and on an edge between non-order-3 vertices.
 
-Neither of these schemes can be represented in the :math:`L_x` or :math:`M_x`
-forms defined earlier.
+Because they don't treat every edge uniformly, neither of these schemes can
+be represented in the :math:`L_x` or :math:`M_x` forms defined earlier.
 
 Listing of operators and transformations
 ----------------------------------------
 Where not specified, :math:`k` and :math:`\ell` are 1, and
-:math:`b_i` and :math:`b'_i` are 0.
+:math:`b_i` and :math:`b'_i` are 0. Remember that these lists only pick one
+out of each set of associated operators. For operators that aren't already
+implemented in Antiprism, an input string to ``wythoff`` is included in the
+Notes section.
 
 .. list-table:: EROs
    :header-rows: 1
@@ -1075,7 +1144,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - Matrix :math:`M_x`
      - :math:`k, \ell`, :math:`b_i`, :math:`b'_i`
      - Chambers of `dx`
-     - Useful relations
+     - Notes
    * - `S` (Seed, Identity)
      - N
      - .. image:: edge_chambers.svg
@@ -1142,17 +1211,6 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=2`, :math:`b'_6=1`
      - .. image:: edge_chambers_dc.svg
      - `c = dud`
-   * - Lozenge
-     - N
-     - .. image:: edge_chambers_lozenge.svg
-     - .. math::
-          \begin{bmatrix}
-          1 & 2 & 0 \\
-          0 & 5 & 0 \\
-          0 & 2 & 1 \end{bmatrix}
-     - :math:`k=2`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=2`
-     - .. image:: edge_chambers_dual_lozenge.svg
-     - `x = dxd`
    * - `l` (Loft)
      - N
      - .. image:: edge_chambers_loft.svg
@@ -1197,14 +1255,25 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`k=3`, :math:`b_4=2`, :math:`b'_3=4`
      - .. image:: edge_chambers_dual_lace.svg
      -
+   * - :math:`L_{-1}` (Opposite-Lace) (New)
+     - N
+     - .. image:: edge_chambers_L-1.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 2 & 0 \\
+          0 & 7 & 0 \\
+          0 & 4 & 1 \end{bmatrix}
+     - :math:`k=2`, :math:`b_5=2`, :math:`b'_3=4`
+     - .. image:: edge_chambers_dL-1.svg
+     - ?
    * - :math:`K` (Stake)
      - N
      - .. image:: edge_chambers_stake.svg
      - .. math::
-            \begin{bmatrix}
-            1 & 2 & 1 \\
-            0 & 7 & 0 \\
-            0 & 4 & 0 \end{bmatrix}
+          \begin{bmatrix}
+          1 & 2 & 1 \\
+          0 & 7 & 0 \\
+          0 & 4 & 0 \end{bmatrix}
      - :math:`k=3`, :math:`b_3=2`, :math:`b'_3=2`, :math:`b'_4=2`
      - .. image:: edge_chambers_dual_stake.svg
      -
@@ -1219,6 +1288,17 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
      - :math:`b_3=4`, :math:`b'_6=2`
      - .. image:: edge_chambers_dual_whirl.svg
      -
+   * - :math:`E` (Ethel) (New)
+     - Y
+     - .. image:: edge_chambers_ethel.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 4 & 0 \\
+          0 & 8 & 0 \\
+          0 & 3 & 1 \end{bmatrix}
+     - :math:`b_3=2`, :math:`b_4=2`, :math:`b'_4=2`, :math:`b'_6=1`
+     - .. image:: edge_chambers_dE.svg
+     - ?
    * - :math:`J=(kk)_0` (Join-kis-kis)
      - N
      - .. image:: edge_chambers_join-kis-kis.svg
@@ -1251,7 +1331,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
         0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=2`, :math:`b'_4=2`, :math:`b'_5=2`
      - .. image:: edge_chambers_dual_waffle.svg
-     -
+     - [V, E, F, V2E, VF] 0_4_3f4f, 2_4_3v3_4v, 3E
    * - :math:`B` (Bowtie) (New)
      - Y
      - .. image:: edge_chambers_bowtie.svg
@@ -1262,7 +1342,7 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & 4 & 0 \end{bmatrix}
      - :math:`b_3=4`, :math:`b_4=1`, :math:`b'_3=2`, :math:`b'_7=2`
      - .. image:: edge_chambers_dual_bowtie.svg
-     - `rBr=Bd`
+     - `rBr=Bd` [V, E, F, VE, EF] 1_3_4, 0_3_4_2e4_1_3e
 
 .. list-table:: ERO families
    :header-rows: 1
@@ -1330,6 +1410,83 @@ Where not specified, :math:`k` and :math:`\ell` are 1, and
           0 & (T-1)/2 & 1 \end{bmatrix}
      - :math:`b_4` :math:`=b'_4` :math:`=b` :math:`=b'`
      - :math:`\Box_{a,b} = d\Box_{a,b}d`, :math:`\Box_{1,2} = p`
+
+.. list-table:: Pseudo-EROs (including topological EROs)
+   :header-rows: 1
+
+   * - Operator `x`
+     - Chiral?
+     - Chambers of `x`
+     - Matrix :math:`M_x`
+     - :math:`k, \ell`, :math:`b_i`, :math:`b'_i`
+     - Chambers of `dx`
+     - Useful relations
+   * - ɐ (Annihilate)
+     - N
+     - blank
+     - .. math::
+          \begin{bmatrix}
+          0 & 0 & 0 \\
+          0 & 0 & 0 \\
+          0 & 0 & 0 \end{bmatrix}
+     -
+     - blank
+     - `ɐx = ɐ` for all `x`
+   * - ƨ (Skeleton)
+     - N
+     - .. image:: edge_chambers_skeleton.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 0 \\
+          0 & 1 & 0 \\
+          0 & 0 & 0 \end{bmatrix}
+     -
+     - n/a
+     -
+   * - ǝ (Edged)
+     - N
+     -
+     - .. math::
+          \begin{bmatrix}
+          0 & 2 & 0 \\
+          0 & 4 & 0 \\
+          1 & 0 & 1 \end{bmatrix}
+     -
+     -
+     - [VF] 0F, 0V
+   * - ⅂ (Lozenge)
+     - N
+     - .. image:: edge_chambers_lozenge.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 2 & 0 \\
+          0 & 5 & 0 \\
+          0 & 2 & 1 \end{bmatrix}
+     - :math:`k=2`, :math:`\ell=2`, :math:`b_3=2`, :math:`b'_3=2`
+     - .. image:: edge_chambers_dual_lozenge.svg
+     - `⅂ = d⅂d` [V, EF] 0_1F, 1_0f1f, 1E
+   * - `ɥ` (Hollow)
+     - N
+     -
+     - .. math::
+          \begin{bmatrix}
+          1 & 2 & 0 \\
+          0 & 7 & 0 \\
+          1 & 3 & 0 \end{bmatrix}
+     - :math:`k=2`, :math:`b_5 = 2`, :math:`b'_4 = 3`
+     -
+     - [V, VF] 0_1v1_0v, 1v1f, 1V
+   * - :math:`ɔ_n` (Copy)
+     - N
+     -
+     - .. math::
+          \begin{bmatrix}
+          n & 0 & 0 \\
+          0 & n & 0 \\
+          0 & 0 & n \end{bmatrix}
+     -
+     -
+     - :math:`ɔ_0 =ɐ`
 
 In the following two tables, when :math:`k^+=k^-`, both
 are written as just :math:`k`.
@@ -1432,6 +1589,17 @@ are written as just :math:`k`.
      - :math:`k^+=3`, :math:`k^-=2`, :math:`b_3=1`, :math:`b'_3=2`
      - .. image:: edge_chambers_alternating_dual_prekiskis0.svg
      - :math:`xj = (kk)_0`
+   * - Pre-Ethel
+     - N
+     - .. image:: edge_chambers_alternating_preethel.svg
+     - .. math::
+          \begin{bmatrix}
+          1 & 0 & 2 & 0 \\
+          0 & 0 & 4 & 0 \\
+          0 & 1 & 1 & 1 \end{bmatrix}
+     - :math:`b_3=1`, :math:`b_4=1`, :math:`b'_4=1`
+     - .. image:: edge_chambers_alternating_dual_preethel.svg
+     - :math:`xj = E`.
    * - Pre-Cross
      - N
      - .. image:: edge_chambers_alternating_metaortho.svg
@@ -1478,3 +1646,4 @@ Open questions
   :math:`L_x` to make the set of conditions sufficient as well as necessary?
 * Is there an invariant related to the chirality of an operator?
 * What other invariants need to be added to fully characterize EROs and AEROs?
+* Are there any EROs that can be reduced two (or more) unequal ways into EROs?
