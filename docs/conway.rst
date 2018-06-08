@@ -11,7 +11,10 @@ This text is an attempt to use Brinkmann's work to find ways to quantify,
 analyze, and expand these operators. In particular, it focuses on operators on
 that can be described in terms of a linear operator on the counts of vertices,
 edges, and faces. These linear operators can be used to examine the composition
-and decomposition of operations on polyhedra.
+and decomposition of operations on polyhedra. Such operators do not constitute
+all possible operations on polyhedra, or even all those that can be represented
+by ``wythoff`` in [Antiprism]_, but they are an interesting subset of those
+operators with many nice aesthetic and geometric qualities.
 
 Preliminaries
 -------------
@@ -29,11 +32,14 @@ By Steinitz's theorem, the edges of a convex polyhedron form a
 can be realized as a convex polyhedron. Convex polyhedra are topologically
 equivalent to spheres. The convex polyhedra are a subset of the
 non-self-intersecting polyhedra, or (in Grunbaum's terminology) acoptic
-polyhedra, where faces may be concave. There are also other surfaces
+polyhedra, where faces may be concave (but still no holes or
+self-intersections). There are also other surfaces
 such as toroidal polyhedra (containing topological holes).
 In general, we'll limit ourselves to operations on convex polyhedra.
 However, it can be useful to visualize operators on a planar grid,
 which can be thought of as a zoomed-in section of a large convex polyhedra.
+We may also need to make use of looser sets of abstract polyhedra containing
+digons (two edges that connect the same vertices) or degree-2 vertexes.
 
 Faces with `k` sides may be called `k`-degree faces, by analogy with `k`-degree
 vertices.
@@ -247,8 +253,8 @@ edge-replacement schema.
 There are some operators that can be described like an ERO but violate one
 or another constraint. One example is the lozenge operator depicted in
 :numref:`lozenge`. Its problem is that its result is never a 3-vertex-connected
-graph: it is only 2-connected. Thus, the result is not a convex polyhedron.
-(It may be expressible as a concave polyhedron, however.) We'll call operators
+graph: it is only 2-connected. Thus, the result is not a convex polyhedron:
+it is, however, an acoptic polyhedron of genus 0. We'll call operators
 like this pseudo-EROs, and denote them with latin letters rotated 180 degrees,
 so lozenge is `⅂`. (This is to emphasize their separateness, and not at all
 because we're running out of letters.)
@@ -721,6 +727,8 @@ counterexample would be operators with sufficiently large `g` based on
 or face centers) divided into two triangles:
 the counts of vertices of each degree, faces of each degree, and edges would be
 the same no matter which faces was chosen, but the operators would be different.
+With this construction, it is possible (with a sufficiently large g) to
+create arbitrarily large sets of operators with the same invariants.
 
 Chirality
 ---------
@@ -742,9 +750,9 @@ of a chiral operator and an achiral operator is always chiral, but:
 * Two chiral operators can produce another chiral operator:
   `pp`, `pg`, `prg`, `gg`, `grg`
 
-Further confusing things are chiral EROs where r and d interact. Some
-chiral EROs have `xd = x`, while some others have `xd = rxr`. (Some have
-`x = dxd`, but none with `rxr = dxd` have been observed or proven/disproven to exist.)
+Further confusing things are chiral EROs where r and d interact. Some chiral
+EROs have `xd = x`, while some others have `xd = rxr`. (Some have `x = dxd`,
+but none with `rxr = dxd` have been observed or proven/disproven to exist.)
 The `gyro` operator is one example of the latter, and the bowtie operator
 in :numref:`bowtie` is another, maybe easier-to-visualize example.
 (Bowtie is a newly named operator, introduced in this text.)
@@ -970,12 +978,14 @@ so we have a contradiction, and :math:`\Delta_{a,b}` is irreducible.
 
 Extension - Operations on different polyhedra
 ----------------------------------------------
-With some care, operators can be applied to any polyhedron or tiling; toruses,
-polyhedra with multiple holes, planar tilings, hyperbolic tilings, and even
-non-orientable polyhedra, although the latter is restricted to the achiral
-operators. The main restriction is that the graph must be embeddable on a
-certain surface. Planar tilings may be easier to analyze by taking a finite
-section and treating it as a torus.
+The chamber diagram makes the assumption that each edge is acted on uniformly,
+and each edge of the seed polyhedron has exactly two adjacent faces. With some
+care, operators can be applied to any closed polyhedron or tiling that meets
+that criteria; toruses, polyhedra with multiple holes, planar tilings,
+hyperbolic tilings, and even non-orientable polyhedra, although the latter is
+restricted to the achiral operators. The graph of the polyhedron
+must be embeddable on a certain surface. Planar tilings may be easier to
+analyze by taking a finite section and treating it as a torus.
 It's worth noting that applying :math:`\Delta` to the regular triangular grid
 on the plane, or :math:`\Box` to the regular square grid on the plane,
 just creates a topologically equivalent grid on the plane.
@@ -1014,7 +1024,8 @@ example, start with a single square face. Applying `o` splits the square into
 four squares, but `jj` either annihilates the face entirely or creates stuff
 outside the boundary of the original face, depending. (``conway`` in Antiprism
 does the former.) EROs are also problematic on kaleidoscopes or other
-tilings where 3 or more faces meet at an edge.
+tilings where 3 or more faces meet at an edge. (However, see the section
+Extensions - Multiple chambers.)
 
 Extension - Operations that alter topology
 ------------------------------------------
@@ -1086,7 +1097,7 @@ faces are specified, topologically they both resemble a process like so:
   faces were.
 
 To represent this, we have to extrude the chamber structure out into a sort of
-3d prism. We'll call this operator hollow, and notate it `ɥ`. It is not the
+3d prism. We'll call this operator "hollow", and notate it `ɥ`. It is not the
 operation performed by ``leonardo`` or Polyhedronisme,
 but it can be represented in ``wythoff`` using the notation
 ``[V,VF]0_1v1_0v,1v1f,1V``). In terms of invariants, :math:`k=2`,
@@ -1124,7 +1135,12 @@ could be described by a set of 3 chamber structures: on an edge between
 order-3 vertices, on an edge from an order-3 vertex to a non-order-3 vertex
 (or vice versa), and on an edge between non-order-3 vertices.
 
-Because they don't treat every edge uniformly, neither of these schemes can
+It would also be possible to describe operations on surfaces with boundary this
+way: a chamber structure for an edge adjacent to 1 face, and a chamber
+structure for an edge adjacent to 2 faces. Kaleidoscopes where more than
+two faces meet at an edge are still problematic.
+
+Because they don't treat every edge uniformly, none of these schemes can
 be represented in the :math:`L_x` or :math:`M_x` forms defined earlier.
 
 Listing of operators and transformations
