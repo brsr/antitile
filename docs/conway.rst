@@ -1281,7 +1281,7 @@ Notes section.
           0 & 4 & 1 \end{bmatrix}
      - :math:`k=2`, :math:`b_5=2`, :math:`b'_3=4`
      - .. image:: edge_chambers_dL-1.svg
-     - ?
+     - [V, E2F] 1F, 1e1_0e, 0_1f1f, 1E
    * - :math:`K` (Stake)
      - N
      - .. image:: edge_chambers_stake.svg
@@ -1314,7 +1314,7 @@ Notes section.
           0 & 3 & 1 \end{bmatrix}
      - :math:`b_3=2`, :math:`b_4=2`, :math:`b'_4=2`, :math:`b'_6=1`
      - .. image:: edge_chambers_dE.svg
-     - ?
+     - [V, VE, VF] 0_1_2e1e, 2F, 1_2v2f
    * - :math:`J=(kk)_0` (Join-kis-kis)
      - N
      - .. image:: edge_chambers_join-kis-kis.svg
