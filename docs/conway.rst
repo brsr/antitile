@@ -1120,6 +1120,13 @@ characteristic 1 such as the tetrahemihexahedron, may be possible. Such
 operators probably have more theoretical uses than aesthetic or practical ones,
 and good luck getting the faces to be flat and not intersect awkwardly.)
 
+We can think of these more general topological operators as having the
+structure of a :math:`\mathbb{N}`-module over a semiring, where addition is the
+disjoint union of polyhedra, multiplication is composition of operators, and
+a coefficient from :math:`\mathbb{N} = {0, 1, ...}` represents creating disjoint
+copies of a polyhedron. Then, the module has an obvious homomorphism with the
+3x3 matrices.
+
 Extensions - Multiple chambers
 ------------------------------
 The concept of AEROs could be extended to k-partite graphs. :math:`k(k-1)/2`
