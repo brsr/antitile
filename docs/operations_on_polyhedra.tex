@@ -565,22 +565,25 @@ the number of sides on a face.
 Extension of GCs to all faces
 
 \section{Table of operators}
-\begin{longtable}[t]{ c|c|c|p{1cm}|c|c|p{2cm} }
-&$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+\begin{table}[h]
+\caption{$a$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
 & Note
-\endhead \hline
-2 &
-\begin{tikzpicture}
+\\ \hline
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
   \pic at (0,0) {chamber1};
-\draw (0.85,0) -- (0.85,1.5);
-\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw (1.7, 0) -- (0, 0);
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (1.7, 0) circle [radius=0.05];
 \end{tikzpicture} &
 $\begin{bmatrix}
-0 & 0 & 1 & 0 & 0 \\
+1 & 1 & 0 & ? & ? \\
 0 & 0 & 0 & 0 & 0 \\
-1 & 1 & 0 & ? & ? \end{bmatrix}$ &
-CAB, CBA &
-\begin{tikzpicture}
+0 & 0 & 1 & 0 & 0 \end{bmatrix}$ &
+ABC, BAC &
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
   \pic at (0,0) {chamber4};
 
 \draw (0,1) -- (2,1);
@@ -593,53 +596,9 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ \hline
-& & &
-ABC, BAC &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-
-\draw (1,0) -- (1,2);
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 0 & 1 \\
-0 & 1 & 0 \\
-1 & 0 & 0 \end{bmatrix}$
-& $\$x@m = d$
-\\ \hline
-& & &
-ACB, BCA &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-
-\draw (0.5,0.5) -- (1.5,1.5);
-\draw (1.5,0.5) -- (0.5,1.5);
-\draw[fill] (1,1) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 1 & 0 \\
-0 & 2 & 0 \\
-1 & 0 & 1 \end{bmatrix}$
-&  $x@m = a$
-\\ \hline
-&
-\begin{tikzpicture}
-  \pic at (0,0) {chamber1};
-
-\draw (1.7, 0) -- (0, 0);
-\draw[fill] (0, 0) circle [radius=0.05];
-\draw[fill] (1.7, 0) circle [radius=0.05];
-\end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & ? & ? \\
-0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 0 & 0 \end{bmatrix}$ &
+\\ & &
 CAB, CBA &
-\begin{tikzpicture}
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
   \pic at (0,0) {chamber4};
 \draw (1,0) -- (1,2);
 \draw[fill] (1,0) circle [radius=0.05];
@@ -651,26 +610,9 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 1 & 0 & 0 \end{bmatrix}$
 &  $\$x@m = d$
-\\ \hline
-& & &
-ABC, BAC &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-
-\draw (0,1) -- (2,1);
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 0 & 0 \\
-0 & 1 & 0 \\
-0 & 0 & 1 \end{bmatrix}$
-& $\$x@m = S$
-\\ \hline
-& & &
+\\ & &
 ACB, BCA &
-\begin{tikzpicture}
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
 \draw[fill] (0,1) circle [radius=0.05];
@@ -685,7 +627,478 @@ $\begin{bmatrix}
 0 & 1 & 0 \end{bmatrix}$
 & $x@m = j$
 \\ \hline
-5 &
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
+  \pic at (0,0) {chamber1};
+\draw (0.85,0) -- (0.85,1.5);
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & ? & ? \end{bmatrix}$ &
+ABC, BAC &
+$d$
+ &
+$\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \end{bmatrix}$
+& $\$x@m = d$
+\\ & &
+CAB, CBA &
+$S$
+ &
+$\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \end{bmatrix}$
+& $\$x@m = S$
+\\ & &
+ACB, BCA &
+\begin{tikzpicture}[baseline={([yshift={-3ex}]current bounding box.north)}]
+  \pic at (0,0) {chamber4};
+\draw (0.5,0.5) -- (1.5,1.5);
+\draw (1.5,0.5) -- (0.5,1.5);
+\draw[fill] (1,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 2 & 0 \\
+1 & 0 & 1 \end{bmatrix}$
+&  $x@m = a$
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{$o$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+  \draw (0, 0) -- (0.85,1.5) -- (1.7, 0) ;
+  \draw[fill] (0, 0) circle [radius=0.05] ;
+  \draw[fill] (0.85, 1.5) circle [radius=0.05] ;
+  \draw[fill] (1.7, 0) circle [radius=0.05] ;
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & ? & ? \end{bmatrix}$ &
+ABC, BAC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+  \draw (1,0) -- (0,1) -- (1,2) -- (2,1) -- (1,0);
+  \draw (1,0) -- (1,2);
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & 0 & 1 \\
+ 0 & 3 & 0 \\
+ 0 & 2 & 0 \end{bmatrix}$
+&  $\$x@m = n$
+\\ & & ACB, BCA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (1,0) -- (0,1) -- (1,2) -- (2,1) -- (1,0);
+\draw (0,1) -- (2,1);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & 0 & 1 \\
+ 0 & 3 & 0 \\
+ 0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = k$
+\\ & & CAB, CBA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 1 & 1 \\
+0 & 4 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $x@m = o$
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+  \draw (0.425, 0.75) -- (0.85,0) -- (1.275, 0.75) ;
+  \draw[fill] (0.85,0) circle [radius=0.05];
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+1 & ? & ? \end{bmatrix}$ &
+ACB, BCA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+  \draw (0.33, 0.66) -- (0.66,1) -- (1.33,1) -- (1.66,1.33);
+  \draw (0.33, 1.33) -- (0.66,1);
+  \draw (1.33,1) -- (1.66,0.66);
+  \draw[fill] (0.66,1) circle [radius=0.05];
+  \draw[fill] (1.33,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2 & 0 \\
+ 0 & 3 & 0 \\
+ 1 & 0 & 1 \end{bmatrix}$
+&  $\$x@m = t$
+\\ & & ABC, BAC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+  \draw (0.66, 0.33) -- (1,0.66) -- (1,1.33) -- (1.33,1.66);
+  \draw (1.33, 0.33) -- (1,0.66);
+  \draw (1,1.33) -- (0.66,1.66);
+  \draw[fill] (1,0.66) circle [radius=0.05];
+  \draw[fill] (1,1.33) circle [radius=0.05];
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2 & 0 \\
+ 0 & 3 & 0 \\
+ 1 & 0 & 1 \end{bmatrix}$
+& $\$x@m = z$
+\\ & & CAB, CBA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0.5,0.5) -- (1.5,0.5) -- (1.5,1.5) -- (0.5,1.5) -- (0.5,0.5);
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 4 & 0 \\
+1 & 1 & 1 \end{bmatrix}$
+& $x@m = e$
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{$u$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+  \draw (0.425,0.75) -- (1.7, 0)  -- (0, 0);
+  \draw[fill] (0, 0) circle [radius=0.05];
+  \draw[fill] (1.7, 0) circle [radius=0.05];
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 1 & 0 & -1 & 2 \\
+0 & 0 & 0 & 0 & 3/2 \\
+0 & 0 & 1 & 0 & 1/2 \end{bmatrix}$ &
+ABC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (2,1);
+\draw (0.5,0.5) -- (1.5,1.5);
+\draw (1.5,0.5) -- (0.5,1.5);
+
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 1 & 0 \\
+0 & 4 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+& $x@m = u$
+\\ & & ACB & $n$ &
+$\begin{bmatrix}
+1 & 0 & 1 \\
+0 & 3 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = n$
+\\ & & BAC & $S$ &
+$\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \end{bmatrix}$
+& $\$x@m = S$
+\\ & & BCA & $k$ &
+$\begin{bmatrix}
+1 & 0 & 1 \\
+0 & 3 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = k$
+\\ & & CAB & $d$ &
+$\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \end{bmatrix}$
+& $\$x@m = d$
+\\ & & CBA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (1,0) -- (1,2);
+\draw (0.5,0.5) -- (1.5,1.5);
+\draw (1.5,0.5) -- (0.5,1.5);
+
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 1 & 1 \\
+0 & 4 & 0 \\
+1 & 2 & 0 \end{bmatrix}$
+& $x@m = ud$
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+  \draw (0.85, 1.5) -- (0.425, 0.75)  -- (0.425, 0);
+  \draw[fill] (0.85, 1.5) circle [radius=0.05];
+  \draw[fill] (0.425, 0.75) circle [radius=0.05];
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 & -1 & 2 \\
+0 & 0 & 0 & 0 & 3/2 \\
+1 & 1 & 0 & 0 & 1/2 \end{bmatrix}$ &
+ABC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (1,0) -- (0.5,0.5) -- (0.5,1.5) -- (1,2) -- (1.5,1.5) -- (1.5,0.5)
+  -- (1,0);
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 1 \\
+0 & 4 & 0 \\
+1 & 1 & 0 \end{bmatrix}$
+& $x@m = cd$
+\\ & & ACB & $t$ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 3 & 0 \\
+1 & 0 & 1 \end{bmatrix}$
+& $\$x@m = t$
+\\ & & BAC & $d$ &
+$\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \end{bmatrix}$
+& $\$x@m = d$
+\\ & & BCA & $z$ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 3 & 0 \\
+1 & 0 & 1 \end{bmatrix}$
+& $\$x@m = z$
+\\ & & CAB & $S$ &
+$\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \end{bmatrix}$
+& $\$x@m = S$
+\\ & &
+ABC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (0.5,0.5) -- (1.5,0.5) -- (2,1) -- (1.5,1.5) -- (0.5,1.5)
+  -- (0,1);
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 4 & 0 \\
+0 & 1 & 1 \end{bmatrix}$
+& $x@m = c$
+\end{tabular}
+\end{table}
+
+\begin{table}[h]%verify that the orientation is the same as in wythoff
+\caption{$p$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw (2,1) -- (1,1.5) -- (0,1);
+  \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
+  \draw (0.66,0.33) -- (1.33,0.33);
+
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 1 & 0 & ? & ? \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \end{bmatrix}$ &
+BAC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (1.33,0.33);
+\draw (2,1) -- (0.66,1.66);
+\draw (0.66,0.33) -- (1.33,1.66);
+\draw[fill] (1.2,1.4) circle [radius=0.05];
+\draw[fill] (0.8,0.6) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 5 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+&  $\$x@m = p$
+\\ & & ACB &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (2,1) -- (1.25,1.25) -- (1,2);
+\draw (0,1) -- (0.75,0.75) -- (1,0);
+\draw (1.25,1.25) -- (0.75,0.75);
+
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.25,1.25) circle [radius=0.05];
+\draw[fill] (0.75,0.75) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 1 \\
+0 & 5 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = rgr$
+\\ & & CBA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (1,0) -- (0.33,1.33);
+\draw (1,2) -- (1.66,0.66);
+\draw (0.33,0.66) -- (1.66,1.33);
+\draw[fill] (1.4,1.2) circle [radius=0.05];
+\draw[fill] (0.6,0.8) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 1 \\
+0 & 5 & 0 \\
+1 & 2 & 0 \end{bmatrix}$
+&  $\$x@m = dp = pd$
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,1) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+  \draw (0.5,0.5) -- (1.5,1.5);
+  \draw (1.5,0.5) -- (0.5,1.5);
+  \draw (1,1) -- (1,2);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 & ? & ? \\
+0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 \end{bmatrix}$ &
+BAC &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (1,0) -- (0.33,1.33);
+\draw (1,2) -- (1.66,0.66);
+\draw (0.33,0.66) -- (1.66,1.33);
+\draw[fill] (1.4,1.2) circle [radius=0.05];
+\draw[fill] (0.6,0.8) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 1 \\
+0 & 5 & 0 \\
+1 & 2 & 0 \end{bmatrix}$
+&  $\$x@m = dp = pd$
+\\ & & ACB &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
+\draw (1.5,0.5) -- (0.5,1.5);
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 5 & 0 \\
+1 & 2 & 1 \end{bmatrix}$
+& $\$x@m = rsr$
+\\ & & BCA &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (1.33,0.33);
+\draw (2,1) -- (0.66,1.66);
+\draw (0.66,0.33) -- (1.33,1.66);
+\draw[fill] (1.2,1.4) circle [radius=0.05];
+\draw[fill] (0.8,0.6) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 5 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+&  $\$x@m = p$
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{$g$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
 \begin{tikzpicture}
   \pic at (0,0) {chamber2};
   \draw[fill] (1,1.5) circle [radius=0.05];
@@ -721,31 +1134,8 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 0 \end{bmatrix}$
 & $\$x@m = g$
+\\ & & CBA BAC ACB & mirror & " & $\$x@m = rgr$
 \\ \hline
- & & &
-CBA BAC ACB &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-\draw (2,1) -- (1.25,1.25) -- (1,2);
-\draw (0,1) -- (0.75,0.75) -- (1,0);
-\draw (1.25,1.25) -- (0.75,0.75);
-
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\draw[fill] (1.25,1.25) circle [radius=0.05];
-\draw[fill] (0.75,0.75) circle [radius=0.05];
-
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 2 & 1 \\
-0 & 5 & 0 \\
-0 & 2 & 0 \end{bmatrix}$
-& $\$x@m = rgr$
-\\ \hline
-&
 \begin{tikzpicture}
   \pic at (0,0) {chamber2};
   \draw[fill] (1,1.5) circle [radius=0.05];
@@ -775,92 +1165,17 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 1 & 2 & 1 \end{bmatrix}$
 & $\$x@m = s$
-\\ \hline
-& & &
-CBA BAC ACB &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
-\draw (1.5,0.5) -- (0.5,1.5);
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 2 & 0 \\
-0 & 5 & 0 \\
-1 & 2 & 1 \end{bmatrix}$
-& $\$x@m = rsr$
-\\ \hline
-? &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,1.5) circle [radius=0.05];
-  \draw[fill] (0,1) circle [radius=0.05];
-  \draw[fill] (2,1) circle [radius=0.05];
-  \draw (2,1) -- (1,1.5) -- (0,1);
-  \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
-  \draw (0.66,0.33) -- (1.33,0.33);
+\\ & & CBA BAC ACB & mirror & " & $\$x@m = rsr$
+\end{tabular}
+\end{table}
 
-\end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & ? & ? \\
-0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 0 & 0 \end{bmatrix}$ &
-BAC &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-\draw (0,1) -- (1.33,0.33);
-\draw (2,1) -- (0.66,1.66);
-\draw (0.66,0.33) -- (1.33,1.66);
-\draw[fill] (1.2,1.4) circle [radius=0.05];
-\draw[fill] (0.8,0.6) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 2 & 0 \\
-0 & 5 & 0 \\
-0 & 2 & 1 \end{bmatrix}$
-&  $\$x@m = p$
+\begin{table}[h]
+\caption{$m$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
 \\ \hline
- &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,0) circle [radius=0.05];
-  \draw[fill] (1,1) circle [radius=0.05];
-  \draw[fill] (1,2) circle [radius=0.05];
-  \draw (0.5,0.5) -- (1.5,1.5);
-  \draw (1.5,0.5) -- (0.5,1.5);
-  \draw (1,1) -- (1,2);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & ? & ? \\
-0 & 0 & 0 & 0 & 0 \\
-1 & 1 & 0 & 0 & 0 \end{bmatrix}$ &
-BAC &
-\begin{tikzpicture}
-  \pic at (0,0) {chamber4};
-\draw (1,0) -- (0.33,1.33);
-\draw (1,2) -- (1.66,0.66);
-\draw (0.33,0.66) -- (1.66,1.33);
-\draw[fill] (1.4,1.2) circle [radius=0.05];
-\draw[fill] (0.6,0.8) circle [radius=0.05];
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 2 & 1 \\
-0 & 5 & 0 \\
-1 & 2 & 0 \end{bmatrix}$
-&  $\$x@m = p$
-\\ \hline
-6 &
 \begin{tikzpicture}
   \pic at (0,0) {chamber1};
 \draw (0, 0) -- (0.85,1.5) -- (1.7, 0) -- (0, 0) ;
@@ -891,7 +1206,39 @@ $\begin{bmatrix}
 0 & 4 & 0 \end{bmatrix}$
 & $x = S$
 $xm = m$
-\end{longtable}
+\\ \hline
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+\draw (0.85, 0) -- (0.85,0.5);
+\draw (0.425,0.75) -- (0.85,0.5) -- (1.275,0.75);
+\draw[fill] (0.85, 0.5) circle [radius=0.05];
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \end{bmatrix}$ &
+All &
+\begin{tikzpicture}
+  \pic at (0,0) {chamber4};
+  \draw (0.75,1.25) -- (1.25,1.25) -- (1.25,0.75) -- (0.75,0.75) -- (0.75,1.25);
+  \draw (0.75,1.25) -- (0.5,1.5);
+  \draw (1.25,1.25) -- (1.5,1.5);
+  \draw (1.25,0.75) -- (1.5,0.5);
+  \draw (0.75,0.75) -- (0.5,0.5);
+  \draw[fill] (0.75,1.25) circle [radius=0.05];
+  \draw[fill] (1.25,1.25) circle [radius=0.05];
+  \draw[fill] (1.25,0.75) circle [radius=0.05];
+  \draw[fill] (0.75,0.75) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 6 & 0 \\
+1 & 1 & 1 \end{bmatrix}$
+& $x = d$
+$xm = b$
+\end{tabular}
+\end{table}
 
 \section{Future work}
 There are two related directions to take this work in the future.
