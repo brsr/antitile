@@ -1,0 +1,72 @@
+\begin{thebibliography}{10}
+
+\bibitem{brinkmann}
+Gunnar Brinkmann, Pieter Goetschalckx, and Stan Schein.
+\newblock Comparing the constructions of goldberg, fuller, caspar, klug and
+  coxeter, and a general approach to local symmetry-preserving operations.
+\newblock {\em Proc. R. Soc. A}, 473(2206):20170267, 2017.
+\newblock doi:10.1098/rspa.2017.0267.
+
+\bibitem{conway}
+John~H Conway, Heidi Burgiel, and Chaim Goodman-Strauss.
+\newblock Naming archimedean and catalan polyhedra and tilings.
+\newblock In {\em The symmetries of things}, chapter~21. AK Peters/CRC Press,
+  2016.
+
+\bibitem{coxeter71}
+Harold Scott~Macdonald Coxeter.
+\newblock Virus macromolecules and geodesic domes.
+\newblock {\em A spectrum of mathematics}, pages 98--107, 1971.
+
+\bibitem{coxeter73}
+Harold Scott~Macdonald Coxeter.
+\newblock Truncation.
+\newblock In {\em Regular polytopes}, chapter~8. Dover, 3 edition, 1973.
+
+\bibitem{dutour}
+Mathieu Dutour and Michel Deza.
+\newblock Goldberg-coxeter construction for $3$-and $4$-valent plane graphs.
+\newblock {\em The Electronic Journal of Combinatorics}, 11(1):20, 2004.
+
+\bibitem{grunbaum99}
+Branko Grunbaum.
+\newblock Acoptic polyhedra.
+\newblock {\em Contemporary Mathematics}, 223:163--200, 1999.
+
+\bibitem{grunbaum03}
+Branko Gr{\"u}nbaum.
+\newblock Are your polyhedra the same as my polyhedra?
+\newblock In Boris Aronov, Saugata Basu, János Pach, and Micha Sharir,
+  editors, {\em Discrete and computational geometry: The Goodman-Pollack
+  Festschrift}, pages 461--488. Springer, 2003.
+
+\bibitem{hart98}
+George~W Hart.
+\newblock Conway notation for polyhedra.
+\newblock {\em URL:
+  http://www.georgehart.com/virtual-polyhedra/conway\_notation.html}, 1998.
+
+\bibitem{hart00}
+George~W Hart.
+\newblock Sculpture based on propellorized polyhedra.
+\newblock {\em Proceedings of MOSAIC}, pages 61--70, 2000.
+\newblock http://www.georgehart.com/propello/propello.html.
+
+\bibitem{mcmullen}
+Peter McMullen and Egon Schulte.
+\newblock {\em Abstract regular polytopes}, volume~92 of {\em Encyclopedia of
+  Mathematics and Its Applications}.
+\newblock Cambridge University Press, 2002.
+
+\bibitem{antiprism}
+Adrian Rossiter.
+\newblock {\em Antiprism}.
+\newblock http://www.antiprism.com/.
+
+\bibitem{ziegler}
+G{\"u}nter~M Ziegler.
+\newblock Steinitz' theorem for 3-polytopes.
+\newblock In {\em Lectures on polytopes}, volume 152 of {\em Graduate Texts in
+  Mathematics}, chapter~4. Springer Science \& Business Media, 2012.
+
+\end{thebibliography}

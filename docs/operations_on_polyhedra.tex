@@ -1,5 +1,6 @@
 \documentclass{amsart}[12pt]
 \usepackage{longtable, latexsym, amsmath, amsfonts, tikz}
+\usepackage{natbib}
 \oddsidemargin=0in \evensidemargin=0in
 \textwidth=6.6in \textheight=8.7in
 
@@ -55,7 +56,7 @@ faces. (In most literature on abstract polytopes all elements of the poset are
 called (abstract) faces, but since this work is primarily concerned with
 polyhedra, it would be confusing.) The order relation $<$ on the poset
 represents incidence between elements: for example, a face is incident on an
-edge, which is incident on a vertex. \cite{arp}
+edge, which is incident on a vertex.\cite{mcmullen}
 \begin{enumerate}
   \item $P$ contains a least element with rank $-1$ and a greatest
   element with rank $n$. ($n$ is the rank of the abstract polytope.)
@@ -94,7 +95,7 @@ repeated points, digons, etc.
 An abstract polyhedron $P$ is an abstract polytope of rank 3. This generalizes
 things like convex polyhedra, tilings of the plane, and spherical polyhedra.
 Some of the properties above have more explicit consequences for
-polyhedra: \cite{grunbaum1}
+polyhedra: \cite{grunbaum03}
 \begin{itemize}
   \item Each edge is incident to 2 distinct vertices. This is the usual
   definition of edge, but here it is a consequence of earlier definitions.
@@ -147,7 +148,7 @@ An achiral polyhedron is one that has mirror symmetry: a chiral polyhedron is
 one that does not. Note that the particular handedness of a chiral polyhedron
 is a quality of the realization, not the underlying abstract structure.
 An acoptic polyhedron is (loosely) a polyhedron that does not
-self-intersect. \cite{grunbaum2} Its faces are simple polygons with straight
+self-intersect. \cite{grunbaum99} Its faces are simple polygons with straight
 edges that do not self-intersect (although they may be concave). A convex
 polyhedron is an acoptic polyhedron that is convex: any line between points on
 the surface of the polyhedron is contained in the interior of the polyhedron.
@@ -155,7 +156,7 @@ By Steinitz's theorem, the skeleton of every convex polyhedron is a
 3-vertex-connected planar graph. Furthermore, all convex polyhedra have a
 realization such that each edge is tangent to the unit sphere,
 each face is flat, and the centroid of the vertices lies at the origin. This is
-called the canonical realization.
+called the canonical realization. \cite{ziegler}
 
 An operator on polyhedra is simply a map $x : \mathcal{P} \to \mathcal{P}$,
 where $\mathcal{P}$ is the set of polyhedra. Operators which break the mirror
@@ -177,7 +178,7 @@ the discussion herein or will be applied.
 
 \subsection{Operations defined in Coxeter's Regular Polytopes}
 
-In Coxeter's classic text \cite{Coxeter8},
+In Coxeter's classic text \textit{Regular Polytopes}\cite{coxeter73},
 he defines a handful of operations on regular polytopes:
 \begin{itemize}
   \item The dual is defined in the usual way, compatible with how it was
@@ -208,16 +209,16 @@ of posets is the product of the $f$-polynomial of each poset.)
 \subsection{Conway's operations}
 Conway described a set of operations on polyhedra and a notation for describing
 those operations, with the intent of creating a systematic naming scheme for
-polyhedra. He used a prefix notation, where the rightmost element is a
-polyhedral seed and operators apply from right to left. Each operator is
+polyhedra.\cite{conway} He used a prefix notation, where the rightmost element
+is a polyhedral seed and operators apply from right to left. Each operator is
 assigned a letter and a name. So, for instance, $dO$ is the dual of a regular
 octahedron (i.e. a cube), and $taO$ is a truncated ambo octahedron, more
 commonly known as the truncated cuboctahedron. Conway's original set of
 operations is denoted with the letters $abdegjkmost$: a full list of their
 descriptions will be given later. These operations are sufficient to create all
 of the Archimedean and Catalan solids from the Platonic solids. Others have
-defined more operations. \cite{HartConway}\cite{HartPropeller}\cite{antiprism}
-In particular, Hart \cite{HartConway} defined $r$,
+defined more operations. \cite{hart98}\cite{hart00}\cite{antiprism}
+In particular, Hart \cite{hart98} defined $r$,
 which reverses the chirality of a polyhedra.
 
 Aside from $g, s, j$, and $a$, Conway's operations preserve the
@@ -250,8 +251,8 @@ polyhedron.
 
 \subsection{Goldberg-Coxeter operations}
 The Goldberg-Coxeter operation (GC operation) was defined by Deza and
-Dutour \cite{Deza2004}, based on the Goldberg polyhedra, the viral capsid
-structure defined by Coxeter \cite{Coxeter}, the geodesic domes of Buckminster
+Dutour \cite{dutour}, based on the Goldberg polyhedra, the viral capsid
+structure defined by Coxeter \cite{coxeter71}, the geodesic domes of Buckminster
 Fuller, and similar structures. Essentially it amounts to replacing the faces of
 a polyhedra with a section from a grid of triangular or square faces. Here the
 operation on triangle-faced polyhedra will be denoted $\Delta_{a,b}$, and on
@@ -365,7 +366,7 @@ digons. These elements can be eliminated in a systematic manner. We define a
 smoothing operator, $\$$, that transforms digons into single edges and handles
 degree-2 vertices by removing that vertex and merging the vertex's incident
 edges, as depicted in figure \ref{fig:smooth}. This is similar to the topic of
-homeomorphism in graph theory. Antiprism effectively smooths digons
+homeomorphism in graph theory: see \cite{ziegler} for context. Antiprism effectively smooths digons
 automatically by treating them as "explicit edges".
 
 \begin{figure}
@@ -575,175 +576,207 @@ example, the dual operation is defined for all posets. Finding the most general
 restriction on the poset for a certain operation may help us understand how to
 deal with quasipolyhedra.
 
-\begin{thebibliography}{1}
-\bibitem{grunbaum1} Branko Grunbaum. Are Your Polyhedra the Same as My
-  Polyhedra? Discrete and Computational Geometry: The Goodman-Pollack
-  Festschrift. Editors Boris Aronov, Saugata Basu, János Pach, Micha Sharir
-  pp 461-488
-\bibitem{grunbaum2} Branko Grunbaum. Acoptic Polyhedra. Advances in Discrete
-  and Computational Geometry, B. Chazelle, J.E. Goodman and R. Pollack, eds.,
-  Contemporary Mathematics vol. 223(1999). AMS, Providence, RI. Pp.163 - 199.
-\bibitem{arp} Peter McMullen, Egon Schulte. Abstract Regular Polytopes,
-  Encyclopedia of Mathematics and Its Applications Volume 92.
-  Cambridge University Press, 2002
-\bibitem{antiprism} http://www.antiprism.com/
-\bibitem{brinkmann} Brinkmann, G.; Goetschalckx, P.; Schein, S. (2017).
-  ``Goldberg, Fuller, Caspar, Klug and Coxeter and a general approach to local
-  symmetry-preserving operations''. Proceedings of the Royal Society A:
-  Mathematical, Physical and Engineering Sciences. 473 (2206): 20170267.
-  arXiv:1705.02848 Freely accessible. Bibcode:2017RSPSA.47370267B.
-  doi:10.1098/rspa.2017.0267.
-\bibitem{Deza2004} M. Deza and M. Dutour. Goldberg-Coxeter constructions for 3-
-   and 4-valent plane graphs. The Electronic Journal of Combinatorics,
-   11, 2004. R20.
-\bibitem{Goldberg} Goldberg, M, 1937. A class of multi-symmetric polyhedra.
-    Tohoku Mathematical Journal.
-\bibitem{Caspar} D.L.D. Caspar and A. Klug. Physical principles in the
-  construction of regular viruses. In Cold Spring Harb Symp Quant Biol.,
-  volume 27, pages 1–24, 1962.
-\bibitem{Coxeter} H.S.M. Coxeter. Virus macromolecules and geodesic domes.
-  In J.C. Butcher, editor, A spectrum of mathematics, pages 98–107.
-  Oxford University Press, 1971.
-\bibitem{Coxeter8} H.S.M. Coxeter. Truncation. In Regular Polytopes, 3rd ed, Dover, 1973.
-\bibitem{HartPropeller} Hart, G. W. (2000) Sculpture Based on Propellorized
-  Polyhedra. Proceedings of MOSAIC 2000, Seattle, Washington, August 2000,
-  pp. 61-70.  http://www.georgehart.com/propello/propello.html
-\bibitem{HartConway} Hart, G. W. Conway Notation for Polyhedra.
-  http://www.georgehart.com/virtual-polyhedra/conway\_notation.html
-\end{thebibliography}
+
+\bibliography{operations_on_polyhedra}{}
+\bibliographystyle{plain}
 
 \appendix
+\section{\texttt{wythoff} strings for new operators in this text}
+\begin{itemize}
+  \item Opposite-Lace $L_{-1}$: \texttt{[V, E2F] 1F, 1e1\_0e, 0\_1f1f, 1E}
+  \item Ethel $E$: \texttt{[V, VE, VF] 0\_1\_2e1e, 2F, 1\_2v2f}
+  \item Waffle $W$: \texttt{[V, E, F, V2E, VF] 0\_4\_3f4f, 2\_4\_3v3\_4v, 3E}
+  \item Bowtie $B$: \texttt{[V, E, F, VE, EF] 1\_3\_4, 0\_3\_4\_2e4\_1\_3e}
+  \item Lozenge: \texttt{[V, EF] 0\_1F, 1\_0f1f, 1E}
+  \item Hollow: \texttt{[V, VF] 0\_1v1\_0v, 1v1f, 1V}
+\end{itemize}
+
 \section{Tables of operators}
+
+Items marked with a dagger (\dag) indicate an operator that may produce non-convex polyhedra from convex polyhedra. Items marked with a double dagger (\ddag) indicate an operator that does not preserve topology: it may produce polyhedra with holes, or disjoint polyhedra. The origin of the operators is indicated like so;
+\texttt{c}: Conway's original set \cite{conway};
+\texttt{h}: George Hart \cite{hart00}\cite{hart98};
+\texttt{a}: Antiprism extensions\cite{antiprism};
+\texttt{g}: Goldberg-Coxeter, as per the section earlier;
+\texttt{n}: new in this text.
+
 \begin{longtable}{c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{3cm}}
-    \caption{Operators organized by associates. c=Conway's original, h=George
-    Hart, a=antiprism extensions}\\
+    \caption{Operators with linear represenations, organized by associates.}
+    \\
     $M_x$ & $x$  & $xd$ & $dx$ & $dxd$ & Notes
     \endhead \hline
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & chiral, h
+    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & chiral, \texttt{h}
     \\
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & $d$: c, $S$: a
+    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & $d$: \texttt{c}, $S$: \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 2 & 0 \\
-    0 & 1 & 0 \end{bmatrix}$& Join: $j=\Box_{1,1}$ & $j$ & Ambo: $a$ & $a$ & c
+    0 & 1 & 0 \end{bmatrix}$& Join: $j=\Box_{1,1}$ & $j$ ($@j$) & Ambo: $a$ & $a$ ($@a$)& \texttt{c}
     \\
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 3 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & $k, t$: c, $n, z$: a
+    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & $k, t$: c, $n, z$: \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 1 & 1 \\
     0 & 4 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Ortho: $o=jj=\Box_{2,0}$ & $o$ & Expand: $e=aa$ & $e$ & c
+    0 & 2 & 0 \end{bmatrix}$& Ortho: $o=jj=\Box_{2,0}$ & $o$ & Expand: $e=aa$ & $e$ & \texttt{c}
     \\
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 5 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & chiral, c
+    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & chiral, \texttt{c}
     \\
     $\begin{bmatrix}
     1 & 1 & 1 \\
     0 & 6 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Meta: $m=kj$ & $m$ & Bevel: $b=ta$ & $b$ & c
+    0 & 4 & 0 \end{bmatrix}$& Meta: $m=kj$ & $m$ & Bevel: $b=ta$ & $b$ & \texttt{c}
     \\
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 4 & 0 \\
-    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: $u =\Delta_{2,0}$ & a
+    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: $u =\Delta_{2,0}$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Propeller: $p=\Box_{2,1}$ & $dp=pd$ & $pd=dp$ & $p$ & chiral, h
+    0 & 2 & 1 \end{bmatrix}$& Propeller: $p=\Box_{2,1}$ & $dp=pd$ & $pd=dp$ & $p$ & chiral, \texttt{h}
     \\
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Loft: $l$ & $ld$ & $dl$ & $dld$ & a
+    0 & 2 & 1 \end{bmatrix}$& Loft: $l$ & $ld$ & $dl$ & $dld$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 3 & 0 \\
     0 & 6 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Quinto: $q$ & $qd$ & $dq$ & $dqd$ & a
+    0 & 2 & 1 \end{bmatrix}$& Quinto: $q$ & $qd$ & $dq$ & $dqd$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 6 & 0 \\
     0 & 3 & 1 \end{bmatrix}$& Joined-Lace: $L_0$ & $L_0d$ & $dL_0$ & $dL_0d$
-    & a
+    & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 7 & 0 \\
-    0 & 4 & 1 \end{bmatrix}$& Lace: $L$ & $Ld$ & $dL$ & $dLd$ & a
+    0 & 4 & 1 \end{bmatrix}$& Lace: $L$ & $Ld$ & $dL$ & $dLd$ & \texttt{a}
+    \\
+    $\begin{bmatrix}
+    1 & 2 & 0 \\
+    0 & 7 & 0 \\
+    0 & 4 & 1 \end{bmatrix}$& Opposite-Lace: $L_{-1}$ & $L_{-1}d$ & $dL_{-1}$ & $dL_{-1}d$ & \texttt{n}
     \\
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 7 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Medial: $M$ & $Md$ & $dM$ & $dM d$ & a
+    0 & 4 & 0 \end{bmatrix}$& Medial: $M$ & $Md$ & $dM$ & $dM d$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 7 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Stake: $K$ & $Kd$ & $dK$ & $dKd$ & a
+    0 & 4 & 0 \end{bmatrix}$& Stake: $K$ & $Kd$ & $dK$ & $dKd$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & 4 & 0 \\
     0 & 7 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & chiral, a
+    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & chiral, \texttt{a}
+    \\
+    $\begin{bmatrix}
+    1 & 4 & 0 \\
+    0 & 8 & 0 \\
+    0 & 3 & 1 \end{bmatrix}$& Ethel: $E$ & $Ed$ & $dE$ & $dEd$ & \texttt{n}
     \\
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 8 & 0 \\
-    0 & 5 & 0 \end{bmatrix}$& Join-kis-kis\footnote{Antiprism calls this "joined-medial".}: $J$ & $Jd$ & $dJ$ & $dJd$ & a
+    0 & 5 & 0 \end{bmatrix}$& Join-kis-kis\footnote{Antiprism calls this "joined-medial".}: $J$ & $Jd$ & $dJ$ & $dJd$ & \texttt{a}
+    \\
+    $\begin{bmatrix}
+    1 & 4 & 1 \\
+    0 & 9 & 0 \\
+    0 & 4 & 0 \end{bmatrix}$& Waffle: $W$ & $Wd$ & $dW$ & $dWd$ & \texttt{n}
+    \\
+    $\begin{bmatrix}
+    1 & 5 & 1 \\
+    0 & 10 & 0 \\
+    0 & 4 & 0 \end{bmatrix}$& Bowtie: $B$ & $Bd$ & $dB$ & $dBd$ & \texttt{n}
     \\
     $\begin{bmatrix}
     1 & 3 & 1 \\
     0 & 10 & 0 \\
-    0 & 6 & 0 \end{bmatrix}$& Cross: $X$ & $Xd$ & $dX$ & $dXd$ & a
+    0 & 6 & 0 \end{bmatrix}$& Cross: $X$ & $Xd$ & $dX$ & $dXd$ & \texttt{a}
     \\
     $\begin{bmatrix}
     1 & n & 1 \\
     0 & 3n+3 & 0 \\
-    0 & 2n+2 & 0 \end{bmatrix}$& $m_n$ & $m_n d$ & $b_n$ & $b_n d$ & a, $n \ge 0$
+    0 & 2n+2 & 0 \end{bmatrix}$& $m_n$ & $m_n d$ & $b_n$ & $b_n d$ & \texttt{a}, $n \ge 0$
     \\
     $\begin{bmatrix}
     1 & n & 1 \\
     0 & 3n+1 & 0 \\
-    0 & 2n & 0 \end{bmatrix}$& $M_n$ & $M_n d$ & $dM_n$ & $dM_n d$ & a, $n \ge 1$
+    0 & 2n & 0 \end{bmatrix}$& $M_n$ & $M_n d$ & $dM_n$ & $dM_n d$ &
+    \texttt{a}, $n \ge 1$
     \\
     $\begin{bmatrix}
     1 & \frac{T}{2} - 1 & 1 \\
     0 & T & 0 \\
-    0 & \frac{T}{2} & 0 \end{bmatrix}$& $\Box_{a,b}$ & $\Box_{a,b}$ & $d\Box_{a,b}$ & $d\Box_{a,b}$ & $a \equiv b \mod 2$, $T=a^2+b^2$. a\footnote{Antiprism implements $\Box$, but only where $b=0$: it calls it $o_n$.}
+    0 & \frac{T}{2} & 0 \end{bmatrix}$& $\Box_{a,b}$ & $\Box_{a,b}$ &
+    $d\Box_{a,b}$ & $d\Box_{a,b}$ & $a \equiv b \mod 2$, $T=a^2+b^2$.
+    \texttt{g}, \texttt{a}\footnote{Antiprism implements $\Box$,
+    but only where $b=0$: it calls it $o_n$.}
     \\
     $\begin{bmatrix}
     1 & \frac{T-1}{2} & 0 \\
     0 & T & 0 \\
-    0 & \frac{T-1}{2} & 1 \end{bmatrix}$& $\Box_{a,b}$ & $d\Box_{a,b}$ & $d\Box_{a,b}$ & $\Box_{a,b}$ & $a \not\equiv b \mod 2$, $T=a^2+b^2$
+    0 & \frac{T-1}{2} & 1 \end{bmatrix}$& $\Box_{a,b}$ & $d\Box_{a,b}$ &
+    $d\Box_{a,b}$ & $\Box_{a,b}$ & $a \not\equiv b \mod 2$,
+    $T=a^2+b^2$. \texttt{g}
     \\
     $\begin{bmatrix}
     1 & \frac{T}{3} - 1 & 1 \\
     0 & T & 0 \\
-    0 & \frac{2T}{3} & 0 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ & $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \equiv b \mod 3$, $T=a^2+ab+b^2$
+    0 & \frac{2T}{3} & 0 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ &
+    $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \equiv b \mod 3$, $T=a^2+ab+b^2$.
+    \texttt{g}
     \\
     $\begin{bmatrix}
     1 & \frac{T-1}{3} & 0 \\
     0 & T & 0 \\
-    0 & 2\frac{T-1}{3} & 1 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ & $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \not\equiv b \mod 3$, $T=a^2+ab+b^2$
-
+    0 & 2\frac{T-1}{3} & 1 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ &
+    $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \not\equiv b \mod 3$,
+    $T=a^2+ab+b^2$. \texttt{g}
+    \\ \hline
+    $\begin{bmatrix}
+    1 & 2 & 0 \\
+    0 & 5 & 0 \\
+    0 & 2 & 1 \end{bmatrix}$& Lozenge & & & & \texttt{n}\dag
+    \\ \hline
+    $\begin{bmatrix}
+    1 & 2 & 0 \\
+    0 & 7 & 0 \\
+    1 & 3 & 0 \end{bmatrix}$& Hollow & & & & \texttt{n}\ddag
+    \\
+    $\begin{bmatrix}
+    n & 0 & 0 \\
+    0 & n & 0 \\
+    0 & 0 & n \end{bmatrix}$& $n$-Copy  & & & & \texttt{n}, \ddag for $n>1$
 \end{longtable}
 
-Items marked with a dagger (\dag) indicate an operator that may produce non-convex polyhedra from convex polyhedra. Permutations in parentheses, such as (CBA), indicate a permutation that produces the chiral pair of the depicted operator. With the exception of some named operators, if $x$ is shown, $xd$ is not, since its information can be easily determined from the information for
-$x$.
+In the following tables, permutations in parentheses, such as (CBA), indicate a
+permutation that produces the chiral pair of the depicted operator. With the
+exception of some named operators, if $x$ is shown, $xd$ is not, since its
+information can be easily determined from the information for $x$. An arbitrary 
+named member of the cohort is chosen to label the cohort, e.g. the $a$-cohort.
 
 \begin{table}
 \caption{$a$-cohort of operators on polyhedra}
@@ -1246,7 +1279,7 @@ $\begin{bmatrix}
 
 
 \begin{table}
-\caption{$l2$-cohort of operators on polyhedra}
+\caption{$l$-cohort of operators on polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -1492,7 +1525,7 @@ $\begin{bmatrix}
 \end{table}
 
 \begin{table}
-\caption{$l$-cohort of operators on polyhedra}
+\caption{$q$-cohort of operators on polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -1545,7 +1578,7 @@ $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 6 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-&
+& $x@m = q$
 \\ & & ACB & $k$&
 $\begin{bmatrix}
 1 & 0 & 1 \\
@@ -1602,7 +1635,7 @@ $\begin{bmatrix}
 1 & 2 & 0 \\
 0 & 6 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
-&
+& $x@m = dqd$
 \\ & & BCA & $t$&
 $\begin{bmatrix}
 0 & 2 & 0 \\
@@ -1838,8 +1871,159 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
+
 \begin{table}
-\caption{$L$-cohort of operators on polyhedra}
+\caption{$M$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (1.275, 0.75) circle [radius=0.05];
+\draw[fill] (1.7, 0) circle [radius=0.05];
+\draw (0, 0) -- (1.275, 0.75) -- (1.7, 0) ;
+\draw (1.275, 0.75) -- (0.425, 0.75) ;
+
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 1 & 0 & 0 & 1/2 \\
+0 & 0 & 0 & 0 & 2 \\
+0 & 0 & 1 & -1 & ? \end{bmatrix}$ &
+ABC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (1.33,1.66) -- (0,1) -- (1.33,0.33);
+\draw (0.66,1.66) -- (2,1) -- (0.66,0.33);
+\draw (1,0.5) -- (1,1.5);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 7 & 0 \\
+0 & 4 & 1 \end{bmatrix}$
+& $\$x@m = L_{-1}$
+\\ & & BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (0.66,1) -- (1,2) -- (1.33,1) -- (1,0);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (0.66,1) circle [radius=0.05];
+\draw[fill] (1.33,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 1 \\
+0 & 7 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m = M$
+\\ & & BAC &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,0.5) -- (1.5,1.5);
+\draw (0.5,1.5) -- (1.5,0.5);
+\draw (0,1) -- (0.5,0.5) -- (1.5,0.5) --
+      (2,1) -- (1.5,1.5) -- (0.5,1.5) -- (0,1);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 3 & 0 \\
+0 & 8 & 0 \\
+0 & 4 & 1 \end{bmatrix}$
+& $x@m = $
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw[fill] (0.425, 0.75) circle [radius=0.05];
+\draw[fill] (0.85, 0) circle [radius=0.05];
+\draw (0.85, 1.5) -- (0.425, 0.75) -- (0.85, 0) -- (1.275, 0.75);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 & 0 & 1/2 \\
+0 & 0 & 0 & 0 & 2 \\
+1 & 1 & 0 & -1 & ? \end{bmatrix}$ &
+BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (1,1.33) -- (1.5,1.5) -- (1.5,0.5) -- (1,0.66) --
+      (1,1.33) -- (0.5,1.5) -- (0.5,0.5) -- (1,0.66);
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1,1.33) circle [radius=0.05];
+\draw[fill] (1,0.66) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 7 & 0 \\
+1 & 2 & 1 \end{bmatrix}$
+& $\$x@m = dM$
+\\ & & CBA&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (1,1.33) -- (1.5,1.5) -- (2,1) -- (1.5,0.5) -- (1,0.66) --
+      (1,1.33) -- (0.5,1.5) -- (0,1) -- (0.5,0.5) -- (1,0.66);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (1,1.33) circle [radius=0.05];
+\draw[fill] (1,0.66) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 4 & 0 \\
+0 & 7 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+& $\$x@m = dL_{-1}d$
+\\ & & CAB &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (0.66,1);
+\draw (2,1) -- (1.33,1);
+\draw (0.66,0.33) -- (1.33,1) -- (0.66,1.66);
+\draw (1.33,0.33) -- (0.66,1) -- (1.33,1.66);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (0.66,1) circle [radius=0.05];
+\draw[fill] (1.33,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0.66) circle [radius=0.05];
+\draw[fill] (1,1.33) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 4 & 0 \\
+0 & 8 & 0 \\
+0 & 3 & 1 \end{bmatrix}$
+& $x@m = $
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{$E$-cohort of operators on polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -1874,7 +2058,7 @@ $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
-& $x@m$
+& $x@m = dEd$
 \\ & & ACB & \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
@@ -1983,7 +2167,7 @@ $\begin{bmatrix}
 1 & 4 & 0 \\
 0 & 8 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
-& $x@m$
+& $x@m = E$
 \end{tabular}
 \end{table}
 
@@ -2138,6 +2322,304 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 1 & 2 & 1 \end{bmatrix}$
 & $x@m = dJ$
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{$W$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (0.425, 0.75) circle [radius=0.05];
+\draw[fill] (0.85, 0) circle [radius=0.05];
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw[fill] (1.7, 0) circle [radius=0.05];
+\draw (0,0) -- (0.85, 1.5);
+\draw (0.425, 0.75) -- (0.85, 0) -- (1.7, 0);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & 1/2 \\
+0 & 0 & 2 \\
+0 & -1 & ? \end{bmatrix}$ &
+ABC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw (0.5,0.5) -- (0.66,1) -- (0.5,1.5);
+\draw (1.5,0.5) -- (1.33,1) -- (1.5,1.5);
+\draw (0.66,1) -- (1.33,1);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.33,1) circle [radius=0.05];
+\draw[fill] (0.66,1) circle [radius=0.05];
+
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 4 & 1 \\
+0 & 9 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m = W$
+\\ & & BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (1,2) -- (1,0);
+\draw (0,1) -- (0.5,0.5) -- (1.5,0.5) --
+      (2,1) -- (1.5,1.5) -- (0.5,1.5) -- (0,1);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+&
+$\begin{bmatrix}
+1 & 4 & 1 \\
+0 & 9 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m$
+\\ & & CAB &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (2,1) -- (0,1);
+\draw (1,1.5) -- (0.5,1) -- (1,0.5) -- (1.5,1) -- (1,1.5);
+\draw (1,2) -- (1,1.5);
+\draw (1,0) -- (1,0.5);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\end{tikzpicture}
+&
+$\begin{bmatrix}
+1 & 4 & 1 \\
+0 & 9 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (1.275, 0.75) circle [radius=0.05];
+\draw[fill] (0.85, 0) circle [radius=0.05];
+\draw (1.275, 0) -- (1.275, 0.75) -- (0.85, 0) -- (0.213,0.375);
+\draw (1.275, 0.75) -- (0.638,1.125);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & 1/2 \\
+0 & 0 & 2 \\
+0 & -1 & ? \end{bmatrix}$ &
+ABC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (1,0.5) -- (1,1.5);
+\draw (0.25,1.25) -- (1.25,0.25);
+\draw (0.25,0.75) -- (1.25,1.75);
+
+\draw (1.75,1.25) -- (0.75,0.25);
+\draw (1.75,0.75) -- (0.75,1.75);
+
+
+\draw[fill] (1,1.5) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 9 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+& $\$x@m = dW$
+\\ & & BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,1) -- (1.5,1);
+\draw (0.25,1.25) -- (0.5,1) -- (0.25,0.75);
+\draw (1.75,1.25) -- (1.5,1) -- (1.75,0.75);
+\draw (0.5,0.5) -- (1.5,0.5) --
+      (1.5,1.5) -- (0.5,1.5) -- (0.5,0.5);
+\draw[fill] (0.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+&
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 9 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+& $\$x@m$
+\\ & & CAB &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,0.5) -- (1.5,0.5) --
+      (1.5,1.5) -- (0.5,1.5) -- (0.5,0.5);
+\draw (1,0.75) -- (1,1.25);
+\draw (0.5,0.5) -- (1,0.75) -- (1.5,0.5);
+\draw (0.5,1.5) -- (1,1.25) -- (1.5,1.5);
+\draw[fill] (1,0.75) circle [radius=0.05];
+\draw[fill] (1,1.25) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\end{tikzpicture}
+&
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 9 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+& $\$x@m$
+\end{tabular}
+\end{table}
+
+\begin{table}%verify that the orientation is the same as in wythoff
+\caption{$B$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+  \draw[fill] (1.5,1.5) circle [radius=0.05];
+  \draw[fill] (1.5,0.5) circle [radius=0.05];
+  \draw[fill] (0.5,0.5) circle [radius=0.05];
+  \draw[fill] (0.5,1.5) circle [radius=0.05];
+  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+  \draw (0.5,1.5) -- (1.5,1.5);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & 1/2 \\
+0 & 0 & 3/2 \\
+0 & -1 & 2 \end{bmatrix}$ &
+BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw (0.5,1) -- (1,1.5);
+\draw (1.5,1) -- (1,0.5);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 5 & 1 \\
+0 & 10 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+&  $x@m = B$
+\\ & & ABC &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+  \draw (1,0) -- (1,2);
+  \draw (0.5,1.5) -- (1,1.5);
+  \draw (1.5,0.5) -- (1,0.5);
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 4 & 1 \\
+0 & 9 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1) circle [radius=0.05];
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw (1,1) -- (1,1.5);
+  \draw (0.5,1.5) -- (1,1) -- (1.5,1.5);
+  \draw (0.75,1.75) -- (1,1.5) -- (1.25,1.75);
+  \draw (0.5,0.5) -- (1,1) -- (1.5,0.5);
+  \draw (0.75,0.25) -- (1,1) -- (1.25,0.25);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & -1 & 2 \\
+0 & 0 & 3/2 \\
+1 & 0 & 1/2 \end{bmatrix}$ &
+BCA &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
+\draw (1.5,0.5) -- (1.25,0.75);
+\draw (0.5,1.5) -- (0.75,1.25);
+\draw (0.5,0.5) -- (0.75,1.25) -- (1.5,1.5) -- (1.25,0.75) -- (0.5,0.5);
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.75,1.25) circle [radius=0.05];
+\draw[fill] (1.25,0.75) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 5 & 0 \\
+0 & 10 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+& $x@m = dB$
+\\ & & ABC &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw (0.5,0.5) -- (0.5,1.5) -- (1.5,1) -- (1.75,0.75);
+  \draw (1.5,1.5) -- (1.5,0.5) -- (0.5,1) -- (0.25,1.25);
+  \draw (1.75,1.25) -- (1.5,1) -- (0.5,1) -- (0.25,0.75);
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 9 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+&  $\$x@m$
 \end{tabular}
 \end{table}
 
