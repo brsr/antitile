@@ -50,16 +50,16 @@ The motivations for this line of inquiry are:
 
 \section{Definitions}
 
-An abstract polytope $P$ is a ranked poset satisfying the properties below.
-Elements of rank $0$ may be called vertices; of rank $1$, edges; of rank $2$,
-faces. (In most literature on abstract polytopes all elements of the poset are
-called (abstract) faces, but since this work is primarily concerned with
-polyhedra, it would be confusing.) The order relation $<$ on the poset
-represents incidence between elements: for example, a face is incident on an
-edge, which is incident on a vertex.\cite{mcmullen}
+An \textit{abstract} polytope $P$ is a ranked poset satisfying the properties
+below. Elements of rank $0$ may be called \text{vertices}; of rank $1$,
+\textit{edges}; of rank $2$, \text{faces}. (In most literature on abstract
+polytopes all elements of the poset are called (abstract) faces, but since this
+work is primarily concerned with polyhedra, it would be confusing.) The order
+relation $<$ on the poset represents incidence between elements: for example,
+a face is incident on an edge, which is incident on a vertex.\cite{mcmullen}
 \begin{enumerate}
-  \item $P$ contains a least element with rank $-1$ and a greatest
-  element with rank $n$. ($n$ is the rank of the abstract polytope.)
+  \item $P$ contains a least element $\bot$ with rank $-1$ and a greatest
+  element $\top$ with rank $n$. ($n$ is the rank of the abstract polytope.)
   \item Each flag of $P$ has the same length and includes the least and greatest
   elements. (A flag is a series of incident elements from the least element to
   the greatest)
@@ -69,33 +69,39 @@ edge, which is incident on a vertex.\cite{mcmullen}
   and an element $C$ has rank $k+1$, there are exactly $2$ elements $B$ of
   rank $k$ such that $A < B < C$.
 \end{enumerate}
-Occasionally a structure that violates one of these properties may be useful;
-these will be discussed as they appear. The skeleton of a polytope is the
-(possibly multi-) graph formed by its vertices and edges.
+Occasionally a poset structure that violates one of these properties may be
+useful; these will be discussed as they appear. The skeleton of a polytope is
+the (possibly multi-) graph formed by its vertices and edges.
 The dual of an abstract polytope is simply the abstract polytope with its order
 and rank reversed. (This corresponds to the usual geometric notion of dual.)
 
-The $f$-vector of a polytope is the vector of counts of elements of each rank.
-Normally the greatest and least elements are omitted (since they're always 1),
-and the vector has the form $(a_0, \ldots, a_{d-1})$ where $a_i$ is the count
-of elements of rank $i$. The extended $f$-vector includes those elements:
-$(a_{-1}=1, a_0, \ldots, a_{d-1}, a_d=1)$. The vector is half-extended if
-only one of those endpoints is included. As such, the (extended) $f$-vector of
-the dual of a polytope is the (extended) $f$-vector of the original polytope,
-reversed. The $f$-polynomial is $F(x) = \sum_{i=-1}^d a_i x^{i+1}$.
-The Euler characteristic of a polytope is the alternating
-sum of the elements of the $f$-vector: $\chi = a_0 - a_1 + a_2 \ldots$.
+An element $a$ of a poset with least element $\bot$ (and therefore an abstract
+polytope) is an \textit{atom} if $\bot < a$ and there is no $x$ such that
+$\bot < x < a$. A poset is \textit{atomistic} if every
+element can be described unambiguously as a unique set of atoms.
 
-A realization of an abstract polytope is an abstract polytope $P$ mapped into
-a topological space, usually, but not necessarily, $\mathbb{R}^n$. Some
-realizations may be called faithful, which is not consistently defined, but
-usually means that the polytope does not have self-intersections,
+The $f$\textit{-vector} of a polytope is the vector of counts of elements of
+each rank. Normally the greatest and least elements are omitted (since they're
+always 1), and the vector has the form $(a_0, \ldots, a_{d-1})$ where $a_i$ is
+the count of elements of rank $i$. The \textit{extended} $f$-vector includes
+those elements: $(a_{-1}=1, a_0, \ldots, a_{d-1}, a_d=1)$. The vector is
+\textit{left/right half-extended} if only one of those endpoints is included.
+As such, the (extended) $f$-vector of the dual of a polytope is the (extended)
+$f$-vector of the original polytope, reversed. The $f$-polynomial is
+$F(x) = \sum_{i=-1}^d a_i x^{i+1}$. The \textit{Euler characteristic} of a
+polytope is the alternating sum of the elements of the $f$-vector:
+$\chi = a_0 - a_1 + a_2 \ldots$.
+
+A \textit{realization} of an abstract polytope is an abstract polytope $P$
+mapped into a topological space, usually, but not necessarily, $\mathbb{R}^n$.
+Some realizations may be called \textit{faithful}, which is not consistently
+defined, but usually means that the polytope does not have self-intersections,
 repeated points, digons, etc.
 
-An abstract polyhedron $P$ is an abstract polytope of rank 3. This generalizes
-things like convex polyhedra, tilings of the plane, and spherical polyhedra.
-Some of the properties above have more explicit consequences for
-polyhedra: \cite{grunbaum03}
+An \textit{abstract polyhedron} $P$ is an abstract polytope of rank 3. This
+generalizes things like convex polyhedra, tilings of the plane,
+and spherical polyhedra. Some of the properties above have more
+explicit consequences for polyhedra: \cite{grunbaum03}
 \begin{itemize}
   \item Each edge is incident to 2 distinct vertices. This is the usual
   definition of edge, but here it is a consequence of earlier definitions.
@@ -105,12 +111,12 @@ polyhedra: \cite{grunbaum03}
   partial tilings of the plane (where fewer than 2 faces may meet at an edge).
   \item The faces may be self-intersecting, but may not contain interior holes.
 \end{itemize}
-The degree of a vertex is the number of edges to which it is incident. The
-degree of a face is the number of edges which are incident to it, i.e. its
-number of sides. (An edge of a polyhedron is always incident to 2 faces and 2
-vertices, so defining degree for edges is not useful here, although it is for
-higher polytopes.)
-Abstract polyhedra permit faces of degree 2, called digons. Digons are
+The \textit{degree of a vertex} is the number of edges to which it is incident.
+The \textit{degree of a face} is the number of edges which are incident to it,
+i.e. its number of sides. (An edge of a polyhedron is always incident to 2
+faces and 2 vertices, so defining degree for edges is not useful here, although
+it is for higher polytopes.)
+Abstract polyhedra permit faces of degree 2, called \textit{digons}. Digons are
 disallowed by many definitions of polyhedra, but appear in spherical polyhedra
 (for example). Digons occur naturally in the study of operations on polyhedra.
 The count of vertices, edges, and faces is be denoted $v, e, f$. The Euler
@@ -118,16 +124,23 @@ characteristic is $\chi = v - e + f$. The count of vertices or faces of a
 certain degree is denoted $v_i$ and $f_i$ where $i$ is the degree, such that
 $\sum_i v_i = v$ and $\sum_i f_i = f$.
 
-The term polyhedron here will mean ``realization of an abstract polyhedron.''
-Unless otherwise specified, polyhedra here do not require distinct vertices,
-convex faces, straight edges, non-intersecting faces, flat faces, or other
-things that may be required of other classes of polyhedra. This might seem
-odd if you're used to standard polyhedra, but examples appear naturally: see
-for example Figure \ref{fig:circlesquare}, which is a common motif in quilting.
-We won't make much
-use of abstract polyhedra directly, but we need them as a theoretical
-underpinning. A structure that resembles a polyhedron but does not satisfy the
-axioms of an abstract polytope is here called a quasipolyhedron.
+The term \textit{polyhedron} here will mean ``realization of an abstract
+polyhedron.'' Unless otherwise specified, polyhedra here do not require
+distinct vertices, convex faces, straight edges, non-intersecting faces, flat
+faces, or other things that may be required of other classes of polyhedra. This
+might seem odd if you're used to standard polyhedra, but examples appear in the
+world. Lu and Steinhardt \cite{lu07} assert that the girih patterns in Islamic
+art are based on a particular set of tiles, one of which is a concave polygon.
+For a more mundane example, Figure \ref{fig:circlesquare}, with digons and
+concave quadrilaterals, appears on the author's bedspread.
+
+We won't make much use of abstract polyhedra directly, but we need them as a
+theoretical underpinning. A structure that resembles a polyhedron but does not
+satisfy the axioms of an abstract polytope is here called a quasipolyhedron.
+Examples of quasipolyhedra include the monogonal dihedron ($f$-vector
+$[1,1,2]$), its dual the digonal hosohedron ($[2,1,1]$), and the monohedron
+($[1,0,1]$), all spherical "polyhedra" that violate the diamond property.
+
 \begin{figure}
 \begin{tikzpicture}
 \draw (-2,-1.4142) arc [radius=1.4142, start angle=-90, end angle= 90];
@@ -138,30 +151,34 @@ axioms of an abstract polytope is here called a quasipolyhedron.
   \draw (-1.4142 + \x,2) arc [radius=1.4142, start angle=-180, end angle= 0];
 }
 \end{tikzpicture}
-
 \caption{A tiling of the plane created by overlapping circles, consisting of
 digons and concave quadrilaterals with curved edges.}
 \label{fig:circlesquare}
 \end{figure}
 
-An achiral polyhedron is one that has mirror symmetry: a chiral polyhedron is
-one that does not. Note that the particular handedness of a chiral polyhedron
-is a quality of the realization, not the underlying abstract structure.
-An acoptic polyhedron is (loosely) a polyhedron that does not
-self-intersect. \cite{grunbaum99} Its faces are simple polygons with straight
-edges that do not self-intersect (although they may be concave). A convex
-polyhedron is an acoptic polyhedron that is convex: any line between points on
-the surface of the polyhedron is contained in the interior of the polyhedron.
-By Steinitz's theorem, the skeleton of every convex polyhedron is a
-3-vertex-connected planar graph. Furthermore, all convex polyhedra have a
-realization such that each edge is tangent to the unit sphere,
-each face is flat, and the centroid of the vertices lies at the origin. This is
-called the canonical realization. \cite{ziegler}
+An \textit{orientable} polyhedron is one where each face's vertices may be assigned a cyclic order such that each edge, say with vertices $a$ and $b$, has an order of $a$ to $b$ in one face and the reverse order $b$ to $a$ in the other. A polyhedron that is not orientable is \textit{non-orientable}. All polyhedra with an odd Euler characteristic are non-orientable, e.g. the hemicuboctahedron. That said, all non-orientable polyhedra have an orientable double cover that is connected. (An orientable polyhedron also has an orientable double over, consisting of two disjoint copies of the original polyhedron.)
 
-An operator on polyhedra is simply a map $x : \mathcal{P} \to \mathcal{P}$,
-where $\mathcal{P}$ is the set of polyhedra. Operators which break the mirror
-symmetry of a polyhedron are called chiral: ones that preserve it are achiral.
-We'll often apply operators to a restricted set of polyhedra, e.g. convex
+An \textit{achiral polyhedron} is one that has mirror symmetry:
+a \textit{chiral polyhedron} is one that does not. Note that the particular
+handedness of a chiral polyhedron is a quality of the realization, not the
+underlying abstract polyhedron.
+Also note that chirality depends on the space the polyhedron is embedded in:
+polyhedra that are chiral in $\mathbb{R}^3$ are not in $\mathbb{R}^4$.
+
+An \textit{acoptic polyhedron} is (loosely) a polyhedron that does not
+self-intersect. \cite{grunbaum99} Its faces are simple polygons with straight
+edges that do not self-intersect (although they may be concave). A
+\textit{convex polyhedron} is an acoptic polyhedron that is convex: any line
+between points on the surface of the polyhedron is contained in the interior of
+the polyhedron. By Steinitz's theorem, the skeleton of every convex polyhedron
+is a 3-vertex-connected planar graph. Furthermore, all convex polyhedra have a
+realization such that each edge is tangent to the unit sphere, each face is
+flat, and the centroid of the vertices lies at the origin.\cite{ziegler}
+This is called the \textit{canonical realization}.
+
+An \textit{operator on polyhedra} is simply a map $x : \mathcal{P} \to
+\mathcal{P}$, where $\mathcal{P}$ is the set of polyhedra. We'll often apply
+operators to a restricted set of polyhedra, e.g. convex polyhedra, orientable
 polyhedra, or polyhedra with triangular faces. Sometimes we will look at maps
 satisfying $x : \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ and
 $\mathcal{Y}$ are different subsets of polyhedra: we will still call these
@@ -224,7 +241,7 @@ which reverses the chirality of a polyhedra.
 Aside from $g, s, j$, and $a$, Conway's operations preserve the
 symmetry of the resultant polyhedra. $g$ and $s$ are achiral, so
 do not preserve mirror symmetry. $j$ and $a$ actually increase
-the symmetry: in fact, it is possible to express the other 4 Platonic solids
+the symmetry: in fact, the other 4 Platonic solids can be expressed
 in terms of the tetrahedron $T$ using $j$ and $a$.
 
 Some of Conway's operations can be expressed in terms of other operations:
@@ -250,24 +267,26 @@ Operations like this do not in general preserve the symmetry of the seed
 polyhedron.
 
 \subsection{Goldberg-Coxeter operations}
-The Goldberg-Coxeter operation (GC operation) was defined by Deza and
-Dutour \cite{dutour}, based on the Goldberg polyhedra, the viral capsid
-structure defined by Coxeter \cite{coxeter71}, the geodesic domes of Buckminster
-Fuller, and similar structures. Essentially it amounts to replacing the faces of
-a polyhedra with a section from a grid of triangular or square faces. Here the
-operation on triangle-faced polyhedra will be denoted $\Delta_{a,b}$, and on
-quadrilateral-faced polyhedra $\Box_{a,b}$, where $a$ and $b$ are integers,
-$a > 0$, and $b \ge 0$.
+The Goldberg-Coxeter operation (GC operation) was defined by Deza and Dutour
+\cite{dutour}, based on the Goldberg polyhedra, the viral capsid structure
+defined by Coxeter \cite{coxeter71}, the geodesic domes of Buckminster Fuller,
+and similar structures. Essentially it amounts to replacing the faces of a
+polyhedra with a section from a grid of triangular or square faces, termed the
+"master polygon" by Deza and Dutour. Here the operation on triangle-faced
+polyhedra will be denoted $\Delta_{a,b}$, and on quadrilateral-faced polyhedra
+$\Box_{a,b}$, where $a$ and $b$ are integers, $a > 0$, and $b \ge 0$.
 
 $\Delta_{a,b}$ can be described using the triangular lattice over the
 Eisenstein integers. It is useful for this operation to parameterize the
 Eisenstein integers as $x = a + bu$ where $u = \frac{1}{2}(1 + i\sqrt 3) =
-e^{\pi i/3}$, for reasons to be explained later. Take the section of the grid
-inside the triangle with vertices $0, x(2-u)/3, x, x(1+u)/3$.
+e^{\pi i/3}$, for reasons to be explained later. The master polygon is the
+section of the grid contained in the triangle $0, x, xu$. It may also be useful
+to identify an edge-centered section of the grid,
+given by $0, x(2-u)/3, x, x(1+u)/3$.
 
 $\Box_{a,b}$ can be described using the triangular lattice over the Gaussian
-integers, $x = a + bi$ where $i = \sqrt{-1}$. Take the section of the grid
-inside the square with vertices $0, x(1-i)/2, x, x(1+i)/2$.
+integers, $x = a + bi$ where $i = \sqrt{-1}$. The master polygon is contained
+in $0,x,(x+i),xi$, and the edge-centered section is $0, x(1-i)/2, x, x(1+i)/2$.
 
 Each operator has an invariant $g$, equivalent to $g = |x|^2$. For
 $\Delta_{a,b}$, $g = a^2 + b^2$: for $\Box_{a,b}$, $g = a^2 + ab + b^2$. This
@@ -291,16 +310,21 @@ similarly for $\Box_{a,b}$. Furthermore, the Eisenstein and Gaussian integers
 are Euclidean domains, which means elements of the domains can be factored
 uniquely (if not irreducible), and there is a straightforward way to do so
 using an extension of the Euclidean algorithm. (The invariant $g$ is the
-Euclidean function in the Euclidean algorithm.)
+Euclidean function in the Euclidean algorithm.) Therefore, it's straightforward
+to reduce $\Delta_{a,b}$ and $\Box_{a,b}$ into other operators, in
+and the irreducible operators correspond to Eisenstein or Gaussian primes.
 
 These operators are divided into three classes.
 \begin{itemize}
   \item Class I: $b = 0$, achiral
   \item Class II: $a = b$, achiral
-  \item Class III: All others, chiral
+  \item Class III: All others, chiral, requires orientable polyhedron.
 \end{itemize}
 All Class II operators can be reduced as
-$\Delta_{a,a} = \Delta_{1,1}\Delta_{a,0}$ (and possibly further).
+$\Delta_{a,a} = \Delta_{1,1}\Delta_{a,0}$, and possibly further (and similiarly
+for $\Box_{a,b}$). In fact, $\Delta_{a,b}$ is reducible if $a \equiv b \mod 3$
+(as $\Delta_{1,1}$ and some other $\Delta_{c,d}$), and $\Box_{a,b}$ is
+reducible if $a \equiv b \mod 2$ (as $\Box_{1,1}$ and some other $\Box_{c,d}$).
 
 \subsection{Operations in the software package Antiprism}
 
@@ -310,8 +334,9 @@ contains an implementation of Conway operations.) One caveat: The file format
 used by antiprism, OFF, consists of a list of vertex positions and a list of
 faces that references the list of vertices. This is not a fully faithful
 representation of a polyhedra, as it does not contain explicit incidence
-information. Problems show up for overlapping faces and digons. Digons are
-referred to as explicit edges by antiprism.
+information. Any polyhedron whose abstract polyhedron is not atomistic cannot
+be represented faithfully in Antiprism: e.g. polyhedra with overlapping faces
+or digons. Digons are referred to as explicit edges by antiprism.
 
 Of particular interest is the application \texttt{wythoff}, in which a notation
 for operations on polyhedra is introduced. Despite the name, the new notation is
@@ -324,8 +349,10 @@ automatically applies Conway's meta operation to produce a polyhedron in
 $\mathcal{W}$. The meta operation retains the original vertices and adds a
 vertex at the center of each edge and each face. Respectively, these are labeled
 $V$, $E$, and $F$. If a polyhedron is in $\mathcal{W}$ it can be used directly:
-the labeling of vertices uses the same letters VEF. This is somewhat confusing since E and F no longer relate to edges or faces, so alternately the vertices
-can be labeled ABC.
+the labeling of vertices uses the same letters VEF. This is somewhat confusing
+since E and F no longer relate to edges or faces, so alternately the vertices
+can be labeled ABC. If applied to a non-orientable polyhedron, \texttt{wythoff}
+instead uses the orientable double cover of the polyhedron.
 
 For example, this is the string that it uses to implement Conway's kis
 operation: \texttt{[F, V] 0\_1v1v, 1E}. The extended Wythoff notation comprises
@@ -355,7 +382,7 @@ This notation is capable of representing many operations on polyhedra,
 including all of Conway's operators. Notation to create the regular hemihedra
 from the Platonic solids exists, as does notation to create hollowed-out,
 da Vinci-style renderings of polyhedra.
-It is also capable of producing quasipolyhedra.
+It is also capable of producing certain quasipolyhedra.
 
 \section{Smoothing}
 
@@ -366,8 +393,8 @@ digons. These elements can be eliminated in a systematic manner. We define a
 smoothing operator, $\$$, that transforms digons into single edges and handles
 degree-2 vertices by removing that vertex and merging the vertex's incident
 edges, as depicted in figure \ref{fig:smooth}. This is similar to the topic of
-homeomorphism in graph theory: see \cite{ziegler} for context. Antiprism effectively smooths digons
-automatically by treating them as "explicit edges".
+homeomorphism in graph theory: see \cite{ziegler} for context. Antiprism
+effectively smooths digons automatically by treating them as "explicit edges".
 
 \begin{figure}
 \begin{tikzpicture}
@@ -448,11 +475,11 @@ that it produces a polyhedron where all degree-2 features have been removed.
 \end{figure}
 
 Note that in special circumstances this operator may produce quasipolyhedra.
-For instance, any spherical hosohedron is reduced to a spherical quasipolyhedron
-with two vertices, one edge, and one face, and any spherical dihedron
-is reduced to a spherical quasipolyhedron with one vertex, one edge, and
-two faces. (These violate the diamond property, and therefore are not
-polyhedra in the sense defined here.)
+For instance, the endpoint for any spherical hosohedron or spherical dihedron
+is the spherical monohedron. It may be helpful to define the operator to return
+a proper polyhedra. This ambiguity will not affect the rest of this text.
+
+(smoothing lozenges?)
 
 \section{Compositions of operations on $\mathcal{W}$ and
           operations producing $\mathcal{W}$}
@@ -516,9 +543,11 @@ and that in some sense degree 4 features come ``for free''.
 With these relations, and the assumption that there are no degree 2 features
 and therefore $i \ge 3$, a series of inequalities can be derived for EROs:
 \begin{equation}
+  \begin{split}
   g + 1 \le 2a + 3b + 2c \le 2g \\
   2k + 2\ell \le g + 3 \\
   0 \le 2k + 2\ell - 4 \le b_3 + b'_3 \\
+  \end{split}
 \end{equation}
 Note that these inequalities are only necessary, not sufficient.
 
@@ -570,14 +599,13 @@ skeleton of a polytope.
 Second, to explore operations on abstract polyhedra (and polytopes) without
 reference to the realization. The way they have been described in this text,
 there is a dependence on the underlying space. Removing that dependence would
-probably make the theory clearer. Furthermore, some of these operations may be
-valid on posets that do not satisfy the axioms of an abstract polytope. For
-example, the dual operation is defined for all posets. Finding the most general
-restriction on the poset for a certain operation may help us understand how to
-deal with quasipolyhedra.
+make the theory clearer. Furthermore, some of these operations may be valid on
+posets that do not satisfy all the axioms of an abstract polytope. For example,
+the dual operation is defined for all posets.
+Finding the most general restriction on the poset for a certain operation may
+help us understand how to deal with quasipolyhedra.
 
-
-\bibliography{operations_on_polyhedra}{}
+\bibliography{operations_on_polyhedra}
 \bibliographystyle{plain}
 
 \appendix
@@ -591,7 +619,7 @@ deal with quasipolyhedra.
   \item Hollow: \texttt{[V, VF] 0\_1v1\_0v, 1v1f, 1V}
 \end{itemize}
 
-\section{Tables of operators}
+\section{Table of operator associates}
 
 Items marked with a dagger (\dag) indicate an operator that may produce non-convex polyhedra from convex polyhedra. Items marked with a double dagger (\ddag) indicate an operator that does not preserve topology: it may produce polyhedra with holes, or disjoint polyhedra. The origin of the operators is indicated like so;
 \texttt{c}: Conway's original set \cite{conway};
@@ -772,10 +800,11 @@ Items marked with a dagger (\dag) indicate an operator that may produce non-conv
     0 & 0 & n \end{bmatrix}$& $n$-Copy  & & & & \texttt{n}, \ddag for $n>1$
 \end{longtable}
 
+\section{Table of operator cohorts}
 In the following tables, permutations in parentheses, such as (CBA), indicate a
 permutation that produces the chiral pair of the depicted operator. With the
 exception of some named operators, if $x$ is shown, $xd$ is not, since its
-information can be easily determined from the information for $x$. An arbitrary 
+information can be easily determined from the information for $x$. An arbitrary
 named member of the cohort is chosen to label the cohort, e.g. the $a$-cohort.
 
 \begin{table}
@@ -798,7 +827,6 @@ $\begin{bmatrix}
 ABC, BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
-
 \draw (0,1) -- (2,1);
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
@@ -808,7 +836,7 @@ $\begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
-& $\$x@m = S = \Box_{1,0} = \Delta_{1,0}$
+& $\$x@m = S$
 \\ & &
 CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -838,7 +866,7 @@ $\begin{bmatrix}
 1 & 0 & 1 \\
 0 & 2 & 0 \\
 0 & 1 & 0 \end{bmatrix}$
-& $x@m = j = jd = da = \Box_{1,1}$
+& $x@m = j$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber1};
@@ -879,7 +907,7 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 0 & 2 & 0 \\
 1 & 0 & 1 \end{bmatrix}$
-&  $x@m = a = dj$
+&  $x@m = a$
 \end{tabular}
 \end{table}
 
@@ -916,7 +944,7 @@ ABC, BAC &
  1 & 0 & 1 \\
  0 & 3 & 0 \\
  0 & 2 & 0 \end{bmatrix}$
-&  $\$x@m = n = kd = \Delta_{1,1}$
+&  $\$x@m = n$
 \\ & & ACB, BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -932,7 +960,7 @@ ABC, BAC &
  1 & 0 & 1 \\
  0 & 3 & 0 \\
  0 & 2 & 0 \end{bmatrix}$
-& $\$x@m = k = nd$
+& $\$x@m = k$
 \\ & & CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -949,7 +977,7 @@ $\begin{bmatrix}
 1 & 1 & 1 \\
 0 & 4 & 0 \\
 0 & 2 & 0 \end{bmatrix}$
-& $x@m = o = j^2 = \Box_{2,0}$
+& $x@m = o$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber1};
@@ -974,7 +1002,7 @@ ACB, BCA &
  0 & 2 & 0 \\
  0 & 3 & 0 \\
  1 & 0 & 1 \end{bmatrix}$
-&  $\$x@m = t = zd$
+&  $\$x@m = t$
 \\ & & ABC, BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -989,7 +1017,7 @@ ACB, BCA &
  0 & 2 & 0 \\
  0 & 3 & 0 \\
  1 & 0 & 1 \end{bmatrix}$
-& $\$x@m = z = td$
+& $\$x@m = z$
 \\ & & CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1004,7 +1032,7 @@ $\begin{bmatrix}
 0 & 2 & 0 \\
 0 & 4 & 0 \\
 1 & 1 & 1 \end{bmatrix}$
-& $x@m = e = a^2$
+& $x@m = e$
 \end{tabular}
 \end{table}
 
@@ -1031,18 +1059,16 @@ ABC &
 \draw (0,1) -- (2,1);
 \draw (0.5,0.5) -- (1.5,1.5);
 \draw (1.5,0.5) -- (0.5,1.5);
-
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (1,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
 1 & 1 & 0 \\
 0 & 4 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-& $x@m = u = dcd = \Delta_{2,0}$
+& $x@m = u$
 \\ & & ACB & $n$ &
 $\begin{bmatrix}
 1 & 0 & 1 \\
@@ -1101,7 +1127,7 @@ $\begin{bmatrix}
 \end{table}
 
 \begin{table}%verify that the orientation is the same as in wythoff
-\caption{$p$-cohort of operators on polyhedra}
+\caption{$p$-cohort of operators on orientable polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -1115,7 +1141,6 @@ $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
   \draw (2,1) -- (1,1.5) -- (0,1);
   \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
   \draw (0.66,0.33) -- (1.33,0.33);
-
 \end{tikzpicture} &
 $\begin{bmatrix}
 1 & 1 & 0 & 0 & 1/2 \\
@@ -1131,28 +1156,25 @@ BAC &
 \draw[fill] (0.8,0.6) circle [radius=0.05];
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
 1 & 2 & 0 \\
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-&  $\$x@m = p = dpd = \Box_{2,1}$
+&  $\$x@m = p$
 \\ & & ACB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (2,1) -- (1.25,1.25) -- (1,2);
 \draw (0,1) -- (0.75,0.75) -- (1,0);
 \draw (1.25,1.25) -- (0.75,0.75);
-
 \draw[fill] (1,0) circle [radius=0.05];
 \draw[fill] (1,2) circle [radius=0.05];
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
 \draw[fill] (1.25,1.25) circle [radius=0.05];
 \draw[fill] (0.75,0.75) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
@@ -1202,7 +1224,7 @@ $\begin{bmatrix}
 \end{table}
 
 \begin{table}
-\caption{$g$-cohort of operators on polyhedra}
+\caption{$g$-cohort of operators on orientable polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -1228,14 +1250,12 @@ ABC BCA CAB (CBA) (BAC) (ACB)&
 \draw (0,1) -- (0.75,1.25) -- (1,2);
 \draw (2,1) -- (1.25,0.75) -- (1,0);
 \draw (0.75,1.25) -- (1.25,0.75);
-
 \draw[fill] (1,0) circle [radius=0.05];
 \draw[fill] (1,2) circle [radius=0.05];
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
 \draw[fill] (0.75,1.25) circle [radius=0.05];
 \draw[fill] (1.25,0.75) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
@@ -1243,8 +1263,7 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 0 \end{bmatrix}$
 & $\$x@m = g$
-\\
-\hline
+\\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber2};
   \draw[fill] (1,1.5) circle [radius=0.05];
@@ -1252,7 +1271,6 @@ $\begin{bmatrix}
   \draw (0.5,0.5) -- (1.5,0.5);
   \draw (0.75,1.75) -- (1.75,0.75);
   \draw (1.25,1.75) -- (0.25,0.75);
-
 \end{tikzpicture} &
 $\begin{bmatrix}
 0 & 0 & 1/2 \\
@@ -1276,7 +1294,6 @@ $\begin{bmatrix}
 & $\$x@m = s$
 \end{tabular}
 \end{table}
-
 
 \begin{table}
 \caption{$l$-cohort of operators on polyhedra}
@@ -1621,13 +1638,11 @@ $\begin{bmatrix}
       (2,1) -- (1.5,1.5) -- (0.5,1.5) --  (0,1);
 \draw (0.5,0.5) -- (0.5,1.5);
 \draw (1.5,0.5) -- (1.5,1.5);
-
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (0.5,0.5) circle [radius=0.05];
 \draw[fill] (1.5,1.5) circle [radius=0.05];
 \draw[fill] (1.5,0.5) circle [radius=0.05];
 \draw[fill] (0.5,1.5) circle [radius=0.05];
-
 \draw[fill] (2,1) circle [radius=0.05];
 \end{tikzpicture}
  &
@@ -1729,7 +1744,6 @@ $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw[fill] (0.85, 0) circle [radius=0.05];
-
 \draw (0, 0) -- (0.85, 1.5) -- (0.85, 0) -- (1.7, 0) ;
 \end{tikzpicture} &
 $\begin{bmatrix}
@@ -1746,7 +1760,6 @@ ABC&
   \draw[fill] (1,0) circle [radius=0.05];
   \draw[fill] (2,1) circle [radius=0.05];
   \draw[fill] (1,2) circle [radius=0.05];
-
   \draw[fill] (0.66,1) circle [radius=0.05];
   \draw[fill] (1.33,1) circle [radius=0.05];
 \end{tikzpicture}
@@ -1833,12 +1846,10 @@ $\begin{bmatrix}
         (1.66,0.66) -- (1, 0.5) -- (0.75, 0.25);
   \draw (1.25,1.75) -- (1,1.5) -- (0.33,1.33) --
         (0.33,0.66) -- (1, 0.5) -- (1.25, 0.25);
-
   \draw[fill] (0.33,1.33) circle [radius=0.05];
   \draw[fill] (1.66,1.33) circle [radius=0.05];
   \draw[fill] (1.66,0.66) circle [radius=0.05];
   \draw[fill] (0.33,0.66) circle [radius=0.05];
-
   \draw[fill] (1,0.5) circle [radius=0.05];
   \draw[fill] (1,1.5) circle [radius=0.05];
 \end{tikzpicture}
@@ -1858,7 +1869,6 @@ $\begin{bmatrix}
   \draw[fill] (1.5,1.5) circle [radius=0.05];
   \draw[fill] (1.5,0.5) circle [radius=0.05];
   \draw[fill] (0.5,0.5) circle [radius=0.05];
-
   \draw[fill] (1,0.75) circle [radius=0.05];
   \draw[fill] (1,1.25) circle [radius=0.05];
 \end{tikzpicture}
@@ -1870,7 +1880,6 @@ $\begin{bmatrix}
 & $\$x@m = dK$
 \end{tabular}
 \end{table}
-
 
 \begin{table}
 \caption{$M$-cohort of operators on polyhedra}
@@ -2011,7 +2020,6 @@ $\begin{bmatrix}
 \draw[fill] (2,1) circle [radius=0.05];
 \draw[fill] (1,0.66) circle [radius=0.05];
 \draw[fill] (1,1.33) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
@@ -2068,7 +2076,6 @@ $\begin{bmatrix}
   \draw[fill] (1,0) circle [radius=0.05];
   \draw[fill] (2,1) circle [radius=0.05];
   \draw[fill] (1,2) circle [radius=0.05];
-
   \draw[fill] (0.66,1) circle [radius=0.05];
   \draw[fill] (1.33,1) circle [radius=0.05];
 \end{tikzpicture}
@@ -2229,11 +2236,9 @@ $\begin{bmatrix}
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (1,2) -- (2,1) -- (1,0) --
-      (0,1) -- (1,1.5) -- (2,1) -- (1,0.5) --
-      (0,1);
+      (0,1) -- (1,1.5) -- (2,1) -- (1,0.5) -- (0,1);
 \draw (1,0) -- (1,0.5);
 \draw (1,2) -- (1,1.5);
-
 \draw[fill] (1,0) circle [radius=0.05];
 \draw[fill] (0,1) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
@@ -2254,7 +2259,6 @@ $\begin{bmatrix}
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \draw (0.85, 1.5) -- (0.85, 0);
 \draw (0.85, 0.5) -- (0.425,0.75);
-
 \end{tikzpicture} &
 $\begin{bmatrix}
 1 & 1 & 0 & 0 & 1/2 \\
@@ -2309,7 +2313,6 @@ $\begin{bmatrix}
 \draw (0.75,1.25) -- (1.25,1.25);
 \draw (0.5,0.5) -- (1.5,1.5);
 \draw (0.5,1.5) -- (1.5,0.5);
-
 \draw[fill] (1,1) circle [radius=0.05];
 \draw[fill] (0.75,0.75) circle [radius=0.05];
 \draw[fill] (0.75,1.25) circle [radius=0.05];
@@ -2363,7 +2366,6 @@ ABC&
 \draw[fill] (0.5,1.5) circle [radius=0.05];
 \draw[fill] (1.33,1) circle [radius=0.05];
 \draw[fill] (0.66,1) circle [radius=0.05];
-
 \end{tikzpicture}
  &
 $\begin{bmatrix}
@@ -2434,11 +2436,8 @@ ABC&
 \draw (1,0.5) -- (1,1.5);
 \draw (0.25,1.25) -- (1.25,0.25);
 \draw (0.25,0.75) -- (1.25,1.75);
-
 \draw (1.75,1.25) -- (0.75,0.25);
 \draw (1.75,0.75) -- (0.75,1.75);
-
-
 \draw[fill] (1,1.5) circle [radius=0.05];
 \draw[fill] (1,0.5) circle [radius=0.05];
 \draw[fill] (1.5,1) circle [radius=0.05];
@@ -2496,7 +2495,7 @@ $\begin{bmatrix}
 \end{table}
 
 \begin{table}%verify that the orientation is the same as in wythoff
-\caption{$B$-cohort of operators on polyhedra}
+\caption{$B$-cohort of operators on orientable polyhedra}
 \begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
 \hline \hline
 $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
@@ -2620,6 +2619,431 @@ $\begin{bmatrix}
 0 & 9 & 0 \\
 1 & 4 & 1 \end{bmatrix}$
 &  $\$x@m$
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{$M_n$-cohort of operators on polyhedra, $n=2k, k \ge 1$}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (0.85, 0) node[anchor=center] {\tiny x} node[anchor=north] {\tiny $k$};
+\draw[fill] (1.7, 0) circle [radius=0.05];
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw (0,0) -- (1.7, 0);
+\draw[dashed] (0.85, 0) -- (0.85, 1.5);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & k/2 \\
+0 & 0 & 2 \\
+0 & -1 & ? \end{bmatrix}$ &
+ABC BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0.5,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw[dashed] (1,2) -- (0.5,1) -- (1,0) -- (1.5,1) -- (1,2);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & n & 1 \\
+ 0 & 3n+1 & 0 \\
+ 0 & 2n & 0 \end{bmatrix}$
+& $\$x@m = M_n$
+\\ & & BCA ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.5,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1.5) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw[dashed] (0.5,0.5) -- (1.5,1.5);
+\draw[dashed] (0.5,1.5) -- (1.5,0.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & n+1 & 1 \\
+ 0 & 3n+2 & 0 \\
+ 0 & 2n & 0 \end{bmatrix}$
+& $x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0.85, 0) node[anchor=north] {\tiny $k$};
+\draw[fill] (0.425, 0.75) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.275, 0.75) node[anchor=center] {\tiny x} ;
+\draw[dashed] (0.425, 0) -- (0.425, 0.75);
+\draw[dashed] (1.275, 0) -- (1.275, 0.75);
+\draw (0.425,0.75) -- (1.275,0.75);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & k/2 \\
+0 & 0 & 2 \\
+1 & -1 & ? \end{bmatrix}$ &
+ABC BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.5,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1.5) node[anchor=center] {\tiny x} ;
+\draw (0.5,0.5) -- (1.5,0.5);
+\draw (0.5,1.5) -- (1.5,1.5);
+\draw[dashed] (0.5,0.5) -- (0.5,1.5);
+\draw[dashed] (1,0.5) -- (1,1.5);
+\draw[dashed] (1.5,0.5) -- (1.5,1.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n & 0 \\
+ 0 & 3n+1 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $\$x@m$
+\\ & & BCA ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0.7,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,0.7) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.3,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,1.3) node[anchor=center] {\tiny x} ;
+\draw (0.7,1) -- (1,0.7) -- (1.3,1) -- (1,1.3) -- (0.7,1);
+\draw[dashed] (0.7,1) -- (0.35,0.65);
+\draw[dashed] (1,0.7) -- (0.65,0.35);
+\draw[dashed] (1,0.7) -- (1.35,0.35);
+\draw[dashed] (1.3,1) -- (1.65,0.65);
+\draw[dashed] (1.3,1) -- (1.65,1.35);
+\draw[dashed] (1,1.3) -- (1.35,1.65);
+\draw[dashed] (1,1.3) -- (0.65,1.65);
+\draw[dashed] (0.7,1) -- (0.35,1.35);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n & 0 \\
+ 0 & 3n + 2 & 0 \\
+ 1 & n + 1 & 1 \end{bmatrix}$
+& $x@m$
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{$M_n$/$m_n$-cohort of operators on polyhedra}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (0.85, 0) node[anchor=center] {\tiny x} node[anchor=north] {\tiny $k$};
+\draw[fill] (1.7, 0) circle [radius=0.05];
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw (0.85, 1.5) -- (0,0) -- (1.7, 0);
+\draw[dashed] (0.85, 0) -- (0.85, 1.5);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & k/2 \\
+0 & 0 & 2 \\
+0 & -1 & ? \end{bmatrix}$ &
+ABC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0.5,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw[dashed] (1,2) -- (0.5,1) -- (1,0) -- (1.5,1) -- (1,2);
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & n & 1 \\
+0 & 3n+3 & 0 \\
+0 & 2n+2 & 0 \end{bmatrix}$
+& $n=2k$, $k \ge 0$, $\$x@m = m_n$
+\\ & & BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw[dashed] (1,2) -- (0.5,1) -- (1,0) -- (1.5,1) -- (1,2);
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & n & 1 \\
+0 & 3n+1 & 0 \\
+0 & 2n & 0 \end{bmatrix}$
+& $n=2k+1$, $k \ge 0$, $x@m = M_n$
+\\ & & ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.5,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1.5) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw[dashed] (0.5,0.5) -- (1.5,1.5);
+\draw[dashed] (0.5,1.5) -- (1.5,0.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & n & 1 \\
+ 0 & 3n+1 & 0 \\
+ 0 & 2n & 0 \end{bmatrix}$
+& $n=2k$, $k \ge 1$, $x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0.85, 0) node[anchor=north] {\tiny $k$};
+\draw[fill] (0.708, 0.75) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.275, 0.75) node[anchor=center] {\tiny x} ;
+\draw[dashed] (0.708, 0) -- (0.708, 0.75);
+\draw[dashed] (1.275, 0) -- (1.275, 0.75);
+\draw (0.425,0.75) -- (1.275,0.75);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & k/2 \\
+0 & 0 & 2 \\
+1 & -1 & ? \end{bmatrix}$ &
+ABC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw[fill] (0.75,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.25,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (0.75,1.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1,1.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.25,1.5) node[anchor=center] {\tiny x} ;
+  \draw (0.5,0.5) -- (1.5,0.5);
+  \draw (0.5,1.5) -- (1.5,1.5);
+  \draw[dashed] (0.75,0.5) -- (0.75,1.5);
+  \draw[dashed] (1,0.5) -- (1,1.5);
+  \draw[dashed] (1.25,0.5) -- (1.25,1.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n+2 & 0 \\
+ 0 & 3n+3 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $n=2k$, $k \ge 0$, $\$x@m = b_n$
+\\ & & BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (0.83,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.17,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.5,0.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (0.5,1.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (0.83,1.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.17,1.5) node[anchor=center] {\tiny x} ;
+  \draw[fill] (1.5,1.5) node[anchor=center] {\tiny x} ;
+  \draw (0.5,0.5) -- (1.5,0.5);
+  \draw (0.5,1.5) -- (1.5,1.5);
+  \draw[dashed] (0.5,0.5) -- (0.5,1.5);
+  \draw[dashed] (0.83,0.5) -- (0.83,1.5);
+  \draw[dashed] (1.17,0.5) -- (1.17,1.5);
+  \draw[dashed] (1.5,0.5) -- (1.5,1.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n & 0 \\
+ 0 & 3n+1 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $n=2k+1$, $k \ge 0$, $x@m$
+\\ & & ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0.6,0.9) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,0.6) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.4,0.9) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.4,1.1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1,1.4) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.6,1.1) node[anchor=center] {\tiny x} ;
+\draw (0.6,0.9) -- (1,0.6) -- (1.4,0.9) --
+(1.4,1.1) -- (1,1.4)  -- (0.6,1.1) -- (0.6,0.9);
+\draw[dashed] (0.6,0.9) -- (0.35,0.65);
+\draw[dashed] (1,0.6) -- (0.7,0.3);
+\draw[dashed] (1,0.6) -- (1.3,0.3);
+\draw[dashed] (1.4,0.9) -- (1.65,0.65);
+\draw[dashed] (1.4,1.1) -- (1.65,1.35);
+\draw[dashed] (1,1.4) -- (1.3,1.7);
+\draw[dashed] (1,1.4) -- (0.7,1.7);
+\draw[dashed] (0.6,1.1) -- (0.35,1.35);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n & 0 \\
+ 0 & 3n+1 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $n=2k$, $k \ge 1$, $x@m$
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{$m_n$-cohort of operators on polyhedra, $n=2k+1, k \ge 0$}
+\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\hline \hline
+$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (0.85, 0) node[anchor=center] {\tiny x} node[anchor=north] {\tiny $k$};
+\draw[fill] (1.7, 0) circle [radius=0.05];
+\draw[fill] (0.85, 1.5) circle [radius=0.05];
+\draw (0,0) -- (1.7, 0) -- (0.85, 1.5) -- (0,0);
+\draw[dashed] (0.85, 0) -- (0.85, 1.5);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & k/2 \\
+0 & 0 & 2 \\
+0 & -1 & ? \end{bmatrix}$ &
+ABC BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw[dashed] (1,2) -- (0.5,1) -- (1,0) -- (1.5,1) -- (1,2);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & n & 1 \\
+ 0 & 3n+3 & 0 \\
+ 0 & 2n+2 & 0 \end{bmatrix}$
+& $x@m = m_n$
+\\ & & BCA ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.5,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.5,1.5) node[anchor=center] {\tiny x} ;
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+\draw[dashed] (0.5,0.5) -- (1.5,1.5);
+\draw[dashed] (0.5,1.5) -- (1.5,0.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 1 & n & 1 \\
+ 0 & 3n+3 & 0 \\
+ 0 & 2n+2 & 0 \end{bmatrix}$
+& $x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber1};
+\draw[fill] (0.85, 0) node[anchor=north] {\tiny $k$};
+\draw[fill] (0.638, 0.75) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.062, 0.75) node[anchor=center] {\tiny x} ;
+\draw[dashed] (0.638, 0) -- (0.638, 0.75);
+\draw[dashed] (1.062, 0) -- (1.062, 0.75);
+\draw (0.425,0.75) -- (1.275,0.75);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & k/2 \\
+0 & 0 & 2 \\
+1 & -1 & ? \end{bmatrix}$ &
+ABC BAC&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0.625,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.875,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.125,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.375,0.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.625,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.875,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.125,1.5) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.375,1.5) node[anchor=center] {\tiny x} ;
+\draw (0.5,0.5) -- (1.5,0.5);
+\draw (0.5,1.5) -- (1.5,1.5);
+\draw[dashed] (0.625,0.5) -- (0.625,1.5);
+\draw[dashed] (0.875,0.5) -- (0.875,1.5);
+\draw[dashed] (1.125,0.5) -- (1.125,1.5);
+\draw[dashed] (1.375,0.5) -- (1.375,1.5);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n+2 & 0 \\
+ 0 & 3n+3 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $x@m = b_n$
+\\ & & BCA ACB&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw[fill] (0.6,0.9) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.9,0.6) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.1,0.6) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.4,0.9) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.4,1.1) node[anchor=center] {\tiny x} ;
+\draw[fill] (1.1,1.4) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.9,1.4) node[anchor=center] {\tiny x} ;
+\draw[fill] (0.6,1.1) node[anchor=center] {\tiny x} ;
+\draw (0.6,0.9) -- (0.9,0.6) -- (1.1,0.6) -- (1.4,0.9) --
+(1.4,1.1) -- (1.1,1.4) -- (0.9,1.4) -- (0.6,1.1) -- (0.6,0.9);
+\draw[dashed] (0.6,0.9) -- (0.35,0.65);
+\draw[dashed] (0.9,0.6) -- (0.65,0.35);
+\draw[dashed] (1.1,0.6) -- (1.35,0.35);
+\draw[dashed] (1.4,0.9) -- (1.65,0.65);
+\draw[dashed] (1.4,1.1) -- (1.65,1.35);
+\draw[dashed] (1.1,1.4) -- (1.35,1.65);
+\draw[dashed] (0.9,1.4) -- (0.65,1.65);
+\draw[dashed] (0.6,1.1) -- (0.35,1.35);
+\end{tikzpicture}
+ &
+ $\begin{bmatrix}
+ 0 & 2n+2 & 0 \\
+ 0 & 3n+3 & 0 \\
+ 1 & n & 1 \end{bmatrix}$
+& $x@m$
 \end{tabular}
 \end{table}
 
