@@ -1,6 +1,6 @@
 \documentclass{amsart}[12pt]
 \usepackage{longtable, latexsym, amsmath, amsfonts, tikz}
-\usepackage{natbib}
+\usepackage{natbib, array}
 \oddsidemargin=0in \evensidemargin=0in
 \textwidth=6.6in \textheight=8.7in
 
@@ -118,11 +118,11 @@ faces and 2 vertices, so defining degree for edges is not useful here, although
 it is for higher polytopes.)
 Abstract polyhedra permit faces of degree 2, called \textit{digons}. Digons are
 disallowed by many definitions of polyhedra, but appear in spherical polyhedra
-(for example). Digons occur naturally in the study of operations on polyhedra.
-The count of vertices, edges, and faces is be denoted $v, e, f$. The Euler
-characteristic is $\chi = v - e + f$. The count of vertices or faces of a
-certain degree is denoted $v_i$ and $f_i$ where $i$ is the degree, such that
-$\sum_i v_i = v$ and $\sum_i f_i = f$.
+and regular maps (for example). Digons occur naturally in the study of
+operations on polyhedra. The count of vertices, edges, and faces is be denoted
+$v, e, f$. The Euler characteristic is $\chi = v - e + f$. The count of
+vertices or faces of a certain degree is denoted $v_i$ and $f_i$ where $i$ is
+the degree, such that $\sum_i v_i = v$ and $\sum_i f_i = f$.
 
 The term \textit{polyhedron} here will mean ``realization of an abstract
 polyhedron.'' Unless otherwise specified, polyhedra here do not require
@@ -156,7 +156,7 @@ digons and concave quadrilaterals with curved edges.}
 \label{fig:circlesquare}
 \end{figure}
 
-An \textit{orientable} polyhedron is one where each face's vertices may be assigned a cyclic order such that each edge, say with vertices $a$ and $b$, has an order of $a$ to $b$ in one face and the reverse order $b$ to $a$ in the other. A polyhedron that is not orientable is \textit{non-orientable}. All polyhedra with an odd Euler characteristic are non-orientable, e.g. the hemicuboctahedron. That said, all non-orientable polyhedra have an orientable double cover that is connected. (An orientable polyhedron also has an orientable double over, consisting of two disjoint copies of the original polyhedron.)
+An \textit{orientable} polyhedron is one where each face's vertices may be assigned a cyclic order such that each edge, say with vertices $a$ and $b$, has an order of $a$ to $b$ in one face and the reverse order $b$ to $a$ in the other. \cite{grunbaum94} A polyhedron that is not orientable is \textit{non-orientable}. All polyhedra with an odd Euler characteristic are non-orientable, e.g. the hemicuboctahedron. That said, all non-orientable polyhedra have an orientable double cover that is connected. (An orientable polyhedron also has an orientable double over, consisting of two disjoint copies of the original polyhedron.)
 
 An \textit{achiral polyhedron} is one that has mirror symmetry:
 a \textit{chiral polyhedron} is one that does not. Note that the particular
@@ -183,7 +183,29 @@ polyhedra, or polyhedra with triangular faces. Sometimes we will look at maps
 satisfying $x : \mathcal{X} \to \mathcal{Y}$ where $\mathcal{X}$ and
 $\mathcal{Y}$ are different subsets of polyhedra: we will still call these
 operators on polyhedra (instead of transformations). We'll use a calligraphic
-typeface for sets of polyhedra or quasipolyhedra.
+typeface for sets of polyhedra or quasipolyhedra. The set of polyhedra without
+digons or degree-2 vertices is here denoted $\mathcal{P}_3$, and the set of
+polyhedra with 3-vertex-connected skeletons is $\mathcal{P}_{3v}$.
+
+Some of these sets have additional structure, such as a specific coloring of
+the vertices or faces. One fundamental distinction is between orientable and
+non-orientable polyhedra. If a polyhedron is orientable, then there are two
+choices of orientation to apply to it. We'll call the orientable polyhedra,
+plus a choice of orientation, the \textit{oriented polyhedra}, and denote them
+$\mathcal{P}^o$. Other subsets of polyhedra that are orientable will share this
+superscript $o$ notation, so e.g. $\mathcal{P}^o_3$ is the set of orientable
+polyhedra without digons or degree-2 vertices.
+
+The set of polyhedra with even-sided faces is denoted $\mathcal{E}$. If also
+orientable, ($\mathcal{E}^o$), the vertices of the polyhedron can be 2-colored.
+The particular choice of coloring (out of the two possible colorings) is also
+part of the additional structure of $\mathcal{E}^o$,
+in addition to the orientation.
+
+$\mathcal{W}$ is here defined as the set of polyhedra with only triangular
+faces, such that the vertices of the polyhedron can be 3-colored. The faces of
+a polyhedron in $\mathcal{W}^o$ can also be 2-colored. Such polyhedra are
+important to Antiprism's implementation of many operations.
 
 \section{Notable operations}
 
@@ -245,20 +267,7 @@ the symmetry: in fact, the other 4 Platonic solids can be expressed
 in terms of the tetrahedron $T$ using $j$ and $a$.
 
 Some of Conway's operations can be expressed in terms of other operations:
-$e=aa, o=jj, m=kj$, and $b=ta$. Borrowing an idea from ring
-theory, we refer to $d$ (dual) and $S$ (seed, identity) as the
-units of the EROs, and operators that are related by $d$ are called
-associates. At most 4 operators can be associated with each other, corresponding
-to $x$, $xd$, $dx$, and $dxd$.
-Conway's operators are associated as so:
-
-\begin{itemize}
-  \item $j=jd, a=dj=djd$
-  \item $k, t=dkd$ (as well as $n=kd$ and $z=dk$)
-  \item $o=od, e=do=dod$
-  \item $g, s=dgd$ (as well as $rgr=gd$ and $rsr=sd$)
-  \item $m=md, b=dm=dmd$
-\end{itemize}
+$e=aa, o=jj, m=kj$, and $b=ta$, as well as the ones that are dual to each other.
 
 Some Conway operators have an indexed form that indicates that only certain faces or
 vertices are operated on. For instance, $k_i$ applies kis to faces with
@@ -273,35 +282,35 @@ defined by Coxeter \cite{coxeter71}, the geodesic domes of Buckminster Fuller,
 and similar structures. Essentially it amounts to replacing the faces of a
 polyhedra with a section from a grid of triangular or square faces, termed the
 "master polygon" by Deza and Dutour. Here the operation on triangle-faced
-polyhedra will be denoted $\Delta_{a,b}$, and on quadrilateral-faced polyhedra
-$\Box_{a,b}$, where $a$ and $b$ are integers, $a > 0$, and $b \ge 0$.
+polyhedra will be denoted $\Delta_{n,m}$, and on quadrilateral-faced polyhedra
+$\Box_{n,m}$, where $n$ and $m$ are integers, $n > 0$, and $m \ge 0$.
 
-$\Delta_{a,b}$ can be described using the triangular lattice over the
+$\Delta_{n,m}$ can be described using the triangular lattice over the
 Eisenstein integers. It is useful for this operation to parameterize the
-Eisenstein integers as $x = a + bu$ where $u = \frac{1}{2}(1 + i\sqrt 3) =
+Eisenstein integers as $x = n + mu$ where $u = \frac{1}{2}(1 + i\sqrt 3) =
 e^{\pi i/3}$, for reasons to be explained later. The master polygon is the
 section of the grid contained in the triangle $0, x, xu$. It may also be useful
 to identify an edge-centered section of the grid,
 given by $0, x(2-u)/3, x, x(1+u)/3$.
 
-$\Box_{a,b}$ can be described using the triangular lattice over the Gaussian
-integers, $x = a + bi$ where $i = \sqrt{-1}$. The master polygon is contained
+$\Box_{n,m}$ can be described using the triangular lattice over the Gaussian
+integers, $x = n + mi$ where $i = \sqrt{-1}$. The master polygon is contained
 in $0,x,(x+i),xi$, and the edge-centered section is $0, x(1-i)/2, x, x(1+i)/2$.
 
 Each operator has an invariant $g$, equivalent to $g = |x|^2$. For
-$\Delta_{a,b}$, $g = a^2 + b^2$: for $\Box_{a,b}$, $g = a^2 + ab + b^2$. This
+$\Delta_{n,m}$, $g = n^2 + m^2$: for $\Box_{n,m}$, $g = n^2 + nm + m^2$. This
 can be used to calculate the count of elements in the resulting polyhedron
 based on the count of elements in the original polyhedron. (The actual formula
 will be shown later in a more general form.)
 
 Two elements of the Eisenstein integers $x$ and $y$ are associates if
-$y = u^n x$ for some $n$. Similarly, two elements of the Gaussian integers are
-associates if $y = i^n x$ for some $n$. The associated element with $a>0$ and
-$b\ge 0$ is the normal form. (We use the alternate definition for Eisenstein
+$y = u^k x$ for some integer $k$. Similarly, two elements of the Gaussian integers are
+associates if $y = i^k x$ for some $k$. The associated element with $n>0$ and
+$m\ge 0$ is the normal form. (We use the alternate definition for Eisenstein
 integers so that the same definition for normal form applies to both operators.
 This is also the traditional definition used by Goldberg polyhedra, geodesic
-domes, viral capsids, etc.) Iff $e+fu$ is associated with $(a+bu)(c+du)$, then
-$\Delta_{a,b}\Delta_{c,d} = \Delta_{e,f}$, and similarly for $\Box_{a,b}$.
+domes, viral capsids, etc.) Iff $n+mu$ is associated with $(a+bu)(c+du)$, then
+$\Delta_{a,b}\Delta_{c,d} = \Delta_{n,m}$, and similarly for $\Box_{a,b}$.
 
 Another consequence of the relationship between these operators and the
 Eisenstein and Gausssian integers is that these operators are commutative and
@@ -311,20 +320,20 @@ are Euclidean domains, which means elements of the domains can be factored
 uniquely (if not irreducible), and there is a straightforward way to do so
 using an extension of the Euclidean algorithm. (The invariant $g$ is the
 Euclidean function in the Euclidean algorithm.) Therefore, it's straightforward
-to reduce $\Delta_{a,b}$ and $\Box_{a,b}$ into other operators, in
+to reduce $\Delta_{n,m}$ and $\Box_{n,m}$ into other operators, in
 and the irreducible operators correspond to Eisenstein or Gaussian primes.
 
 These operators are divided into three classes.
 \begin{itemize}
-  \item Class I: $b = 0$, achiral
-  \item Class II: $a = b$, achiral
+  \item Class I: $m = 0$, achiral
+  \item Class II: $n = m$, achiral
   \item Class III: All others, chiral, requires orientable polyhedron.
 \end{itemize}
 All Class II operators can be reduced as
-$\Delta_{a,a} = \Delta_{1,1}\Delta_{a,0}$, and possibly further (and similiarly
-for $\Box_{a,b}$). In fact, $\Delta_{a,b}$ is reducible if $a \equiv b \mod 3$
-(as $\Delta_{1,1}$ and some other $\Delta_{c,d}$), and $\Box_{a,b}$ is
-reducible if $a \equiv b \mod 2$ (as $\Box_{1,1}$ and some other $\Box_{c,d}$).
+$\Delta_{n,n} = \Delta_{1,1}\Delta_{n,0}$, and possibly further (and similiarly
+for $\Box_{n,n}$). In fact, $\Delta_{n,m}$ is reducible if $n \equiv m \mod 3$
+(as $\Delta_{1,1}$ and some other $\Delta_{c,d}$), and $\Box_{n,m}$ is
+reducible if $n \equiv m \mod 2$ (as $\Box_{1,1}$ and some other $\Box_{c,d}$).
 
 \subsection{Operations in the software package Antiprism}
 
@@ -340,19 +349,15 @@ or digons. Digons are referred to as explicit edges by antiprism.
 
 Of particular interest is the application \texttt{wythoff}, in which a notation
 for operations on polyhedra is introduced. Despite the name, the new notation is
-much more flexible than Wythoff notation.
-\texttt{wythoff} requires a polyhedron with only triangular faces, where the
-vertices of the polyhedron can be 3-colored. As a consequence, the vertices must
-have even order, and the faces are 2-colorable. The colored faces are labeled
-$+$ or $-$. We'll call this set of polyhedra $\mathcal{W}$. \texttt{wythoff}
-automatically applies Conway's meta operation to produce a polyhedron in
-$\mathcal{W}$. The meta operation retains the original vertices and adds a
-vertex at the center of each edge and each face. Respectively, these are labeled
-$V$, $E$, and $F$. If a polyhedron is in $\mathcal{W}$ it can be used directly:
-the labeling of vertices uses the same letters VEF. This is somewhat confusing
-since E and F no longer relate to edges or faces, so alternately the vertices
-can be labeled ABC. If applied to a non-orientable polyhedron, \texttt{wythoff}
-instead uses the orientable double cover of the polyhedron.
+much more flexible than Wythoff notation. \texttt{wythoff} automatically
+applies Conway's meta operation to produce a polyhedron in $\mathcal{W}^o$. The
+meta operation retains the original vertices and adds a vertex at the center of
+each edge and each face. Respectively, these are labeled $V$, $E$, and $F$. If
+a polyhedron is in $\mathcal{W}^o$ it can be used directly: the labeling of
+vertices uses the same letters VEF. This is somewhat confusing since E and F no
+longer relate to edges or faces, so alternately the vertices can be labeled
+ABC. If applied to a non-orientable polyhedron, \texttt{wythoff} instead uses
+the orientable double cover of the polyhedron.
 
 For example, this is the string that it uses to implement Conway's kis
 operation: \texttt{[F, V] 0\_1v1v, 1E}. The extended Wythoff notation comprises
@@ -376,24 +381,28 @@ on the same triangle, then moves over the edge opposite $V$ to point 1 on
 that triangle. It then moves back over the edge and completes the path at 0
 on the original triangle. (The second produces an explicit edge, and is needed
 so that the operation produces a polyhedron when applied directly to a
-polyhedron in $\mathcal{W}$.)
+polyhedron in $\mathcal{W}^o$.)
 
 This notation is capable of representing many operations on polyhedra,
 including all of Conway's operators. Notation to create the regular hemihedra
 from the Platonic solids exists, as does notation to create hollowed-out,
-da Vinci-style renderings of polyhedra.
-It is also capable of producing certain quasipolyhedra.
+da Vinci-style renderings of polyhedra. It may also produce quasipolyhedra: in
+fact, care should be taken to make sure that the notation produces a polyhedron
+in all cases, not just when applied after the meta operation.
 
 \section{Smoothing}
 
 Digons can be present in a faithful realization of a polyhedron, such as in
-Figure \ref{fig:circlesquare}, or spherical hosohedra. However, many subsets of
-polyhedra exclude digons. Degree-2 vertices are also problematic, being dual to
-digons. These elements can be eliminated in a systematic manner. We define a
-smoothing operator, $\$$, that transforms digons into single edges and handles
-degree-2 vertices by removing that vertex and merging the vertex's incident
-edges, as depicted in figure \ref{fig:smooth}. This is similar to the topic of
-homeomorphism in graph theory: see \cite{ziegler} for context. Antiprism
+Figure \ref{fig:circlesquare}, or spherical hosohedra. However, many
+definitions or subsets of polyhedra exclude digons. (For instance, Gr\"unbaum
+excludes digons in \cite{grunbaum03}.) Degree-2 vertices are also problematic,
+being dual to digons. These elements can be eliminated in a systematic manner.
+We define a smoothing operator, $\$$, that transforms digons into single edges
+and handles degree-2 vertices by removing that vertex and merging the vertex's
+incident edges, as depicted in figure \ref{fig:smooth}. In graph-theoretic
+terms, degree-2 vertices are transformed by contracting one of the edges it
+connects to, and digons are transformed by collapsing their edges into one,
+which is the equivalent act on the dual graph. \cite{gross} Antiprism
 effectively smooths digons automatically by treating them as "explicit edges".
 
 \begin{figure}
@@ -419,7 +428,7 @@ effectively smooths digons automatically by treating them as "explicit edges".
 \draw[fill] (12,1) circle [radius=0.05];
 \end{tikzpicture}
 
-\caption{Depiction of smoothing operator. a) a degree-2 vertex b) digon c)
+\caption{Depiction of smoothing operator $\$$. a) a degree-2 vertex b) digon c)
         smoothed result when applied to either.}
 \label{fig:smooth}
 \end{figure}
@@ -433,10 +442,15 @@ Conceptual complications arise when a polyhedron contains multiple digons or
 2-vertices incident to one another. There is some choice in which element to
 start on, and degree-2 elements may be adjacent to one another. A single
 smoothing step may create other degree-2 elements, as depicted in Figure
-\ref{fig:multismooth}. It can be shown
-that with repeated reduction of single elements, the polyhedron eventually
-reaches a state where it has no degree-2 features. We choose to define $\$$ so
-that it produces a polyhedron where all degree-2 features have been removed.
+\ref{fig:multismooth}. It can be shown that with repeated reduction of single
+elements, the polyhedron eventually reaches a state where it has no degree-2
+features. We choose to define $\$$ so that it produces a polyhedron where all
+degree-2 features have been removed. However, in special circumstances $\$$ may
+produce quasipolyhedra. For instance, the result for any spherical hosohedron
+or spherical dihedron is the digonal hosohedron or monogonal dihedron,
+respecetively. It may be helpful to define the operator such that it returns a
+proper polyhedra, stopping before it produces a quasipolyhedron.
+This ambiguity will not affect the rest of this text.
 
 \begin{figure}
 \begin{tikzpicture}
@@ -474,26 +488,322 @@ that it produces a polyhedron where all degree-2 features have been removed.
 \label{fig:multismooth}
 \end{figure}
 
-Note that in special circumstances this operator may produce quasipolyhedra.
-For instance, the endpoint for any spherical hosohedron or spherical dihedron
-is the spherical monohedron. It may be helpful to define the operator to return
-a proper polyhedra. This ambiguity will not affect the rest of this text.
+With some odd exceptions (those in the last paragraph), the smoothing operator
+$\$$ produces polyhedra where the minimum vertex and face degree is 3. Since
+the original polyhedron was required to be connected, this also means that the
+polyhedron has a 3-edge-connected skeleton. This is necessary but not
+sufficient in order to have a 3-vertex-connected skeleton (which, if the graph
+is also planar, makes it the skeleton of a convex polyhedron). One feature
+preventing a 3-edge-connected skeleton from being a 3-vertex-connected skeleton
+can be seen on the left of Figure \ref{fig:pound}. In general, if a
+3-edge-connected graph has any subgraphs that can be reduced to a digon or
+degree-2 vertex by edge contraction, those are responsible for the graph not
+being a 3-vertex-connected graph. So, we introduce an operator that does that
+edge contraction and then removes the resulting degree-2 feature, and call it
+\textit{pound}, denoted $\pounds$. (The name is by analogy with pounding out
+the dents in a metal object to make it convex, and using a currency symbol
+makes it similar to $\$$.) That said, polyhedra with such features and
+operators that produce them are interesting in ways we'll get to later.
 
-(smoothing lozenges?)
+\begin{figure}
+\begin{tikzpicture}
+\draw (0,0) -- (0,2);
+\draw (0,1) -- (1.5,1.5) -- (3,1);
+\draw (0,1) -- (1.5,0.5) -- (3,1);
+\draw (1.5,0.5) -- (1.5,1.5);
+\draw (3,0) -- (3,2);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (3,1) circle [radius=0.05];
 
-\section{Compositions of operations on $\mathcal{W}$ and
-          operations producing $\mathcal{W}$}
+\draw [->] (3.5,1) -- (4,1);
 
+\draw (4.5,0) -- (4.5,2);
+\draw (4.5,1) --  (7.5,1);
+\draw (7.5,0) -- (7.5,2);
+\draw[fill] (4.5,1) circle [radius=0.05];
+\draw[fill] (7.5,1) circle [radius=0.05];
+\end{tikzpicture}
 
-\section{Invariants of operators}
-Brinkmann et al. \cite{brinkmann} prove that in a class of operators they call
-local symmetry-preserving operations (LSP) and local operations that preserve
-orientation-preserving symmetries (LOPSP), each operator has an invariant they
-call $g$, or the inflation factor. $g$ is the ratio of the number of edges
-in the result polyhedron to that in the seed polyhedron. All of Conway's
-operations are LSPs or LOPSPs. For shorthand, we'll refer to LSPs and LOPSPs
-together as edge-replacement operations (EROs).
+\caption{Depiction of pound operator $\pounds$.}
+\label{fig:pound}
+\end{figure}
 
+\section{Edge-replacement operations}
+From this point, the discussion will exist in an uncomfortable middle ground.
+We will usually only be concerned with the combinatorial or topological
+structure of the polyhedron, but we still need to make reference to the ambient
+space. For instance, a \textit{face center} as used here need not be at any
+exact center of the face, or even really on the face, but the most intuitive
+way to talk about it is to put it at some sort of center on the face. When we
+talk about equality of operators, we mean it in the topological and combinatorial sense.
+
+In \cite{brinkmann}, two sets of operations on polyhedra are defined: local
+symmetry-preserving operations (LSP), on $\mathcal{P}$, and local operations
+that preserve orientation-preserving symmetries (LOPSP), on $\mathcal{P}^o$.
+\textit{Symmetry-preserving} means that the symmetry group of the seed
+polyhedron is the same as or a subgroup of the symmetry group of the result
+polyhedron. All of Conway's original operators are LSPs,
+except for gyro ($g$) and snub ($s$), which are LOPSPs.
+
+For LSPs and LOPSPs, the ratio of edges in the result polyhedron to the seed
+polyhedron is an invariant of the operator, and is always a positive integer.
+This is termed the \textit{inflation rate} by \cite{brinkmann},
+and denoted $g$ (not to be confused with the operator).
+It can also be termed the \textit{edge multiplier}.
+
+\begin{figure}
+\begin{tikzpicture}
+    \pic at (0,0) {chamber4};
+  \draw (0,1) -- (2,1);
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+
+  \pic at (2.5,0) {chamber4};
+\draw (3.5,0) -- (3.5,2);
+\draw[fill] (3.5,0) circle [radius=0.05];
+\draw[fill] (3.5,2) circle [radius=0.05];
+
+\pic at (5,0) {chamber4};
+\draw (5,1) -- (6,0) -- (7,1) -- (6,2) -- (5,1);
+\draw[fill] (5,1) circle [radius=0.05];
+\draw[fill] (6,0) circle [radius=0.05];
+\draw[fill] (7,1) circle [radius=0.05];
+\draw[fill] (6,2) circle [radius=0.05];
+
+\pic at (7.5,0) {chamber4};
+\draw (8,0.5) -- (9,1.5);
+\draw (9,0.5) -- (8,1.5);
+\draw[fill] (8.5,1) circle [radius=0.05];
+
+\pic at (10,0) {chamber4};
+\draw (10,1) -- (10.75,1.25) -- (11,2);
+\draw (12,1) -- (11.25,0.75) -- (11,0);
+\draw (10.75,1.25) -- (11.25,0.75);
+\draw[fill] (11,0) circle [radius=0.05];
+\draw[fill] (11,2) circle [radius=0.05];
+\draw[fill] (10,1) circle [radius=0.05];
+\draw[fill] (12,1) circle [radius=0.05];
+\draw[fill] (10.75,1.25) circle [radius=0.05];
+\draw[fill] (11.25,0.75) circle [radius=0.05];
+
+  \pic at (12.5,0) {chamber4};
+\draw (13,1.5) -- (14,1.5) -- (14,0.5) -- (13,0.5) -- (13,1.5);
+\draw (14,1.5) -- (13,0.5);
+\draw[fill] (13,1.5) circle [radius=0.05];
+\draw[fill] (14,1.5) circle [radius=0.05];
+\draw[fill] (14,0.5) circle [radius=0.05];
+\draw[fill] (13,0.5) circle [radius=0.05];
+\end{tikzpicture}
+
+\caption{Edge-centered diagram of EROs (LSPs and LOPSPs). From right to left:
+Seed ($S$), dual ($d$), join ($j$), ambo ($a$), gyro ($g$), snub ($s$).}
+\label{fig:edgecentered}
+\end{figure}
+
+Both LSPs and LOPSPs can be depicted in an edge-centered diagram like in Figure
+\ref{fig:edgecentered}. The idea is quadrilaterals can be identified on a
+polyhedron that contain each edge and have vertices going from one vertex of
+that edge, the face center to one side of the edge, the other vertex of the
+edge, and the face center to the other side of the edge. Then, that
+quadrilateral can be replaced with these edge-centered diagrams. The original
+vertices of the seed polyhedron are the point of the quadrilateral on the left
+and right of the diagram, while the original face centers are those on the top
+and bottom. Vertices are a filled dot, while face centers that are retained as
+a face are an open dot. Because LSPs and LOPSPs can be depicted like this, and
+since \cite{brinkmann} didn't introduce a term for it, we call the two sets of
+operators together \textit{edge-replacement operators}, or \textit{ERO}s.
+
+Edge-centered diagrams show four chambers, two to each side of the seed edge.
+For LOPSPs, the chambers of the top 2 chambers are a one-half-turn rotation of
+the bottom two. For LSPs, the chambers are all reflections of each other over
+the dotted lines. There is some redundancy built into these diagrams. We might
+think back to our explanation of \texttt{wythoff} and how it generally starts
+with a meta operation $m$, and note that the $m$'s edge-centered diagram would
+create a line over each dotted line, and wonder if we can create these
+operators as a composition of $m$ and some other operator from
+$\mathcal{W}$ to $\mathcal{P}$ or $\mathcal{W}^o$ to $\mathcal{P}^o$.
+
+The last statement is true, in a more complicated form. Figure
+\ref{fig:facediagram} depicts face diagrams for operators that can be used to
+produce the operators from Figure \ref{fig:edgecentered}. The first thing to
+note is that an edge cannot pass through the corners of the face diagram
+without a vertex at that corner. If it could, there could be edges connecting
+3 or more vertices, which is forbidden. The second is that we can permute the
+vertices of these face diagrams to produce new operators. Here we introduce an
+operator, $@$, to represent that permutation. $@_{ABC}$ maps A, B, and C
+to V, E and F in the seed polyhedron produced by $m$. (In general, $@$ acts on
+the vertex coloring of polyhedra in $\mathcal{W}$.) The third is that the $m$
+operator always produces a vertex of degree 4 at the center of each edge.
+
+\begin{figure}
+\begin{tikzpicture}
+  \pic at (0,0) {chamber1};
+\draw (1.7, 0) -- (0, 0);
+\draw[fill] (0, 0) circle [radius=0.05];
+\draw[fill] (1.7, 0) circle [radius=0.05];
+
+\pic at (2,0) {chamber1};
+\draw (2.85,0) -- (2.85,1.5);
+\draw[fill] (2.85, 1.5) circle [radius=0.05];
+
+\pic at (4,0) {chamber2};
+  \draw[fill] (5,1.5) circle [radius=0.05];
+  \draw[fill] (5,0) circle [radius=0.05];
+  \draw[fill] (5,2) circle [radius=0.05];
+  \draw[fill] (4,1) circle [radius=0.05];
+  \draw[fill] (6,1) circle [radius=0.05];
+  \draw (5,2) -- (5,1.5) -- (4,1);
+  \draw (5,1.5) -- (6,1);
+
+\pic at (6.5,0) {chamber2};
+  \draw[fill] (7.5,1.5) circle [radius=0.05];
+  \draw (7,1.5) -- (8,1.5);
+  \draw (7,0.5) -- (8,0.5);
+  \draw (7.25,1.75) -- (8.25,0.75);
+  \draw (7.75,1.75) -- (6.75,0.75);
+\end{tikzpicture}
+
+\caption{Face diagram of some operators.}
+\label{fig:facediagram}
+\end{figure}
+
+Let $x$ be the operator in the first face diagram from Figure
+\ref{fig:facediagram}. $x@m$ produces different operators, depending on the
+subscript to $@$. ACB and BCA produce the join operator $j$. ABC and BAC
+produce something that is almost, but not quite the identity operator $S$,
+while CAB and CBA almost produce the dual operator $d$. The degree 4 vertex at
+the edge center has had its order halved, to a degree 2 vertex. Applying the
+smoothing operator $\$$ will remove that vertex. So it makes sense, if degree-2
+elements are undesirable, to create operators as $\$x@m$.
+
+If $y$ is operator in the second face diagram from Figure \ref{fig:facediagram},
+then $\$x@m$ is $d$ for ABC and BAC, $S$ for CAB and CBA, and $a$ for ACB and
+BCA. Note that we have two different expressions for $S$ and $d$ now. For the
+expression in terms of $x$, degree-2 vertices were removed, and in terms of
+$y$, digons were removed.
+At most six operators can arise from the different permutations of an operator:
+the aforementioned have some the same due to symmetry.
+
+For LOPSPs, the situation is a little more complicated by keeping track of
+orientations. See the last two face diagrams in Figure \ref{fig:facediagram},
+which correspond to $g$ and $s$. Starting with A and travelling
+counterclockwise in each triangle, the first triangle is ABC, while the second
+is ACB. Thus, the upper triangle is applied to even-permutation faces from the
+seed in $\mathcal{W}^o$, while the lower triangle is applied to odd-permutation
+faces. (Also, note that for these operators,
+all even permutations result in the same operator for these face diagrams,
+and all odd permutations result in the chiral pair of that operator.)
+
+Given what we've discussed so far, it is easily shown that all EROs can be
+expressed as $y = \$x@m$ for some $x$, where $y$ operates on $\mathcal{P}_3$.
+(If the seed polyhedron contains degree-2 elements, those will also be reduced
+by the $\$$ term, so to exclude that case we restrict it to polyhedra without
+such elements. It's possible that there is a definition of $\$$ or grouping
+of operators that would allow for extension to all polyhedra.) If the edge
+multiplier $g$ for $y$ is even, there is an $x$ such that $y = x@m$, with no
+smoothing step needed. If $g$ is odd, then there are at least two $x$
+satisfying $y = \$x@m$, one which will have a digon removed and one which will
+have a degree-2 vertex removed. (There may be further relations where more than
+one digon or degree-2 vertex is removed.) Relatedly, if $g$ is even it either
+has a vertex or a face at the center of its edge-centered diagram:
+if odd, it has an edge there.
+
+The aforementioned also makes it very easy to describe $yd$ given $y$.
+Remember that the dual operator interchanges vertices and faces. Therefore,
+$md$ produces a polyhedra with V and F in opposite places. In a formula,
+$\$xmd = \$x@_{CBA}d$. Thus, the edge-centered diagram for $yd$ is that for
+$y$, rotated one-quarter-turn.
+
+Borrowing an idea from ring theory, we refer to $d$ (dual), $S$ (seed,
+identity) as the units of the EROs, and operators that are related by $d$ are
+called associates. ($r$ is a little odd and will be left out.) At most 4
+distinct operators can be associated with each other, corresponding to $x$,
+$xd$, $dx$, and $dxd$. Conway's operators are associated as so:
+\begin{itemize}
+  \item $j=jd, a=dj=djd$
+  \item $k, t=dkd$ (as well as $n=kd$ and $z=dk$)
+  \item $o=od, e=do=dod$
+  \item $g, s=dgd$ (as well as $rgr=gd$ and $rsr=sd$)
+  \item $m=md, b=dm=dmd$
+\end{itemize}
+Appendix B lists all named operators with their associates.
+
+We'll call operations on polyhedra that share their
+operator on $\mathcal{W}$ or the dual of $\mathcal{W}$ as a \textit{cohort}. If
+operators are associated, they share a cohort. There are at most 12 distinct
+operators in a cohort. Appendix C lists all named operators and their cohort.
+
+As a final note, EROs allow us to extend the Goldberg-Coxeter operations
+$\Box_{n,m}$ and $\Delta_{n,m}$ to faces with any number of sides. We simply
+have to identify the edge-centered diagram for EROs. The vertices of this
+quadrilateral were given in the earlier section on GC operations. These
+operators retain the same commutation and factoring properties in this
+extension.
+
+\section{Alternating EROs}
+Recall that $m = kj$, so $y = \$x@m = \$x@kj$. $m: \mathcal{P} \to
+\mathcal{W}$, as mentioned earlier, and $j: \mathcal{P} \to \mathcal{E}$, since
+join produces only quadrilateral faces. As well, when $k$'s seed is in
+$\mathcal{E}$, its result is in $\mathcal{W}$: this is true in general, not
+just for the quadrilaterals $j$ produces. Combining this information leads us
+to operators of the form $\$x@k: \mathcal{E} \to \mathcal{P}$. We call these
+\textit{Vertex-Alternating EROs}, or \textit{VAEROs}. They have edge-centered
+diagrams like EROs, but without the vertical center line. The leftmost corner
+represents one color of vertex, and the rightmost represents another, while the
+top and bottom still represent face centers. Notice that the orientation of the diagram matters: if you have a diagram from $-$ to $+$, flip it one half turn to get the diagram from $+$ to $-$. The similiar case for dual polyhedra would be called \textit{Face-Alternating EROs}, or \textit{FAEROs}. Both taken together are \textit{Alternating EROs} or \textit{AEROs}.
+
+Coxeter's alternation operation $h$ is an VAERO. Let $x$ be the first face
+diagram from Figure \ref{fig:facediagram}, then $\$x@_{ACB}k = h$. The inner
+component $x@_{ACB}k$ creates degree-2 vertices where the seed polyhedron had
+quadrilateral faces. Like with EROs, there is another $x$ that would create
+digons instead. While the inner component has an inflation rate $g=1$,
+this is not necessarily true for $h$ itself, since faces with 4 sides don't
+exist in any fixed ratio for an arbitrary polyhedron in $\mathcal{E}$.
+
+The join operator $j$ has a similar relation with duals as $m$. $j$ creates
+vertices at the vertices and faces of the seed polyhedron, which implies a
+2-coloring of the vertices. In $jd$, the same vertices are created, but their
+correspondence to the vertices and faces of the seed is reversed. We can expand
+the $@$ notation to apply to 2-colored vertices as well: $jd = @j$. Since there
+are only two possible colorings, we don't need a subscript, and $@^2 = S$.
+Furthermore, we can use the relation with $m$ from earlier: $md = @_{CBA}m =
+kjd = k@j$, so we define $k@ = @_{CBA}k$.
+
+This idea leads one to a possible edge-centered diagram method to construct
+operators like $t_n$, truncation of vertices of degree $n$. Create three
+edge-centered diagrams, one for edges between vertices of degree not equal to
+$n$, one for edges between vertices of degree $n$, and one for edges with one
+vertex of degree $n$ and one that is not. (Respectively, the first and second
+would just be the diagrams for $S$ and $t$, and the last would look like $t$ or
+$a$ on the left side and $S$ on the right.) Then use these diagrams to replace
+their respective edges.
+
+\section{Other operations}
+
+Technically, LSPs and LOPSPs as defined in \cite{brinkmann} are operators on
+$\mathcal{P}_{3v}$. That excludes any operator that creates digons or degree-2
+vertices, as well as any operator that creates the kind of features that
+$\pounds$ removes, such as the Lozenge operator.
+
+Some operators that do not preserve the topology of the seed polyhedron can be
+described as EROs. \texttt{leonardo} in Antiprism creates attractive
+hollowed-out polyhedra from seed polyhedra. The particular operation of
+\texttt{leonardo} can't be performed in \texttt{wythoff}, but a similar one can
+with the input string \texttt{[V, VF] 0\_1v1\_0v, 1v1f, 1V}. We call this the
+\textit{Hollow} operation. The resulting polyhedron is acoptic if the seed has
+positive curvature everywhere.
+
+It can help to understand operators like the Hollow operation by considering
+two disjoint copies of the seed polyhedra that are then stitched together. We
+define an operator, \textit{$n$-copy}, as the operator that creates $n$
+disjoint copies of the seed. That said, the result of this operator is not a
+polyhedron (it's multiple polyhedra), and it is ambiguous how to represent it
+as a poset (specifically the maximal and minimal elements).
+
+\section{Invariants of EROs}
+We already mentioned Brinkmann's inflation factor for EROs. \cite{brinkmann}
 Expanding on that, many operations act on the $f$-vector as a linear operator.
 Where $x$ is the operator, then the linear operator can be described with a
 matrix:
@@ -504,11 +814,11 @@ matrix:
   a' & b' & c' \end{bmatrix}
 \end{equation}
 If $x$ is an ERO, then $d = h= 0$. If $x$ perserves the Euler characteristic,
-then the vector $<1,-1,1>$ is a left eigenvector of $M_x$ with eigenvalue $1$.
+then the vector $(1,-1,1)$ is a left eigenvector of $M_x$ with eigenvalue $1$.
 (Explicitly, $a + a' = d + 1$, $c+ c' = h+1$, and $b + b' + 1 = g$).
 
 Some operators can also be expressed as an infinite linear operator $L_x$ on
-the values $v_i$, $e$, and $f_i$. In particular, EROs take this form:
+the values $v_i$, $e$, and $f_i$: vertices of degree $i$, edges, and faces with $i$ sides, respectively. In particular, EROs take this form:
 \begin{equation}
   \begin{split}
   E & = ge \\
@@ -519,11 +829,35 @@ the values $v_i$, $e$, and $f_i$. In particular, EROs take this form:
 $v_i$, $e$, and $f_i$ are the input to the operator and $V_i, E$, and $F_i$ are
 the result. $a, a', c,$ and $c'$ are either 0 or 1 if the Euler characteristic
 is preserved. $g$ is a positive integer, all $b_i$ and $b'_i$ are nonnegative
-integers, and $k$ and $\ell$ are positive integers. The subscripted values like
-$v_{i/k}$ should be interpreted as 0 if $i/k$ is not an integer.
+integers, and $k$ and $\ell$ are positive integers.
+$\sum b_i = b$ and $\sum b'_i = b'$. The subscripted
+values like $v_{i/k}$ should be interpreted as 0 if $i/k$ is not an integer.
 
-Applying the handshake lemma to the skeleton graph of the polyhedron gives
-relations between the values for EROs:
+$L_x$ and $M_x$ for an ERO can be determined by counting elements off the
+edge-centered diagram. Step by step:
+\begin{itemize}
+\item Seed vertices are either retained or converted into faces centered on that
+  vertex. (Other options are precluded by symmetry). Let $a = 1$ if the
+  seed vertices are retained, and 0 otherwise. Also, the degree of the vertex
+  or face is either the same as the seed vertex, or a multiple of it;
+  let $k$ be that multiple.
+\item Seed face centers are either retained (possibly of in a smaller face) or
+  converted into vertices. (Again, other options are precluded by symmetry).
+  Let $c = 0$ if the seed faces are retained, and 1 otherwise. Let
+  $\ell$ serve a similar role as $k$ above: the degree of the vertex
+  or face corresponding to the seed face center is $k$ times the degree of
+  the seed vertex.
+\item Except for the faces or vertices corresponding to the seed vertices and face
+  centers, the added elements are in proportion to to the number of edges in the
+  seed. $g$ is the count of added edges (the edge multiplier or inflation
+  rate), $b_i$ is the number of vertices of degree $i$ added, and
+  $b'_i$ is the number of faces of degree $i$ added.
+\end{itemize}
+Count elements lying on or crossing the outer edge of the chamber structure as
+half. It may help to draw an adjacent chamber, particularly when determining
+the number of sides on a face.
+
+Applying the handshake lemma to the skeleton graph of the polyhedron and its dual gives relations between the values for EROs:
 \begin{equation}
   \begin{split}
    2g &= 2ak + 2c\ell + \sum i b_i \\
@@ -549,42 +883,271 @@ and therefore $i \ge 3$, a series of inequalities can be derived for EROs:
   0 \le 2k + 2\ell - 4 \le b_3 + b'_3 \\
   \end{split}
 \end{equation}
-Note that these inequalities are only necessary, not sufficient.
+Note that these inequalities are only necessary, not sufficient. For instance,
+$g=4, a=1, c=0, b_4 = 1, b'_3=2, k=2, \ell=1$ satisfies the relations, but
+doesn't appear to correspond to any ERO. Furthermore, the Lozenge operator
+satisfies the relations.
 
-\section{Operator diagrams}
+It can be demonstrated that $M_{xy} = M_{x}M_{y}$ and $L_{xy} = L_{x}L_{y}$.
+The expansion factor $g$ for the operator $xy$ is the product of the $g$
+invariants for operators $x$ and $y$. It can also be seen that $a, a', c, c'$
+form their own linear system, a submatrix of $M_x$: let $\Lambda_x =
+\begin{bmatrix} a & c \\ a' & c' \end{bmatrix}$, then $\Lambda_{xy} = \Lambda_x
+\Lambda_y$. $\Lambda_x$ represents the effect of the operator on the seed
+faces and vertices. By cofactor expansion, $\det (M_x) = g \det (\Lambda_x)$.
+$\Lambda_x$ has a determinant of $-1, 0$, or $1$. (In fact, $\Lambda_x$ has two
+eigenvalues, one of which is always 1, and one of which may be -1, 0, or 1.
+$M_x$ has three eigenvalues: two it shares with $\Lambda_x$, and one is $g$.)
+The dual operator has $\det (M_d) = \det (\Lambda_d) = -1$, and it is easy to
+see that of the four possible $\Lambda_x$, the two with determinant 0 are
+related by the dual operator, and the two with determinant $\pm 1$ are related
+by the dual operator. With that motivation, we define the \textit{Type} of the
+operator as the absolute value of the determinant of $\Lambda_x$.
 
-While antiprism's extended Wythoff notation can express EROs, it's not
-necessarily obvious what the notation string does without executing it, or
-what the composition of two operators would be. Here we introduce a way of
-diagramming these operators to complement the extended Wythoff notation.
+For EROs, the parity of the invariants $g$ and $b$ also describe the center of the chamber structure.
+In particular, an ERO with both $g$ and $b$ odd is not possible.
+\begin{itemize}
+  \item $g$ even, $b$ even: A face with even degree lies at the center.
+  \item $g$ even, $b$ odd: A vertex with even degree lies at the center.
+  \item $g$ odd, $b$ even: An edge crosses the center.
+  \item $g$ odd, $b$ odd: Excluded by symmetry.
+\end{itemize}
 
-The action of an ERO on the vertices of degree $i$, edges, and faces with
-$i$ sides can be described with an infinite linear operator $L_x$, as mentioned
-earlier. This operator can be determined by counting elements off the chamber
-structure. Step by step:
+EROs form a monoid (a group without inverses, or a semigroup with identity).
+We have derived here a series of monoid homomorphisms, as
+$ x \to L_x \to M_x \to (g, \Lambda_x)$.
+None of these homomorphisms are injections: there are certain
+$L_x$ or $M_x$ that correspond to more than one EROs. Examples for $M_x$ are
+easy to come by: where $n = kd$, $M_k = M_n$. For an example where the
+operators are not related by duality, $M_l = M_p$. For $L_x$, $L_{prp} =
+L_{pp}$ but $prp$ is not the same as $pp$ (one's chiral, one's not). For the
+Waffle operator, $W \ne Wd$, but $L_W = L_{Wd}$. A general counterexample would
+be operators with sufficiently large $g$ based on $\Box_{n,m}$, with a single
+square face (not touching the seed vertices or face centers) divided into two
+triangles: the counts of vertices of each degree, faces of each degree, and
+edges would be the same no matter which faces was chosen, but the operators
+would be different. With this construction, it is possible (with a sufficiently
+large $g$) to create arbitrarily large sets of operators with the same
+invariants.
 
-* Seed vertices are either retained or converted into faces centered on that
-  vertex. (Other options are precluded by symmetry). Let $a = 1$ if the
-  seed vertices are retained, and 0 otherwise. Also, the degree of the vertex
-  or face is either the same as the seed vertex, or a multiple of it;
-  let $k$ be that multiple.
-* Seed face centers are either retained (possibly of in a smaller face) or
-  converted into vertices. (Again, other options are precluded by symmetry).
-  Let $c = 0$ if the seed faces are retained, and 1 otherwise. Let
-  $\ell$ serve a similar role as $k$ above: the degree of the vertex
-  or face corresponding to the seed face center is $k$ times the degree of
-  the seed vertex.
-* Except for the faces or vertices corresponding to the seed vertices and face
-  centers, the added elements are in proportion to to the number of edges in the
-  seed. $g$ is the count of added edges (the edge multiplier or inflation
-  rate), $b_i$ is the number of vertices of degree $i$ added, and
-  $b'_i$ is the number of faces of degree $i$ added.
+Unfortunately, no invariant for chirality has been discovered so far. The
+relationship with operators and chirality is complicated: two chiral operators
+may produce another chiral operator (e.g. $p^2, g^2$) or an achiral operator
+$prpr$. Further confusing things are LOPSPs where r and d interact. Some EROs
+have $xd = x$, while some others have $xd = rxr$. $g$ and $B$ are examples of
+the latter. Some have $x = dxd$, like $p$, but none with $rxr = dxd$ have been
+observed or proven/disproven to exist.
 
-Count elements lying on or crossing the outer edge of the chamber structure as
-half. It may help to draw an adjacent chamber, particularly when determining
-the number of sides on a face.
+\section{Invariants of other operators}
+Some VAEROs have a 4x3 matrix form from $v^+, v^-, e, f$ to $v, e, f$, where
+$v^+, v^-$ are the counts of vertices of one color or the other. The matrix takes
+this form:
 
-Extension of GCs to all faces
+\begin{equation}
+  M_x = \begin{bmatrix}
+  a^+ & a^- & b & c \\
+  0 & 0 & g & 0 \\
+  a'^+ & a'^- & b' & c' \end{bmatrix}
+\end{equation}
+
+where $a^+, a^-, a'^+,$ and $a'^-$ are either 0 or 1. This matrix may be
+expressed as a standard 3x3 matrix if $a^+ = a^-$ and $a'^+ = a'^-$, for
+conciseness.
+VAEROs may also have a linear operator form like so,
+where $k^+$ and $k^-$ are positive integers and $\ell$ takes values in
+$\mathbb{N}/2 = \{1/2, 1, 3/2, 2, ...\}$:
+
+\begin{equation}
+  \begin{split}
+  E & = ge \\
+  V_i & = a^+ v^+_{i/k^+} + a^- v^-_{i/k^-} + e b_i + c f_{i/\ell} \\
+  F_i & = a'^+ v^+_{i/k^+} + a'^- v^-_{i/k^-} + e b'_i + c' f_{i/\ell}
+  \end{split}
+\end{equation}
+
+Operators from $\mathcal{W}$ to $\mathcal{P}$ may have a 5x3 matrix form
+from $v^{(1)}, v^{(2)}, v^{(3)}, e, f$ to $v, e, f$, where $v^{(1)}, v^{(2)},
+v^{(3)}$ are the counts of 3-colored vertices, like so:
+
+\begin{equation}
+  M_x = \begin{bmatrix}
+  a^{(1)} & a^{(2)} & a^{(3)} & b & c \\
+  0 & 0 & 0 & g & h \\
+  {a'}^{(1)} & {a'}^{(2)} & {a'}^{(3)} & b' & c' \end{bmatrix}
+\end{equation}
+
+The zeros in the second row are a consequence of the fact that $x@m$ is an ERO
+when $x$ is an operator from $\mathcal{W}$ to $\mathcal{P}$. All values can be
+rational numbers, even negative. Again, if $a^{(1)} = a^{(2)} = a^{(3)}$ and
+$a'^{(1)} = a'^{(2)} = a'^{(3)}$ the matrix may be presented in a condensed 3x3
+form. In general, having $M_{x@m}$ is not enough to determine $M_x$.
+
+$M_@$ can be expressed as a 4x4 permutation matrix (for $\mathcal{E}$)
+or a 5x5 permutation matrix (for $\mathcal{W}$). $m$ and $j$,
+which produce such polyhedra, have these expanded forms:
+
+\begin{equation}
+  M_j = \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & 0 & 1 \\
+  0 & 2 & 0 \\
+  0 & 1 & 0 \end{bmatrix},
+  M_m = \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+  0 & 6 & 0 \\
+  0 & 4 & 0 \end{bmatrix}
+\end{equation}
+
+These operators may also have a defined inflation factor $g$, and an analgous
+$\Lambda_x$ can be defined (although Type, being based on determinants, is not
+be defined unless the matrix can be condensed).
+
+\section{Reducibility and irreducibility}
+An operator that cannot be expressed in terms of EROs aside from $d$ and
+$r$ is \textit{irreducible over the EROs}. For instance, $k$ (Kis) and $j$
+(Join) are irreducible in terms of EROs, but $m$ (Meta) is not (it is equal to
+$kj$). A polyhedron that cannot be expressed in terms of another polyhedron and
+one or more EROs other than the units $S$ and $d$ is an irreducible polyhedron.
+Out of all of the Platonic, Archimedean, and Catalan solids, the only
+irreducible one is the tetrahedron.
+
+The relations defined earlier can be used to help reduce an operator,
+with some caveats. The above representations do not give us a completely
+reliable way to decompose an arbitrary operator into a sequence of operators,
+although it does suggest a (trial-and-error filled) heuristic to reduce an
+operator into two operators by starting at the bottom of the homomorphism chain
+and going up.
+
+* Determine the $g$ of the two operators from the factors of the
+  $g$ of the operator to be factored.
+* Determine the outline ($a, a', c, c'$) of the two operators.
+* Determine $b, b'$ for the two operators.
+* Determine $k, \ell, b_i, b'_i$. for the two operators.
+* Figure out if the representations you've produced actually correspond to
+  an ERO.
+
+Which set of operators you're trying to reduce an operator over is important.
+It may be possible to reduce an ERO into an AERO and $j$, but that's not useful
+if you're trying to reduce over the EROs. Be careful of naively reducing based
+on $M_x$, as the matrices for operators outside of the EROs may pop up. Also
+keep in mind that a LSP may reduce into two LOPSPs which are inapplicable to
+non-orientable surfaces, although this is more of a technical issue.
+
+Some facts relating to decomposition that can be derived from what we have
+so far:
+
+\begin{itemize}
+\item If a polyhedron has a prime number of edges, it is irreducible.
+\item Operators where $g$ is a prime number are irreducible.
+\item If $x=xd$ or $rxr=xd$, $x$ has type 0.
+\item If $x=dxd$ or $rxr=dxd$, $x$ has type 1, $g$ is odd, $b=b'$, and $b$ and $b'$ are even.
+\item If an ERO has type 1, its decomposition cannot contain any EROs of type 0. Correspondingly, if an ERO has type 0, its decomposition must contain at least one type 0 ERO.
+\item There are no type 1 EROs with $g=2$, so therefore type 1 EROs
+  with $g=2p$, where p is prime, are irreducible in terms of EROs.
+  (However, it may be reducible into an AERO or an operator on $\mathcal{W}$.)
+\item $\Box_{n,m}$ that correspond to the Gaussian primes,
+  and $\Delta_{n,m}$ that correspond to the Eisenstein primes,
+  are irreducible in terms of EROs. (Proof below.)
+  As a consequence of this, there are an infinite number of irreducible EROs.
+\end{itemize}
+
+Proof of the last statement: A Gaussian integer $a + bi$ is prime if its
+square norm $a^2 + b^2$ is prime or the square of a prime. In the first
+case, that prime has the form $p=4k+1$; in the latter, $p=4k+3$.
+Remember that the squared norm of the integer is just the inflation factor $g$
+for the corresponding operator. If $g$ is prime, the operator is irreducible.
+If $g$ is the square of a prime, the operator $\Box_{n,m}$ is type 1,
+specifically, $\det(\Lambda_{\Box_{n,m}}) = 1$. Suppose the operator can
+be decomposed into $\Box_{n,m} = xy$, where $x$ and $y$ both have
+inflation factor $g' = \sqrt{g}$. Without loss of generality, assume
+$\det(\Lambda_x) = \det(\Lambda_y) = 1$. Their matrix forms are:
+
+\begin{equation}
+   \mathbf{M}_x \mathbf{M}_y = \begin{bmatrix}
+   1 & b & 0 \\
+   0 & g' & 0 \\
+   0 & b' & 1 \end{bmatrix} \begin{bmatrix}
+   1 & B & 0 \\
+   0 & g' & 0 \\
+   0 & B' & 1 \end{bmatrix}
+   = \begin{bmatrix}
+   1 & B+bg' & 0 \\
+   0 & g & 0 \\
+   0 & B'+b'g' & 1 \end{bmatrix}
+   = \mathbf{M}_{\Box_{n,m}} = \begin{bmatrix}
+   1 & (T-1)/2 & 0 \\
+   0 & T & 0 \\
+   0 & (T-1)/2 & 1 \end{bmatrix}
+\end{equation}
+
+therefore, $B+bg' = B'+b'g'$. It can be demonstrated using the ERO
+invariant inequalities from earlier that the only solution to this that could
+correspond to an actual ERO is $b=b'$ and $B=B'$.
+$g' = p = 4k + 3$, so $b, b', B, B'$ must all be odd. As mentioned
+earlier, there are no EROs with both $b$ and $g$ odd, so we have a
+contradiction, and $\Box_{n,m}$ is irreducible.
+
+The proof for $\Delta_{n,m}$ is analogous. An Eisenstein integer
+$a + bu$, $u=\exp(\pi i/3)$, is prime if its square norm
+$a^2 + ab + b^2$ is prime or the square of a prime. The prior (except
+for $(1 + u)$, which we corresponds to the ERO $n$ which we already
+know is irreducible) have the form $p=3k+1$; the latter, $p=3k+2$.
+When the prime is of the latter form, the ERO is type 1 with
+$\det(\Lambda_{\Delta_{n,m}}) = 1$ and its matrix form is:
+
+\begin{equation}
+   \mathbf{M}_{\Delta_{n,m}} = \begin{bmatrix}
+          1 & (T-1)/3 & 0 \\
+          0 & T & 0 \\
+          0 & 2(T-1)/3 & 1 \end{bmatrix}.
+\end{equation}
+
+Define $x$ and $y$ as before: then $2(B+bg') = B'+b'g'$. Using the
+inequalities to exclude other choices, $B' = 2B$ and $b' = 2b$.
+$g = 3k + 2$, but $g = b+ b' + 1 = 3b+1$:
+there is no simultaneous integer solution to both equations,
+so we have a contradiction, and $\Delta_{n,m}$ is irreducible.
+
+There are some polyhedra or operators that have non-unique reductions. However,
+all known examples involve degree-2 features or operators that do not produce
+polyhedra in $\mathcal{P}_{3v}$. For example, $kX = tT$, where $X$ is the
+4-dihedron, and $jx = lj$, where $x$ is the Lozenge operator. It is an open
+question whether the decomposition of an ERO on $\mathcal{P}_{3v}$ in terms of
+other EROs is unique (up to associates).
+
+\section{Lower polytopes}
+
+Examining operations on the lower polytopes may help us form analogies.
+There is only one abstract polytope of each rank -1, 0, and 1:
+the null polytope, a single vertex, and a single edge. Therefore,
+given a rank $k \le 1$, there is only one operator on that set of abstract
+polytopes, which is the identity operator.
+
+The polygons are the polytopes of rank 2. A polygon has an equal number of
+vertices and edges, and a (finite) abstract polygon is uniquely determined by
+its count of edges (or vertices). (There's also the apeirogon, with an infinite
+number of vertices and edges, which is also unique.) Therefore, abstract
+polygons are self-dual. An abstract polygon may have 2 or more vertices.
+Therefore, the operators on abstract polygons correspond to the operators on
+the integers 2 or greater. (Monogons violate the diamond property, so they're
+not abstract polygons. If we were to include those, the operators would
+correspond to operators on the integers 1 and greater.
+This analysis is basically the same whether they're included or not.)
+
+In the set of abstract polygons, the analog to EROs is the operators that
+multiply the number of edges by some integer $k \ge 1$. The symmetry group of
+an $n$-edged polygon is, by definition, the dihedral group $D_n$, and $D_n$ is
+a subgroup of $D_{kn}$, so like the EROs these operators also preserve or
+increase the symmetry of the polygon. Furthermore, the operator can be reduced
+into a series of operators as per the integer factorization of $k$, and these
+operators commute with each other.
+
+One can also make analogy with the alternating EROs by considering polygons
+with an even number of sides. Essentially, these are the extension of the last
+paragraph to $k = j + \frac{1}{2}$, $j \ge 0$. (Including monogons may help
+here: for the operator where $k=1/2$, a digon would map to a monogon.)
 
 \section{Future work}
 There are two related directions to take this work in the future.
@@ -627,191 +1190,193 @@ Items marked with a dagger (\dag) indicate an operator that may produce non-conv
 \texttt{a}: Antiprism extensions\cite{antiprism};
 \texttt{g}: Goldberg-Coxeter, as per the section earlier;
 \texttt{n}: new in this text.
+$\$, \pounds$, and $@$ are not included in the list below. Where not specified, $k$ and $\ell$ are 1, and $b_i$ and $b'_i$ are 0.
 
-\begin{longtable}{c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{3cm}}
+
+
+\begin{longtable}{c|m{2cm}|m{2cm}|m{2cm}|m{2cm}|m{1.7cm}|m{2.5cm}}
     \caption{Operators with linear represenations, organized by associates.}
     \\
-    $M_x$ & $x$  & $xd$ & $dx$ & $dxd$ & Notes
+    $M_x$ & $x$ & $xd$ & $dx$ & $dxd$ & $k, \ell, b_i, b'_i$ & Notes
     \endhead \hline
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & chiral, \texttt{h}
-    \\
+    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & & chiral, \texttt{h}
+    \\ \hline
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & $d$: \texttt{c}, $S$: \texttt{a}
-    \\
+    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & & $d$: \texttt{c}, $S$: \texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 2 & 0 \\
-    0 & 1 & 0 \end{bmatrix}$& Join: $j=\Box_{1,1}$ & $j$ ($@j$) & Ambo: $a$ & $a$ ($@a$)& \texttt{c}
-    \\
+    0 & 1 & 0 \end{bmatrix}$& Join: ${j=\Box_{1,1}}$ & $j$ ($@j$) & Ambo: $a$ & $a$ ($@a$)& $b'_4=1$ &\texttt{c}
+    \\ \hline
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 3 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & $k, t$: c, $n, z$: \texttt{a}
-    \\
+    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & ${k=2}$, ${b'_3=2}$ &$k, t$: \texttt{c}. $n, z$: \texttt{a}.
+    \\ \hline
     $\begin{bmatrix}
     1 & 1 & 1 \\
     0 & 4 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Ortho: $o=jj=\Box_{2,0}$ & $o$ & Expand: $e=aa$ & $e$ & \texttt{c}
-    \\
+    0 & 2 & 0 \end{bmatrix}$& Ortho: ${o=jj=\Box_{2,0}}$ & $o$ & Expand: ${e=aa}$ & $e$ & &\texttt{c}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 5 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & chiral, \texttt{c}
-    \\
+    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & ${b_3=2}$, ${b'_5=2}$ &chiral, \texttt{c}
+    \\ \hline
     $\begin{bmatrix}
     1 & 1 & 1 \\
     0 & 6 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Meta: $m=kj$ & $m$ & Bevel: $b=ta$ & $b$ & \texttt{c}
-    \\
+    0 & 4 & 0 \end{bmatrix}$& Meta: ${m=kj}$ & $m$ ($@m$) & Bevel: ${b=ta}$ & $b$ ($@b$) & &\texttt{c}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 4 & 0 \\
-    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: $u =\Delta_{2,0}$ & \texttt{a}
-    \\
+    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: ${u =\Delta_{2,0}}$ & ${b_3=2}$, ${b'_6=1}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Propeller: $p=\Box_{2,1}$ & $dp=pd$ & $pd=dp$ & $p$ & chiral, \texttt{h}
-    \\
+    0 & 2 & 1 \end{bmatrix}$& Propeller: ${p=\Box_{2,1}}$ & $dp=pd$ & $pd=dp$ & $p$ & ${b_4=2}$, ${b'_4=2}$ &chiral, \texttt{h}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Loft: $l$ & $ld$ & $dl$ & $dld$ & \texttt{a}
-    \\
+    0 & 2 & 1 \end{bmatrix}$& Loft: $l$ & $ld$ & $dl$ & $dld$ & ${k=2}$, ${b_3=2}$, ${b'_4=2}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 3 & 0 \\
     0 & 6 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Quinto: $q$ & $qd$ & $dq$ & $dqd$ & \texttt{a}
-    \\
+    0 & 2 & 1 \end{bmatrix}$& Quinto: $q$ & $qd$ & $dq$ & $dqd$ & ${b_3=2}$, ${b_4=1}$, ${b'_5=2}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 6 & 0 \\
     0 & 3 & 1 \end{bmatrix}$& Joined-Lace: $L_0$ & $L_0d$ & $dL_0$ & $dL_0d$
-    & \texttt{a}
-    \\
+    & ${k=2}$, ${b_4=2}$, ${b'_3=2}$, ${b'_4=1}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 7 & 0 \\
-    0 & 4 & 1 \end{bmatrix}$& Lace: $L$ & $Ld$ & $dL$ & $dLd$ & \texttt{a}
-    \\
+    0 & 4 & 1 \end{bmatrix}$& Lace: $L$ & $Ld$ & $dL$ & $dLd$ & ${k=3}$, ${b_4=2}$, ${b'_3=4}$&\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 7 & 0 \\
-    0 & 4 & 1 \end{bmatrix}$& Opposite-Lace: $L_{-1}$ & $L_{-1}d$ & $dL_{-1}$ & $dL_{-1}d$ & \texttt{n}
-    \\
+    0 & 4 & 1 \end{bmatrix}$& Opposite-Lace: $L_{-1}$ & $L_{-1}d$ & $dL_{-1}$ & $dL_{-1}d$ & ${k=2}$, ${b_5=2}$, ${b'_3=4}$ &\texttt{n}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 7 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Medial: $M$ & $Md$ & $dM$ & $dM d$ & \texttt{a}
-    \\
+    0 & 4 & 0 \end{bmatrix}$& Medial: $M$ & $Md$ & $dM$ & $dM d$ & &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 7 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Stake: $K$ & $Kd$ & $dK$ & $dKd$ & \texttt{a}
-    \\
+    0 & 4 & 0 \end{bmatrix}$& Stake: $K$ & $Kd$ & $dK$ & $dKd$ & ${k=3}$, ${b_3=2}$, ${b'_3=2}$, ${b'_4=2}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 4 & 0 \\
     0 & 7 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & chiral, \texttt{a}
-    \\
+    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & ${b_3=4}$, ${b'_6=2}$ &chiral, \texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 4 & 0 \\
     0 & 8 & 0 \\
-    0 & 3 & 1 \end{bmatrix}$& Ethel: $E$ & $Ed$ & $dE$ & $dEd$ & \texttt{n}
-    \\
+    0 & 3 & 1 \end{bmatrix}$& Ethel: $E$ & $Ed$ & $dE$ & $dEd$ & ${b_3=2}$, ${b_4=2}$, ${b'_4=2}$, ${b'_6=1}$ &\texttt{n}
+    \\ \hline
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 8 & 0 \\
-    0 & 5 & 0 \end{bmatrix}$& Join-kis-kis\footnote{Antiprism calls this "joined-medial".}: $J$ & $Jd$ & $dJ$ & $dJd$ & \texttt{a}
-    \\
+    0 & 5 & 0 \end{bmatrix}$& Join-kis-kis\footnote{Antiprism calls this "joined-medial".}: $J$ & $Jd$ & $dJ$ & $dJd$ & ${k=3}$, ${\ell=2}$, ${b_3=2}$, ${b'_3=4}$, ${b'_4=1}$&\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & 4 & 1 \\
     0 & 9 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Waffle: $W$ & $Wd$ & $dW$ & $dWd$ & \texttt{n}
-    \\
+    0 & 4 & 0 \end{bmatrix}$& Waffle: $W$ & $Wd$ & $dW$ & $dWd$ & ${b_3=2}$, ${b_4=2}$, ${b'_4=2}$, ${b'_5=2}$ &\texttt{n}
+    \\ \hline
     $\begin{bmatrix}
     1 & 5 & 1 \\
     0 & 10 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Bowtie: $B$ & $Bd$ & $dB$ & $dBd$ & \texttt{n}
-    \\
+    0 & 4 & 0 \end{bmatrix}$& Bowtie: $B$ & $Bd$ & $dB$ & $dBd$ & ${b_3=4}$, ${b_4=1}$, ${b'_3=2}$, ${b'_7=2}$ &chiral, \texttt{n}
+    \\ \hline
     $\begin{bmatrix}
     1 & 3 & 1 \\
     0 & 10 & 0 \\
-    0 & 6 & 0 \end{bmatrix}$& Cross: $X$ & $Xd$ & $dX$ & $dXd$ & \texttt{a}
-    \\
+    0 & 6 & 0 \end{bmatrix}$& Cross: $X$ & $Xd$ & $dX$ & $dXd$ & ${k=2}$, ${b_4=2}$, ${b_6=1}$, ${b'_3=4}$, ${b'_4=2}$ &\texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & n & 1 \\
     0 & 3n+3 & 0 \\
-    0 & 2n+2 & 0 \end{bmatrix}$& $m_n$ & $m_n d$ & $b_n$ & $b_n d$ & \texttt{a}, $n \ge 0$
-    \\
+    0 & 2n+2 & 0 \end{bmatrix}$& $m_n$ & $m_n d$ & $b_n$ & $b_n d$ & ${k=2}$, ${\ell=n+1}$, ${b_4=n}$, ${b'_3=2n+2}$ &$n \ge 0$. $m_1 = m$. \texttt{a}
+    \\ \hline
     $\begin{bmatrix}
     1 & n & 1 \\
     0 & 3n+1 & 0 \\
     0 & 2n & 0 \end{bmatrix}$& $M_n$ & $M_n d$ & $dM_n$ & $dM_n d$ &
-    \texttt{a}, $n \ge 1$
-    \\
+    ${\ell=n}$, ${b_4=n}$, ${b'_3=2n-2}$, ${b'_4=2}$ &\texttt{a}, $n \ge 1$
+    \\ \hline
     $\begin{bmatrix}
     1 & \frac{T}{2} - 1 & 1 \\
     0 & T & 0 \\
-    0 & \frac{T}{2} & 0 \end{bmatrix}$& $\Box_{a,b}$ & $\Box_{a,b}$ &
-    $d\Box_{a,b}$ & $d\Box_{a,b}$ & $a \equiv b \mod 2$, $T=a^2+b^2$.
+    0 & \frac{T}{2} & 0 \end{bmatrix}$& $\Box_{n,m}$ & $\Box_{n,m}$ &
+    $d\Box_{n,m}$ & $d\Box_{n,m}$ & $b_4=b'_4=b$ &${n \equiv m \mod 2}$, ${T=n^2+m^2}$.
     \texttt{g}, \texttt{a}\footnote{Antiprism implements $\Box$,
-    but only where $b=0$: it calls it $o_n$.}
-    \\
+    but only where $b=0$: it calls it $o_n$ and numbers it differently.}
+    \\ \hline
     $\begin{bmatrix}
     1 & \frac{T-1}{2} & 0 \\
     0 & T & 0 \\
-    0 & \frac{T-1}{2} & 1 \end{bmatrix}$& $\Box_{a,b}$ & $d\Box_{a,b}$ &
-    $d\Box_{a,b}$ & $\Box_{a,b}$ & $a \not\equiv b \mod 2$,
-    $T=a^2+b^2$. \texttt{g}
-    \\
+    0 & \frac{T-1}{2} & 1 \end{bmatrix}$& $\Box_{n,m}$ & $d\Box_{n,m}$ &
+    $d\Box_{n,m}$ & $\Box_{n,m}$ & $b_4=b'_4=b$ &${n \not\equiv m \mod 2}$,
+    ${T=n^2+m^2}$. \texttt{g}
+    \\ \hline
     $\begin{bmatrix}
     1 & \frac{T}{3} - 1 & 1 \\
     0 & T & 0 \\
-    0 & \frac{2T}{3} & 0 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ &
-    $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \equiv b \mod 3$, $T=a^2+ab+b^2$.
+    0 & \frac{2T}{3} & 0 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
+    $d\Delta_{n,m}$ & $d\Delta_{n,m}d$ & ${b_6=b}$, ${b'_3=b'}$ &${n \equiv m \mod 3}$, ${T=n^2+nm+m^2}$.
     \texttt{g}
-    \\
+    \\ \hline
     $\begin{bmatrix}
     1 & \frac{T-1}{3} & 0 \\
     0 & T & 0 \\
-    0 & 2\frac{T-1}{3} & 1 \end{bmatrix}$& $\Delta_{a,b}$ & $\Delta_{a,b}d$ &
-    $d\Delta_{a,b}$ & $d\Delta_{a,b}d$ & $a \not\equiv b \mod 3$,
-    $T=a^2+ab+b^2$. \texttt{g}
+    0 & 2\frac{T-1}{3} & 1 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
+    $d\Delta_{n,m}$ & $d\Delta_{n,m}d$ & ${b_6=b}$, ${b'_3=b'}$ &${n \not\equiv m \mod 3}$,
+    ${T=n^2+nm+m^2}$. \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Lozenge & & & & \texttt{n}\dag
+    0 & 2 & 1 \end{bmatrix}$& Lozenge & & & &${k=2}$, ${\ell=2}$, ${b_3=2}$, ${b'_3=2}$ &\texttt{n}\dag
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 7 & 0 \\
-    1 & 3 & 0 \end{bmatrix}$& Hollow & & & & \texttt{n}\ddag
-    \\
+    1 & 3 & 0 \end{bmatrix}$& Hollow & & & & ${k=2}$, ${b_5 = 2}$, ${b'_4 = 3}$ &\texttt{n}\ddag
+    \\ \hline
     $\begin{bmatrix}
     n & 0 & 0 \\
     0 & n & 0 \\
-    0 & 0 & n \end{bmatrix}$& $n$-Copy  & & & & \texttt{n}, \ddag for $n>1$
+    0 & 0 & n \end{bmatrix}$& $n$-Copy & $d$ ($n$-Copy) = ($n$-Copy) $d$ & $d$ ($n$-Copy) = ($n$-Copy) $d$ & $n$-Copy & &\texttt{n}, \ddag for $n>1$
 \end{longtable}
 
-\section{Table of operator cohorts}
-In the following tables, permutations in parentheses, such as (CBA), indicate a
-permutation that produces the chiral pair of the depicted operator. With the
+\section{Cohorts of LSPs}
+With the
 exception of some named operators, if $x$ is shown, $xd$ is not, since its
 information can be easily determined from the information for $x$. An arbitrary
 named member of the cohort is chosen to label the cohort, e.g. the $a$-cohort.
 
-\begin{table}
-\caption{$a$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$a$-cohort of LSPs}
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ / $M_{x}$ / Invariants & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -820,10 +1385,6 @@ $x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
 \draw[fill] (0, 0) circle [radius=0.05];
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 1/2 \\
-0 & 0 & 1 & -1 & 3/2 \end{bmatrix}$ &
 ABC, BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -837,7 +1398,11 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ & &
+\\
+$\begin{bmatrix}
+1 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1/3 & 0 \\
+0 & 0 & 1 & 0 & 0 \end{bmatrix}$ &
 CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -851,7 +1416,7 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 1 & 0 & 0 \end{bmatrix}$
 &  $\$x@m = d$
-\\ & &
+\\ &
 ACB, BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -873,10 +1438,6 @@ $\begin{bmatrix}
 \draw (0.85,0) -- (0.85,1.5);
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & -1 & 3/2 \\
-0 & 0 & 0 & 0 & 1/2 \\
-1 & 1 & 0 & 0 & 0 \end{bmatrix}$ &
 ABC, BAC &
 $d$
  &
@@ -885,7 +1446,11 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 1 & 0 & 0 \end{bmatrix}$
 & $\$x@m = d$
-\\ & &
+\\
+$\begin{bmatrix}
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 1/3 & 0 \\
+1 & 1 & 0 & 0 & 0 \end{bmatrix}$ &
 CAB, CBA &
 $S$
  &
@@ -894,7 +1459,7 @@ $\begin{bmatrix}
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ & &
+\\ &
 ACB, BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -912,10 +1477,10 @@ $\begin{bmatrix}
 \end{table}
 
 \begin{table}
-\caption{$o$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\caption{$o$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1036,11 +1601,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$u$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$u$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1126,180 +1691,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}%verify that the orientation is the same as in wythoff
-\caption{$p$-cohort of operators on orientable polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$l$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
-& Note
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,1.5) circle [radius=0.05];
-  \draw[fill] (0,1) circle [radius=0.05];
-  \draw[fill] (2,1) circle [radius=0.05];
-  \draw (2,1) -- (1,1.5) -- (0,1);
-  \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
-  \draw (0.66,0.33) -- (1.33,0.33);
-\end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & 0 & 1/2 \\
-0 & 0 & 0 & 0 & 3/2 \\
-0 & 0 & 1 & -1 & 2 \end{bmatrix}$ &
-BAC &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0,1) -- (1.33,0.33);
-\draw (2,1) -- (0.66,1.66);
-\draw (0.66,0.33) -- (1.33,1.66);
-\draw[fill] (1.2,1.4) circle [radius=0.05];
-\draw[fill] (0.8,0.6) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 2 & 0 \\
-0 & 5 & 0 \\
-0 & 2 & 1 \end{bmatrix}$
-&  $\$x@m = p$
-\\ & & ACB &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (2,1) -- (1.25,1.25) -- (1,2);
-\draw (0,1) -- (0.75,0.75) -- (1,0);
-\draw (1.25,1.25) -- (0.75,0.75);
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\draw[fill] (1.25,1.25) circle [radius=0.05];
-\draw[fill] (0.75,0.75) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 2 & 1 \\
-0 & 5 & 0 \\
-0 & 2 & 0 \end{bmatrix}$
-& $\$x@m = rgr$
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,0) circle [radius=0.05];
-  \draw[fill] (1,1) circle [radius=0.05];
-  \draw[fill] (1,2) circle [radius=0.05];
-  \draw (0.5,0.5) -- (1.5,1.5);
-  \draw (1.5,0.5) -- (0.5,1.5);
-  \draw (1,1) -- (1,2);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & -1 & 2 \\
-0 & 0 & 0 & 0 & 3/2 \\
-1 & 1 & 0 & 0 & 1/2 \end{bmatrix}$ &
-ACB &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
-\draw (1.5,0.5) -- (0.5,1.5);
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 2 & 0 \\
-0 & 5 & 0 \\
-1 & 2 & 1 \end{bmatrix}$
-& $\$x@m = rsr$
-\\ & & BCA &
-$p$
- &
-$\begin{bmatrix}
-1 & 2 & 0 \\
-0 & 5 & 0 \\
-0 & 2 & 1 \end{bmatrix}$
-&  $\$x@m = p$
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{$g$-cohort of operators on orientable polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
-\hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
-& Note
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,1.5) circle [radius=0.05];
-  \draw[fill] (1,0) circle [radius=0.05];
-  \draw[fill] (1,2) circle [radius=0.05];
-  \draw[fill] (0,1) circle [radius=0.05];
-  \draw[fill] (2,1) circle [radius=0.05];
-  \draw (1,2) -- (1,1.5) -- (0,1);
-  \draw (1,1.5) -- (2,1);
-\end{tikzpicture} &
-$\begin{bmatrix}
-1 & -1 & 2 \\
-0 & 0 & 3/2 \\
-0 & 0 & 1/2 \end{bmatrix}$ &
-ABC BCA CAB (CBA) (BAC) (ACB)&
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0,1) -- (0.75,1.25) -- (1,2);
-\draw (2,1) -- (1.25,0.75) -- (1,0);
-\draw (0.75,1.25) -- (1.25,0.75);
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\draw[fill] (0.75,1.25) circle [radius=0.05];
-\draw[fill] (1.25,0.75) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 2 & 1 \\
-0 & 5 & 0 \\
-0 & 2 & 0 \end{bmatrix}$
-& $\$x@m = g$
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,1.5) circle [radius=0.05];
-  \draw (0.5,1.5) -- (1.5,1.5);
-  \draw (0.5,0.5) -- (1.5,0.5);
-  \draw (0.75,1.75) -- (1.75,0.75);
-  \draw (1.25,1.75) -- (0.25,0.75);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1/2 \\
-0 & 0 & 3/2 \\
-1 & -1 & 2 \end{bmatrix}$ &
-ABC BCA CAB (CBA) (BAC) (ACB)&
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
-\draw (1.5,1.5) -- (0.5,0.5);
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 2 & 0 \\
-0 & 5 & 0 \\
-1 & 2 & 1 \end{bmatrix}$
-& $\$x@m = s$
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{$l$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
-\hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1414,11 +1810,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$L_0$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$L_0$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1450,7 +1846,7 @@ $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 6 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-&$x@m = dL_0d$
+&${x@m = dL_0d}$
 \\ & & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1541,11 +1937,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$q$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$q$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1660,11 +2056,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$m$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$m$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1695,7 +2091,7 @@ $\begin{bmatrix}
 1 & 1 & 1 \\
 0 & 6 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
-& $x = S$
+& ${x = S}$,
 $xm = m = kj$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1726,16 +2122,16 @@ $\begin{bmatrix}
 0 & 4 & 0 \\
 0 & 6 & 0 \\
 1 & 1 & 1 \end{bmatrix}$
-& $x = d$
+& ${x = d}$,
 $xm = b = ta$
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$K$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$K$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1881,11 +2277,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$M$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$M$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1917,7 +2313,7 @@ $\begin{bmatrix}
 1 & 2 & 0 \\
 0 & 7 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
-& $\$x@m = L_{-1}$
+& ${\$x@m = L_{-1}}$
 \\ & & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1956,7 +2352,7 @@ $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
-& $x@m = $
+& $x@m$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber1};
@@ -2006,7 +2402,7 @@ $\begin{bmatrix}
 1 & 4 & 0 \\
 0 & 7 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-& $\$x@m = dL_{-1}d$
+& ${\$x@m = dL_{-1}d}$
 \\ & & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2030,11 +2426,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$E$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$E$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2066,7 +2462,7 @@ $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
-& $x@m = dEd$
+& ${x@m = dEd}$
 \\ & & ACB & \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
@@ -2152,7 +2548,7 @@ $\begin{bmatrix}
 1 & 4 & 0 \\
 0 & 7 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
-& $\$x@m = dLd$
+& ${\$x@m = dLd}$
 \\ & & CBA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2178,11 +2574,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$J$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$J$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2328,11 +2724,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$W$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$W$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2494,139 +2890,11 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}%verify that the orientation is the same as in wythoff
-\caption{$B$-cohort of operators on orientable polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$M_n$-cohort of LSPs, $n=2k, k \ge 1$}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
-& Note
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (0,1) circle [radius=0.05];
-  \draw[fill] (2,1) circle [radius=0.05];
-  \draw[fill] (1,0) circle [radius=0.05];
-  \draw[fill] (1,2) circle [radius=0.05];
-  \draw[fill] (1.5,1.5) circle [radius=0.05];
-  \draw[fill] (1.5,0.5) circle [radius=0.05];
-  \draw[fill] (0.5,0.5) circle [radius=0.05];
-  \draw[fill] (0.5,1.5) circle [radius=0.05];
-  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
-  \draw (0.5,1.5) -- (1.5,1.5);
-\end{tikzpicture} &
-$\begin{bmatrix}
-1 & 0 & 1/2 \\
-0 & 0 & 3/2 \\
-0 & -1 & 2 \end{bmatrix}$ &
-BCA &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0,1) -- (2,1);
-\draw (1,0) -- (1,2);
-\draw (0.5,1) -- (1,1.5);
-\draw (1.5,1) -- (1,0.5);
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\draw[fill] (1,1) circle [radius=0.05];
-\draw[fill] (0.5,1) circle [radius=0.05];
-\draw[fill] (1.5,1) circle [radius=0.05];
-\draw[fill] (1,0.5) circle [radius=0.05];
-\draw[fill] (1,1.5) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 5 & 1 \\
-0 & 10 & 0 \\
-0 & 4 & 0 \end{bmatrix}$
-&  $x@m = B$
-\\ & & ABC &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
-  \draw (1,0) -- (1,2);
-  \draw (0.5,1.5) -- (1,1.5);
-  \draw (1.5,0.5) -- (1,0.5);
-\draw[fill] (1,0) circle [radius=0.05];
-\draw[fill] (1,2) circle [radius=0.05];
-\draw[fill] (0,1) circle [radius=0.05];
-\draw[fill] (2,1) circle [radius=0.05];
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (1,0.5) circle [radius=0.05];
-\draw[fill] (1,1.5) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-1 & 4 & 1 \\
-0 & 9 & 0 \\
-0 & 4 & 0 \end{bmatrix}$
-& $\$x@m$
-\\ \hline
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber2};
-  \draw[fill] (1,1) circle [radius=0.05];
-  \draw[fill] (1,1.5) circle [radius=0.05];
-  \draw (1,1) -- (1,1.5);
-  \draw (0.5,1.5) -- (1,1) -- (1.5,1.5);
-  \draw (0.75,1.75) -- (1,1.5) -- (1.25,1.75);
-  \draw (0.5,0.5) -- (1,1) -- (1.5,0.5);
-  \draw (0.75,0.25) -- (1,1) -- (1.25,0.25);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & -1 & 2 \\
-0 & 0 & 3/2 \\
-1 & 0 & 1/2 \end{bmatrix}$ &
-BCA &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
-\draw (1.5,0.5) -- (1.25,0.75);
-\draw (0.5,1.5) -- (0.75,1.25);
-\draw (0.5,0.5) -- (0.75,1.25) -- (1.5,1.5) -- (1.25,0.75) -- (0.5,0.5);
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\draw[fill] (0.75,1.25) circle [radius=0.05];
-\draw[fill] (1.25,0.75) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 5 & 0 \\
-0 & 10 & 0 \\
-1 & 4 & 1 \end{bmatrix}$
-& $x@m = dB$
-\\ & & ABC &
-\begin{tikzpicture}[baseline=(current bounding box.center)]
-  \pic at (0,0) {chamber4};
-  \draw (0.5,0.5) -- (0.5,1.5) -- (1.5,1) -- (1.75,0.75);
-  \draw (1.5,1.5) -- (1.5,0.5) -- (0.5,1) -- (0.25,1.25);
-  \draw (1.75,1.25) -- (1.5,1) -- (0.5,1) -- (0.25,0.75);
-\draw[fill] (1.5,1.5) circle [radius=0.05];
-\draw[fill] (1.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,0.5) circle [radius=0.05];
-\draw[fill] (0.5,1.5) circle [radius=0.05];
-\draw[fill] (0.5,1) circle [radius=0.05];
-\draw[fill] (1.5,1) circle [radius=0.05];
-\end{tikzpicture}
- &
-$\begin{bmatrix}
-0 & 4 & 0 \\
-0 & 9 & 0 \\
-1 & 4 & 1 \end{bmatrix}$
-&  $\$x@m$
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{$M_n$-cohort of operators on polyhedra, $n=2k, k \ge 1$}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
-\hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2743,11 +3011,11 @@ ABC BAC&
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$M_n$/$m_n$-cohort of operators on polyhedra}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$M_n$/$m_n$-cohort of LSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2781,7 +3049,7 @@ $\begin{bmatrix}
 1 & n & 1 \\
 0 & 3n+3 & 0 \\
 0 & 2n+2 & 0 \end{bmatrix}$
-& $n=2k$, $k \ge 0$, $\$x@m = m_n$
+& ${n=2k}$, ${k \ge 0}$, ${\$x@m = m_n}$
 \\ & & BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2801,7 +3069,7 @@ $\begin{bmatrix}
 1 & n & 1 \\
 0 & 3n+1 & 0 \\
 0 & 2n & 0 \end{bmatrix}$
-& $n=2k+1$, $k \ge 0$, $x@m = M_n$
+& ${n=2k+1}$, ${k \ge 0}$, ${x@m = M_n}$
 \\ & & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2824,7 +3092,7 @@ $\begin{bmatrix}
  1 & n & 1 \\
  0 & 3n+1 & 0 \\
  0 & 2n & 0 \end{bmatrix}$
-& $n=2k$, $k \ge 1$, $x@m$
+& ${n=2k}$, ${k \ge 1}$, ${x@m}$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber1};
@@ -2859,7 +3127,7 @@ ABC&
  0 & 2n+2 & 0 \\
  0 & 3n+3 & 0 \\
  1 & n & 1 \end{bmatrix}$
-& $n=2k$, $k \ge 0$, $\$x@m = b_n$
+& ${n=2k}$, ${k \ge 0}$, ${\$x@m = b_n}$
 \\ & & BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2883,7 +3151,7 @@ ABC&
  0 & 2n & 0 \\
  0 & 3n+1 & 0 \\
  1 & n & 1 \end{bmatrix}$
-& $n=2k+1$, $k \ge 0$, $x@m$
+& ${n = 2k+1}$, ${k \ge 0}$, $x@m$
 \\ & & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2909,15 +3177,15 @@ ABC&
  0 & 2n & 0 \\
  0 & 3n+1 & 0 \\
  1 & n & 1 \end{bmatrix}$
-& $n=2k$, $k \ge 1$, $x@m$
+& ${n=2k}$, ${k \ge 1}$, $x@m$
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{$m_n$-cohort of operators on polyhedra, $n=2k+1, k \ge 0$}
-\begin{tabular}[t]{ c c|p{1cm} c c p{2cm} }
+\begin{table}[h!]
+\caption{$m_n$-cohort of LSPs, $n=2k+1, k \ge 0$}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
-$x \in \mathcal{W}$ & $M_{x}$ & $@$ & $\$x@m \in \mathcal{P}$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3044,6 +3312,307 @@ ABC BAC&
  0 & 3n+3 & 0 \\
  1 & n & 1 \end{bmatrix}$
 & $x@m$
+\end{tabular}
+\end{table}
+
+\section{Cohorts of LOPSPs}
+In the following tables, permutations in parentheses, such as (CBA), indicate a
+permutation that produces the chiral pair of the depicted operator.
+
+\begin{table}[h!]
+\caption{$p$-cohort of LOPSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\hline \hline
+$x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw (2,1) -- (1,1.5) -- (0,1);
+  \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
+  \draw (0.66,0.33) -- (1.33,0.33);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 1 & 0 & 0 & 1/2 \\
+0 & 0 & 0 & 0 & 3/2 \\
+0 & 0 & 1 & -1 & 2 \end{bmatrix}$ &
+BAC (ABC)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (1.33,0.33);
+\draw (2,1) -- (0.66,1.66);
+\draw (0.66,0.33) -- (1.33,1.66);
+\draw[fill] (1.2,1.4) circle [radius=0.05];
+\draw[fill] (0.8,0.6) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 5 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+&  $\$x@m = p$
+\\ & & ACB (BCA)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (2,1) -- (1.25,1.25) -- (1,2);
+\draw (0,1) -- (0.75,0.75) -- (1,0);
+\draw (1.25,1.25) -- (0.75,0.75);
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.25,1.25) circle [radius=0.05];
+\draw[fill] (0.75,0.75) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 1 \\
+0 & 5 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = g$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,1) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+  \draw (0.5,0.5) -- (1.5,1.5);
+  \draw (1.5,0.5) -- (0.5,1.5);
+  \draw (1,1) -- (1,2);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1 & -1 & 2 \\
+0 & 0 & 0 & 0 & 3/2 \\
+1 & 1 & 0 & 0 & 1/2 \end{bmatrix}$ &
+ACB (BCA)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
+\draw (1.5,0.5) -- (0.5,1.5);
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 5 & 0 \\
+1 & 2 & 1 \end{bmatrix}$
+& $\$x@m = rsr$
+\\ & & BAC (ABC)&
+$p$
+ &
+$\begin{bmatrix}
+1 & 2 & 0 \\
+0 & 5 & 0 \\
+0 & 2 & 1 \end{bmatrix}$
+&  $\$x@m = p$
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{$g$-cohort of LOPSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\hline \hline
+$x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw (1,2) -- (1,1.5) -- (0,1);
+  \draw (1,1.5) -- (2,1);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & -1 & 2 \\
+0 & 0 & 3/2 \\
+0 & 0 & 1/2 \end{bmatrix}$ &
+ABC BCA CAB (CBA) (BAC) (ACB)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (0.75,1.25) -- (1,2);
+\draw (2,1) -- (1.25,0.75) -- (1,0);
+\draw (0.75,1.25) -- (1.25,0.75);
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (0.75,1.25) circle [radius=0.05];
+\draw[fill] (1.25,0.75) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 2 & 1 \\
+0 & 5 & 0 \\
+0 & 2 & 0 \end{bmatrix}$
+& $\$x@m = rgr$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw (0.5,1.5) -- (1.5,1.5);
+  \draw (0.5,0.5) -- (1.5,0.5);
+  \draw (0.75,1.75) -- (1.75,0.75);
+  \draw (1.25,1.75) -- (0.25,0.75);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & 0 & 1/2 \\
+0 & 0 & 3/2 \\
+1 & -1 & 2 \end{bmatrix}$ &
+ABC BCA CAB (CBA) (BAC) (ACB)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
+\draw (1.5,1.5) -- (0.5,0.5);
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 2 & 0 \\
+0 & 5 & 0 \\
+1 & 2 & 1 \end{bmatrix}$
+& $\$x@m = s$
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{$B$-cohort of LOPSPs}
+\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\hline \hline
+$x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
+& Note
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (0,1) circle [radius=0.05];
+  \draw[fill] (2,1) circle [radius=0.05];
+  \draw[fill] (1,0) circle [radius=0.05];
+  \draw[fill] (1,2) circle [radius=0.05];
+  \draw[fill] (1.5,1.5) circle [radius=0.05];
+  \draw[fill] (1.5,0.5) circle [radius=0.05];
+  \draw[fill] (0.5,0.5) circle [radius=0.05];
+  \draw[fill] (0.5,1.5) circle [radius=0.05];
+  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+  \draw (0.5,1.5) -- (1.5,1.5);
+\end{tikzpicture} &
+$\begin{bmatrix}
+1 & 0 & 1/2 \\
+0 & 0 & 3/2 \\
+0 & -1 & 2 \end{bmatrix}$ &
+BCA (ACB)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0,1) -- (2,1);
+\draw (1,0) -- (1,2);
+\draw (0.5,1) -- (1,1.5);
+\draw (1.5,1) -- (1,0.5);
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (1,1) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 5 & 1 \\
+0 & 10 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+&  $x@m = B$
+\\ & & ABC (BAC)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
+  \draw (1,0) -- (1,2);
+  \draw (0.5,1.5) -- (1,1.5);
+  \draw (1.5,0.5) -- (1,0.5);
+\draw[fill] (1,0) circle [radius=0.05];
+\draw[fill] (1,2) circle [radius=0.05];
+\draw[fill] (0,1) circle [radius=0.05];
+\draw[fill] (2,1) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1,0.5) circle [radius=0.05];
+\draw[fill] (1,1.5) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+1 & 4 & 1 \\
+0 & 9 & 0 \\
+0 & 4 & 0 \end{bmatrix}$
+& $\$x@m$
+\\ \hline
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber2};
+  \draw[fill] (1,1) circle [radius=0.05];
+  \draw[fill] (1,1.5) circle [radius=0.05];
+  \draw (1,1) -- (1,1.5);
+  \draw (0.5,1.5) -- (1,1) -- (1.5,1.5);
+  \draw (0.75,1.75) -- (1,1.5) -- (1.25,1.75);
+  \draw (0.5,0.5) -- (1,1) -- (1.5,0.5);
+  \draw (0.75,0.25) -- (1,1) -- (1.25,0.25);
+\end{tikzpicture} &
+$\begin{bmatrix}
+0 & -1 & 2 \\
+0 & 0 & 3/2 \\
+1 & 0 & 1/2 \end{bmatrix}$ &
+BCA (ACB)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+\draw (0.5,1.5) -- (1.5,1.5) -- (1.5,0.5) -- (0.5,0.5) -- (0.5,1.5);
+\draw (1.5,0.5) -- (1.25,0.75);
+\draw (0.5,1.5) -- (0.75,1.25);
+\draw (0.5,0.5) -- (0.75,1.25) -- (1.5,1.5) -- (1.25,0.75) -- (0.5,0.5);
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.75,1.25) circle [radius=0.05];
+\draw[fill] (1.25,0.75) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 5 & 0 \\
+0 & 10 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+& $x@m = dB$
+\\ & & ABC (BAC)&
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \pic at (0,0) {chamber4};
+  \draw (0.5,0.5) -- (0.5,1.5) -- (1.5,1) -- (1.75,0.75);
+  \draw (1.5,1.5) -- (1.5,0.5) -- (0.5,1) -- (0.25,1.25);
+  \draw (1.75,1.25) -- (1.5,1) -- (0.5,1) -- (0.25,0.75);
+\draw[fill] (1.5,1.5) circle [radius=0.05];
+\draw[fill] (1.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,0.5) circle [radius=0.05];
+\draw[fill] (0.5,1.5) circle [radius=0.05];
+\draw[fill] (0.5,1) circle [radius=0.05];
+\draw[fill] (1.5,1) circle [radius=0.05];
+\end{tikzpicture}
+ &
+$\begin{bmatrix}
+0 & 4 & 0 \\
+0 & 9 & 0 \\
+1 & 4 & 1 \end{bmatrix}$
+&  $\$x@m$
 \end{tabular}
 \end{table}
 

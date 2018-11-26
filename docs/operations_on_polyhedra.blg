@@ -3,44 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: operations_on_polyhedra.aux
 The style file: plain.bst
 Database file #1: operations_on_polyhedra.bib
-You've used 13 entries,
+You've used 15 entries,
             2118 wiz_defined-function locations,
-            588 strings with 6009 characters,
-and the built_in function-call counts, 4079 in all, are:
-= -- 409
-> -- 145
-< -- 8
-+ -- 57
-- -- 44
-* -- 257
-:= -- 675
-add.period$ -- 45
-call.type$ -- 13
-change.case$ -- 58
+            601 strings with 6261 characters,
+and the built_in function-call counts, 4787 in all, are:
+= -- 486
+> -- 165
+< -- 10
++ -- 65
+- -- 50
+* -- 297
+:= -- 783
+add.period$ -- 53
+call.type$ -- 15
+change.case$ -- 68
 chr.to.int$ -- 0
-cite$ -- 13
-duplicate$ -- 185
-empty$ -- 353
-format.name$ -- 44
-if$ -- 876
+cite$ -- 15
+duplicate$ -- 222
+empty$ -- 420
+format.name$ -- 50
+if$ -- 1041
 int.to.chr$ -- 0
-int.to.str$ -- 13
-missing$ -- 13
-newline$ -- 70
-num.names$ -- 28
-pop$ -- 64
+int.to.str$ -- 15
+missing$ -- 15
+newline$ -- 80
+num.names$ -- 32
+pop$ -- 75
 preamble$ -- 1
-purify$ -- 46
+purify$ -- 53
 quote$ -- 0
-skip$ -- 117
+skip$ -- 140
 stack$ -- 0
-substring$ -- 234
-swap$ -- 44
-text.length$ -- 8
+substring$ -- 268
+swap$ -- 55
+text.length$ -- 10
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 50
+type$ -- 58
 warning$ -- 0
-while$ -- 42
-width$ -- 15
-write$ -- 152
+while$ -- 49
+width$ -- 17
+write$ -- 179

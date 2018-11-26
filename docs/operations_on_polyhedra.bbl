@@ -28,8 +28,21 @@ Mathieu Dutour and Michel Deza.
 \newblock Goldberg-coxeter construction for $3$-and $4$-valent plane graphs.
 \newblock {\em The Electronic Journal of Combinatorics}, 11(1):20, 2004.
 
+\bibitem{gross}
+Jonathan~L Gross and Jay Yellen.
+\newblock Graph operations and mappings.
+\newblock In {\em Graph Theory and Its Applications}, Discrete Mathematics and
+  Its Applications, chapter~7. Chapman and Hall/CRC, Boca Raton, 2 edition,
+  2005.
+
+\bibitem{grunbaum94}
+Branko Gr{\"u}nbaum.
+\newblock Polyhedra with hollow faces.
+\newblock In {\em Polytopes: abstract, convex and computational}, pages 43--70.
+  Springer, 1994.
+
 \bibitem{grunbaum99}
-Branko Grunbaum.
+Branko Gr{\"u}nbaum.
 \newblock Acoptic polyhedra.
 \newblock {\em Contemporary Mathematics}, 223:163--200, 1999.
 
