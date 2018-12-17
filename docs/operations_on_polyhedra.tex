@@ -1220,10 +1220,29 @@ $g = 3k + 2$, but $g = b+ b' + 1 = 3b+1$:
 there is no simultaneous integer solution to both equations,
 so we have a contradiction, and $\Delta_{n,m}$ is irreducible.
 
-There are some polyhedra or operators that have non-unique reductions. However,
-all known examples involve degree-2 features or operators that do not produce
-polyhedra in $\mathcal{P}_{3v}$. For example, $kX = tT$, where $X$ is the
-4-dihedron, and $jx = lj$, where $x$ is the Lozenge operator.
+\section{$\mathcal{P}$, $\mathcal{P}_{3}$, and $\mathcal{P}_{3v}$}
+
+There are some polyhedra or operators that have non-unique reductions.
+However, all known examples involve degree-2 features or operators that
+do not produce polyhedra in $\mathcal{P}_{3v}$. For example,
+$kD_4 = O = aT$, where $D_4$ is the 4-dihedron, and $jx = lj$, where
+$x$ is the Lozenge operator on $\mathcal{P}_{3}$ (not $\mathcal{P}_{3v}$).
+
+In \cite{brinkmann}, they ask if all LSP operations which increase the number
+of symmetries of a polyhedron can be written as ambo or some composition of
+operators involving ambo. ($j=da$, so this question could be asked in terms of
+join as well.) There are counterexamples, but again they involve degree-2
+features. As a general example, $m_n D_k = B_{k(n+1)}$ with $n>0$ and
+$k\ge 2$, where $D_j$ is the $j$-dihedron,
+$B_j$ is the bipyramid formed by gluing 2 $n$-pyramids together,
+and both $D_j$ and $B_j$ have $j$-dihedral symmetry.
+
+The question now is: do any of the things we've just talked about in
+$\mathcal{P}$ or $\mathcal{P}_{3}$ also occur in $\mathcal{P}_{3v}$? If no,
+what is it about $\mathcal{P}_{3v}$ that disallows them from occuring? We
+already know that $\mathcal{P}_{3v}$ is special because of Steinitz's theorem,
+but it's not clear how that would lead to the proofs we would need perform
+here.
 
 \section{Lower polytopes}
 
@@ -1503,7 +1522,7 @@ named member of the cohort is chosen to label the cohort, e.g. the $a$-cohort.
 \caption{$a$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ / $M_{x}$ / Invariants & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1605,9 +1624,9 @@ $\begin{bmatrix}
 
 \begin{table}
 \caption{$o$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1617,10 +1636,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
   \draw[fill] (0.85, 1.5) circle [radius=0.05] ;
   \draw[fill] (1.7, 0) circle [radius=0.05] ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & -2/3 & 1 \\
-0 & 2/3 & 0 \\
-0 & 1/3 & 0 \end{bmatrix}$ &
 ABC, BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1637,7 +1652,10 @@ ABC, BAC &
  0 & 3 & 0 \\
  0 & 2 & 0 \end{bmatrix}$
 &  $\$x@m = n$
-\\ & & ACB, BCA &
+\\ $\begin{bmatrix}
+1 & -2/3 & 1 \\
+0 & 2/3 & 0 \\
+0 & 1/3 & 0 \end{bmatrix}$ & ACB, BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,0) -- (0,1) -- (1,2) -- (2,1) -- (1,0);
@@ -1653,7 +1671,7 @@ ABC, BAC &
  0 & 3 & 0 \\
  0 & 2 & 0 \end{bmatrix}$
 & $\$x@m = k$
-\\ & & CAB, CBA &
+\\ & CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (2,1);
@@ -1676,10 +1694,6 @@ $\begin{bmatrix}
   \draw (0.425, 0.75) -- (0.85,0) -- (1.275, 0.75) ;
   \draw[fill] (0.85,0) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 1/3 & 0 \\
-0 & 2/3 & 0 \\
-1 & -2/3 & 1 \end{bmatrix}$ &
 ACB, BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1695,7 +1709,10 @@ ACB, BCA &
  0 & 3 & 0 \\
  1 & 0 & 1 \end{bmatrix}$
 &  $\$x@m = t$
-\\ & & ABC, BAC &
+\\ $\begin{bmatrix}
+0 & 1/3 & 0 \\
+0 & 2/3 & 0 \\
+1 & -2/3 & 1 \end{bmatrix}$ & ABC, BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0.66, 0.33) -- (1,0.66) -- (1,1.33) -- (1.33,1.66);
@@ -1710,7 +1727,7 @@ ACB, BCA &
  0 & 3 & 0 \\
  1 & 0 & 1 \end{bmatrix}$
 & $\$x@m = z$
-\\ & & CAB, CBA &
+\\ & CAB, CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5,0.5) -- (1.5,0.5) -- (1.5,1.5) -- (0.5,1.5) -- (0.5,0.5);
@@ -1730,9 +1747,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$u$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1741,10 +1758,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
   \draw[fill] (0, 0) circle [radius=0.05];
   \draw[fill] (1.7, 0) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -2/3 & 1 \\
-0 & 0 & 0 & 2/3 & 0 \\
-0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ &
 ABC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1761,13 +1774,16 @@ $\begin{bmatrix}
 0 & 4 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $x@m = u$
-\\ & & ACB & $n$ &
+\\$\begin{bmatrix}
+1 & 1 & 0 & -2/3 & 1 \\
+0 & 0 & 0 & 2/3 & 0 \\
+0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ & ACB & $n$ &
 $\begin{bmatrix}
 1 & 0 & 1 \\
 0 & 3 & 0 \\
 0 & 2 & 0 \end{bmatrix}$
 & $\$x@m = n$
-\\ & & BAC & $S$ &
+\\ & BAC & $S$ &
 $\begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
@@ -1780,25 +1796,23 @@ $\begin{bmatrix}
   \draw[fill] (0.85, 1.5) circle [radius=0.05];
   \draw[fill] (0.425, 0.75) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 1/3 & 0 \\
-0 & 0 & 0 & 2/3 & 0 \\
-1 & 1 & 0 & -2/3 & 1
-\end{bmatrix}$ &
  ACB & $t$ &
 $\begin{bmatrix}
 0 & 2 & 0 \\
 0 & 3 & 0 \\
 1 & 0 & 1 \end{bmatrix}$
 & $\$x@m = t$
-\\ & & CAB & $S$ &
+\\$\begin{bmatrix}
+0 & 0 & 1 & 1/3 & 0 \\
+0 & 0 & 0 & 2/3 & 0 \\
+1 & 1 & 0 & -2/3 & 1
+\end{bmatrix}$ & CAB & $S$ &
 $\begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ & &
-CBA &
+\\ & CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (0.5,0.5) -- (1.5,0.5) -- (2,1) -- (1.5,1.5) -- (0.5,1.5)
@@ -1821,9 +1835,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$l$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1834,10 +1848,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw (0, 0) -- (1.7, 0) ;
 \draw (0.425, 0.75) -- (0.85, 0) ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 1 & 0 \\
-0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1855,13 +1865,16 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m = dld$
-\\ & & BAC& $S$ &
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ & BAC& $S$ &
 $\begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ & & BCA&
+\\ & BCA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (1,2) -- (2,1) -- (1,0) -- (0,1);
@@ -1889,10 +1902,6 @@ $\begin{bmatrix}
 \draw[fill] (0.425, 0.75) circle [radius=0.05];
 \draw (0.57, 0) -- (0.425, 0.75) -- (0.85, 1.5) -- (1.13, 0);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 1/3 & 0 \\
-0 & 0 & 0 & 1 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 CBA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1911,13 +1920,16 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m = l$
-\\ & & CAB& $S$ &
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 1/3 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CAB& $S$ &
 $\begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 0 & 1 \end{bmatrix}$
 & $\$x@m = S$
-\\ & & ACB&
+\\ & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5, 1) -- (1.5,1);
@@ -1940,9 +1952,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$L_0$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -1952,10 +1964,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw (0,0) -- (0.425, 0.75) -- (1.7, 0);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 1 & 0 \\
-0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -1975,7 +1983,10 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 &${x@m = dL_0d}$
-\\ & & BAC &
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,1.5) -- (0,1) -- (1,0.5) -- (1,1.5) -- (2,1) -- (1,0.5);
@@ -1990,7 +2001,7 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m =$ Lozenge \dag
-\\ & & BCA &
+\\ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (1,0.5) -- (2,1) -- (1,1.5) -- (0,1);
@@ -2016,10 +2027,6 @@ $\begin{bmatrix}
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \draw[fill] (0.85, 0) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 1/3 & 0 \\
-0 & 0 & 0 & 1 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 CAB &
 Lozenge
  &
@@ -2028,7 +2035,10 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m =$ Lozenge \dag
-\\ & & CBA &
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 1/3 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1.33,1.66) -- (0,1) -- (1.33,0.33);
@@ -2045,7 +2055,7 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
 & $x@m = L_0$
-\\ & & BCA &
+\\ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5,0.5) -- (1.5,0.5) --
@@ -2067,9 +2077,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$q$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2079,10 +2089,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw (1.7,0) -- (0, 0) -- (0.425, 0.75) -- (1.275, 0.75) ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 1 & 0 \\
-0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2101,7 +2107,10 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m = l$
-\\ & & BAC &
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,1.33) -- (1,0.66) ;
@@ -2120,7 +2129,7 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $x@m = q$
-\\ & & ACB & $k$&
+\\ & ACB & $k$&
 $\begin{bmatrix}
 1 & 0 & 1 \\
 0 & 3 & 0 \\
@@ -2134,10 +2143,6 @@ $\begin{bmatrix}
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \draw[fill] (1.275, 0.75) circle [radius=0.05];
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 1/3 & 0 \\
-0 & 0 & 0 & 1 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 CBA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2155,7 +2160,10 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & $\$x@m = dld$
-\\ & & CAB &
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 1/3 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (0.5,0.5) -- (1.5,0.5) --
@@ -2175,7 +2183,7 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
 & $x@m = dqd$
-\\ & & BCA & $t$&
+\\ & BCA & $t$&
 $\begin{bmatrix}
 0 & 2 & 0 \\
 0 & 3 & 0 \\
@@ -2220,7 +2228,7 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & ${x = S}$,
-$xm = m = kj$
+${xm = m = kj}$
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber1};
@@ -2251,15 +2259,15 @@ $\begin{bmatrix}
 0 & 6 & 0 \\
 1 & 1 & 1 \end{bmatrix}$
 & ${x = d}$,
-$xm = b = ta$
+${xm = b = ta}$
 \end{tabular}
 \end{table}
 
 \begin{table}[h!]
 \caption{$K$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2270,10 +2278,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (0.85, 0) circle [radius=0.05];
 \draw (0, 0) -- (0.85, 1.5) -- (0.85, 0) -- (1.7, 0) ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & -1/3 & 1 \\
-0 & 4/3 & 0 \\
-0 & 2/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2293,7 +2297,10 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m$ \dag
-\\ & & ACB &
+\\ $\begin{bmatrix}
+1 & -1/3 & 1 \\
+0 & 4/3 & 0 \\
+0 & 2/3 & 0 \end{bmatrix}$ & ACB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (2,1);
@@ -2314,7 +2321,7 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $x@m$
-\\ & & CAB &
+\\ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (2,1);
@@ -2341,10 +2348,6 @@ $\begin{bmatrix}
 \draw[fill] (1.275, 0.75) circle [radius=0.05];
 \draw (0.425, 0.75) -- (0.425, 0) -- (1.275, 0.75) -- (1.275, 0) ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 2/3 & 0 \\
-0 & 4/3 & 0 \\
-1 & -1/3 & 1 \end{bmatrix}$ &
 ABC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2363,7 +2366,10 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m$ \dag
-\\ & & ACB&
+\\ $\begin{bmatrix}
+0 & 2/3 & 0 \\
+0 & 4/3 & 0 \\
+1 & -1/3 & 1 \end{bmatrix}$ & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0.75,1.75) -- (1,1.5) -- (1.66,1.33) --
@@ -2383,7 +2389,7 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 1 & 3 & 1 \end{bmatrix}$
 & $x@m$
-\\ & & CAB&
+\\ & CAB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (1,1.25) -- (0.5,1.5) -- (1.5,1.5) -- (1,1.25);
@@ -2396,7 +2402,7 @@ $\begin{bmatrix}
   \draw[fill] (1,0.75) circle [radius=0.05];
   \draw[fill] (1,1.25) circle [radius=0.05];
 \end{tikzpicture}
- &
+&
 $\begin{bmatrix}
 0 & 4 & 0 \\
 0 & 7 & 0 \\
@@ -2407,9 +2413,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$M$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2419,12 +2425,7 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw (0, 0) -- (1.275, 0.75) -- (1.7, 0) ;
 \draw (1.275, 0.75) -- (0.425, 0.75) ;
-
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 4/3 & 0 \\
-0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2442,7 +2443,10 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
 & ${\$x@m = L_{-1}}$
-\\ & & BCA &
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 4/3 & 0 \\
+0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (2,1);
@@ -2460,7 +2464,7 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m = M$
-\\ & & BAC &
+\\ & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5,0.5) -- (1.5,1.5);
@@ -2489,10 +2493,6 @@ $\begin{bmatrix}
 \draw[fill] (0.85, 0) circle [radius=0.05];
 \draw (0.85, 1.5) -- (0.425, 0.75) -- (0.85, 0) -- (1.275, 0.75);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 2/3 & 0 \\
-0 & 0 & 0 & 4/3 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2511,7 +2511,10 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 1 & 2 & 1 \end{bmatrix}$
 & $\$x@m = dM$
-\\ & & CBA&
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 2/3 & 0 \\
+0 & 0 & 0 & 4/3 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CBA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,1.33) -- (1.5,1.5) -- (2,1) -- (1.5,0.5) -- (1,0.66) --
@@ -2531,7 +2534,7 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & ${\$x@m = dL_{-1}d}$
-\\ & & CAB &
+\\ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (0.66,1);
@@ -2556,9 +2559,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$E$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2568,10 +2571,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw (0, 0) -- (1.7, 0) -- (0.425, 0.75) -- (1.275, 0.75);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 4/3 & 0 \\
-0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2585,13 +2584,16 @@ ABC&
 \draw[fill] (0.5,1.5) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
 \end{tikzpicture}
- &
-$\begin{bmatrix}
+& $\begin{bmatrix}
 1 & 3 & 0 \\
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
 & ${x@m = dEd}$
-\\ & & ACB & \begin{tikzpicture}[baseline=(current bounding box.center)]
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 4/3 & 0 \\
+0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ & ACB &
+ \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
   \draw (0.66,1) -- (1,0) -- (1.33,1) -- (1,2) -- (0.66,1);
@@ -2603,13 +2605,12 @@ $\begin{bmatrix}
   \draw[fill] (0.66,1) circle [radius=0.05];
   \draw[fill] (1.33,1) circle [radius=0.05];
 \end{tikzpicture}
- &
-$\begin{bmatrix}
+& $\begin{bmatrix}
 1 & 2 & 1 \\
 0 & 7 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m$ \dag
-\\ & & BAC &
+\\ & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1.33,1.66) -- (0,1) -- (1.33,0.33);
@@ -2620,8 +2621,7 @@ $\begin{bmatrix}
 \draw[fill] (1,1.5) circle [radius=0.05];
 \draw[fill] (2,1) circle [radius=0.05];
 \end{tikzpicture}
- &
-$\begin{bmatrix}
+& $\begin{bmatrix}
 1 & 2 & 0 \\
 0 & 7 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
@@ -2633,12 +2633,7 @@ $\begin{bmatrix}
 \draw[fill] (1.275, 0.75) circle [radius=0.05];
 \draw[fill] (0.85, 1.5) circle [radius=0.05];
 \draw (0.85, 1.5) -- (1.275, 0.75) -- (0.425, 0.75) -- (0.85,0);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 2/3 & 0 \\
-0 & 0 & 0 & 4/3 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
- ACB &
+\end{tikzpicture} & ACB &
  \begin{tikzpicture}[baseline=(current bounding box.center)]
    \pic at (0,0) {chamber4};
    \draw (0.5,1) -- (1,0.5) -- (1.5,1) -- (1,1.5) -- (0.5,1);
@@ -2656,7 +2651,10 @@ $\begin{bmatrix}
  0 & 7 & 0 \\
  0 & 4 & 0 \end{bmatrix}$
  & $\$x@m$ \dag
-\\ & & CAB&
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 2/3 & 0 \\
+0 & 0 & 0 & 4/3 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.66,1) -- (1.33,1);
@@ -2677,7 +2675,7 @@ $\begin{bmatrix}
 0 & 7 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 & ${\$x@m = dLd}$
-\\ & & CBA&
+\\ & CBA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (0.33,1);
@@ -2704,9 +2702,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$J$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2716,10 +2714,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw[fill] (1.7, 0) circle [radius=0.05];
 \draw (1.7,0) -- (0, 0) -- (0.425, 0.75) -- (1.7, 0) ;
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 4/3 & 0 \\
-0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2739,7 +2733,10 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
 & $x@m$
-\\ & & BAC &
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 4/3 & 0 \\
+0 & 0 & 1 & 2/3 & 0 \end{bmatrix}$ & BAC &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,1.5) -- (0,1) -- (1,0.5) -- (1,1.5) -- (2,1) -- (1,0.5);
@@ -2756,7 +2753,7 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 0 & 4 & 1 \end{bmatrix}$
 & $x@m$ \dag
-\\ & & BCA &
+\\ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0,1) -- (1,2) -- (2,1) -- (1,0) --
@@ -2784,10 +2781,6 @@ $\begin{bmatrix}
 \draw (0.85, 1.5) -- (0.85, 0);
 \draw (0.85, 0.5) -- (0.425,0.75);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 2/3 & 0 \\
-0 & 0 & 0 & 4/3 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 CBA&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2810,7 +2803,10 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
 & $x@m$
-\\ & & CAB &
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 2/3 & 0 \\
+0 & 0 & 0 & 4/3 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (0.75,1.25) -- (1.25,1.25) --
@@ -2830,7 +2826,7 @@ $\begin{bmatrix}
 0 & 8 & 0 \\
 0 & 3 & 1 \end{bmatrix}$
 & $x@m$ \dag
-\\ & & BCA &
+\\ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.75,0.75) -- (1.25,0.75);
@@ -2854,9 +2850,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$W$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -2869,10 +2865,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw (0,0) -- (0.85, 1.5);
 \draw (0.425, 0.75) -- (0.85, 0) -- (1.7, 0);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 0 & 1 \\
-0 & 5/3 & 0 \\
-0 & 2/3 & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2897,7 +2889,10 @@ $\begin{bmatrix}
 0 & 9 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m = W$
-\\ & & BCA &
+\\ $\begin{bmatrix}
+1 & 0 & 1 \\
+0 & 5/3 & 0 \\
+0 & 2/3 & 0 \end{bmatrix}$ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (1,2) -- (1,0);
@@ -2920,7 +2915,7 @@ $\begin{bmatrix}
 0 & 9 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 & $\$x@m$
-\\ & & CAB &
+\\ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (2,1) -- (0,1);
@@ -2950,10 +2945,6 @@ $\begin{bmatrix}
 \draw (1.275, 0) -- (1.275, 0.75) -- (0.85, 0) -- (0.213,0.375);
 \draw (1.275, 0.75) -- (0.638,1.125);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 2/3 & 0 \\
-0 & 5/3 & 0 \\
-1 & 0 & 1 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -2973,7 +2964,10 @@ $\begin{bmatrix}
 0 & 9 & 0 \\
 1 & 4 & 1 \end{bmatrix}$
 & $\$x@m = dW$
-\\ & & BCA &
+\\ $\begin{bmatrix}
+0 & 2/3 & 0 \\
+0 & 5/3 & 0 \\
+1 & 0 & 1 \end{bmatrix}$ & BCA &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5,1) -- (1.5,1);
@@ -2994,7 +2988,7 @@ $\begin{bmatrix}
 0 & 9 & 0 \\
 1 & 4 & 1 \end{bmatrix}$
 & $\$x@m$
-\\ & & CAB &
+\\ & CAB &
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (0.5,0.5) -- (1.5,0.5) --
@@ -3020,9 +3014,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$M_n$-cohort of LSPs, $n=2k, k \ge 1$}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3034,10 +3028,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw (0,0) -- (1.7, 0);
 \draw[dashed] (0.85, 0) -- (0.85, 1.5);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & \frac{k-2}{3} & 1 \\
-0 & k+\frac{1}{3} & 0 \\
-0 & \frac{2}{3}k & 0 \end{bmatrix}$ &
 ABC BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3056,7 +3046,10 @@ ABC BAC&
  0 & 3n+1 & 0 \\
  0 & 2n & 0 \end{bmatrix}$
 & $\$x@m = M_n$
-\\ & & BCA ACB&
+\\ $\begin{bmatrix}
+1 & \frac{k-2}{3} & 1 \\
+0 & k+\frac{1}{3} & 0 \\
+0 & \frac{2}{3}k & 0 \end{bmatrix}$ & BCA ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0,1) circle [radius=0.05];
@@ -3088,10 +3081,6 @@ ABC BAC&
 \draw[dashed] (1.275, 0) -- (1.275, 0.75);
 \draw (0.425,0.75) -- (1.275,0.75);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & \frac{2}{3}k & 0 \\
-0 & k+\frac{1}{3} & 0 \\
-1 & \frac{k-2}{3} & 1 \end{bmatrix}$ &
 ABC BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3113,7 +3102,10 @@ ABC BAC&
  0 & 3n+1 & 0 \\
  1 & n & 1 \end{bmatrix}$
 & $\$x@m$
-\\ & & BCA ACB&
+\\ $\begin{bmatrix}
+0 & \frac{2}{3}k & 0 \\
+0 & k+\frac{1}{3} & 0 \\
+1 & \frac{k-2}{3} & 1 \end{bmatrix}$ & BCA ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0.7,1) node[anchor=center] {\tiny x} ;
@@ -3141,9 +3133,9 @@ ABC BAC&
 
 \begin{table}[h!]
 \caption{$M_n$/$m_n$-cohort of LSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3155,10 +3147,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw (0.85, 1.5) -- (0,0) -- (1.7, 0);
 \draw[dashed] (0.85, 0) -- (0.85, 1.5);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & \frac{2k-5}{6} & 1 \\
-0 & k + \frac{1}{6} & 0 \\
-0 & \frac{2}{3}k & 0 \end{bmatrix}$ &
 ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3178,7 +3166,10 @@ $\begin{bmatrix}
 0 & 3n+3 & 0 \\
 0 & 2n+2 & 0 \end{bmatrix}$
 & ${n=2k}$, ${k \ge 0}$, ${\$x@m = m_n}$
-\\ & & BAC&
+\\ $\begin{bmatrix}
+1 & \frac{2k-5}{6} & 1 \\
+0 & k + \frac{1}{6} & 0 \\
+0 & \frac{2}{3}k & 0 \end{bmatrix}$ & BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0,1) circle [radius=0.05];
@@ -3198,7 +3189,7 @@ $\begin{bmatrix}
 0 & 3n+1 & 0 \\
 0 & 2n & 0 \end{bmatrix}$
 & ${n=2k+1}$, ${k \ge 0}$, ${x@m = M_n}$
-\\ & & ACB&
+\\ & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0,1) circle [radius=0.05];
@@ -3230,12 +3221,7 @@ $\begin{bmatrix}
 \draw[dashed] (0.708, 0) -- (0.708, 0.75);
 \draw[dashed] (1.275, 0) -- (1.275, 0.75);
 \draw (0.425,0.75) -- (1.275,0.75);
-\end{tikzpicture} &
-$\begin{bmatrix}
-0 & \frac{2}{3}k & 0 \\
-0 & k + \frac{1}{6} & 0 \\
-1 & \frac{2k-5}{6} & 1 \end{bmatrix}$&
-ABC&
+\end{tikzpicture} & ABC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw[fill] (0.75,0.5) node[anchor=center] {\tiny x} ;
@@ -3256,7 +3242,10 @@ ABC&
  0 & 3n+3 & 0 \\
  1 & n & 1 \end{bmatrix}$
 & ${n=2k}$, ${k \ge 0}$, ${\$x@m = b_n}$
-\\ & & BAC&
+\\ $\begin{bmatrix}
+0 & \frac{2}{3}k & 0 \\
+0 & k + \frac{1}{6} & 0 \\
+1 & \frac{2k-5}{6} & 1 \end{bmatrix}$& BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw[fill] (0.5,0.5) node[anchor=center] {\tiny x} ;
@@ -3280,7 +3269,7 @@ ABC&
  0 & 3n+1 & 0 \\
  1 & n & 1 \end{bmatrix}$
 & ${n = 2k+1}$, ${k \ge 0}$, $x@m$
-\\ & & ACB&
+\\ & ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0.6,0.9) node[anchor=center] {\tiny x} ;
@@ -3311,9 +3300,9 @@ ABC&
 
 \begin{table}[h!]
 \caption{$m_n$-cohort of LSPs, $n=2k+1, k \ge 0$}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
+$x : \mathcal{W} \to \mathcal{P}$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \mathcal{P}_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3325,10 +3314,6 @@ $x : \mathcal{W} \to \mathcal{P}$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}_3 \to \
 \draw (0,0) -- (1.7, 0) -- (0.85, 1.5) -- (0,0);
 \draw[dashed] (0.85, 0) -- (0.85, 1.5);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & \frac{2k-5}{6} & 1 \\
-0 & k + \frac{1}{2} & 0 \\
-0 & \frac{2k+1}{3} & 0 \end{bmatrix}$ &
 ABC BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3350,7 +3335,10 @@ ABC BAC&
  0 & 3n+3 & 0 \\
  0 & 2n+2 & 0 \end{bmatrix}$
 & $x@m = m_n$
-\\ & & BCA ACB&
+\\ $\begin{bmatrix}
+1 & \frac{2k-5}{6} & 1 \\
+0 & k + \frac{1}{2} & 0 \\
+0 & \frac{2k+1}{3} & 0 \end{bmatrix}$ & BCA ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0,1) circle [radius=0.05];
@@ -3384,10 +3372,6 @@ ABC BAC&
 \draw[dashed] (1.062, 0) -- (1.062, 0.75);
 \draw (0.425,0.75) -- (1.275,0.75);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & \frac{2k+1}{3} & 0 \\
-0 & k + \frac{1}{2} & 0 \\
-1 & \frac{2k-5}{6} & 1 \end{bmatrix}$ &
 ABC BAC&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3412,7 +3396,10 @@ ABC BAC&
  0 & 3n+3 & 0 \\
  1 & n & 1 \end{bmatrix}$
 & $x@m = b_n$
-\\ & & BCA ACB&
+\\ $\begin{bmatrix}
+0 & \frac{2k+1}{3} & 0 \\
+0 & k + \frac{1}{2} & 0 \\
+1 & \frac{2k-5}{6} & 1 \end{bmatrix}$ & BCA ACB&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw[fill] (0.6,0.9) node[anchor=center] {\tiny x} ;
@@ -3452,9 +3439,9 @@ topologically-equivalent manner.
 
 \begin{table}[h!]
 \caption{$p$-cohort of LOPSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
+$x : \mathcal{W}^o \to \mathcal{P}^o$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3466,10 +3453,6 @@ $x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3
   \draw (0.66,1.66) -- (1,1.5) -- (1.33,1.66);
   \draw (0.66,0.33) -- (1.33,0.33);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 1 & 0 & -1/3 & 1 \\
-0 & 0 & 0 & 1 & 0 \\
-0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ &
 BAC (ABC)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3487,7 +3470,10 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 0 & 2 & 1 \end{bmatrix}$
 &  $\$x@m = p$
-\\ & & ACB (BCA)&
+\\ $\begin{bmatrix}
+1 & 1 & 0 & -1/3 & 1 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 1/3 & 0 \end{bmatrix}$ & ACB (BCA)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
 \draw (2,1) -- (1.25,1.25) -- (1,2);
@@ -3516,10 +3502,6 @@ $\begin{bmatrix}
   \draw (1.5,0.5) -- (0.5,1.5);
   \draw (1,1) -- (1,2);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 0 & 1 & 1/3 & 0 \\
-0 & 0 & 0 & 1 & 0 \\
-1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ &
 ACB (BCA)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3536,7 +3518,10 @@ $\begin{bmatrix}
 0 & 5 & 0 \\
 1 & 2 & 1 \end{bmatrix}$
 & $\$x@m = rsr$
-\\ & & BAC (ABC)&
+\\ $\begin{bmatrix}
+0 & 0 & 1 & 1/3 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+1 & 1 & 0 & -1/3 & 1 \end{bmatrix}$ & BAC (ABC)&
 $p$
  &
 $\begin{bmatrix}
@@ -3621,9 +3606,9 @@ $\begin{bmatrix}
 
 \begin{table}[h!]
 \caption{$B$-cohort of LOPSPs}
-\begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
+\begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
-$x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
+$x : \mathcal{W}^o \to \mathcal{P}^o$, $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3 \to \mathcal{P}^o_3$ & $M_{\$x@m}$
 & Note
 \\ \hline
 \begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -3639,10 +3624,6 @@ $x : \mathcal{W}^o \to \mathcal{P}^o$ & $M_{x}$ & $@$ & $\$x@m : \mathcal{P}^o_3
   \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
   \draw (0.5,1.5) -- (1.5,1.5);
 \end{tikzpicture} &
-$\begin{bmatrix}
-1 & 0 & 1 \\
-0 & 5/3 & 0 \\
-0 & 2/3 & 0 \end{bmatrix}$ &
 BCA (ACB)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3666,7 +3647,10 @@ $\begin{bmatrix}
 0 & 10 & 0 \\
 0 & 4 & 0 \end{bmatrix}$
 &  $x@m = B$
-\\ & & ABC (BAC)&
+\\ $\begin{bmatrix}
+1 & 0 & 1 \\
+0 & 5/3 & 0 \\
+0 & 2/3 & 0 \end{bmatrix}$ & ABC (BAC)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0,1) -- (1,0) -- (2,1) -- (1,2) -- (0,1);
@@ -3701,10 +3685,6 @@ $\begin{bmatrix}
   \draw (0.5,0.5) -- (1,1) -- (1.5,0.5);
   \draw (0.75,0.25) -- (1,1) -- (1.25,0.25);
 \end{tikzpicture} &
-$\begin{bmatrix}
-0 & 2/3 & 0 \\
-0 & 5/3 & 0 \\
-1 & 0 & 1 \end{bmatrix}$ &
 BCA (ACB)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
@@ -3725,7 +3705,10 @@ $\begin{bmatrix}
 0 & 10 & 0 \\
 1 & 4 & 1 \end{bmatrix}$
 & $x@m = dB$
-\\ & & ABC (BAC)&
+\\ $\begin{bmatrix}
+0 & 2/3 & 0 \\
+0 & 5/3 & 0 \\
+1 & 0 & 1 \end{bmatrix}$ & ABC (BAC)&
 \begin{tikzpicture}[baseline=(current bounding box.center)]
   \pic at (0,0) {chamber4};
   \draw (0.5,0.5) -- (0.5,1.5) -- (1.5,1) -- (1.75,0.75);
