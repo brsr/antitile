@@ -1009,30 +1009,33 @@ In particular, an ERO with both $g$ and $b$ odd is not possible.
   \item $g$ odd, $b$ odd: Excluded by symmetry.
 \end{itemize}
 
+$\Lambda_x$ can be used to prove that there are no EROs such that
+$x = dx$ or $rxr = dx$. Other invariants can be used to prove the following.
+Let $x$ be an ERO. If $rxr=xd$, $x$ has type 0. (Remember that $rxr = x$ if
+$x$ is an LSP.) If $x=dxd$, $x$ is type 1, $g$ is odd, $b=b'$, and $b$ and
+$b'$ are even. There are no LOPSPs $x$ with
+$rxr = dxd$ or $x=xd$: either $x = dxd$, $rxr = xd$, or neither.
+Unfortunately, no invariant for chirality has been discovered so far, either
+to distinguish LSPs from LOPSPs or to distinguish the two parts of a chiral
+pair of LOPSPs. The relationship with operators and chirality is complicated:
+two chiral operators may produce another chiral operator (e.g.
+$p^2 = \Box_{3,4}, g^2$) or an achiral operator ($prpr = \Box_{5,0}$).
+
 EROs form a monoid (a group without inverses, or a semigroup with identity).
 We have derived here a series of monoid homomorphisms, as
-$ x \to L_x \to M_x \to (g, \Lambda_x)$.
-None of these homomorphisms are injections: there are certain
-$L_x$ or $M_x$ that correspond to more than one EROs. Examples for $M_x$ are
-easy to come by: where $n = kd$, $M_k = M_n$. For an example where the
-operators are not related by duality, $M_l = M_p$. For $L_x$, $L_{prp} =
-L_{pp}$ but $prp$ is not the same as $pp$ (one's chiral, one's not). For the
-Waffle operator, $W \ne Wd$, but $L_W = L_{Wd}$. A general counterexample would
-be operators with sufficiently large $g$ based on $\Box_{n,m}$, with a single
-square face (not touching the seed vertices or face centers) divided into two
-triangles: the counts of vertices of each degree, faces of each degree, and
-edges would be the same no matter which faces was chosen, but the operators
-would be different. With this construction, it is possible (with a sufficiently
-large $g$) to create arbitrarily large sets of operators with the same
-invariants.
-
-Unfortunately, no invariant for chirality has been discovered so far. The
-relationship with operators and chirality is complicated: two chiral operators
-may produce another chiral operator (e.g. $p^2, g^2$) or an achiral operator
-$prpr$. Further confusing things are LOPSPs where r and d interact. Some EROs
-have $xd = x$, while some others have $xd = rxr$. $g$ and $B$ are examples of
-the latter. Some have $x = dxd$, like $p$, but none with $rxr = dxd$ have been
-observed or proven/disproven to exist.
+$x \to L_x \to M_x \to (g, \Lambda_x)$. None of these homomorphisms are
+injections: there are certain $L_x$ or $M_x$ that correspond to more than one
+EROs. Examples for $M_x$ are easy to come by: where $n = kd$, $M_k = M_n$. For
+an example where the operators are not related by duality, $M_l = M_p$. For
+$L_x$, $L_{prpr} = L_{pp}$ but $prpr = \Box_{5,0}$ is not the same as $p^2 =
+\Box_{3,4}$ (one's chiral, one's not). For the Waffle operator, $W \ne Wd$,
+but $L_W = L_{Wd}$. A general counterexample would be operators with
+sufficiently large $g$ based on $\Box_{n,m}$, with a single square face (not
+touching the seed vertices or face centers) divided into two triangles: the
+counts of vertices of each degree, faces of each degree, and edges would be
+the same no matter which faces was chosen, but the operators would be
+different. With this construction, it is possible (with a sufficiently large
+$g$) to create arbitrarily large sets of operators with the same invariants.
 
 \section{Invariants of other operators}
 Some VAEROs have a 4x3 matrix form from $v^+, v^-, e, f$ to $v, e, f$, where
@@ -1148,9 +1151,6 @@ so far.
 \begin{itemize}
 \item If a polyhedron has a prime number of edges, it is irreducible.
 \item Operators where $g$ is a prime number are irreducible.
-\item If $x=xd$ or $rxr=xd$, $x$ has type 0.
-\item If $x=dxd$ or $rxr=dxd$, $x$ has type 1, $g$ is odd, $b=b'$,
-and $b$ and $b'$ are even.
 \item If an ERO has type 1, its decomposition cannot contain
 any EROs of type 0. Correspondingly, if an ERO has type 0,
 its decomposition must contain at least one type 0 ERO.
@@ -1284,7 +1284,6 @@ Some open questions persist:
 \begin{itemize}
 \item Are there irreducible EROs other than $j$ that produce only polyhedra in $\mathcal{E}$?
 \item Are there EROs other than $m_{2k+1}$ that produce only polyhedra in  $\mathcal{W}$?
-\item Are there any LOPSPs such that $rxr = dxd$? (They would have to be type 1 operators.)
 \item Are there other conditions that can be added to the invariants for $L_x$ to make the set of conditions sufficient as well as necessary?
 \item Can a useful invariant related to the chirality of an operator be defined?
 \item What other invariants need to be added to fully characterize EROs and related operators?

@@ -12,7 +12,6 @@ in its own section.
    :caption: Contents:
 
    gco
-   conway
    gallery
    modules
 
