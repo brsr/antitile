@@ -145,7 +145,8 @@ might seem odd if you're used to standard polyhedra, but examples appear in the
 world. Lu and Steinhardt \cite{lu07} assert that the girih patterns in Islamic
 art are based on a particular set of tiles, one of which is a concave polygon.
 For a more mundane example, Figure \ref{fig:circlesquare}, with digons and
-concave quadrilaterals, appears on the author's bedspread.
+concave quadrilaterals, is a common decorative pattern: it appears on the
+author's bedspread, among other places.
 
 We won't make much use of abstract polyhedra directly, but we need them as a
 theoretical underpinning. A structure that resembles a polyhedron but does not
@@ -153,8 +154,12 @@ satisfy the axioms of an abstract polytope is here called a quasipolyhedron.
 Examples of quasipolyhedra include the monogonal dihedron ($f$-vector
 $[1,1,2]$), its dual the digonal hosohedron ($[2,1,1]$), and the monohedron
 ($[1,0,1]$), all spherical "polyhedra" that violate the diamond property.
+If a structure satisfies the axioms except that 1 or 2 faces may meet at an
+edge, it is a \textit{partial polyhedron} or \textit{polyhedron with
+boundary}. For example, a section from a tiling of the plane would be a
+partial polyhedron.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
 \draw (-2,-1.4142) arc [radius=1.4142, start angle=-90, end angle= 90];
 \draw (10,-1.4142) arc [radius=1.4142, start angle=270, end angle= 90];
@@ -219,6 +224,17 @@ $\mathcal{W}$ is here defined as the set of polyhedra with only triangular
 faces, such that the vertices of the polyhedron can be 3-colored. The faces of
 a polyhedron in $\mathcal{W}^o$ can also be 2-colored. Such polyhedra are
 important to Antiprism's implementation of many operations.
+
+Finally, there are three different ways to examine the equality or inequality
+of a polyhedron. Two polyhedra are combinatorially equivalent if they have the
+same abstract polyhedron. Two polyhedra are geometrically equivalent if they
+have the same abstract polyhedron and the same geometry: same vertex
+locations, same edge arcs, etc. Two polyhedra are topologically equivalent if
+they can be deformed into each other without tearing or overlapping.
+Geometric implies topological, and topological implies combinatorial. These
+definitions extend to polytopes in general. So, for instance, a pentagon and a
+pentagram are combinatorially equivalent but not topologically or
+geometrically equivalent.
 
 \section{Notable operations}
 
@@ -351,10 +367,10 @@ for $\Box_{n,n}$). In fact, $\Delta_{n,m}$ is reducible if $n \equiv m \mod 3$
 (as $\Delta_{1,1}$ and some other $\Delta_{c,d}$), and $\Box_{n,m}$ is
 reducible if $n \equiv m \mod 2$ (as $\Box_{1,1}$ and some other $\Box_{c,d}$).
 
-When applied to the triangular tiling of the plane, $\Delta_{n,m}$ produces a
-(possibly scaled and rotated) triangular tiling of the plane, regardless of
-subscript. The same holds for $\Box_{n,m}$ and the quadrilateral tiling of the
-plane.
+When applied to the regular triangular tiling of the plane, $\Delta_{n,m}$
+produces a (possibly scaled and rotated) triangular tiling of the plane,
+regardless of subscript. The same holds for $\Box_{n,m}$ and the regular
+quadrilateral tiling of the plane.
 
 \subsection{Operations in the software package Antiprism}
 
@@ -410,11 +426,11 @@ including all of Conway's operators. (In fact the current version of
 \texttt{conway} uses \texttt{wythoff} to implement the operators.) Notation to
 create the regular hemihedra from the Platonic solids exists, as does notation
 to create hollowed-out, da Vinci-style renderings of polyhedra. It can be
-applied to partial tilings of the plane or partial polyhedra, although it more
-or less skips the edges that are adjacent to less than 2 faces. It may also
-produce quasipolyhedra: in fact, care should be taken to make sure that the
-notation produces a polyhedron in all cases, not just when applied with the
-meta operation.
+applied to partial polyhedra, although it more or less skips the edges that
+are adjacent to less than 2 faces. It may also produce quasipolyhedra: in
+fact, care should be taken (if you're not intentionally trying to create
+quasipolyhedra) to make sure that a notation string produces a polyhedron in
+all cases, not just when applied with the meta operation.
 
 \section{Smoothing}
 
@@ -425,13 +441,13 @@ excludes digons in \cite{grunbaum03}.) Degree-2 vertices are also problematic,
 being dual to digons. These elements can be eliminated in a systematic manner.
 We define a smoothing operator, $\$$, that transforms digons into single edges
 and handles degree-2 vertices by removing that vertex and merging the vertex's
-incident edges, as depicted in figure \ref{fig:smooth}. In graph-theoretic
+incident edges, as depicted in Figure \ref{fig:smooth}. In graph-theoretic
 terms, degree-2 vertices are transformed by contracting one of the edges it
 connects to, and digons are transformed by collapsing their edges into one,
 which is the equivalent act on the dual graph. \cite{gross} Antiprism
 effectively smooths digons automatically by treating them as "explicit edges".
 
-\begin{figure}
+\begin{figure} [!htbp]
 \begin{tikzpicture}
 \draw (0,0) -- (0,2);
 \draw (0,1) -- (3,1);
@@ -464,7 +480,7 @@ Smoothing a single degree-2 vertex removes 1 vertex and 1 edge.
 If $f_p$ is the f-vector of a polyhedron, then $f_{\$p} \le f_p$, where the
 inequality holds pairwise.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
 \draw (0,0) -- (0,2);
 \draw (0,1) -- (1,1);
@@ -512,7 +528,7 @@ particular configuration involving a degree-2 feature that may have other
 benefits, e.g. Figure \ref{fig:weirdo},
 but $\$$ is the minimum-effort way to remove the degree-2 features.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
   \draw (0,0) -- (0,2);
   \draw (0,1) -- (1.5,1.5) -- (3,1);
@@ -572,7 +588,7 @@ the dents in a metal object to make it convex, and using a currency symbol
 makes it similar to $\$$.) That said, polyhedra with such features and
 operators that produce them are interesting in ways we'll get to later.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
 \draw (0,0) -- (0,2);
 \draw (0,1) -- (1.5,1.5) -- (3,1);
@@ -598,13 +614,12 @@ operators that produce them are interesting in ways we'll get to later.
 \end{figure}
 
 \section{Edge-replacement operations}
-From this point, the discussion will exist in an uncomfortable middle ground.
-We will usually only be concerned with the combinatorial or topological
-structure of the polyhedron, but we still need to make reference to the ambient
-space. For instance, a \textit{face center} as used here need not be at any
-exact center of the face, or even really on the face, but the most intuitive
-way to talk about it is to put it at some sort of center on the face. When we
-talk about equality of operators, we mean it in the topological and combinatorial sense.
+When we talk about equality of operators here, we mean it in the topological
+(and combinatorial) sense. For instance, a \textit{face center} as used here
+need not be at any exact center of the face, or even really contained in the
+face, but the most intuitive way to talk about it is to put it at some sort of
+center on the face. We still need to make reference to the ambient space,
+however.
 
 In \cite{brinkmann}, two sets of operations on polyhedra are defined: local
 symmetry-preserving operations (LSP), on $\mathcal{P}$, and local operations
@@ -625,7 +640,7 @@ This is termed the \textit{inflation rate} by \cite{brinkmann},
 and denoted $g$ (not to be confused with the operator).
 It can also be termed the \textit{edge multiplier}.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
     \pic at (0,0) {chamber4};
   \draw (0,1) -- (2,1);
@@ -709,7 +724,7 @@ to V, E and F in the seed polyhedron produced by $m$. (In general, $@$ acts on
 the vertex coloring of polyhedra in $\mathcal{W}$.) The third is that the $m$
 operator always produces a vertex of degree 4 at the center of each edge.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \begin{tikzpicture}
   \pic at (0,0) {chamber1};
 \draw (1.7, 0) -- (0, 0);
@@ -1291,23 +1306,24 @@ Some open questions persist:
   other EROs unique (up to associates)?
 \end{itemize}
 
-Following this, there are two related ideas to pursue in the future.
+Following this, there are two related ideas to pursue.
 
 First, to explore operations on abstract polyhedra (and polytopes) without
-reference to the realization. The way they have been described in this text,
-there is a dependence on the underlying space. Removing that dependence would
-make the theory clearer. Furthermore, some of these operations may be valid on
-posets that do not satisfy all the axioms of an abstract polytope. For example,
-the dual operation is defined for all posets.
-Finding the most general restriction on the poset for a certain operation may
-help us understand how to deal with quasipolyhedra.
+reference to the realization. As we mentioned earlier, most of this discussion
+is in topological terms. Can it be expressed purely in terms of the abstract
+polyhedron, without making reference to the ambient space? It would be more
+rigorous. Furthermore, some of these operations may be valid on posets that do
+not satisfy all the axioms of an abstract polytope. For example, the dual
+operation is defined for all posets. Finding the most general restriction on
+the poset for a certain operation may help us understand how to deal with
+quasipolyhedra or partial polyhedra.
 
 Second, to explore operations on general polytopes. Here we've explored
 operations on polyhedra. Coxeter defined his operations on regular polytopes.
-A general theory of operations on polytopes would be the next logical step.
-These operations need not necessarily be between polytopes of the same rank:
-consider the embedding of a higher polytope in 3-space, or producing the
-skeleton of a polytope.
+A general theory of operations on (not just regular) polytopes would be the
+next logical step. These operations need not necessarily be between polytopes
+of the same rank: consider a vertex figure of an $n$-polytope, which is a
+$n-1$-polytope.
 
 \bibliography{operations_on_polyhedra}
 \bibliographystyle{plain}
@@ -1347,32 +1363,32 @@ and $b'_i$ are 0.
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & & chiral, \texttt{h}
+    0 & 0 & 1 \end{bmatrix}$& Reflect: $r$ & $rd=dr$ & $rd=dr$ & $r$ & & not LSP or LOPSP, \texttt{h}
     \\ \hline
     $\begin{bmatrix}
     1 & 0 & 0 \\
     0 & 1 & 0 \\
-    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & & $d$: \texttt{c}, $S$: \texttt{a}
+    0 & 0 & 1 \end{bmatrix}$& Seed: $S=\Box_{1,0} =\Delta_{1,0}$ & Dual: $d$ & $d$ & $S$ & & $d$: \texttt{c}, $S$: \texttt{a}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 2 & 0 \\
-    0 & 1 & 0 \end{bmatrix}$& Join: ${j=\Box_{1,1}}$ & $j$ ($@j$) & Ambo: $a$ & $a$ ($@a$)& $b'_4=1$ &\texttt{c}
+    0 & 1 & 0 \end{bmatrix}$& Join: ${j=\Box_{1,1}}$ & $j$ ($@j$) & Ambo: $a$ & $a$ ($@a$)& $b'_4=1$ &\texttt{c}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 0 & 1 \\
     0 & 3 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & ${k=2}$, ${b'_3=2}$ &$k, t$: \texttt{c}. $n, z$: \texttt{a}.
+    0 & 2 & 0 \end{bmatrix}$& Kis: $k$ & Needle: $n =\Delta_{1,1}$ & Zip: $z$ & Truncate: $t$ & ${k=2}$, ${b'_3=2}$ &$k, t$: \texttt{c}. $n, z$: \texttt{a}. \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 1 & 1 \\
     0 & 4 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Ortho: ${o=jj=\Box_{2,0}}$ & $o$ & Expand: ${e=aa}$ & $e$ & &\texttt{c}
+    0 & 2 & 0 \end{bmatrix}$& Ortho: ${o=jj=\Box_{2,0}}$ & $o$ & Expand: ${e=aa}$ & $e$ & &\texttt{c}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 1 \\
     0 & 5 & 0 \\
-    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & ${b_3=2}$, ${b'_5=2}$ &chiral, \texttt{c}
+    0 & 2 & 0 \end{bmatrix}$& Gyro: $g$ & $gd=rgr$ & $sd=rsr$ & Snub: $s$ & ${b_3=2}$, ${b'_5=2}$ &LOPSP, \texttt{c}
     \\ \hline
     $\begin{bmatrix}
     1 & 1 & 1 \\
@@ -1382,12 +1398,12 @@ and $b'_i$ are 0.
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 4 & 0 \\
-    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: ${u =\Delta_{2,0}}$ & ${b_3=2}$, ${b'_6=1}$ &\texttt{a}
+    0 & 1 & 1 \end{bmatrix}$& Chamfer: $c$ & $cd=du$ & $dc=ud$ & Subdivide: ${u =\Delta_{2,0}}$ & ${b_3=2}$, ${b'_6=1}$ &\texttt{a}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
     0 & 5 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Propeller: ${p=\Box_{2,1}}$ & $dp=pd$ & $pd=dp$ & $p$ & ${b_4=2}$, ${b'_4=2}$ &chiral, \texttt{h}
+    0 & 2 & 1 \end{bmatrix}$& Propeller: ${p=\Box_{2,1}}$ & $dp=pd$ & $pd=dp$ & $p$ & ${b_4=2}$, ${b'_4=2}$ &LOPSP, \texttt{h}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
@@ -1428,7 +1444,7 @@ and $b'_i$ are 0.
     $\begin{bmatrix}
     1 & 4 & 0 \\
     0 & 7 & 0 \\
-    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & ${b_3=4}$, ${b'_6=2}$ &chiral, \texttt{a}
+    0 & 2 & 1 \end{bmatrix}$& Whirl: $w$ & $wd$ & $dw$ & $dwd=\Delta_{2,1}$ & ${b_3=4}$, ${b'_6=2}$ &LOPSP, \texttt{a}, \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 4 & 0 \\
@@ -1448,7 +1464,7 @@ and $b'_i$ are 0.
     $\begin{bmatrix}
     1 & 5 & 1 \\
     0 & 10 & 0 \\
-    0 & 4 & 0 \end{bmatrix}$& Bowtie: $B$ & $Bd$ & $dB$ & $dBd$ & ${b_3=4}$, ${b_4=1}$, ${b'_3=2}$, ${b'_7=2}$ &chiral, \texttt{n}
+    0 & 4 & 0 \end{bmatrix}$& Bowtie: $B$ & $Bd$ & $dB$ & $dBd$ & ${b_3=4}$, ${b_4=1}$, ${b'_3=2}$, ${b'_7=2}$ &LOPSP, \texttt{n}
     \\ \hline
     $\begin{bmatrix}
     1 & 3 & 1 \\
@@ -1467,33 +1483,33 @@ and $b'_i$ are 0.
     ${\ell=n}$, ${b_4=n}$, ${b'_3=2n-2}$, ${b'_4=2}$ &\texttt{a}, $n \ge 1$
     \\ \hline
     $\begin{bmatrix}
-    1 & \frac{T}{2} - 1 & 1 \\
-    0 & T & 0 \\
-    0 & \frac{T}{2} & 0 \end{bmatrix}$& $\Box_{n,m}$ & $\Box_{n,m}$ &
-    $d\Box_{n,m}$ & $d\Box_{n,m}$ & $b_4=b'_4=b$ &${n \equiv m \mod 2}$, ${T=n^2+m^2}$.
-    \texttt{g}, \texttt{a}\footnote{Antiprism implements $\Box$,
+    1 & \frac{g}{2} - 1 & 1 \\
+    0 & g & 0 \\
+    0 & \frac{g}{2} & 0 \end{bmatrix}$& $\Box_{n,m}$ & $\Box_{n,m}$ &
+    $d\Box_{n,m}$ & $d\Box_{n,m}$ & $b_4=b'_4=b$ &${n \equiv m \mod 2}$, ${g=n^2+m^2}$.
+    \texttt{g}, \texttt{a}\footnote{\label{note1}Antiprism implements $\Box$,
     but only where $b=0$: it calls it $o_n$ and numbers it differently.}
     \\ \hline
     $\begin{bmatrix}
-    1 & \frac{T-1}{2} & 0 \\
-    0 & T & 0 \\
-    0 & \frac{T-1}{2} & 1 \end{bmatrix}$& $\Box_{n,m}$ & $d\Box_{n,m}$ &
+    1 & \frac{g-1}{2} & 0 \\
+    0 & g & 0 \\
+    0 & \frac{g-1}{2} & 1 \end{bmatrix}$& $\Box_{n,m}$ & $d\Box_{n,m}$ &
     $d\Box_{n,m}$ & $\Box_{n,m}$ & $b_4=b'_4=b$ &${n \not\equiv m \mod 2}$,
-    ${T=n^2+m^2}$. \texttt{g}
+    ${g=n^2+m^2}$. \texttt{g}, \texttt{a}\footnotemark[\ref{note1}]
     \\ \hline
     $\begin{bmatrix}
-    1 & \frac{T}{3} - 1 & 1 \\
-    0 & T & 0 \\
-    0 & \frac{2T}{3} & 0 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
-    $d\Delta_{n,m}$ & $d\Delta_{n,m}d$ & ${b_6=b}$, ${b'_3=b'}$ &${n \equiv m \mod 3}$, ${T=n^2+nm+m^2}$.
+    1 & \frac{g}{3} - 1 & 1 \\
+    0 & g & 0 \\
+    0 & \frac{2}{3}g & 0 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
+    $d\Delta_{n,m}$ & $d\Delta_{n,m}d$ & ${b_6=b}$, ${b'_3=b'}$ &${n \equiv m \mod 3}$, ${g=n^2+nm+m^2}$.
     \texttt{g}
     \\ \hline
     $\begin{bmatrix}
-    1 & \frac{T-1}{3} & 0 \\
-    0 & T & 0 \\
-    0 & 2\frac{T-1}{3} & 1 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
+    1 & \frac{g-1}{3} & 0 \\
+    0 & g & 0 \\
+    0 & 2\frac{g-1}{3} & 1 \end{bmatrix}$& $\Delta_{n,m}$ & $\Delta_{n,m}d$ &
     $d\Delta_{n,m}$ & $d\Delta_{n,m}d$ & ${b_6=b}$, ${b'_3=b'}$ &${n \not\equiv m \mod 3}$,
-    ${T=n^2+nm+m^2}$. \texttt{g}
+    ${g=n^2+nm+m^2}$. \texttt{g}
     \\ \hline
     $\begin{bmatrix}
     1 & 2 & 0 \\
@@ -1511,13 +1527,19 @@ and $b'_i$ are 0.
     0 & 0 & n \end{bmatrix}$& $n$-Copy & $d$ ($n$-Copy) = ($n$-Copy) $d$ & $d$ ($n$-Copy) = ($n$-Copy) $d$ & $n$-Copy & &\texttt{n}, \ddag for $n>1$
 \end{longtable}
 
-\section{Cohorts of LSPs}
+\section{Cohorts of LSPs and LOPSPs}
 With the
 exception of some named operators, if $x$ is shown, $xd$ is not, since its
 information can be easily determined from the information for $x$. An arbitrary
 named member of the cohort is chosen to label the cohort, e.g. the $a$-cohort.
 
-\begin{table}[h!]
+For LOPSPs, permutations in parentheses, such as (CBA), indicate a
+permutation that produces the chiral pair of the depicted operator. For some
+operators, the edge-centered diagram has been redrawn for clarity in a
+topologically-equivalent manner.
+(Typically this means vertices were moved to an edge of the diagram.)
+
+\begin{table}[!htbp]
 \caption{$a$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -1744,7 +1766,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$u$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -1832,7 +1854,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$l$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -1949,7 +1971,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$L_0$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2074,7 +2096,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$q$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2191,7 +2213,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$m$-cohort of LSPs}
 \begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2262,7 +2284,7 @@ ${xm = b = ta}$
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$K$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2410,7 +2432,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$M$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2556,7 +2578,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$E$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2699,7 +2721,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$J$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -2847,7 +2869,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$W$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3011,7 +3033,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$M_n$-cohort of LSPs, $n=2k, k \ge 1$}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3130,7 +3152,7 @@ ABC BAC&
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$M_n$/$m_n$-cohort of LSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3297,7 +3319,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$m_n$-cohort of LSPs, $n=2k+1, k \ge 0$}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3429,14 +3451,7 @@ ABC BAC&
 \end{tabular}
 \end{table}
 
-\section{Cohorts of LOPSPs}
-In the following tables, permutations in parentheses, such as (CBA), indicate a
-permutation that produces the chiral pair of the depicted operator. For some
-operators, the edge-centered diagram has been redrawn for clarity in a
-topologically-equivalent manner.
-(Typically this means vertices were moved to an edge of the diagram.)
-
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$p$-cohort of LOPSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3531,7 +3546,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$g$-cohort of LOPSPs}
 \begin{tabular}[t]{ c c|m{1cm} c c m{2cm} }
 \hline \hline
@@ -3603,7 +3618,7 @@ $\begin{bmatrix}
 \end{tabular}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \caption{$B$-cohort of LOPSPs}
 \begin{tabular}[t]{ c|m{1cm} c c m{2cm} }
 \hline \hline

@@ -57,6 +57,8 @@ Indices and tables
 .. [Oosterom] Van Oosterom, A & Strackee, J, 1983. The Solid Angle of a Plane
    Triangle. IEEE Trans. Biom. Eng. BME-30 (2): 125–126.
    [http://dx.doi.org/10.1109/TBME.1983.325207 doi:10.1109/TBME.1983.325207].
+.. [Folke] Eriksson, Folke (1990). "On the measure of solid angles".
+    Math. Mag. 63 (3): 184–187. doi:10.2307/2691141. JSTOR 2691141.   
 .. [Caspar] D.L.D. Caspar and A. Klug. Physical principles in the construction
    of regular viruses. In Cold Spring Harb Symp Quant Biol., volume 27,
    pages 1–24, 1962.
