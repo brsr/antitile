@@ -1,0 +1,377 @@
+\documentclass{amsart}[12pt]
+\usepackage{amsmath, amsfonts, tikz, natbib, array}
+\oddsidemargin=0in \evensidemargin=0in
+\textwidth=6.6in \textheight=8.7in
+
+\title{Maps between Euclidean and spherical polygons}
+\author{B R S Recht}
+\date{December 2018}
+
+\begin{document}
+
+\maketitle
+
+Yadda yadda\cite{kahn}
+
+In the geodesic dome world, geometry is usually synthetic rather than
+analytic. That is, geometric constructions are usually expressed in terms of
+step-by-step geometric constructions rather than in equations and numeric
+values. See, for instance, \cite{kenner}. Implementing a synthetic geometric
+construction on a computer can be a pain; analytic specifications are more
+amenable to programming idioms.
+
+\section{Definitions}
+
+\subsection{Spherical geometry}
+There are a number of ways to numerically specify points on a sphere. By far
+the most common is by latitude and longitude, which appear on every modern map
+of the Earth and probably some other planets. Latitude and longitude are
+familiar and convenient, but performing extended geometry calculations using
+latitude and longitude is a complicated task.
+
+Doing spherical geometry using a 3-component unit vector is more convenient
+in a number of ways: the equations are often simpler, and there are no
+singularities at the poles. A unit sphere can be defined as the set of all unit
+vectors in 3-space; i.e., vectors $\mathbf v = [v_x, v_y, v_z]$ such that the
+vector norm $\|\mathbf v \|=1$. Unit vectors are often denoted using a hat:
+$\hat{\mathbf v}$. We'll often find ourselves normalizing vectors,
+so we may supress the denominator with an ellipsis like so:
+\begin{equation}
+  \hat{\mathbf v} = \frac{\mathbf{some+really+long+statement}}{\|\dots\|}
+\end{equation}
+If a vector is an intermediate step to a normalized vector,
+we may call it pre-normalized and denote it ${\mathbf v}^*$,
+such that $\hat{\mathbf v} = \frac{{\mathbf v}^*}{ \|{\mathbf v}^*\|}$
+
+The shortest distance between two points in Euclidean space is a straight line.
+On the sphere, the shortest distance is an arc of the great circle between those
+points. The great circle is the intersection of the sphere and a plane passing
+through the origin. A plane through the origin can be specified as
+$\hat{\mathbf n} \cdot \mathbf v = 0$, where $\hat{\mathbf n}$ is a unit vector
+normal to the plane; this vector $\hat{\mathbf n}$ can be used to specify a
+great circle. Given two points $\mathbf{\hat{v}_1, \hat{v}_2}$ on the sphere,
+the $\hat{\mathbf n}$ of the great circle between those two points is (up to
+normalization) their cross product:
+\begin{equation}
+  \mathbf{\hat{n}} =
+\frac{\mathbf{\hat{v}}_1 \times \mathbf{\hat{v}}_2}{\|\dots\|}
+\end{equation}
+
+Small circles are the intersection of the sphere with a plane not through
+the origin. All planes may be specified in Hessian normal form as
+$\mathbf{\hat{n}} \cdot \mathbf v = r$, where $r$ is the minimum distance
+between the plane and the origin. The intersection of the plane with the sphere
+is determined by $r$ as so:
+
+\begin{itemize}
+  \item $r = 0$: Great circle
+  \item $r \in (0,1)$: Small circle
+  \item $r = 1$: Point
+  \item $r > 1$: None
+\end{itemize}
+
+The following subsections give some formulas for measurements and constructions
+in Euclidean space and on the sphere. Since a sphere is locally Euclidean, the
+spherical formulas approach the Euclidean formulas when the measures are small.
+Note that some spherical formulas require normalized vectors,
+denoted by the hat $\mathbf{\hat{v}}$.
+
+\subsubsection{Distance}
+In Euclidean space, the distance between two vertices $\mathbf v_1$ and
+$\mathbf v_2$ is given by the usual metric. On the sphere, distance is the
+central angle $\theta$, which is given by many equivalent forms: the most
+numerically stable one is the one using $\arctan$ given below.
+\begin{equation}\begin{split}
+\eta & = \|\mathbf v_1-\mathbf v_2\| \\
+\theta & = \arctan\left(
+  \frac{\|\mathbf{\hat{v}}_1 \times \mathbf{\hat{v}}_2\|}
+  {\mathbf{\hat{v}}_1 \cdot \mathbf{\hat{v}}_2}\right)
+\end{split}\end{equation}
+
+\subsubsection{Angle}
+The angle on a surface at the vertex $v_1$ between $v_2$ and $v_3$ is a
+standard expression for Euclidean space. For spheres, it is the dihedral angle
+between the planes defined from $v_1$ to $v_2$ and from $v_1$ to $v_3$.
+\begin{equation}
+  \cos\phi_1 = \mathbf{\hat{c}}_{12} \cdot \mathbf{\hat{c}}_{13}
+\end{equation}
+where $\mathbf{\hat{c}}_{ij} = \frac{\mathbf{v}_i - \mathbf{v}_j}{\|\dots\|}$
+for Euclidean space and $\mathbf{\hat{c}}_{ij} = \frac{\mathbf{\hat{v}}_i
+\times \mathbf{\hat{v}}_j}{\|\dots\|}$ for spheres. (This formula also has
+equivalent forms using $\sin$ and $\tan$.)
+
+\subsubsection{Area}
+The area of an arbitrary polygon with vertices $v_i$ is given by the shoelace
+formula. $n$ is the number of vertices in the polygon and
+$i = 0 \dots n-1$ is an index for each vertex. $i$ should be treated as if it's
+mod $n$, so that it loops around. This formula will give a result for skew
+polygons, but the areas of skew polygons are not well-defined.
+\begin{equation}
+A = \frac{1}{2} \| \sum \mathbf v_i\times \mathbf v_{i+1} \|
+\end{equation}
+The area of a spherical triangle is the solid angle $\Omega$,
+and given by a more elaborate formula. \cite{oosterom}\cite{eriksson}
+\begin{equation}
+\tan(\Omega/2) = \frac{|\mathbf{\hat{v}_1} \cdot
+       \mathbf{\hat{v}}_2 \times \mathbf{\hat{v}}_3|}
+       {1+\mathbf{\hat{v}}_1\cdot \mathbf{\hat{v}}_2+\mathbf{\hat{v}}_2
+       \cdot \mathbf{\hat{v}}_3+\mathbf{\hat{v}}_3\cdot \mathbf{\hat{v}}_1}
+\end{equation}
+
+\subsubsection{Means}
+When $n=2$ this formula gives the midpoint between $\mathbf v_1$ and
+$\mathbf v_2$. When $n=3$ it gives the centroid of the triangle with
+vertices $\mathbf v_1, \mathbf v_2$ and $\mathbf v_3$.
+\begin{equation}\begin{split}
+\mathbf v_\mu & = \frac{\sum\mathbf v_i}{n} \\
+\mathbf{\hat{v}}_\mu & = \frac{\sum\mathbf{\hat{v}}_i}{\|\dots\|}
+\end{split}\end{equation}
+\subsubsection{Interpolation}
+Interpolation in Euclidean space is standard linear interpolation. On the
+sphere, interpolation is given by spherical linear interpolation, or slerp.
+\begin{equation}\begin{split}
+\mathrm{Lerp}(\mathbf{v_1}, \mathbf{v_2}; t) & =
+       (1-t) \mathbf{v_1} + t \mathbf{v_2} \\
+\mathrm{Slerp}(\mathbf{\hat{v}_1}, \mathbf{\hat{v}_2}; t) & =
+       \frac{\sin {((1-t)w)}}{\sin (w)} \mathbf{\hat{v}_1} +
+       \frac{\sin (tw)}{\sin (w)} \mathbf{\hat{v}_2},
+        w = \arccos \mathbf{\hat{v}_1} \cdot \mathbf{\hat{v}_2}
+\end{split}\end{equation}
+
+\subsubsection{Face normal}
+For the purposes of this text, we define the normal to a (Euclidean) polygon as
+so, where $n$ is the number of vertices in the polygon and
+$i = 0 \dots n-1$ is an index for each vertex:
+\begin{equation}
+  \hat{\mathbf{n}} =
+  \frac{\sum^{n-1}_i \mathbf{v}_i \times \mathbf{v}_{i+1}}{\|\dots\|}
+\end{equation}
+$i$ should be treated as if it's mod $n$, so that it loops around.
+(Note the similarity to the shoelace formula.)
+This definition allows for a somewhat sensible extension to skew polygons:
+the normal points in a generally reasonable direction for skew polygons.
+The normal will be outward-facing if the points are ordered counterclockwise,
+and inward-facing if the points are ordered clockwise.
+
+\subsubsection{Skewness}
+There's no standard measure of polygon skewness, so this text uses an ad-hoc
+measure that seems to work well. This program measures the skewness of a polygon
+with 4 or more vertices by this method: Let $\mathbf x_i = \mathbf{v}_i -
+\bar{\mathbf{v}}$, where $\bar{\mathbf{v}}$ is the (Euclidean) average of the
+points. Calculate the SVD decomposition of the matrix that has $\mathbf x_i$
+as rows (or columns). We only need the singular values: since we're in 3d
+space, there will be 3 singular values. The \textit{skewness} is the smallest
+singular value divided by the sum of the  other two singular values.
+If the polygon is flat, the skewness is 0.
+
+\subsection{Triangle and quadrilateral coordinates}
+
+\begin{figure}[!htbp]
+\begin{tikzpicture}
+  \draw (0, 0) -- (1.7,3) -- (3.4, 0) -- (0, 0) ;
+  \draw[fill] (0, 0) circle [radius=0.05] node[anchor=south] {\tiny 1};
+  \draw[fill] (1.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 2};
+  \draw[fill] (3.4, 0) circle [radius=0.05] node[anchor=south] {\tiny 3};
+  \draw[fill] (2, 1) circle [radius=0.05];
+  \draw[dotted] (0,0) -- (2,1) -- (1.7,3);
+  \draw[dotted] (3.4, 0) -- (2,1);
+
+  \draw (4, 0) -- (5.7,3) -- (7.4, 0) -- (4, 0) ;
+  \draw[fill] (4, 0) circle [radius=0.05] node[anchor=south] {\tiny 1};
+  \draw[fill] (5.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 2};
+  \draw[fill] (7.4, 0) circle [radius=0.05] node[anchor=south] {\tiny 3};
+  \draw[fill] (6, 1) circle [radius=0.05];
+
+  \draw[dotted] (4.6, 1) node[anchor=east] {\tiny 2,1}
+  -- (6.85,1) node[anchor=west] {\tiny 2,3};
+  \draw[dotted] (5.43, 0) node[anchor=north] {\tiny 3,1}
+  -- (6.425, 1.75) node[anchor=west] {\tiny 3,2};
+  \draw[dotted] (6.56, 0) node[anchor=north] {\tiny 1,3}
+  -- (5.3, 2.2) node[anchor=east] {\tiny 1,2};
+
+\end{tikzpicture}
+\caption{Barycentric coordinates. Left: Area opposite of each vertex. Right: Intersection of lines parallel with triangle edges.}
+\label{fig:bary}
+\end{figure}
+
+This text will use barycentric coordinates to express Euclidean triangles.
+Barycentric coordinates are real numbers $\beta_1, \beta_2, \beta_3$ such that
+$\sum^3_{i=1} \beta_i = 1$. Given a triangle with vertices $\mathbf v_1,
+\mathbf v_2, \mathbf v_3$, the corresponding vertex is given by $\mathbf v =
+\sum^3_{i=1} \beta_i \mathbf v_i$. Given $\mathbf v$ and $\mathbf v_i$,
+$\beta_i$ can be found by e.g. solving the linear system of
+$\beta_1 + \beta_2 + \beta_3 = 1$ and $\mathbf v = \sum^3_{i=1} \beta_i \mathbf
+v_i$. $\beta_i$ are all positive on the interior of the triangle. If a point
+lies on an edge opposite vertex $i$, then $\beta_i$ is zero.
+(If it lies beyond the edge, then $\beta_i < 0$.)
+
+There are two geometric interpretations of barycentric coordinates that will be
+useful, as depicted in Figure \ref{fig:bary}. One is that $\beta_i$ is the area
+of the smaller triangle opposite $v_i$ divided by the area of the large
+triangle. The other is that if a line is placed passing through $v$ parallel to
+the edge opposite vertex $i$, it will be at $\beta_i$ of the distance between
+the edge and its opposite vertex, with $\beta_i = 0$ being on the edge itself.
+Let $v_{i,j}$ be the point where the line for $i$ meets the line between
+vertices $i$ and $j$: then the vertex lies $\frac{\beta_{j}}{1-\beta{i}}$
+of the distance from $v_{i,j}$ to $v_{i,j+1}$.
+
+Generalized barycentric coordinates are defined similarly, but the requirement
+that $\sum^3_{i=1} \beta_i = 1$ is dropped. For instance, generalized
+barycentric coordinates on the unit sphere replace it with a requirement that
+$\| \sum^3_{i=1} \beta_i \mathbf v_i \| = 1$. $\sum^3_{i=1} \beta_i$ would be
+$>1$ on the interior of the triangle, $=1$ on the edges, and $<1$ on the exterior.
+
+Quadrilaterals are instead specified by what we'll call \textit{$uv$
+coordinates} where $u$ and $v$ are $\in [0, 1]$. Given a quadrilateral with
+vertices $\mathbf v_1, \mathbf v_2, \mathbf v_3, \mathbf v_4$, the
+transformation is:
+\begin{equation}
+\mathbf v = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv
+\end{equation}
+Unlike triangles, quadrilaterals may have points that do not share a common
+plane: they may be skew quadrilaterals. If the quadrilateral is a skew
+quadrilateral, $u$ and $v$ smoothly parameterize a surface over that skew
+quadrilateral.
+
+\section{Maps between Euclidean and spherical polygons}
+\subsection{Conformal}
+
+Schwarz triangle maps
+
+\subsection{Gnomonic}
+The gnomonic projection was known to the ancient Greeks, and is the simplest
+of the transformations listed here. It has the nice property that all lines in
+Euclidean space are transformed into great circles on the sphere: that is,
+geodesics stay geodesics, and polygons stay polygons. This is in fact the
+motivation for the name "geodesic dome": Fuller used this projection to project
+triangles on the sphere. This is referred to as Method 1 in geodesic dome
+terminology. The main downside is that the transformation causes shapes
+near the corners to appear bunched up;
+this is particularly bad for larger faces e.g. on the tetrahedron.
+
+In general, the gnomonic projection is defined as:
+\begin{itemize}
+\item To sphere: $\hat{\mathbf v} = \frac{\mathbf p}{\|\mathbf p\|}$
+\item From sphere: $\mathbf p = \frac{r}
+  {\hat{\mathbf n} \cdot \hat{\mathbf v}}\hat{\mathbf v}$
+\end{itemize}
+
+where $\mathbf p$ is a point on a plane given in Hessian normal
+form by $\hat{\mathbf n} \cdot \mathbf p = r$. Projection from Euclidean
+space to the sphere is literally just normalizing the vector. For the Goldberg-Coxeter operation, this amounts to just normalizing
+the vectors produced by the coordinate form. For triangles:
+\begin{equation}
+   \mathbf v^* =
+   \beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3
+\end{equation}
+For quadrilaterals:
+\begin{equation}
+   \mathbf v^* = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) x +
+   (\mathbf v_4-\mathbf v_1) y +
+   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy
+ \end{equation}
+where $\beta_i$ are (planar) barycentric coordinates and $x,y$ are
+x-y quadrilateral coordinates.
+
+The triangular case can be thought of in terms of generalized
+barycentric coordinates. If the generalized coordinates are
+$\beta^\prime_i$, then $\beta^\prime_i = \frac{\beta_1}
+{\|\beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3\|}$.
+
+\subsection{Spherical areal}
+This method applies to triangles only. Instead we look to the relation between
+barycentric coordinates and area; we treat $\beta_i$ as the proportion of
+spherical area in the triangle that is opposite the vertex $\hat{\mathbf v}_i$.
+Let $\Omega$ be the spherical area (solid angle) of the spherical triangle and
+$\Omega_i = \beta_i\Omega$ be the area of the smaller triangle opposite vertex
+$\hat{\mathbf v}_i$.
+
+The formula to find $\hat{\mathbf v}$ given $\beta_i$ more complicated,
+although it's also derived from the formula for solid angle given earlier.
+\begin{equation}\begin{split}
+  \mathbf G & \hat{\mathbf v} = \mathbf h \\
+   \mathbf G & = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix} \\
+   \mathbf h & = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T \\
+   \mathbf g_{i} & = \left(1+\cos \Omega_{i}\right) \mathbf v_{i-1} \times
+   \mathbf v_{i+1} - \sin\Omega_{i}\left(\mathbf v_{i-1} + \mathbf v_{i+1}\right)\\
+   h_i &= \sin\Omega_i\left(1+\mathbf v_{i-1}\cdot\mathbf v_{i+1}\right)
+\end{split}\end{equation}
+The subscripts loop around: 0 should be interpreted as 3, and 4 should be
+interpreted as 1. To clarify, $\mathbf G$ is the 3x3 matrix where the $i$th
+column is $\mathbf g_i$, and $\mathbf h$ is the column vector where the
+$i$th element is $h_i$. The vector $\hat{\mathbf v}$
+can be solved for using standard matrix methods.
+
+\subsection{Great Circle}
+Method 2 in geodesic dome circles, at least how Antiprism implements it
+\subsection{Double Slerp}
+
+\subsection{Naive Slerp}
+This method shares with the gnomonic method an analytic form for the
+transformation from Euclidean space to the sphere. It has two downsides: there is no analytic form
+for the reverse transformation, and it can only be used on equilateral faces.
+
+The Naive Slerp method on a triangular face resembles a naive extension of
+spherical linear interpolation (Slerp) to barycentric coordinates, thus the
+name. The Naive Slerp methods reduce to slerp on the edges of the face.
+
+Let $\cos(w) = \mathbf v_i \cdot \mathbf v_{i+1}$ for all $i$. (As
+usual, the subscripts loop around.) For triangles:
+\begin{equation}
+   \mathbf v^* = \sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i
+\end{equation}
+For quadrilaterals:
+\begin{equation}\begin{split}
+     \mathbf v^* & = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)} \mathbf v_i \\
+\gamma_1 & = (1-x)(1-y) \\
+\gamma_2 & = x(1-y) \\
+\gamma_3 & = xy \\
+\gamma_4 & = (1-x)y
+\end{split}\end{equation}
+or
+\begin{equation}\begin{split}
+   \mathbf v^* & = \sum_{i=1}^4\frac{s_i}{\sin^2(w)}  \mathbf v_i \\
+s_1 &  = \sin (w(1-x))\sin (w(1-y)) \\
+s_2 & = \sin (wx)\sin (w(1-y)) \\
+s_3 & = \sin (wx)\sin (wy) \\
+s_4 & = \sin (w(1-x))\sin (wy)
+\end{split}\end{equation}
+
+Because the projected edges already lie on the sphere, there is a lot of
+freedom in how to adjust $\mathbf v^*$ to lie on the sphere. The
+easiest is just to centrally project the vertices, that is, to normalize
+$\mathbf v^*$ like we have been. Another option is to perform a parallel
+projection along the face normal. (See appendix for a formula for the "normal"
+to a skew face.) We need the parallel distance $p$ from the vertex to the
+sphere surface in the direction of the face normal $\hat{\mathbf n}$,
+such that $\hat{\mathbf v} = \mathbf v^* + p\hat{\mathbf n}$.
+$p$ is given by:
+\begin{equation}
+   p = -\mathbf v^* \cdot \hat{\mathbf n} +
+   \sqrt{1+\mathbf v^* \cdot \hat{\mathbf n}-\mathbf v^* \cdot \mathbf v^*}
+\end{equation}
+$p$ can also be approximated as $\widetilde{p} = 1 - \|\mathbf v^*\|
+\leq p$, which is somewhat fewer operations and doesn't require
+calculation of the face normal. Technically, you can project in almost any
+direction, not just that of the face normal, but most other choices don't
+produce anything remotely symmetric.
+
+Sometimes the best polyhedron comes from a compromise of the central and
+parallel projections. Choose a constant $k$, typically between 0 and 1, then:
+\begin{equation}
+  \hat{\mathbf v} = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
+\end{equation}
+$p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
+measurement of the polyhedron, we can do a 1-variable optimization on $k$,
+which is more tractable than the multivariate optimization of the location of
+every vertex.
+
+\section{Maps between polygons and disks in the Euclidean plane}
+\subsection{Conformal}
+Schwarz-Christoffel mapping
+\subsection{Naive Slerp}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

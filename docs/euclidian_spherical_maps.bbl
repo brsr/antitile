@@ -1,0 +1,25 @@
+\begin{thebibliography}{1}
+
+\bibitem{eriksson}
+Folke Eriksson.
+\newblock On the measure of solid angles.
+\newblock {\em Mathematics Magazine}, 63(3):184--187, 1990.
+\newblock doi:10.2307/2691141. JSTOR 2691141.
+
+\bibitem{kahn}
+Lloyd Kahn.
+\newblock {\em Domebook 2}.
+\newblock Pacific Domes, 1971.
+
+\bibitem{kenner}
+Hugh Kenner.
+\newblock {\em Geodesic math and how to use it}.
+\newblock Univ of California Press, 1976.
+
+\bibitem{oosterom}
+Adriaan Van~Oosterom and Jan Strackee.
+\newblock The solid angle of a plane triangle.
+\newblock {\em IEEE transactions on Biomedical Engineering}, 30(2):125--126,
+  1983.
+
+\end{thebibliography}

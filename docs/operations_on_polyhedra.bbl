@@ -23,10 +23,21 @@ Harold Scott~Macdonald Coxeter.
 \newblock Truncation.
 \newblock In {\em Regular polytopes}, chapter~8. Dover, 3 edition, 1973.
 
+\bibitem{deza}
+Michel-Marie Deza, M~Dutour~Sikiric, and Mikhail~Ivanovitch Shtogrin.
+\newblock Geometric structure of chemistry-relevant graphs.
+\newblock In {\em Forum for Interdisciplinary Mathematics}, volume~1, pages
+  131--148. Springer, 2015.
+
 \bibitem{dutour}
 Mathieu Dutour and Michel Deza.
 \newblock Goldberg-coxeter construction for $3$-and $4$-valent plane graphs.
 \newblock {\em The Electronic Journal of Combinatorics}, 11(1):20, 2004.
+
+\bibitem{goldberg}
+Michael Goldberg.
+\newblock A class of multi-symmetric polyhedra.
+\newblock {\em Tohoku Mathematical Journal, First Series}, 43:104--108, 1937.
 
 \bibitem{gross}
 Jonathan~L Gross and Jay Yellen.
@@ -53,6 +64,17 @@ Branko Gr{\"u}nbaum.
   editors, {\em Discrete and computational geometry: The Goodman-Pollack
   Festschrift}, pages 461--488. Springer, 2003.
 
+\bibitem{hart13}
+George Hart.
+\newblock Goldberg polyhedra.
+\newblock In Marjorie Senechal, editor, {\em Shaping space}, pages 125--138.
+  Springer, 2013.
+
+\bibitem{hart97}
+George~W Hart.
+\newblock Calculating canonical polyhedra.
+\newblock {\em Mathematica in Education and Research}, 6:5--10, 1997.
+
 \bibitem{hart98}
 George~W Hart.
 \newblock Conway notation for polyhedra.
@@ -64,6 +86,16 @@ George~W Hart.
 \newblock Sculpture based on propellorized polyhedra.
 \newblock {\em Proceedings of MOSAIC}, pages 61--70, 2000.
 \newblock http://www.georgehart.com/propello/propello.html.
+
+\bibitem{kenner}
+Hugh Kenner.
+\newblock {\em Geodesic math and how to use it}.
+\newblock Univ of California Press, 1976.
+
+\bibitem{polyhedronisme}
+Anselm Levskaya.
+\newblock {\em polyHédronisme v0.2}, 2015.
+\newblock http://levskaya.github.io/polyhedronisme/.
 
 \bibitem{lu07}
 Peter~J Lu and Paul~J Steinhardt.
@@ -79,8 +111,13 @@ Peter McMullen and Egon Schulte.
 
 \bibitem{antiprism}
 Adrian Rossiter.
-\newblock {\em Antiprism}.
+\newblock {\em Antiprism}, 2018.
 \newblock http://www.antiprism.com/.
+
+\bibitem{tarnai}
+T~Tarnai, F~Kov{\'a}cs, PW~Fowler, and SD~Guest.
+\newblock Wrapping the cube and other polyhedra.
+\newblock {\em Proc. R. Soc. A}, 468(2145):2652--2666, 2012.
 
 \bibitem{ziegler}
 G{\"u}nter~M Ziegler.

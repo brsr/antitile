@@ -73,9 +73,9 @@ a face is incident on an edge, which is incident on a vertex.\cite{mcmullen}
 \begin{enumerate}
   \item $P$ contains a least element $\bot$ with rank $-1$ and a greatest
   element $\top$ with rank $n$. ($n$ is the rank of the abstract polytope.)
-  \item Each flag of $P$ has the same length and includes the least and greatest
-  elements. (A flag is a series of incident elements from the least element to
-  the greatest)
+  \item Each flag of $P$ has the same length and includes the least and
+  greatest elements. (A flag is a series of incident elements from the least
+  element to the greatest)
   \item $P$ is strongly connected: any flag can be changed into any other flag
   by changing one element of the flag at a time.
   \item $P$ satisfies the diamond property: if an element $A$ has rank $k-1$,
@@ -174,7 +174,15 @@ digons and concave quadrilaterals with curved edges.}
 \label{fig:circlesquare}
 \end{figure}
 
-An \textit{orientable} polyhedron is one where each face's vertices may be assigned a cyclic order such that each edge, say with vertices $a$ and $b$, has an order of $a$ to $b$ in one face and the reverse order $b$ to $a$ in the other. \cite{grunbaum94} A polyhedron that is not orientable is \textit{non-orientable}. All polyhedra with an odd Euler characteristic are non-orientable, e.g. the hemicuboctahedron. That said, all non-orientable polyhedra have an orientable double cover that is connected. (An orientable polyhedron also has an orientable double over, consisting of two disjoint copies of the original polyhedron.)
+An \textit{orientable} polyhedron is one where each face's vertices may be
+assigned a cyclic order such that each edge, say with vertices $a$ and $b$,
+has an order of $a$ to $b$ in one face and the reverse order $b$ to $a$ in the
+other. \cite{grunbaum94} A polyhedron that is not orientable is
+\textit{non-orientable}. All polyhedra with an odd Euler characteristic are
+non-orientable, e.g. the hemicuboctahedron. That said, all non-orientable
+polyhedra have an orientable double cover that is connected. (An orientable
+polyhedron also has an orientable double over, consisting of two disjoint
+copies of the original polyhedron.)
 
 An \textit{achiral polyhedron} is one that has mirror symmetry:
 a \textit{chiral polyhedron} is one that does not. Note that the particular
@@ -192,7 +200,8 @@ the polyhedron. By Steinitz's theorem, the skeleton of every convex polyhedron
 is a 3-vertex-connected planar graph. Furthermore, all convex polyhedra have a
 realization such that each edge is tangent to the unit sphere, each face is
 flat, and the centroid of the vertices lies at the origin.\cite{ziegler}
-This is called the \textit{canonical realization}.
+This is called the \textit{canonical realization},
+and can be calculated by a simple iterative process.\cite{hart97}
 
 An \textit{operator on polyhedra} is simply a map $x : \mathcal{P} \to
 \mathcal{P}$, where $\mathcal{P}$ is the set of polyhedra. We'll often apply
@@ -233,8 +242,8 @@ locations, same edge arcs, etc. Two polyhedra are topologically equivalent if
 they can be deformed into each other without tearing or overlapping.
 Geometric implies topological, and topological implies combinatorial. These
 definitions extend to polytopes in general. So, for instance, a pentagon and a
-pentagram are combinatorially equivalent but not topologically or
-geometrically equivalent.
+pentagram (Schläfli symbols {5} and {5/2}, respectively) are combinatorially
+equivalent but not topologically or geometrically equivalent.
 
 \section{Notable operations}
 
@@ -285,12 +294,12 @@ commonly known as the truncated cuboctahedron. Conway's original set of
 operations is denoted with the letters $abdegjkmost$: a full list of their
 descriptions will be given in Appendix B. These operations are sufficient to
 create all of the Archimedean and Catalan solids from the Platonic solids.
-Others have defined more operations.
-\cite{hart98}\cite{hart00}\cite{antiprism} In particular, Hart \cite{hart98}
-defined $r$, which reverses the chirality of a polyhedra. The term "Conway
-operator" is actually a little ambiguous: it may refer to Conway's original
-set of operations, or an expanded set, or the general idea of notation
-polyhedra by alphabetical prefixes.
+Others have defined more
+operations.\cite{hart98}\cite{hart00}\cite{antiprism}\cite{polyhedronisme} In
+particular, Hart \cite{hart98} defined $r$, which reverses the chirality of a
+polyhedra. The term "Conway operator" is actually a little ambiguous:
+it may refer to Conway's original set of operations, or an expanded set,
+or the general idea of notation polyhedra by alphabetical prefixes.
 
 Aside from $g, s, j$, and $a$, Conway's operations preserve the
 symmetry of the resultant polyhedra. $g$ and $s$ are achiral, so
@@ -309,13 +318,15 @@ polyhedron.
 
 \subsection{Goldberg-Coxeter operations}
 The Goldberg-Coxeter operation (GC operation) was defined by Deza and Dutour
-\cite{dutour}, based on the Goldberg polyhedra, the viral capsid structure
-defined by Coxeter \cite{coxeter71}, the geodesic domes of Buckminster Fuller,
-and similar structures. Essentially it amounts to replacing the faces of a
-polyhedra with a section from a grid of triangular or square faces, termed the
-"master polygon" by Deza and Dutour. Here the operation on triangle-faced
-polyhedra will be denoted $\Delta_{n,m}$, and on quadrilateral-faced polyhedra
-$\Box_{n,m}$, where $n$ and $m$ are integers, $n > 0$, and $m \ge 0$.
+\cite{dutour}\cite{deza}, based on the Goldberg polyhedra
+\cite{goldberg}\cite{hart13}, the viral capsid structure defined by Coxeter
+\cite{coxeter71}, the geodesic domes of Buckminster Fuller\cite{kenner}, and
+similar structures\cite{tarnai}. Essentially it amounts to replacing the faces
+of a polyhedra with a section from a grid of triangular or square faces,
+termed the "master polygon" by Deza and Dutour. Here the operation on
+triangle-faced polyhedra will be denoted $\Delta_{n,m}$,
+and on quadrilateral-faced polyhedra $\Box_{n,m}$,
+where $n$ and $m$ are integers, $n > 0$, and $m \ge 0$.
 
 $\Delta_{n,m}$ can be described using the triangular lattice over the
 Eisenstein integers. It is useful for this operation to parameterize the
@@ -1325,7 +1336,7 @@ next logical step. These operations need not necessarily be between polytopes
 of the same rank: consider a vertex figure of an $n$-polytope, which is a
 $n-1$-polytope.
 
-\bibliography{operations_on_polyhedra}
+\bibliography{references}
 \bibliographystyle{plain}
 
 \appendix
