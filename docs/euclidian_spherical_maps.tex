@@ -21,6 +21,8 @@ construction on a computer can be a pain; analytic specifications are more
 amenable to programming idioms.
 
 \section{Definitions}
+Unless otherwise specified, the vertices of any given polygon are ordered in
+countclockwise order.
 
 \subsection{Spherical geometry}
 There are a number of ways to numerically specify points on a sphere. By far
@@ -129,14 +131,20 @@ vertices $\mathbf v_1, \mathbf v_2$ and $\mathbf v_3$.
 \subsubsection{Interpolation}
 Interpolation in Euclidean space is standard linear interpolation. On the
 sphere, interpolation is given by spherical linear interpolation, or slerp.
-\begin{equation}\begin{split}
-\mathrm{Lerp}(\mathbf{v_1}, \mathbf{v_2}; t) & =
-       (1-t) \mathbf{v_1} + t \mathbf{v_2} \\
-\mathrm{Slerp}(\mathbf{\hat{v}_1}, \mathbf{\hat{v}_2}; t) & =
-       \frac{\sin {((1-t)w)}}{\sin (w)} \mathbf{\hat{v}_1} +
-       \frac{\sin (tw)}{\sin (w)} \mathbf{\hat{v}_2},
-        w = \arccos \mathbf{\hat{v}_1} \cdot \mathbf{\hat{v}_2}
-\end{split}\end{equation}
+\begin{equation}
+\mathrm{Lerp}(\mathbf{v_1}, \mathbf{v_2}; t) =
+       (1-t) \mathbf{v_1} + t \mathbf{v_2}
+\end{equation}
+\begin{equation}
+\mathrm{Slerp}(\mathbf{\hat{v}_1}, \mathbf{\hat{v}_2}; t) =
+\begin{cases}\mathbf{\hat{v}_1}
+  & \text{if } \mathbf{\hat{v}_1} = \mathbf{\hat{v}_2}\\
+       = \frac{\sin {((1-t)w)}}{\sin (w)} \mathbf{\hat{v}_1} +
+       \frac{\sin (tw)}{\sin (w)} \mathbf{\hat{v}_2}
+  &\text{otherwise}
+      \end{cases}
+\end{equation}
+where $w = \arccos \mathbf{\hat{v}_1} \cdot \mathbf{\hat{v}_2}$.
 
 \subsubsection{Face normal}
 For the purposes of this text, we define the normal to a (Euclidean) polygon as
@@ -166,28 +174,28 @@ If the polygon is flat, the skewness is 0.
 
 \subsection{Triangle and quadrilateral coordinates}
 
-\begin{figure}[!htbp]
+\begin{figure}%[!htbp]
 \begin{tikzpicture}
   \draw (0, 0) -- (1.7,3) -- (3.4, 0) -- (0, 0) ;
-  \draw[fill] (0, 0) circle [radius=0.05] node[anchor=south] {\tiny 1};
-  \draw[fill] (1.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 2};
+  \draw[fill] (1.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 1};
+  \draw[fill] (0, 0) circle [radius=0.05] node[anchor=south] {\tiny 2};
   \draw[fill] (3.4, 0) circle [radius=0.05] node[anchor=south] {\tiny 3};
   \draw[fill] (2, 1) circle [radius=0.05];
   \draw[dotted] (0,0) -- (2,1) -- (1.7,3);
   \draw[dotted] (3.4, 0) -- (2,1);
 
   \draw (4, 0) -- (5.7,3) -- (7.4, 0) -- (4, 0) ;
-  \draw[fill] (4, 0) circle [radius=0.05] node[anchor=south] {\tiny 1};
-  \draw[fill] (5.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 2};
+  \draw[fill] (5.7, 3) circle [radius=0.05] node[anchor=west] {\tiny 1};
+  \draw[fill] (4, 0) circle [radius=0.05] node[anchor=south] {\tiny 2};
   \draw[fill] (7.4, 0) circle [radius=0.05] node[anchor=south] {\tiny 3};
   \draw[fill] (6, 1) circle [radius=0.05];
 
-  \draw[dotted] (4.6, 1) node[anchor=east] {\tiny 2,1}
-  -- (6.85,1) node[anchor=west] {\tiny 2,3};
-  \draw[dotted] (5.43, 0) node[anchor=north] {\tiny 3,1}
-  -- (6.425, 1.75) node[anchor=west] {\tiny 3,2};
-  \draw[dotted] (6.56, 0) node[anchor=north] {\tiny 1,3}
-  -- (5.3, 2.2) node[anchor=east] {\tiny 1,2};
+  \draw[dotted] (4.6, 1) node[anchor=east] {\tiny 1,2}
+  -- (6.85,1) node[anchor=west] {\tiny 1,3};
+  \draw[dotted] (5.43, 0) node[anchor=north] {\tiny 3,2}
+  -- (6.425, 1.75) node[anchor=west] {\tiny 3,1};
+  \draw[dotted] (6.56, 0) node[anchor=north] {\tiny 2,3}
+  -- (5.3, 2.2) node[anchor=east] {\tiny 2,1};
 
 \end{tikzpicture}
 \caption{Barycentric coordinates. Left: Area opposite of each vertex. Right: Intersection of lines parallel with triangle edges.}
@@ -207,13 +215,17 @@ lies on an edge opposite vertex $i$, then $\beta_i$ is zero.
 
 There are two geometric interpretations of barycentric coordinates that will be
 useful, as depicted in Figure \ref{fig:bary}. One is that $\beta_i$ is the area
-of the smaller triangle opposite $v_i$ divided by the area of the large
-triangle. The other is that if a line is placed passing through $v$ parallel to
+of the smaller triangle opposite $\mathbf v_i$ divided by the area of the large
+triangle. The other is that if a line is placed passing through $\mathbf v$ parallel to
 the edge opposite vertex $i$, it will be at $\beta_i$ of the distance between
 the edge and its opposite vertex, with $\beta_i = 0$ being on the edge itself.
-Let $v_{i,j}$ be the point where the line for $i$ meets the line between
+Let $\mathbf v_{i,j}$ be the point where the line for $i$ meets the line between
 vertices $i$ and $j$: then the vertex lies $\frac{\beta_{j}}{1-\beta{i}}$
-of the distance from $v_{i,j}$ to $v_{i,j+1}$.
+of the distance from $\mathbf v_{i,j}$ to $\mathbf v_{i,j+1}$. Symbolically,
+$\mathbf v_{i,j} = \mathrm{Lerp}(\mathbf v_{j},\mathbf v_i;\beta_{i})$, and
+$\mathbf v = \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_{i-1}, \mathbf v_i;
+\beta_{i}), \mathrm{Lerp}(\mathbf v_{i+1}, \mathbf v_i; \beta_{i});
+\frac{\beta_{i-1}}{1-\beta_{i}})$ for all $i$.
 
 Generalized barycentric coordinates are defined similarly, but the requirement
 that $\sum^3_{i=1} \beta_i = 1$ is dropped. For instance, generalized
@@ -225,13 +237,39 @@ Quadrilaterals are instead specified by what we'll call \textit{$uv$
 coordinates} where $u$ and $v$ are $\in [0, 1]$. Given a quadrilateral with
 vertices $\mathbf v_1, \mathbf v_2, \mathbf v_3, \mathbf v_4$, the
 transformation is:
-\begin{equation}
-\mathbf v = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv
-\end{equation}
+\begin{equation}\begin{split}
+\mathbf v & = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv \\
+& = (1-u)(1-v)\mathbf v_1 + u(1-v)\mathbf v_2 + uv\mathbf v_3 + (1-u)v \mathbf v_4
+\end{split}\end{equation}
 Unlike triangles, quadrilaterals may have points that do not share a common
 plane: they may be skew quadrilaterals. If the quadrilateral is a skew
 quadrilateral, $u$ and $v$ smoothly parameterize a surface over that skew
-quadrilateral.
+quadrilateral. Like barycentric coordinates, these uv coordinates can be expressed in terms of nested linear interpolation:
+$\mathbf v
+= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_2;u),\mathrm{Lerp}(\mathbf v_4,\mathbf v_3;u);v)
+= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_4;v),\mathrm{Lerp}(\mathbf v_2,\mathbf v_3;v);u)$
+
+\begin{figure}%[!htbp]
+\begin{tikzpicture}
+  \draw (0, 0) -- (4, 0) -- (4, 3) -- (1, 4) -- (0, 0);
+  \draw[fill] (0, 0) circle [radius=0.05] node[anchor=east] {\tiny 1};
+  \draw[fill] (4, 0) circle [radius=0.05] node[anchor=west] {\tiny 2};
+  \draw[fill] (4, 3) circle [radius=0.05] node[anchor=west] {\tiny 3};
+  \draw[fill] (1, 4) circle [radius=0.05] node[anchor=east] {\tiny 4};
+  \draw[dotted] (2, 0) -- (2.5, 3.5);
+  \draw[dotted] (0.5, 2) -- (4, 1.5);
+  \draw[fill] (2.25, 1.75) circle [radius=0.05];
+\end{tikzpicture}
+\caption{$uv$ coordinates on quadrilateral, showing intersection of lines.}
+\label{fig:uv}
+\end{figure}
+
+$uv$ coordinates are not amenable to a generalization in exactly the way that
+generalized barycentric coordinates are, but can be expressed like
+\begin{equation}
+  \mathbf v = \sum^4_{i=1} \alpha_i \mathbf v_i
+\end{equation}
+where $\alpha_i$ are not necessarily unique.
 
 \section{Maps between Euclidean and spherical polygons}
 \subsection{Conformal}
@@ -288,7 +326,9 @@ $\hat{\mathbf v}_i$.
 
 The formula to find $\hat{\mathbf v}$ given $\beta_i$ more complicated,
 although it's also derived from the formula for solid angle given earlier.
-\begin{equation}\begin{split}
+\begin{equation}
+\label{eq:sphareal}
+  \begin{split}
   \mathbf G & \hat{\mathbf v} = \mathbf h \\
    \mathbf G & = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix} \\
    \mathbf h & = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T \\
@@ -303,10 +343,93 @@ $i$th element is $h_i$. The vector $\hat{\mathbf v}$
 can be solved for using standard matrix methods.
 
 \subsection{Great Circle}
-Method 2 in geodesic dome circles, at least how Antiprism implements it
-\subsection{Double Slerp}
+\begin{figure}%[!htbp]
+\begin{tikzpicture}
+  \draw (2,2) circle [radius=2];
+
+  \draw (0.6, 1) to [out=-25, in=205]
+  (3.4, 1) to [out=90, in=-35]
+  (2, 3.5) to [out=215, in=90]
+  (0.6, 1);
+  \draw[fill] (2, 3.5) circle [radius=0.05] node[anchor=west] {\tiny 1};
+  \draw[fill] (0.6, 1) circle [radius=0.05] node[anchor=north] {\tiny 2};
+  \draw[fill] (3.4, 1) circle [radius=0.05] node[anchor=north] {\tiny 3};
+  \draw[dotted] (0.65, 1.5)  node[anchor=east] {\tiny 1,2}
+  to [out=-15, in=195] (3.35, 1.5) node[anchor=west] {\tiny 1,3};
+
+  \draw[dotted] (1.8, 0.65) node[anchor=north] {\tiny 3,2}
+  to [out=45, in=265] (2.9, 2.7) node[anchor=west] {\tiny 3,1};
+  \draw[dotted] (1.6, 3.1) node[anchor=east] {\tiny 2,1}
+  to [out=-45, in=105] (2.9, 0.8) node[anchor=north] {\tiny 2,3};
+\end{tikzpicture}
+\caption{Intersection of great circle arcs inside a spherical triangle,
+and the small spherical triangle formed by the arcs. Exaggerated so that the
+small triangle is visible; not to scale.}
+\label{fig:intlines}
+\end{figure}
+This is Method 2 in geodesic dome terminology. Recall in our earlier discussion of barycentric coordinates that on a plane triangle, we can draw a line corresponding to each $\beta_i$, and those three lines meet at a point. On the sphere, if we make the same construction, the lines do not meet at a point (except on the edges), but instead intersect to form a small spherical triangle. Take a point within that triangle as $\mathbf v$. Typically the centroid is used, as it's easy to calculate, although we'll discuss another variation.
+
+(If there were any ambiguities, we used the program \texttt{geodesic} from Antiprism\cite{antiprism} as a reference implementation.)
+
+In analytic terms, use Slerp to determine the points on each triangle edge. Take the cross product of the opposing pairs of points to determine the normal to the intersecting plane corresponding to each line. Take the cross product of each pair of normals to find a vector proportional to the point of intersection. (As the cross product is antisymmetric, be careful about order here.) Then normalize each vector and take their centroid.
+
+In terms of equations, Method 2 or the Great Circle Intersection method on a triangle is:
+\begin{equation}\begin{split}
+\mathbf v^* & = \sum^3_{i=1} \frac{\mathbf h_i \times \mathbf h_{i+1}}
+{\|\mathbf h_i \times \mathbf h_{i+1}\|} \\
+\mathbf h_i & =
+\mathrm{Slerp}(\mathbf v_{i-1}, \mathbf v_i; \beta_{i})
+\times
+\mathrm{Slerp}(\mathbf v_{i+1}, \mathbf v_i; \beta_{i})
+\end{split}\end{equation}
+
+The above equation can be tweaked slightly by removing the step of normalizing the vectors at the points of intersection. This still produces a point within the triangle. This formula is a little more computationally efficient and easier to treat algebraically. Where $\mathbf h_i$ is as before:
+\begin{equation}\label{eq:gct}
+\mathbf v^* = \sum^3_{i=1} \mathbf h_i \times \mathbf h_{i+1} \\
+\end{equation}
+
+This method can be extended to the Quadrilateral. Use Slerp to find points on opposing sides of the quadrilateral, use the cross product to find their normal, and then use the cross product to find the point of intersection. Since we draw two intersecting lines, there is only one point of intersection within the quadrilateral. The formula is:
+\begin{equation}\label{eq:gcq}
+\mathbf v^* =
+(\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; u)
+\times
+\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; u))
+\times
+(\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; v)
+\times
+\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; v))
+\end{equation}
+
+\subsection{Nested Slerp}
+This is similar to the Great Circle method, except instead of using the great
+circles to calculate the intersections of the lines, we use another spherical
+linear interpolation to get a point near the intersection. We effectively use
+the Lerp formulas from the section on coordinates, substituting Slerp for Lerp.
+Unlike Lerp, Slerp does not commute, so we take the different permutations of
+the arguments and combine the different points that result.
+
+Triangular:
+\begin{equation}\label{eq:nst}
+\mathbf v^* = \sum^3_{i=3} \mathrm{Slerp}(
+\mathrm{Slerp}(\mathbf v_{i-1}, \mathbf v_i; \beta_{i}),
+\mathrm{Slerp}(\mathbf v_{i+1}, \mathbf v_i; \beta_{i});
+\frac{\beta_{i-1}}{1-\beta{i}})
+\end{equation}
+Quadrilateral:
+\begin{equation}\label{eq:nsq}
+\mathbf v^*
+= \mathrm{Slerp}(
+\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; u),
+\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; u); v)
++ \mathrm{Slerp}(
+\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; v),
+\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; v); u)
+\end{equation}
+Along the edges, these formulas reduce to a simple Slerp.
+We'll discuss this fact more in the next section.
 
 \subsection{Naive Slerp}
+
 This method shares with the gnomonic method an analytic form for the
 transformation from Euclidean space to the sphere. It has two downsides: there is no analytic form
 for the reverse transformation, and it can only be used on equilateral faces.
@@ -366,12 +489,300 @@ measurement of the polyhedron, we can do a 1-variable optimization on $k$,
 which is more tractable than the multivariate optimization of the location of
 every vertex.
 
-\section{Maps between polygons and disks in the Euclidean plane}
-\subsection{Conformal}
-Schwarz-Christoffel mapping
-\subsection{Naive Slerp}
+\section{Applications}
+\subsection{Cartographic use}
+
+\subsection{Optimization of the geodesic polyhedron}
 
 \bibliographystyle{plain}
 \bibliography{references}
+
+\appendix
+\section{Maps between polygons and disks in the Euclidean plane}
+Some of the maps mentioned above adapt nicely to maps between polygons and disks
+in the Euclidean plane. Fong \cite{fong15}\cite{fong16} has produced nice
+summaries of maps between squares and disks, so we won't repeat all of those
+here.
+
+The maps in this section can be adapted into maps between a polygon and a hemisphere.
+The stereographic projection conformally maps the unit disk to a hemisphere,
+and is given by:
+\begin{equation}\begin{split}
+  \hat{\mathbf v} &= \frac{[2x, 2y, x^2+y^2-1]}{1+x^2+y^2}, \\
+  [x, y] & = \frac{[v_x, v_y]}{1-v_z}.
+\end{split}\end{equation}
+The orthographic projection also maps the disk to the hemisphere,
+and is given by:
+\begin{equation}
+  \hat{\mathbf v} = [x, y, \sqrt{1-x^2-y^2}].
+\end{equation}
+\subsection{Conformal}
+The Schwarz-Christoffel mapping is a conformal mapping from a polygon in the
+plan to the complex upper half-plane. Let $\{ \zeta \in \mathbb{C}:
+\operatorname{Im} \zeta > 0 \}$ be a point in the complex upper half-plane. Let
+$\alpha,\beta,\gamma, \ldots$ be the interior angles of the polygon, and $a, b,
+c, \ldots$ be real numbers along the boundary of the upper half-plane. Then the
+map from the upper half-plane to the polygon is:
+\begin{equation}
+f(\zeta) = \int^\zeta \frac{K}{(w-a)^{1-(\alpha/\pi)} (w-b)^{1-(\beta/\pi)}
+(w-c)^{1-(\gamma/\pi)} \cdots} \,\mathrm{d}w
+\end{equation}
+or
+\begin{equation}
+f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
+\end{equation}
+where $K$ is an arbitrary constant. Like the Schwarz triangle map above,
+computing this integral usually results in a hypergeometric function,
+which is not particularly convenient. For squares it results in an elliptic function, which is slightly more convenient.\cite{fong16}
+
+The upper half-plane can be mapped to a unit disk by various Möbius
+transformations. A common choice is this pair of equations,
+where $z$ is a point on the disk and $\zeta$ is a point on the upper half-plane:
+\begin{equation}\begin{split}
+  z &=\frac{i\zeta+1}{\zeta+i} \\
+  \zeta &= \frac{1 - i z}{z - i}
+\end{split}\end{equation}
+This maps $\zeta = i$ to $z = 0$ and $\zeta = 0$ to $z = -i$.
+
+\subsection{Naive Slerp}
+
+Quadrilateral:
+\begin{equation}
+z = \left[\sin\left(\frac{\pi}{2} (1-x)(1-y)\right)
+- \sin\left(\frac{\pi}{2} x y\right),
+\sin\left(\frac{\pi}{2} x (1-y)\right)
+- \sin\left(\frac{\pi}{2} (1-x) y\right)\right]
+\end{equation}
+
+\begin{equation}
+z = \sqrt 2 \left[\cos\left(\frac{\pi}{4} (2x+1)\right)
+\sin\left(\frac{\pi}{4} (2y+1)\right),
+\sin\left(\frac{\pi}{4} (2x+1)\right)
+\cos\left(\frac{\pi}{4} (2y+1)\right)\right]
+\end{equation}
+Note that this map preserves diagonal lines.
+
+Triangular:
+\begin{equation}
+z = \frac{2}{\sqrt 3} \left(\sin(w \beta_1 ) z_1 + \sin(w \beta_1 ) z_2 + \sin(w \beta_1 ) z_3\right)
+\end{equation}
+
+\section{Expanded forms of formulas}
+
+These expansions make use of the vector quadruple product identity
+\begin{equation}
+(\mathbf a \times \mathbf b) \times (\mathbf c \times \mathbf d)
+= [\mathbf a, \mathbf b, \mathbf d] \mathbf c
+- [\mathbf a, \mathbf b, \mathbf c] \mathbf d.
+\end{equation}
+
+Equation \ref{eq:sphareal} - Spherical areal, Triangular
+
+Equation \ref{eq:gct} - Great Circle, Triangular
+
+Equation \ref{eq:gcq} - Great Circle, Quadrilateral
+
+%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1} +
+%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
+%\times
+%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4} +
+%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
+%==
+%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1}
+%\times
+%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4}
+%+
+%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1}
+%\times
+%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
+%+
+%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
+%\times
+%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4}
+%+
+%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
+%\times
+%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
+%=
+%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_4}
+%+
+%\frac{\sin {((1-u)w_12)} \sin (uw_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
+%+
+%\frac{\sin (uw_12) \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_4}
+%+
+%\frac{\sin (uw_12)\sin (uw_34)}{\sin (w_12)\sin (w_34)}
+%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_3}
+
+%(
+%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1} +
+%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
+%\times
+%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4} +
+%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
+%) \times (
+%\frac{\sin {((1-v)w_14)}}{\sin (w_14)} \mathbf{\hat{v}_1} +
+%\frac{\sin (vw_14)}{\sin (w_14)} \mathbf{\hat{v}_4}
+%\times
+%\frac{\sin {((1-v)w_23)}}{\sin (w_23)} \mathbf{\hat{v}_2} +
+%\frac{\sin (vw_23)}{\sin (w_23)} \mathbf{\hat{v}_3}
+%) =
+%(
+%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_4}
+%+
+%\frac{\sin {((1-u)w_12)} \sin (uw_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
+%+
+%\frac{\sin (uw_12) \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
+%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_4}
+%+
+%\frac{\sin (uw_12)\sin (uw_34)}{\sin (w_12)\sin (w_34)}
+%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_3}
+%) \times (
+%\frac{\sin {((1-v)w_14)} \sin ((1-v)w_23)}{\sin (w_14) \sin (w_23)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_2}
+%+
+%\frac{\sin {((1-v)w_14)} \sin (vw_23)}{\sin (w_14) \sin (w_23)}
+%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
+%+
+%\frac{\sin (vw_14) \sin ((1-v)w_23)}{\sin (w_14) \sin (w_23)}
+%\mathbf{\hat{v}_4} \times \mathbf{\hat{v}_2}
+%+
+%\frac{\sin (vw_14)\sin (vw_23)}{\sin (w_14)\sin (w_23)}
+%\mathbf{\hat{v}_4} \times \mathbf{\hat{v}_3}
+%)
+%=(
+%a_14 v_1 \times v_4 +
+%a_13 v_1 \times v_3 +
+%a_24 v_2 \times v_4 +
+%a_23 v_2 \times v_3 )
+%\times (
+%b_12 v_1 \times v_2 +
+%b_13 v_1 \times v_3 +
+%b_42 v_4 \times v_2 +
+%b_43 v_4 \times v_3 )
+%=
+%a_14 (v_1 \times v_4 ) \times b_12 (v_1 \times v_2) +
+%a_14 (v_1 \times v_4 ) \times b_13 (v_1 \times v_3) +
+%a_14 (v_1 \times v_4 ) \times b_42 (v_4 \times v_2) +
+%a_14 (v_1 \times v_4 ) \times b_43 (v_4 \times v_3) +
+%a_13 (v_1 \times v_3 ) \times b_12 (v_1 \times v_2) +
+%a_13 (v_1 \times v_3 ) \times b_13 (v_1 \times v_3) +
+%a_13 (v_1 \times v_3 ) \times b_42 (v_4 \times v_2) +
+%a_13 (v_1 \times v_3 ) \times b_43 (v_4 \times v_3) +
+%a_24 (v_2 \times v_4 ) \times b_12 (v_1 \times v_2) +
+%a_24 (v_2 \times v_4 ) \times b_13 (v_1 \times v_3) +
+%a_24 (v_2 \times v_4 ) \times b_42 (v_4 \times v_2) +
+%a_24 (v_2 \times v_4 ) \times b_43 (v_4 \times v_3) +
+%a_23 (v_2 \times v_3 ) \times b_12 (v_1 \times v_2) +
+%a_23 (v_2 \times v_3 ) \times b_13 (v_1 \times v_3) +
+%a_23 (v_2 \times v_3 ) \times b_42 (v_4 \times v_2) +
+%a_23 (v_2 \times v_3 ) \times b_43 (v_4 \times v_3)
+%=
+%a_14 b_12 (v_1 \times v_4 ) \times (v_1 \times v_2) +
+%a_14 b_13 (v_1 \times v_4 ) \times (v_1 \times v_3) +
+%a_14 b_42 (v_1 \times v_4 ) \times (v_4 \times v_2) +
+%a_14 b_43 (v_1 \times v_4 ) \times (v_4 \times v_3) +
+%a_13 b_12 (v_1 \times v_3 ) \times (v_1 \times v_2) +
+%a_13 b_42 (v_1 \times v_3 ) \times (v_4 \times v_2) +
+%a_13 b_43 (v_1 \times v_3 ) \times (v_4 \times v_3) +
+%a_24 b_12 (v_2 \times v_4 ) \times (v_1 \times v_2) +
+%a_24 b_13 (v_2 \times v_4 ) \times (v_1 \times v_3) +
+%a_24 b_43 (v_2 \times v_4 ) \times (v_4 \times v_3) +
+%a_23 b_12 (v_2 \times v_3 ) \times (v_1 \times v_2) +
+%a_23 b_13 (v_2 \times v_3 ) \times (v_1 \times v_3) +
+%a_23 b_42 (v_2 \times v_3 ) \times (v_4 \times v_2) +
+%a_23 b_43 (v_2 \times v_3 ) \times (v_4 \times v_3)
+%=
+%a_14 b_12 ([v_1, v_4, v_2] v_1 - [v_1, v_4, v_1] v_2) +
+%a_14 b_13 ([v_1, v_4, v_3] v_1 - [v_1, v_4, v_1] v_3) +
+%a_14 b_42 ([v_1, v_4, v_2] v_4 - [v_1, v_4, v_4] v_2) +
+%a_14 b_43 ([v_1, v_4, v_3] v_4 - [v_1, v_4, v_4] v_3) +
+%a_13 b_12 ([v_1, v_3, v_2] v_1 - [v_1, v_3, v_1] v_2) +
+%a_13 b_42 ([v_1, v_3, v_2] v_4 - [v_1, v_3, v_4] v_2) +
+%a_13 b_43 ([v_1, v_3, v_3] v_4 - [v_1, v_3, v_4] v_3) +
+%a_24 b_12 ([v_2, v_4, v_2] v_1 - [v_2, v_4, v_1] v_2) +
+%a_24 b_13 ([v_2, v_4, v_3] v_1 - [v_2, v_4, v_1] v_3) +
+%a_24 b_43 ([v_2, v_4, v_3] v_4 - [v_2, v_4, v_4] v_3) +
+%a_23 b_12 ([v_2, v_3, v_2] v_1 - [v_2, v_3, v_1] v_2) +
+%a_23 b_13 ([v_2, v_3, v_3] v_1 - [v_2, v_3, v_1] v_3) +
+%a_23 b_42 ([v_2, v_3, v_2] v_4 - [v_2, v_3, v_4] v_2) +
+%a_23 b_43 ([v_2, v_3, v_3] v_4 - [v_2, v_3, v_4] v_3)
+%(a \times b) \times (c \times d) = [a, b, d] c - [a, b, c] d
+%=
+%a_13 b_12 (-[v_1, v_2, v_3] v_1 ) +
+%a_14 b_12 (-[v_1, v_2, v_4] v_1 ) +
+%a_14 b_13 (-[v_1, v_3, v_4] v_1 ) +
+%a_24 b_13 (-[v_2, v_3, v_4] v_1 ) +
+
+%a_23 b_12 (-[v_1, v_2, v_3] v_2) +
+%a_24 b_12 (-[v_1, v_2, v_4] v_2) +
+%a_13 b_42 (-[v_1, v_3, v_4] v_2) +
+%a_23 b_42 (-[v_2, v_3, v_4] v_2) +
+
+%a_23 b_13 (-[v_1, v_2, v_3] v_3) +
+%a_24 b_13 (-[v_1, v_2, v_4] v_3) +
+%a_13 b_43 (-[v_1, v_3, v_4] v_3) +
+%a_23 b_43 (-[v_2, v_3, v_4] v_3) +
+
+%a_13 b_42 (-[v_1, v_2, v_3] v_4 ) +
+%a_14 b_42 (-[v_1, v_2, v_4] v_4 ) +
+%a_14 b_43 (-[v_1, v_3, v_4] v_4 ) +
+%a_24 b_43 (-[v_2, v_3, v_4] v_4 ) +
+%=
+%-v_1 (
+%a_13 b_12 [v_1, v_2, v_3] +
+%a_14 b_12 [v_1, v_2, v_4] +
+%a_14 b_13 [v_1, v_3, v_4] +
+%a_24 b_13 [v_2, v_3, v_4])
+%-v_2 (
+%a_23 b_12 [v_1, v_2, v_3] +
+%a_24 b_12 [v_1, v_2, v_4] +
+%a_13 b_42 [v_1, v_3, v_4] +
+%a_23 b_42 [v_2, v_3, v_4])
+%-v_3 (
+%a_23 b_13 [v_1, v_2, v_3] +
+%a_24 b_13 [v_1, v_2, v_4] +
+%a_13 b_43 [v_1, v_3, v_4] +
+%a_23 b_43 [v_2, v_3, v_4])
+%-v_4 (
+%a_13 b_42 [v_1, v_2, v_3] +
+%a_14 b_42 [v_1, v_2, v_4] +
+%a_14 b_43 [v_1, v_3, v_4] +
+%a_24 b_43 [v_2, v_3, v_4])
+
+
+%a_13 b_12 [v_1, v_2, v_3] +
+%a_14 b_12 [v_1, v_2, v_4] +
+%a_14 b_13 [v_1, v_3, v_4] +
+%a_24 b_13 [v_2, v_3, v_4]
+%=
+%\frac{\sin {((1-u)w_12)} \sin (uw_34)\sin {((1-v)w_14)} \sin ((1-v)w_23)}
+%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
+%[v_1, v_2, v_3] +
+%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin ((1-v)w_23)}
+%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
+%[v_1, v_2, v_4] +
+%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin (vw_23)}
+%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
+%[v_1, v_3, v_4] +
+%\frac{\sin (uw_12) \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin (vw_23)}
+%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
+%[v_2, v_3, v_4]
+%=
+%(
+%\sin ((1-u)w_12) \sin (uw_34)    \sin ((1-v)w_23) [v_1, v_2, v_3] +
+%\sin ((1-u)w_12) \sin ((1-u)w_34)\sin ((1-v)w_23) [v_1, v_2, v_4] +
+%\sin ((1-u)w_12) \sin ((1-u)w_34)\sin (vw_23)     [v_1, v_3, v_4] +
+%\sin (uw_12)     \sin ((1-u)w_34) \sin (vw_23)    [v_2, v_3, v_4]
+%)
+%\frac{\sin ((1-v)w_14)}{\sin (w_12) \sin (w_23) \sin (w_34)\sin (w_14) }
+
+Equation \ref{eq:nst} - Nested Slerp, Triangular
+
+Equation \ref{eq:nsq} - Nested Slerp, Quadrilateral
 
 \end{document}

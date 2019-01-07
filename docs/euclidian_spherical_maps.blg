@@ -3,44 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: euclidian_spherical_maps.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 4 entries,
+You've used 7 entries,
             2118 wiz_defined-function locations,
-            524 strings with 4432 characters,
-and the built_in function-call counts, 1091 in all, are:
-= -- 107
-> -- 34
-< -- 0
-+ -- 15
-- -- 10
-* -- 66
-:= -- 191
-add.period$ -- 13
-call.type$ -- 4
-change.case$ -- 15
+            540 strings with 4687 characters,
+and the built_in function-call counts, 1842 in all, are:
+= -- 181
+> -- 55
+< -- 1
++ -- 25
+- -- 16
+* -- 99
+:= -- 315
+add.period$ -- 22
+call.type$ -- 7
+change.case$ -- 26
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 46
-empty$ -- 99
-format.name$ -- 10
-if$ -- 224
+cite$ -- 7
+duplicate$ -- 84
+empty$ -- 170
+format.name$ -- 16
+if$ -- 386
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 6
-newline$ -- 24
-num.names$ -- 8
-pop$ -- 20
+int.to.str$ -- 7
+missing$ -- 8
+newline$ -- 39
+num.names$ -- 14
+pop$ -- 35
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 22
 quote$ -- 0
-skip$ -- 27
+skip$ -- 55
 stack$ -- 0
-substring$ -- 71
-swap$ -- 4
-text.length$ -- 0
+substring$ -- 106
+swap$ -- 14
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
+type$ -- 24
 warning$ -- 0
-while$ -- 12
-width$ -- 5
-write$ -- 46
+while$ -- 21
+width$ -- 8
+write$ -- 77
