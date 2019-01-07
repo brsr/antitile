@@ -517,32 +517,13 @@ and is given by:
   \hat{\mathbf v} = [x, y, \sqrt{1-x^2-y^2}].
 \end{equation}
 \subsection{Conformal}
-The Schwarz-Christoffel mapping is a conformal mapping from a polygon in the
-plan to the complex upper half-plane. Let $\{ \zeta \in \mathbb{C}:
-\operatorname{Im} \zeta > 0 \}$ be a point in the complex upper half-plane. Let
-$\alpha,\beta,\gamma, \ldots$ be the interior angles of the polygon, and $a, b,
-c, \ldots$ be real numbers along the boundary of the upper half-plane. Then the
-map from the upper half-plane to the polygon is:
-\begin{equation}
-f(\zeta) = \int^\zeta \frac{K}{(w-a)^{1-(\alpha/\pi)} (w-b)^{1-(\beta/\pi)}
-(w-c)^{1-(\gamma/\pi)} \cdots} \,\mathrm{d}w
-\end{equation}
-or
 \begin{equation}
 f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
 \end{equation}
-where $K$ is an arbitrary constant. Like the Schwarz triangle map above,
+ Like the Schwarz triangle map above,
 computing this integral usually results in a hypergeometric function,
-which is not particularly convenient. For squares it results in an elliptic function, which is slightly more convenient.\cite{fong16}
-
-The upper half-plane can be mapped to a unit disk by various Möbius
-transformations. A common choice is this pair of equations,
-where $z$ is a point on the disk and $\zeta$ is a point on the upper half-plane:
-\begin{equation}\begin{split}
-  z &=\frac{i\zeta+1}{\zeta+i} \\
-  \zeta &= \frac{1 - i z}{z - i}
-\end{split}\end{equation}
-This maps $\zeta = i$ to $z = 0$ and $\zeta = 0$ to $z = -i$.
+which is not particularly convenient. For squares it results in an elliptic
+function, which is slightly more convenient.\cite{fong16}
 
 \subsection{Naive Slerp}
 
