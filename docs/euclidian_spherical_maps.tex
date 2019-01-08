@@ -198,7 +198,8 @@ If the polygon is flat, the skewness is 0.
   -- (5.3, 2.2) node[anchor=east] {\tiny 2,1};
 
 \end{tikzpicture}
-\caption{Barycentric coordinates. Left: Area opposite of each vertex. Right: Intersection of lines parallel with triangle edges.}
+\caption{Barycentric coordinates. Left: Area opposite of each vertex.
+Right: Intersection of lines parallel with triangle edges.}
 \label{fig:bary}
 \end{figure}
 
@@ -216,7 +217,8 @@ lies on an edge opposite vertex $i$, then $\beta_i$ is zero.
 There are two geometric interpretations of barycentric coordinates that will be
 useful, as depicted in Figure \ref{fig:bary}. One is that $\beta_i$ is the area
 of the smaller triangle opposite $\mathbf v_i$ divided by the area of the large
-triangle. The other is that if a line is placed passing through $\mathbf v$ parallel to
+triangle.
+The other is that if a line is placed passing through $\mathbf v$ parallel to
 the edge opposite vertex $i$, it will be at $\beta_i$ of the distance between
 the edge and its opposite vertex, with $\beta_i = 0$ being on the edge itself.
 Let $\mathbf v_{i,j}$ be the point where the line for $i$ meets the line between
@@ -231,23 +233,29 @@ Generalized barycentric coordinates are defined similarly, but the requirement
 that $\sum^3_{i=1} \beta_i = 1$ is dropped. For instance, generalized
 barycentric coordinates on the unit sphere replace it with a requirement that
 $\| \sum^3_{i=1} \beta_i \mathbf v_i \| = 1$. $\sum^3_{i=1} \beta_i$ would be
-$>1$ on the interior of the triangle, $=1$ on the edges, and $<1$ on the exterior.
+$>1$ on the interior of the triangle, $=1$ on the edges,
+and $<1$ on the exterior.
 
 Quadrilaterals are instead specified by what we'll call \textit{$uv$
 coordinates} where $u$ and $v$ are $\in [0, 1]$. Given a quadrilateral with
 vertices $\mathbf v_1, \mathbf v_2, \mathbf v_3, \mathbf v_4$, the
 transformation is:
 \begin{equation}\begin{split}
-\mathbf v & = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv \\
-& = (1-u)(1-v)\mathbf v_1 + u(1-v)\mathbf v_2 + uv\mathbf v_3 + (1-u)v \mathbf v_4
+\mathbf v & = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-
+\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv \\
+& = (1-u)(1-v)\mathbf v_1 + u(1-v)\mathbf v_2 + uv\mathbf v_3 +
+(1-u)v \mathbf v_4
 \end{split}\end{equation}
 Unlike triangles, quadrilaterals may have points that do not share a common
 plane: they may be skew quadrilaterals. If the quadrilateral is a skew
 quadrilateral, $u$ and $v$ smoothly parameterize a surface over that skew
-quadrilateral. Like barycentric coordinates, these uv coordinates can be expressed in terms of nested linear interpolation:
+quadrilateral. Like barycentric coordinates, these uv coordinates can be
+expressed in terms of nested linear interpolation:
 $\mathbf v
-= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_2;u),\mathrm{Lerp}(\mathbf v_4,\mathbf v_3;u);v)
-= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_4;v),\mathrm{Lerp}(\mathbf v_2,\mathbf v_3;v);u)$
+= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_2;u),
+\mathrm{Lerp}(\mathbf v_4,\mathbf v_3;u);v)
+= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_4;v),
+\mathrm{Lerp}(\mathbf v_2,\mathbf v_3;v);u)$
 
 \begin{figure}%[!htbp]
 \begin{tikzpicture}
@@ -296,8 +304,7 @@ In general, the gnomonic projection is defined as:
 
 where $\mathbf p$ is a point on a plane given in Hessian normal
 form by $\hat{\mathbf n} \cdot \mathbf p = r$. Projection from Euclidean
-space to the sphere is literally just normalizing the vector. For the Goldberg-Coxeter operation, this amounts to just normalizing
-the vectors produced by the coordinate form. For triangles:
+space to the sphere is literally just normalizing the vector. For triangles:
 \begin{equation}
    \mathbf v^* =
    \beta_1 \mathbf v_1 + \beta_2 \mathbf v_2 + \beta_3 \mathbf v_3
@@ -330,10 +337,12 @@ although it's also derived from the formula for solid angle given earlier.
 \label{eq:sphareal}
   \begin{split}
   \mathbf G & \hat{\mathbf v} = \mathbf h \\
-   \mathbf G & = \begin{bmatrix} \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix} \\
+   \mathbf G & = \begin{bmatrix}
+   \mathbf g_1 & \mathbf g_2 & \mathbf g_3 \end{bmatrix} \\
    \mathbf h & = \begin{bmatrix} h_1  & h_2 & h_3  \end{bmatrix}^T \\
    \mathbf g_{i} & = \left(1+\cos \Omega_{i}\right) \mathbf v_{i-1} \times
-   \mathbf v_{i+1} - \sin\Omega_{i}\left(\mathbf v_{i-1} + \mathbf v_{i+1}\right)\\
+   \mathbf v_{i+1} - \sin\Omega_{i}\left(\mathbf v_{i-1} +
+   \mathbf v_{i+1}\right)\\
    h_i &= \sin\Omega_i\left(1+\mathbf v_{i-1}\cdot\mathbf v_{i+1}\right)
 \end{split}\end{equation}
 The subscripts loop around: 0 should be interpreted as 3, and 4 should be
@@ -367,14 +376,28 @@ and the small spherical triangle formed by the arcs. Exaggerated so that the
 small triangle is visible; not to scale.}
 \label{fig:intlines}
 \end{figure}
-This is Method 2 in geodesic dome terminology. Recall in our earlier discussion of barycentric coordinates that on a plane triangle, we can draw a line corresponding to each $\beta_i$, and those three lines meet at a point. On the sphere, if we make the same construction, the lines do not meet at a point (except on the edges), but instead intersect to form a small spherical triangle. Take a point within that triangle as $\mathbf v$. Typically the centroid is used, as it's easy to calculate, although we'll discuss another variation.
+This is Method 2 in geodesic dome terminology. Recall in our earlier discussion
+of barycentric coordinates that on a plane triangle, we can draw a line
+corresponding to each $\beta_i$, and those three lines meet at a point. On the
+sphere, if we make the same construction, the lines do not meet at a point
+(except on the edges), but instead intersect to form a small spherical
+triangle. Take a point within that triangle as $\mathbf v$.
+Typically the centroid is used, as it's easy to calculate,
+although we'll discuss another variation.
 
-(If there were any ambiguities, we used the program \texttt{geodesic} from Antiprism\cite{antiprism} as a reference implementation.)
+(If there were any ambiguities, we used the program \texttt{geodesic}
+from Antiprism\cite{antiprism} as a reference implementation.)
 
-In analytic terms, use Slerp to determine the points on each triangle edge. Take the cross product of the opposing pairs of points to determine the normal to the intersecting plane corresponding to each line. Take the cross product of each pair of normals to find a vector proportional to the point of intersection. (As the cross product is antisymmetric, be careful about order here.) Then normalize each vector and take their centroid.
+In analytic terms, use Slerp to determine the points on each triangle edge.
+Take the cross product of the opposing pairs of points to determine the normal
+to the intersecting plane corresponding to each line. Take the cross product of
+each pair of normals to find a vector proportional to the point of
+intersection. (As the cross product is antisymmetric, be careful about order
+here.) Then normalize each vector and take their centroid.
 
-In terms of equations, Method 2 or the Great Circle Intersection method on a triangle is:
-\begin{equation}\begin{split}
+In terms of equations, Method 2 or the Great Circle Intersection
+method on a triangle is:
+\begin{equation}\begin{split}%??? does this reduce to slerp on the edges?
 \mathbf v^* & = \sum^3_{i=1} \frac{\mathbf h_i \times \mathbf h_{i+1}}
 {\|\mathbf h_i \times \mathbf h_{i+1}\|} \\
 \mathbf h_i & =
@@ -383,13 +406,20 @@ In terms of equations, Method 2 or the Great Circle Intersection method on a tri
 \mathrm{Slerp}(\mathbf v_{i+1}, \mathbf v_i; \beta_{i})
 \end{split}\end{equation}
 
-The above equation can be tweaked slightly by removing the step of normalizing the vectors at the points of intersection. This still produces a point within the triangle. This formula is a little more computationally efficient and easier to treat algebraically. Where $\mathbf h_i$ is as before:
-\begin{equation}\label{eq:gct}
+The above equation can be tweaked slightly by removing the step of normalizing
+the vectors at the points of intersection. This still produces a point within
+the triangle. This formula is a little more computationally efficient and
+easier to treat algebraically. Where $\mathbf h_i$ is as before:
+\begin{equation}\label{eq:gct}%??? does this reduce to slerp on the edges?
 \mathbf v^* = \sum^3_{i=1} \mathbf h_i \times \mathbf h_{i+1} \\
 \end{equation}
 
-This method can be extended to the Quadrilateral. Use Slerp to find points on opposing sides of the quadrilateral, use the cross product to find their normal, and then use the cross product to find the point of intersection. Since we draw two intersecting lines, there is only one point of intersection within the quadrilateral. The formula is:
-\begin{equation}\label{eq:gcq}
+This method can be extended to the Quadrilateral. Use Slerp to find points on
+opposing sides of the quadrilateral, use the cross product to find their
+normal, and then use the cross product to find the point of intersection. Since
+we draw two intersecting lines, there is only one point of intersection within
+the quadrilateral. The formula is:
+\begin{equation}\label{eq:gcq}%??? does this reduce to slerp on the edges?
 \mathbf v^* =
 (\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; u)
 \times
@@ -415,7 +445,7 @@ Triangular:
 \mathrm{Slerp}(\mathbf v_{i+1}, \mathbf v_i; \beta_{i});
 \frac{\beta_{i-1}}{1-\beta{i}})
 \end{equation}
-Quadrilateral:
+Quadrilateral:%??? not symmetric?
 \begin{equation}\label{eq:nsq}
 \mathbf v^*
 = \mathrm{Slerp}(
@@ -425,20 +455,18 @@ Quadrilateral:
 \mathrm{Slerp}(\mathbf v_1, \mathbf v_4; v),
 \mathrm{Slerp}(\mathbf v_2, \mathbf v_3; v); u)
 \end{equation}
-Along the edges, these formulas reduce to a simple Slerp.
-We'll discuss this fact more in the next section.
 
 \subsection{Naive Slerp}
+The previously mentioned maps are all somewhat complicated. Expansion of the
+formulas results in very lengthy equations. Applying a simplifying restriction
+allows us to produce a formula that is nearly as simple as the gnomonic map.
+The restriction is that the polygons are equilateral. This may seem very
+restrictive, but many of the applications of these maps involve a regular
+polyhedron, e.g. the cube or the icosahedron, with equilateral faces.
 
-This method shares with the gnomonic method an analytic form for the
-transformation from Euclidean space to the sphere. It has two downsides: there is no analytic form
-for the reverse transformation, and it can only be used on equilateral faces.
-
-The Naive Slerp method on a triangular face resembles a naive extension of
-spherical linear interpolation (Slerp) to barycentric coordinates, thus the
-name. The Naive Slerp methods reduce to slerp on the edges of the face.
-
-Let $\cos(w) = \mathbf v_i \cdot \mathbf v_{i+1}$ for all $i$. (As
+The Naive Slerp method resembles a naive extension of spherical linear
+interpolation (Slerp) to barycentric or $uv$ coordinates, thus the
+name. Let $\cos(w) = \mathbf v_i \cdot \mathbf v_{i+1}$ for all $i$. (As
 usual, the subscripts loop around.) For triangles:
 \begin{equation}
    \mathbf v^* = \sum_{i=1}^3\frac{\sin(w\beta_i)}{\sin(w)}  \mathbf v_i
@@ -460,39 +488,38 @@ s_3 & = \sin (wx)\sin (wy) \\
 s_4 & = \sin (w(1-x))\sin (wy)
 \end{split}\end{equation}
 
-Because the projected edges already lie on the sphere, there is a lot of
-freedom in how to adjust $\mathbf v^*$ to lie on the sphere. The
-easiest is just to centrally project the vertices, that is, to normalize
-$\mathbf v^*$ like we have been. Another option is to perform a parallel
-projection along the face normal. (See appendix for a formula for the "normal"
-to a skew face.) We need the parallel distance $p$ from the vertex to the
-sphere surface in the direction of the face normal $\hat{\mathbf n}$,
-such that $\hat{\mathbf v} = \mathbf v^* + p\hat{\mathbf n}$.
-$p$ is given by:
+\subsection{Projection of $\mathbf v^*$}
+The nested slerp and naive slerp methods produce values that are normalized
+along the edges. Because the projected edges already lie on the sphere, we have
+freedom in how to adjust $\mathbf v^*$ to lie on the sphere. The easiest is
+just to centrally project the vertices, that is, to normalize $\mathbf v^*$
+like we have been. Another option is to perform a parallel projection along the
+face normal, as defined earlier. We need the parallel distance $p$ from the
+vertex to the sphere surface in the direction of the face normal
+$\hat{\mathbf n}$, such that $\hat{\mathbf v} =
+\mathbf v^* + p\hat{\mathbf n}$. $p$ is given by:
 \begin{equation}
    p = -\mathbf v^* \cdot \hat{\mathbf n} +
    \sqrt{1+\mathbf v^* \cdot \hat{\mathbf n}-\mathbf v^* \cdot \mathbf v^*}
 \end{equation}
 $p$ can also be approximated as $\widetilde{p} = 1 - \|\mathbf v^*\|
-\leq p$, which is somewhat fewer operations and doesn't require
+\leq p$, which is fewer operations and doesn't require
 calculation of the face normal. Technically, you can project in almost any
 direction, not just that of the face normal, but most other choices don't
-produce anything remotely symmetric.
+produce a symmetric result.
 
-Sometimes the best polyhedron comes from a compromise of the central and
+Sometimes the best map comes from a compromise of the central and
 parallel projections. Choose a constant $k$, typically between 0 and 1, then:
 \begin{equation}
   \hat{\mathbf v} = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
 \end{equation}
 $p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
-measurement of the polyhedron, we can do a 1-variable optimization on $k$,
-which is more tractable than the multivariate optimization of the location of
-every vertex.
+measurement of the map, we can do a 1-variable optimization on $k$.
 
 \section{Applications}
 \subsection{Cartographic use}
 
-\subsection{Optimization of the geodesic polyhedron}
+\subsection{Optimization of geodesic polyhedra}
 
 \bibliographystyle{plain}
 \bibliography{references}
@@ -504,9 +531,9 @@ in the Euclidean plane. Fong \cite{fong15}\cite{fong16} has produced nice
 summaries of maps between squares and disks, so we won't repeat all of those
 here.
 
-The maps in this section can be adapted into maps between a polygon and a hemisphere.
-The stereographic projection conformally maps the unit disk to a hemisphere,
-and is given by:
+The maps in this section can be adapted into maps between a polygon and a
+hemisphere. The stereographic projection conformally maps the unit disk to a
+hemisphere, and is given by:
 \begin{equation}\begin{split}
   \hat{\mathbf v} &= \frac{[2x, 2y, x^2+y^2-1]}{1+x^2+y^2}, \\
   [x, y] & = \frac{[v_x, v_y]}{1-v_z}.
@@ -524,6 +551,17 @@ f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
 computing this integral usually results in a hypergeometric function,
 which is not particularly convenient. For squares it results in an elliptic
 function, which is slightly more convenient.\cite{fong16}
+
+\subsection{Radial stretching}
+Consider the disk in polar coordinates. These maps only change the radius $r$
+and leave $theta$ the same. They are not smooth. The square map is given in
+\cite{fong15}. The triangular map is:
+\begin{equation}\begin{split}
+  r &= 1-3 \min( \beta_i ) \\
+  \theta &= \arctan(\sqrt{3}(\beta_2-\beta_3),
+  2\beta_1 - \beta_2 - \beta_3)
+\end{split}\end{equation}
+which can be converted back into Cartesian coordinates if needed.
 
 \subsection{Naive Slerp}
 
@@ -545,225 +583,8 @@ Note that this map preserves diagonal lines.
 
 Triangular:
 \begin{equation}
-z = \frac{2}{\sqrt 3} \left(\sin(w \beta_1 ) z_1 + \sin(w \beta_1 ) z_2 + \sin(w \beta_1 ) z_3\right)
+z = \frac{2}{\sqrt 3} \left(\sin(w \beta_1 ) z_1 + \sin(w \beta_1 ) z_2
++ \sin(w \beta_1 ) z_3\right)
 \end{equation}
-
-\section{Expanded forms of formulas}
-
-These expansions make use of the vector quadruple product identity
-\begin{equation}
-(\mathbf a \times \mathbf b) \times (\mathbf c \times \mathbf d)
-= [\mathbf a, \mathbf b, \mathbf d] \mathbf c
-- [\mathbf a, \mathbf b, \mathbf c] \mathbf d.
-\end{equation}
-
-Equation \ref{eq:sphareal} - Spherical areal, Triangular
-
-Equation \ref{eq:gct} - Great Circle, Triangular
-
-Equation \ref{eq:gcq} - Great Circle, Quadrilateral
-
-%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1} +
-%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
-%\times
-%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4} +
-%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
-%==
-%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1}
-%\times
-%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4}
-%+
-%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1}
-%\times
-%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
-%+
-%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
-%\times
-%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4}
-%+
-%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
-%\times
-%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
-%=
-%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_4}
-%+
-%\frac{\sin {((1-u)w_12)} \sin (uw_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
-%+
-%\frac{\sin (uw_12) \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_4}
-%+
-%\frac{\sin (uw_12)\sin (uw_34)}{\sin (w_12)\sin (w_34)}
-%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_3}
-
-%(
-%\frac{\sin {((1-u)w_12)}}{\sin (w_12)} \mathbf{\hat{v}_1} +
-%\frac{\sin (uw_12)}{\sin (w_12)} \mathbf{\hat{v}_2}
-%\times
-%\frac{\sin {((1-u)w_34)}}{\sin (w_34)} \mathbf{\hat{v}_4} +
-%\frac{\sin (uw_34)}{\sin (w_34)} \mathbf{\hat{v}_3}
-%) \times (
-%\frac{\sin {((1-v)w_14)}}{\sin (w_14)} \mathbf{\hat{v}_1} +
-%\frac{\sin (vw_14)}{\sin (w_14)} \mathbf{\hat{v}_4}
-%\times
-%\frac{\sin {((1-v)w_23)}}{\sin (w_23)} \mathbf{\hat{v}_2} +
-%\frac{\sin (vw_23)}{\sin (w_23)} \mathbf{\hat{v}_3}
-%) =
-%(
-%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_4}
-%+
-%\frac{\sin {((1-u)w_12)} \sin (uw_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
-%+
-%\frac{\sin (uw_12) \sin ((1-u)w_34)}{\sin (w_12) \sin (w_34)}
-%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_4}
-%+
-%\frac{\sin (uw_12)\sin (uw_34)}{\sin (w_12)\sin (w_34)}
-%\mathbf{\hat{v}_2} \times \mathbf{\hat{v}_3}
-%) \times (
-%\frac{\sin {((1-v)w_14)} \sin ((1-v)w_23)}{\sin (w_14) \sin (w_23)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_2}
-%+
-%\frac{\sin {((1-v)w_14)} \sin (vw_23)}{\sin (w_14) \sin (w_23)}
-%\mathbf{\hat{v}_1} \times \mathbf{\hat{v}_3}
-%+
-%\frac{\sin (vw_14) \sin ((1-v)w_23)}{\sin (w_14) \sin (w_23)}
-%\mathbf{\hat{v}_4} \times \mathbf{\hat{v}_2}
-%+
-%\frac{\sin (vw_14)\sin (vw_23)}{\sin (w_14)\sin (w_23)}
-%\mathbf{\hat{v}_4} \times \mathbf{\hat{v}_3}
-%)
-%=(
-%a_14 v_1 \times v_4 +
-%a_13 v_1 \times v_3 +
-%a_24 v_2 \times v_4 +
-%a_23 v_2 \times v_3 )
-%\times (
-%b_12 v_1 \times v_2 +
-%b_13 v_1 \times v_3 +
-%b_42 v_4 \times v_2 +
-%b_43 v_4 \times v_3 )
-%=
-%a_14 (v_1 \times v_4 ) \times b_12 (v_1 \times v_2) +
-%a_14 (v_1 \times v_4 ) \times b_13 (v_1 \times v_3) +
-%a_14 (v_1 \times v_4 ) \times b_42 (v_4 \times v_2) +
-%a_14 (v_1 \times v_4 ) \times b_43 (v_4 \times v_3) +
-%a_13 (v_1 \times v_3 ) \times b_12 (v_1 \times v_2) +
-%a_13 (v_1 \times v_3 ) \times b_13 (v_1 \times v_3) +
-%a_13 (v_1 \times v_3 ) \times b_42 (v_4 \times v_2) +
-%a_13 (v_1 \times v_3 ) \times b_43 (v_4 \times v_3) +
-%a_24 (v_2 \times v_4 ) \times b_12 (v_1 \times v_2) +
-%a_24 (v_2 \times v_4 ) \times b_13 (v_1 \times v_3) +
-%a_24 (v_2 \times v_4 ) \times b_42 (v_4 \times v_2) +
-%a_24 (v_2 \times v_4 ) \times b_43 (v_4 \times v_3) +
-%a_23 (v_2 \times v_3 ) \times b_12 (v_1 \times v_2) +
-%a_23 (v_2 \times v_3 ) \times b_13 (v_1 \times v_3) +
-%a_23 (v_2 \times v_3 ) \times b_42 (v_4 \times v_2) +
-%a_23 (v_2 \times v_3 ) \times b_43 (v_4 \times v_3)
-%=
-%a_14 b_12 (v_1 \times v_4 ) \times (v_1 \times v_2) +
-%a_14 b_13 (v_1 \times v_4 ) \times (v_1 \times v_3) +
-%a_14 b_42 (v_1 \times v_4 ) \times (v_4 \times v_2) +
-%a_14 b_43 (v_1 \times v_4 ) \times (v_4 \times v_3) +
-%a_13 b_12 (v_1 \times v_3 ) \times (v_1 \times v_2) +
-%a_13 b_42 (v_1 \times v_3 ) \times (v_4 \times v_2) +
-%a_13 b_43 (v_1 \times v_3 ) \times (v_4 \times v_3) +
-%a_24 b_12 (v_2 \times v_4 ) \times (v_1 \times v_2) +
-%a_24 b_13 (v_2 \times v_4 ) \times (v_1 \times v_3) +
-%a_24 b_43 (v_2 \times v_4 ) \times (v_4 \times v_3) +
-%a_23 b_12 (v_2 \times v_3 ) \times (v_1 \times v_2) +
-%a_23 b_13 (v_2 \times v_3 ) \times (v_1 \times v_3) +
-%a_23 b_42 (v_2 \times v_3 ) \times (v_4 \times v_2) +
-%a_23 b_43 (v_2 \times v_3 ) \times (v_4 \times v_3)
-%=
-%a_14 b_12 ([v_1, v_4, v_2] v_1 - [v_1, v_4, v_1] v_2) +
-%a_14 b_13 ([v_1, v_4, v_3] v_1 - [v_1, v_4, v_1] v_3) +
-%a_14 b_42 ([v_1, v_4, v_2] v_4 - [v_1, v_4, v_4] v_2) +
-%a_14 b_43 ([v_1, v_4, v_3] v_4 - [v_1, v_4, v_4] v_3) +
-%a_13 b_12 ([v_1, v_3, v_2] v_1 - [v_1, v_3, v_1] v_2) +
-%a_13 b_42 ([v_1, v_3, v_2] v_4 - [v_1, v_3, v_4] v_2) +
-%a_13 b_43 ([v_1, v_3, v_3] v_4 - [v_1, v_3, v_4] v_3) +
-%a_24 b_12 ([v_2, v_4, v_2] v_1 - [v_2, v_4, v_1] v_2) +
-%a_24 b_13 ([v_2, v_4, v_3] v_1 - [v_2, v_4, v_1] v_3) +
-%a_24 b_43 ([v_2, v_4, v_3] v_4 - [v_2, v_4, v_4] v_3) +
-%a_23 b_12 ([v_2, v_3, v_2] v_1 - [v_2, v_3, v_1] v_2) +
-%a_23 b_13 ([v_2, v_3, v_3] v_1 - [v_2, v_3, v_1] v_3) +
-%a_23 b_42 ([v_2, v_3, v_2] v_4 - [v_2, v_3, v_4] v_2) +
-%a_23 b_43 ([v_2, v_3, v_3] v_4 - [v_2, v_3, v_4] v_3)
-%(a \times b) \times (c \times d) = [a, b, d] c - [a, b, c] d
-%=
-%a_13 b_12 (-[v_1, v_2, v_3] v_1 ) +
-%a_14 b_12 (-[v_1, v_2, v_4] v_1 ) +
-%a_14 b_13 (-[v_1, v_3, v_4] v_1 ) +
-%a_24 b_13 (-[v_2, v_3, v_4] v_1 ) +
-
-%a_23 b_12 (-[v_1, v_2, v_3] v_2) +
-%a_24 b_12 (-[v_1, v_2, v_4] v_2) +
-%a_13 b_42 (-[v_1, v_3, v_4] v_2) +
-%a_23 b_42 (-[v_2, v_3, v_4] v_2) +
-
-%a_23 b_13 (-[v_1, v_2, v_3] v_3) +
-%a_24 b_13 (-[v_1, v_2, v_4] v_3) +
-%a_13 b_43 (-[v_1, v_3, v_4] v_3) +
-%a_23 b_43 (-[v_2, v_3, v_4] v_3) +
-
-%a_13 b_42 (-[v_1, v_2, v_3] v_4 ) +
-%a_14 b_42 (-[v_1, v_2, v_4] v_4 ) +
-%a_14 b_43 (-[v_1, v_3, v_4] v_4 ) +
-%a_24 b_43 (-[v_2, v_3, v_4] v_4 ) +
-%=
-%-v_1 (
-%a_13 b_12 [v_1, v_2, v_3] +
-%a_14 b_12 [v_1, v_2, v_4] +
-%a_14 b_13 [v_1, v_3, v_4] +
-%a_24 b_13 [v_2, v_3, v_4])
-%-v_2 (
-%a_23 b_12 [v_1, v_2, v_3] +
-%a_24 b_12 [v_1, v_2, v_4] +
-%a_13 b_42 [v_1, v_3, v_4] +
-%a_23 b_42 [v_2, v_3, v_4])
-%-v_3 (
-%a_23 b_13 [v_1, v_2, v_3] +
-%a_24 b_13 [v_1, v_2, v_4] +
-%a_13 b_43 [v_1, v_3, v_4] +
-%a_23 b_43 [v_2, v_3, v_4])
-%-v_4 (
-%a_13 b_42 [v_1, v_2, v_3] +
-%a_14 b_42 [v_1, v_2, v_4] +
-%a_14 b_43 [v_1, v_3, v_4] +
-%a_24 b_43 [v_2, v_3, v_4])
-
-
-%a_13 b_12 [v_1, v_2, v_3] +
-%a_14 b_12 [v_1, v_2, v_4] +
-%a_14 b_13 [v_1, v_3, v_4] +
-%a_24 b_13 [v_2, v_3, v_4]
-%=
-%\frac{\sin {((1-u)w_12)} \sin (uw_34)\sin {((1-v)w_14)} \sin ((1-v)w_23)}
-%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
-%[v_1, v_2, v_3] +
-%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin ((1-v)w_23)}
-%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
-%[v_1, v_2, v_4] +
-%\frac{\sin {((1-u)w_12)} \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin (vw_23)}
-%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
-%[v_1, v_3, v_4] +
-%\frac{\sin (uw_12) \sin ((1-u)w_34)\sin {((1-v)w_14)} \sin (vw_23)}
-%{\sin (w_12) \sin (w_34)\sin (w_14) \sin (w_23)}
-%[v_2, v_3, v_4]
-%=
-%(
-%\sin ((1-u)w_12) \sin (uw_34)    \sin ((1-v)w_23) [v_1, v_2, v_3] +
-%\sin ((1-u)w_12) \sin ((1-u)w_34)\sin ((1-v)w_23) [v_1, v_2, v_4] +
-%\sin ((1-u)w_12) \sin ((1-u)w_34)\sin (vw_23)     [v_1, v_3, v_4] +
-%\sin (uw_12)     \sin ((1-u)w_34) \sin (vw_23)    [v_2, v_3, v_4]
-%)
-%\frac{\sin ((1-v)w_14)}{\sin (w_12) \sin (w_23) \sin (w_34)\sin (w_14) }
-
-Equation \ref{eq:nst} - Nested Slerp, Triangular
-
-Equation \ref{eq:nsq} - Nested Slerp, Quadrilateral
 
 \end{document}
