@@ -3,7 +3,7 @@
 \oddsidemargin=0in \evensidemargin=0in
 \textwidth=6.6in \textheight=8.7in
 
-\title{Maps between Euclidean and spherical polygons}
+\title{Mappings between Euclidean and spherical polygons}
 \author{B R S Recht}
 \date{December 2018}
 
@@ -139,7 +139,7 @@ sphere, interpolation is given by spherical linear interpolation, or slerp.
 \mathrm{Slerp}(\mathbf{\hat{v}_1}, \mathbf{\hat{v}_2}; t) =
 \begin{cases}\mathbf{\hat{v}_1}
   & \text{if } \mathbf{\hat{v}_1} = \mathbf{\hat{v}_2}\\
-       = \frac{\sin {((1-t)w)}}{\sin (w)} \mathbf{\hat{v}_1} +
+        \frac{\sin ((1-t)w)}{\sin (w)} \mathbf{\hat{v}_1} +
        \frac{\sin (tw)}{\sin (w)} \mathbf{\hat{v}_2}
   &\text{otherwise}
       \end{cases}
@@ -236,26 +236,31 @@ $\| \sum^3_{i=1} \beta_i \mathbf v_i \| = 1$. $\sum^3_{i=1} \beta_i$ would be
 $>1$ on the interior of the triangle, $=1$ on the edges,
 and $<1$ on the exterior.
 
-Quadrilaterals are instead specified by what we'll call \textit{$uv$
-coordinates} where $u$ and $v$ are $\in [0, 1]$. Given a quadrilateral with
-vertices $\mathbf v_1, \mathbf v_2, \mathbf v_3, \mathbf v_4$, the
-transformation is:
+Quadrilaterals are instead specified by \textit{$xy$ coordinates} where
+$x$ and $y$ are $\in [-1, 1]$. Given a quadrilateral with vertices
+$\mathbf v_1, \mathbf v_2, \mathbf v_3, \mathbf v_4$, the transformation is:
 \begin{equation}\begin{split}
-\mathbf v & = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) u + (\mathbf v_4-
-\mathbf v_1) v + (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)uv \\
-& = (1-u)(1-v)\mathbf v_1 + u(1-v)\mathbf v_2 + uv\mathbf v_3 +
-(1-u)v \mathbf v_4
+\mathbf v & = \frac{(1-x)(1-y)}{4} \mathbf v_1 +
+\frac{(1+x)(1-y)}{4} \mathbf v_2 +
+\frac{(1+x)(1+y)}{4} \mathbf v_3 +
+\frac{(1-x)(1+y)}{4} \mathbf v_4 \\
+&= \frac{1}{4} (\mathbf v_1 +\mathbf v_2 +\mathbf v_3 + \mathbf v_4)
++\frac{x}{4}  (-\mathbf v_1 +\mathbf v_2 +\mathbf v_3 - \mathbf v_4)
++\frac{y}{4}  (-\mathbf v_1 -\mathbf v_2 +\mathbf v_3 + \mathbf v_4)
++\frac{x y}{4} (\mathbf v_1 -\mathbf v_2 +\mathbf v_3 - \mathbf v_4)
 \end{split}\end{equation}
 Unlike triangles, quadrilaterals may have points that do not share a common
 plane: they may be skew quadrilaterals. If the quadrilateral is a skew
-quadrilateral, $u$ and $v$ smoothly parameterize a surface over that skew
-quadrilateral. Like barycentric coordinates, these uv coordinates can be
+quadrilateral, $x$ and $y$ smoothly parameterize a surface over that skew
+quadrilateral. Like barycentric coordinates, these $xy$ coordinates can be
 expressed in terms of nested linear interpolation:
-$\mathbf v
-= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_2;u),
-\mathrm{Lerp}(\mathbf v_4,\mathbf v_3;u);v)
-= \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_4;v),
-\mathrm{Lerp}(\mathbf v_2,\mathbf v_3;v);u)$
+\begin{equation}\begin{split}
+\mathbf v
+& = \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_2;\frac{x+1}{2}),
+\mathrm{Lerp}(\mathbf v_4,\mathbf v_3;u);\frac{y+1}{2}) \\
+& = \mathrm{Lerp}(\mathrm{Lerp}(\mathbf v_1,\mathbf v_4;\frac{y+1}{2}),
+\mathrm{Lerp}(\mathbf v_2,\mathbf v_3;v);\frac{x+1}{2})
+\end{split}\end{equation}
 
 \begin{figure}%[!htbp]
 \begin{tikzpicture}
@@ -272,14 +277,14 @@ $\mathbf v
 \label{fig:uv}
 \end{figure}
 
-$uv$ coordinates are not amenable to a generalization in exactly the way that
+$xy$ coordinates are not amenable to a generalization in exactly the way that
 generalized barycentric coordinates are, but can be expressed like
 \begin{equation}
   \mathbf v = \sum^4_{i=1} \alpha_i \mathbf v_i
 \end{equation}
 where $\alpha_i$ are not necessarily unique.
 
-\section{Maps between Euclidean and spherical polygons}
+\section{Mappings between Euclidean and spherical polygons}
 \subsection{Conformal}
 
 Schwarz triangle maps
@@ -311,12 +316,14 @@ space to the sphere is literally just normalizing the vector. For triangles:
 \end{equation}
 For quadrilaterals:
 \begin{equation}
-   \mathbf v^* = \mathbf v_1 + (\mathbf v_2-\mathbf v_1) x +
-   (\mathbf v_4-\mathbf v_1) y +
-   (\mathbf v_1-\mathbf v_2+\mathbf v_3-\mathbf v_4)xy
+   \mathbf v^* = (1-x)(1-y) \mathbf v_1 +
+   (1+x)(1-y) \mathbf v_2 +
+   (1+x)(1+y) \mathbf v_3 +
+   (1-x)(1+y) \mathbf v_4
  \end{equation}
 where $\beta_i$ are (planar) barycentric coordinates and $x,y$ are
-x-y quadrilateral coordinates.
+$xy$ coordinates. The factor of $1/4$ is omitted for the quadrilateral
+form because it's going to be normalized anyways.
 
 The triangular case can be thought of in terms of generalized
 barycentric coordinates. If the generalized coordinates are
@@ -421,13 +428,13 @@ we draw two intersecting lines, there is only one point of intersection within
 the quadrilateral. The formula is:
 \begin{equation}\label{eq:gcq}%??? does this reduce to slerp on the edges?
 \mathbf v^* =
-(\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; u)
+(\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; \frac{x+1}{2})
 \times
-\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; u))
+\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; \frac{y+1}{2}))
 \times
-(\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; v)
+(\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; \frac{y+1}{2})
 \times
-\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; v))
+\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; \frac{x+1}{2}))
 \end{equation}
 
 \subsection{Nested Slerp}
@@ -447,21 +454,22 @@ Triangular:
 \end{equation}
 Quadrilateral:%??? not symmetric?
 \begin{equation}\label{eq:nsq}
-\mathbf v^*
-= \mathrm{Slerp}(
-\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; u),
-\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; u); v)
-+ \mathrm{Slerp}(
-\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; v),
-\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; v); u)
+  \begin{split}
+\mathbf v^* =& \mathrm{Slerp}(
+\mathrm{Slerp}(\mathbf v_1, \mathbf v_2; \frac{x+1}{2}),
+\mathrm{Slerp}(\mathbf v_4, \mathbf v_3; \frac{x+1}{2}); \frac{y+1}{2})\\
+&+ \mathrm{Slerp}(
+\mathrm{Slerp}(\mathbf v_1, \mathbf v_4; \frac{y+1}{2}),
+\mathrm{Slerp}(\mathbf v_2, \mathbf v_3; \frac{y+1}{2}); \frac{x+1}{2})
+\end{split}
 \end{equation}
 
 \subsection{Naive Slerp}
-The previously mentioned maps are all somewhat complicated. Expansion of the
+The previously mentioned mappings are all somewhat complicated. Expansion of the
 formulas results in very lengthy equations. Applying a simplifying restriction
-allows us to produce a formula that is nearly as simple as the gnomonic map.
+allows us to produce a formula that is nearly as simple as the gnomonic mapping.
 The restriction is that the polygons are equilateral. This may seem very
-restrictive, but many of the applications of these maps involve a regular
+restrictive, but many of the applications of these mappings involve a regular
 polyhedron, e.g. the cube or the icosahedron, with equilateral faces.
 
 The Naive Slerp method resembles a naive extension of spherical linear
@@ -474,18 +482,18 @@ usual, the subscripts loop around.) For triangles:
 For quadrilaterals:
 \begin{equation}\begin{split}
      \mathbf v^* & = \sum_{i=1}^4\frac{\sin(w\gamma_i)}{\sin(w)} \mathbf v_i \\
-\gamma_1 & = (1-x)(1-y) \\
-\gamma_2 & = x(1-y) \\
-\gamma_3 & = xy \\
-\gamma_4 & = (1-x)y
+\gamma_1 & = \frac{(1-x)(1-y)}{4} \\
+\gamma_2 & = \frac{(1+x)(1-y)}{4} \\
+\gamma_3 & = \frac{(1+x)(1+y)}{4} \\
+\gamma_4 & = \frac{(1-x)(1+y)}{4}
 \end{split}\end{equation}
 or
 \begin{equation}\begin{split}
    \mathbf v^* & = \sum_{i=1}^4\frac{s_i}{\sin^2(w)}  \mathbf v_i \\
-s_1 &  = \sin (w(1-x))\sin (w(1-y)) \\
-s_2 & = \sin (wx)\sin (w(1-y)) \\
-s_3 & = \sin (wx)\sin (wy) \\
-s_4 & = \sin (w(1-x))\sin (wy)
+s_1 & = \sin \left(w\frac{1-x}{2}\right)\sin \left(w\frac{1-y}{2}\right) \\
+s_2 & = \sin \left(w\frac{1+x}{2}\right)\sin \left(w\frac{1-y}{2}\right) \\
+s_3 & = \sin \left(w\frac{1+x}{2}\right)\sin \left(w\frac{1+y}{2}\right) \\
+s_4 & = \sin \left(w\frac{1-x}{2}\right)\sin \left(w\frac{1+y}{2}\right) \\
 \end{split}\end{equation}
 
 \subsection{Projection of $\mathbf v^*$}
@@ -508,32 +516,39 @@ calculation of the face normal. Technically, you can project in almost any
 direction, not just that of the face normal, but most other choices don't
 produce a symmetric result.
 
-Sometimes the best map comes from a compromise of the central and
+Sometimes the best mapping comes from a compromise of the central and
 parallel projections. Choose a constant $k$, typically between 0 and 1, then:
 \begin{equation}
   \hat{\mathbf v} = \frac{\mathbf v^* + kp\mathbf c}{\|\dots\|}
 \end{equation}
 $p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
-measurement of the map, we can do a 1-variable optimization on $k$.
+measurement of the mapping, we can do a 1-variable optimization on $k$.
 
-\section{Applications}
-\subsection{Cartographic use}
+\section{Mappings between Euclidean polygons and disks}
+Some of the mappings mentioned above adapt nicely to maps between regular
+Euclidan polygons and disks in the Euclidean plane. Mappings between squares
+and disks are well-represented in the literature, but mappings between
+triangles and disks have been neglected.
+\cite{fong15}\cite{fong16}\cite{fong18}\cite{lambers}
 
-\subsection{Optimization of geodesic polyhedra}
+In this section, we will use a square with vertices
+\begin{equation}
+  \mathbf{v}_1 = \frac{[-1,-1]}{\sqrt 2}, \,
+  \mathbf{v}_2 = \frac{[1,-1]}{\sqrt 2}, \,
+  \mathbf{v}_3 = \frac{[1,1]}{\sqrt 2}, \,
+  \mathbf{v}_4 = \frac{[-1,1]}{\sqrt 2},
+\end{equation}
+and a triangle with vertices
+\begin{equation}
+  \mathbf{v}_1 = \left[1, 0\right], \,
+  \mathbf{v}_2 = \left[-\frac{1}{2}, \frac{\sqrt{3}}{2}\right], \,
+  \mathbf{v}_3 = \left[-\frac{1}{2}, -\frac{\sqrt{3}}{2}\right].
+\end{equation}
+$[u, v]$ designates the point on the disk.
 
-\bibliographystyle{plain}
-\bibliography{references}
-
-\appendix
-\section{Maps between polygons and disks in the Euclidean plane}
-Some of the maps mentioned above adapt nicely to maps between polygons and disks
-in the Euclidean plane. Fong \cite{fong15}\cite{fong16} has produced nice
-summaries of maps between squares and disks, so we won't repeat all of those
-here.
-
-The maps in this section can be adapted into maps between a polygon and a
-hemisphere. The stereographic projection conformally maps the unit disk to a
-hemisphere, and is given by:
+The mappings in this section can be adapted into mappings between a polygon and
+a hemisphere. The stereographic projection conformally maps
+the unit disk to a hemisphere, and is given by:
 \begin{equation}\begin{split}
   \hat{\mathbf v} &= \frac{[2x, 2y, x^2+y^2-1]}{1+x^2+y^2}, \\
   [x, y] & = \frac{[v_x, v_y]}{1-v_z}.
@@ -543,6 +558,7 @@ and is given by:
 \begin{equation}
   \hat{\mathbf v} = [x, y, \sqrt{1-x^2-y^2}].
 \end{equation}
+
 \subsection{Conformal}
 \begin{equation}
 f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
@@ -553,38 +569,58 @@ which is not particularly convenient. For squares it results in an elliptic
 function, which is slightly more convenient.\cite{fong16}
 
 \subsection{Radial stretching}
-Consider the disk in polar coordinates. These maps only change the radius $r$
-and leave $theta$ the same. They are not smooth. The square map is given in
-\cite{fong15}. The triangular map is:
+Consider the disk in polar coordinates. These mappings only change the radius
+$r$ by a multiple, and leave $theta$ the same. They are not smooth. We give
+only the triangular and square mappings here, but radial stretching is
+extensible to any polygon. The square mapping is given in \cite{fong15} as:
+\begin{equation}
+  [u, v] = \frac{\max(|x|,|y|)}{\sqrt{x^2+y^2}} [x,y]
+\end{equation}
+The triangular mapping is somewhat easier to express in polar form:
 \begin{equation}\begin{split}
   r &= 1-3 \min( \beta_i ) \\
-  \theta &= \arctan(\sqrt{3}(\beta_2-\beta_3),
-  2\beta_1 - \beta_2 - \beta_3)
+  \theta &= \arctan\left(\sqrt{3}(\beta_2-\beta_3),
+  3\beta_1 - 1 \right)
 \end{split}\end{equation}
 which can be converted back into Cartesian coordinates if needed.
 
 \subsection{Naive Slerp}
 
 Quadrilateral:
-\begin{equation}
-z = \left[\sin\left(\frac{\pi}{2} (1-x)(1-y)\right)
-- \sin\left(\frac{\pi}{2} x y\right),
-\sin\left(\frac{\pi}{2} x (1-y)\right)
-- \sin\left(\frac{\pi}{2} (1-x) y\right)\right]
-\end{equation}
-
-\begin{equation}
-z = \sqrt 2 \left[\cos\left(\frac{\pi}{4} (2x+1)\right)
-\sin\left(\frac{\pi}{4} (2y+1)\right),
-\sin\left(\frac{\pi}{4} (2x+1)\right)
-\cos\left(\frac{\pi}{4} (2y+1)\right)\right]
-\end{equation}
-Note that this map preserves diagonal lines.
+\begin{equation}\begin{split}
+u &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
+\cos \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
+- \sqrt{2-\sqrt 2} \cos \left( \frac{\pi}{8} x \right) \sin
+\left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right), \\
+v &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \cos \left( \frac{\pi}{8} x \right)
+\sin \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
+- \sqrt{2-\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
+\cos \left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right)
+\end{split}\end{equation}
+2nd Quadrilateral:
+\begin{equation}\begin{split}
+u &= \sqrt 2
+\sin \left(\frac{\pi}{4}x\right) \cos \left(\frac{\pi}{4}y\right),\\
+v &= \sqrt 2 \cos \left(\frac{\pi}{4}x\right) \sin \left(\frac{\pi}{4}y\right)
+\end{split}\end{equation}
+Note that the 2nd Quadrilateral Naive Slerp map preserves diagonal lines.
 
 Triangular:
-\begin{equation}
-z = \frac{2}{\sqrt 3} \left(\sin(w \beta_1 ) z_1 + \sin(w \beta_1 ) z_2
-+ \sin(w \beta_1 ) z_3\right)
+\begin{equation}\begin{split}
+u& =  \frac{1}{\sqrt{3}} \left(2 \sin\left(\frac{2\pi}{3} \beta_1 \right)
+- \sin\left(\frac{2\pi}{3} \beta_2 \right)
+- \sin\left(\frac{2\pi}{3} \beta_3 \right) \right)\\
+v& = \sin\left(\frac{2\pi}{3} \beta_2 \right)
+- \sin\left(\frac{2\pi}{3} \beta_3 \right)
+\end{split}
 \end{equation}
+
+\section{Applications}
+\subsection{Cartographic use}
+
+\subsection{Optimization of geodesic polyhedra}
+
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
