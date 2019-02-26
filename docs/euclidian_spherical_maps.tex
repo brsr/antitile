@@ -3,7 +3,7 @@
 \oddsidemargin=0in \evensidemargin=0in
 \textwidth=6.6in \textheight=8.7in
 
-\title{Mappings between Euclidean and spherical polygons}
+\title{Some homeomorphisms between Euclidean and spherical polygons}
 \author{B R S Recht}
 \date{December 2018}
 
@@ -286,15 +286,80 @@ where $\alpha_i$ are not necessarily unique.
 
 \section{Mappings between Euclidean and spherical polygons}
 \subsection{Conformal}
+Conformal mapping has deep connections to the theory of complex functions.
+The Schwarz triangle maps conformally transform the upper half-plane to a
+triangle whose edges are circular arcs. It it given by:
+\begin{equation}
+   \varphi(z) = z^{1-c} \frac{_2 F_1(a',b';c',z)}{_2 F_1(a,b;c,z)}
+\end{equation}
+where $_2 F_1(a,b;c,z)$ is the hypergeometric function and
+\begin{equation}\begin{split}
+   a & = \frac{1 - \alpha + \beta - \gamma}{2}\\
+   b & = \frac{1 - \alpha - \beta - \gamma}{2}\\
+   c & = 1 - \alpha\\
+   a' &= \frac{1 + \alpha + \beta - \gamma}{2} = 1 + a - c\\
+   b' &= \frac{1 + \alpha - \beta - \gamma}{2} = 1 + b - c\\
+   c' &= 1 + \alpha
+\end{split}\end{equation}
+and the angles at each vertex of the triangle are $\pi \alpha, \pi \beta,
+\pi \gamma$. If $\alpha + \beta + \gamma < 1$, then the triangle is hyperbolic;
+if $=1$ it is Euclidean, and if $>1$ it is spherical. \cite{nehari} Hyperbolic
+triangles seem to be the most investigated cases in the literature, but here the
+other two cases are of interest.
 
-Schwarz triangle maps
+The Schwarz triangle map maps the boundary of the half-plane (i.e. $\mathbb{R}$)
+to the boundary of the triangle. The vertices are the points. $z=0$, $1$, and
+$\infty$ on that line. The map maps $z=0$ to $0$ and $z=1$ to the value $g$:
+\begin{equation}
+  g = \frac{\Gamma(c-a)\Gamma(c-b)\Gamma(2-c)}{\Gamma(1-a)\Gamma(1-b)\Gamma(c)}
+\end{equation}.
+
+The stereographic transformation is the conformal mapping between the sphere and
+the plane. If $z=x + i y$, and $u$, $v$, and $w$ are points on the sphere, then
+\begin{equation}\begin{split}
+  u &= \frac{x}{1+x^2+y^2} \\
+  v &= \frac{y}{1+x^2+y^2} \\
+  w &= \frac{x^2 + y^2 - 1}{1+x^2+y^2}
+\end{split}\end{equation}
+or the inverse map,
+\begin{equation}\begin{split}
+x &= \frac{u}{1-w} \\
+y &= \frac{v}{1-w}
+\end{split}\end{equation}
+Denote the map from the plane to the sphere as $S(z)$. Then a conformal mapping
+between the upper half-plane and a spherical triangle is given by
+$S\left(\phi(z)\frac{h}{g}\right)$, where $h$ is a scaling factor given by
+\begin{equation}
+  h = \sqrt{ -\frac{\cos \left(\pi (\alpha+\beta)\right)
+                    \cos\left(\pi\gamma\right)}
+                   {\cos \left(\pi (\alpha-\beta)\right)
+                    \cos\left(\pi\gamma\right)}}
+\end{equation}
+The derivation of $h$ can be performed using the spherical law of cosines.
+
+What remains is to find a conformal mapping between a Euclidean triangle and the
+half-plane. This is also given by the $\varphi(z)$.
+\begin{equation}
+  S\left(\phi_{\alpha,\beta,\gamma}
+  \left(\phi_{\alpha^*,\beta^*,\gamma^*}^{-1}(z)\right)
+  \frac{h_{\alpha,\beta,\gamma}}{g_{\alpha,\beta,\gamma}}\right)
+\end{equation}
+where $\alpha,\beta,\gamma$ denotes the angles of the spherical triangle (over
+$\pi$), and $\alpha^*,\beta^*,\gamma^*$ denotes the angles of the Euclidean
+triangle. (One choice to relate the two sets of angles is $\alpha^* =
+\frac{\alpha}{\alpha+\beta+\gamma}$ etc.)
+That said, calculating $\phi^{-1}(z)$ is not straightforward. No closed-form
+inverse is known to the author, even though in the Euclidean case $b=0$
+and the denominator of $\varphi(z)$ is 1. The function has branch cuts on
+$(-\infty,0]$ and $[1, \infty)$, and points are transformed to arbitrarily
+large values, making a naive numerical inversion difficult to execute.
 
 \subsection{Gnomonic}
 The gnomonic projection was known to the ancient Greeks, and is the simplest
 of the transformations listed here. It has the nice property that all lines in
 Euclidean space are transformed into great circles on the sphere: that is,
 geodesics stay geodesics, and polygons stay polygons. This is in fact the
-motivation for the name "geodesic dome": Fuller used this projection to project
+motivation for the name ``geodesic dome'': Fuller used this projection to project
 triangles on the sphere. This is referred to as Method 1 in geodesic dome
 terminology. The main downside is that the transformation causes shapes
 near the corners to appear bunched up;
@@ -524,96 +589,7 @@ parallel projections. Choose a constant $k$, typically between 0 and 1, then:
 $p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
 measurement of the mapping, we can do a 1-variable optimization on $k$.
 
-\section{Mappings between Euclidean polygons and disks}
-Some of the mappings mentioned above adapt nicely to maps between regular
-Euclidan polygons and disks in the Euclidean plane. Mappings between squares
-and disks are well-represented in the literature, but mappings between
-triangles and disks have been neglected.
-\cite{fong15}\cite{fong16}\cite{fong18}\cite{lambers}
-
-In this section, we will use a square with vertices
-\begin{equation}
-  \mathbf{v}_1 = \frac{[-1,-1]}{\sqrt 2}, \,
-  \mathbf{v}_2 = \frac{[1,-1]}{\sqrt 2}, \,
-  \mathbf{v}_3 = \frac{[1,1]}{\sqrt 2}, \,
-  \mathbf{v}_4 = \frac{[-1,1]}{\sqrt 2},
-\end{equation}
-and a triangle with vertices
-\begin{equation}
-  \mathbf{v}_1 = \left[1, 0\right], \,
-  \mathbf{v}_2 = \left[-\frac{1}{2}, \frac{\sqrt{3}}{2}\right], \,
-  \mathbf{v}_3 = \left[-\frac{1}{2}, -\frac{\sqrt{3}}{2}\right].
-\end{equation}
-$[u, v]$ designates the point on the disk.
-
-The mappings in this section can be adapted into mappings between a polygon and
-a hemisphere. The stereographic projection conformally maps
-the unit disk to a hemisphere, and is given by:
-\begin{equation}\begin{split}
-  \hat{\mathbf v} &= \frac{[2x, 2y, x^2+y^2-1]}{1+x^2+y^2}, \\
-  [x, y] & = \frac{[v_x, v_y]}{1-v_z}.
-\end{split}\end{equation}
-The orthographic projection also maps the disk to the hemisphere,
-and is given by:
-\begin{equation}
-  \hat{\mathbf v} = [x, y, \sqrt{1-x^2-y^2}].
-\end{equation}
-
-\subsection{Conformal}
-\begin{equation}
-f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
-\end{equation}
- Like the Schwarz triangle map above,
-computing this integral usually results in a hypergeometric function,
-which is not particularly convenient. For squares it results in an elliptic
-function, which is slightly more convenient.\cite{fong16}
-
-\subsection{Radial stretching}
-Consider the disk in polar coordinates. These mappings only change the radius
-$r$ by a multiple, and leave $theta$ the same. They are not smooth. We give
-only the triangular and square mappings here, but radial stretching is
-extensible to any polygon. The square mapping is given in \cite{fong15} as:
-\begin{equation}
-  [u, v] = \frac{\max(|x|,|y|)}{\sqrt{x^2+y^2}} [x,y]
-\end{equation}
-The triangular mapping is somewhat easier to express in polar form:
-\begin{equation}\begin{split}
-  r &= 1-3 \min( \beta_i ) \\
-  \theta &= \arctan\left(\sqrt{3}(\beta_2-\beta_3),
-  3\beta_1 - 1 \right)
-\end{split}\end{equation}
-which can be converted back into Cartesian coordinates if needed.
-
-\subsection{Naive Slerp}
-
-Quadrilateral:
-\begin{equation}\begin{split}
-u &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
-\cos \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
-- \sqrt{2-\sqrt 2} \cos \left( \frac{\pi}{8} x \right) \sin
-\left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right), \\
-v &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \cos \left( \frac{\pi}{8} x \right)
-\sin \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
-- \sqrt{2-\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
-\cos \left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right)
-\end{split}\end{equation}
-2nd Quadrilateral:
-\begin{equation}\begin{split}
-u &= \sqrt 2
-\sin \left(\frac{\pi}{4}x\right) \cos \left(\frac{\pi}{4}y\right),\\
-v &= \sqrt 2 \cos \left(\frac{\pi}{4}x\right) \sin \left(\frac{\pi}{4}y\right)
-\end{split}\end{equation}
-Note that the 2nd Quadrilateral Naive Slerp map preserves diagonal lines.
-
-Triangular:
-\begin{equation}\begin{split}
-u& =  \frac{1}{\sqrt{3}} \left(2 \sin\left(\frac{2\pi}{3} \beta_1 \right)
-- \sin\left(\frac{2\pi}{3} \beta_2 \right)
-- \sin\left(\frac{2\pi}{3} \beta_3 \right) \right)\\
-v& = \sin\left(\frac{2\pi}{3} \beta_2 \right)
-- \sin\left(\frac{2\pi}{3} \beta_3 \right)
-\end{split}
-\end{equation}
+%http://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html
 
 \section{Applications}
 \subsection{Cartographic use}
