@@ -278,13 +278,118 @@ expressed in terms of nested linear interpolation:
 \end{figure}
 
 $xy$ coordinates are not amenable to a generalization in exactly the way that
-generalized barycentric coordinates are, but can be expressed like
+generalized barycentric coordinates are, but some formulas can be expressed like
 \begin{equation}
   \mathbf v = \sum^4_{i=1} \alpha_i \mathbf v_i
 \end{equation}
 where $\alpha_i$ are not necessarily unique.
 
-\section{Mappings between Euclidean and spherical polygons}
+\subsection{Mappings between the hemisphere and the disk}
+Let $x,y$ be coordinates in $\mathbb{R}^2$ (equivalently, $z = x + i y$ in
+$\mathbb{C}$), and $u,v,w$ be coordinates in $\mathbb{R}^3$.
+If a point in $\mathbb{R}^3$ is on the unit sphere,
+then its coordinates satisfy $u^2 + v^2 + w^2 = 1$.
+
+For simplicity, we'll \cite{snyder}
+
+\subsubsection{Azimuthal equal-area}
+Preserves areas
+\begin{equation}\begin{split}
+  \left<x, y\right> &= \left<u, v\right> \sqrt{\frac{2}{1-w}} \\
+  \left<u, v, w\right> &= \left<\sqrt{1- \frac{x^2+y^2}{4}}x,
+    \sqrt{1- \frac{x^2+y^2}{4}}y, \frac{x^2+y^2}{2}-1\right>
+\end{split}\end{equation}
+
+\subsubsection{Stereographic}
+This and the following projections are perspective projections: they can be
+understood as the view of a sphere from a defined point in space.
+Conformal
+\begin{equation}\begin{split}
+  \left<x, y\right> &= \frac{\left<u, v\right>}{1-w} \\
+  \left<u, v, w\right> &= \frac{\left<2x, 2y, x^2+y^2-1\right>}{1+x^2+y^2}
+\end{split}\end{equation}
+
+\subsubsection{Gnomonic}
+In general, the gnomonic projection is defined as:
+\begin{itemize}
+\item To sphere: $\hat{\mathbf v} = \frac{\mathbf p}{\|\mathbf p\|}$
+\item From sphere: $\mathbf p = \frac{r}
+  {\hat{\mathbf n} \cdot \hat{\mathbf v}}\hat{\mathbf v}$
+\end{itemize}
+where $\mathbf p$ is a point on a plane given in Hessian normal
+form by $\hat{\mathbf n} \cdot \mathbf p = r$. Projection from Euclidean
+space to the sphere is literally just normalizing the vector.
+
+\subsubsection{Orthographic}
+\begin{equation}\begin{split}
+  \left<x, y\right> &= \left<u, v\right> \\
+  \left<u, v, w\right> &= \left<x, y, \sqrt{1-x^2-y^2}\right>
+\end{split}\end{equation}
+
+\subsection{Qualities of a mapping}
+
+Desireable qualities in a mapping include:
+\begin{itemize}
+\item Homeomorphism: The forward map and inverse map are both continuous.
+\item Diffeomorphism: The forward map and inverse map are both differentiable.
+In terms of appearance, smooth lines stay smooth.
+\item Equal-Area: Relative areas are preserved.
+  Can be measured with the Jacobian determinant.
+\item Conformal: Small circles are mapped to small circles
+(rather than ellipses or something else). Can be measured with the Jacobian matrix.
+\item Equidistant: Mappings which preserve (proportional) distances. This isn't
+possible for the entire domain, but can be for certain cases, e.g. along the
+edges of the polygon/disk, or along lines between the vertices and the center.
+\item Closed-form: Can be expressed in terms of a finite number of defined
+functions and operations.
+This of course depends on which functions are acceptable.
+\item Simple: How simple or complicated is the formula? This is,
+of course, somewhat subjective.
+\end{itemize}
+
+The Jacobian matrix of a mapping $f(x,y) = \left<f_x(x,y), f_y(x,y)\right>$
+between two subsets of $\mathbb{R}^2 = \mathbb{C}$ is a 2x2 matrix of
+derivatives:
+\begin{equation}
+\mathbf{J}_f =
+\begin{bmatrix}
+    \dfrac{\partial f_x}{\partial x} & \dfrac{\partial f_x}{\partial y}\\
+    \dfrac{\partial f_y}{\partial x} & \dfrac{\partial f_y}{\partial y}
+\end{bmatrix}.
+\end{equation}
+
+The Jacobian of the inverse map is just the inverse of the Jacobian matrix of the
+forward map, evaluated at the corresponding point: $\mathbf{J}_{f^{-1}} (z)
+=\mathbf{J}_{f}^{-1} \left(f^{-1}(z)\right)$. The inverse must exist,
+or else the mapping wouldn't be a homeomorphism.
+
+If this matrix is of the form $\begin{bmatrix} a & -b\\ b & a \end{bmatrix}$
+for all arguments, then the mapping is conformal. To measure deviations from
+conformality, define a quantity $\chi$, the "unconformality", as
+\begin{equation}
+\chi = \sqrt{\left(\dfrac{\partial f_x}{\partial x} -
+\dfrac{\partial f_y}{\partial y}\right)^2 +
+\left(\dfrac{\partial f_x}{\partial y} +
+\dfrac{\partial f_y}{\partial x}\right)^2}
+\end{equation}
+If this quantity is zero, the mapping is conformal at that point.
+
+If the determinant of the Jacobian matrix (the Jacobian determinant) is constant,
+the map is area-preserving, and it is equal to the ratio of the areas of the
+domain and the codomain. In fact, the integral of the determinant over the whole
+domain is equal to that ratio.
+
+For mappings from $\mathbb{R}^2$ to the unit sphere $S^2$, use the fact that
+the composition of conformal mappings is a conformal mapping, and the
+composition of equal-area maps is an equal-area mapping. So to measure the
+conformality of a map $\mathbb{R}^2 \to S^2$, we instead measure the composition
+of that map with the stereographic projection from $S^2 \to \mathbb{R}^2$.
+Similarly, for equal-area, measure the compisition of the map with the azimuthal
+equal-area projection. Take care to avoid any singularities or boundaries of the
+projection. (There are more sophisticated differential-geometric methods that
+could be used here, but this suffices and is easier to understand.)
+
+\section{Mappings between Euclidean and general spherical polygons}
 \subsection{Conformal}
 Conformal mapping has deep connections to the theory of complex functions.
 The Schwarz triangle maps conformally transform the upper half-plane to a
@@ -314,21 +419,10 @@ $\infty$ on that line. The map maps $z=0$ to $0$ and $z=1$ to the value $g$:
   g = \frac{\Gamma(c-a)\Gamma(c-b)\Gamma(2-c)}{\Gamma(1-a)\Gamma(1-b)\Gamma(c)}
 \end{equation}.
 
-The stereographic transformation is the conformal mapping between the sphere and
-the plane. If $z=x + i y$, and $u$, $v$, and $w$ are points on the sphere, then
-\begin{equation}\begin{split}
-  u &= \frac{x}{1+x^2+y^2} \\
-  v &= \frac{y}{1+x^2+y^2} \\
-  w &= \frac{x^2 + y^2 - 1}{1+x^2+y^2}
-\end{split}\end{equation}
-or the inverse map,
-\begin{equation}\begin{split}
-x &= \frac{u}{1-w} \\
-y &= \frac{v}{1-w}
-\end{split}\end{equation}
-Denote the map from the plane to the sphere as $S(z)$. Then a conformal mapping
-between the upper half-plane and a spherical triangle is given by
-$S\left(\phi(z)\frac{h}{g}\right)$, where $h$ is a scaling factor given by
+Denote the stereographic map from the plane to the sphere as $S(z)$. Then a
+conformal mapping between the upper half-plane and a spherical triangle is
+given by $S\left(\phi(z)\frac{h}{g}\right)$, where $h$ is a scaling factor
+given by
 \begin{equation}
   h = \sqrt{ -\frac{\cos \left(\pi (\alpha+\beta)\right)
                     \cos\left(\pi\gamma\right)}
@@ -338,7 +432,7 @@ $S\left(\phi(z)\frac{h}{g}\right)$, where $h$ is a scaling factor given by
 The derivation of $h$ can be performed using the spherical law of cosines.
 
 What remains is to find a conformal mapping between a Euclidean triangle and the
-half-plane. This is also given by the $\varphi(z)$.
+half-plane. This is also expressed with $\phi(z)$.
 \begin{equation}
   S\left(\phi_{\alpha,\beta,\gamma}
   \left(\phi_{\alpha^*,\beta^*,\gamma^*}^{-1}(z)\right)
@@ -348,11 +442,12 @@ where $\alpha,\beta,\gamma$ denotes the angles of the spherical triangle (over
 $\pi$), and $\alpha^*,\beta^*,\gamma^*$ denotes the angles of the Euclidean
 triangle. (One choice to relate the two sets of angles is $\alpha^* =
 \frac{\alpha}{\alpha+\beta+\gamma}$ etc.)
-That said, calculating $\phi^{-1}(z)$ is not straightforward. No closed-form
-inverse is known to the author, even though in the Euclidean case $b=0$
-and the denominator of $\varphi(z)$ is 1. The function has branch cuts on
-$(-\infty,0]$ and $[1, \infty)$, and points are transformed to arbitrarily
-large values, making a naive numerical inversion difficult to execute.
+No closed-form inverse $\phi^{-1}(z)$ is known to the author, even though in the
+Euclidean case $b=0$ and the denominator of $\phi(z)$ is 1. The function has
+branch cuts on $(-\infty,0]$ and $[1, \infty)$, and points are transformed to
+arbitrarily large values, so care must be taken performing the numerical
+inversion. A Mobius transformation can be used to estimate initial conditions,
+replacing the triangle with an appropriate disk.
 
 \subsection{Gnomonic}
 The gnomonic projection was known to the ancient Greeks, and is the simplest
@@ -365,15 +460,7 @@ terminology. The main downside is that the transformation causes shapes
 near the corners to appear bunched up;
 this is particularly bad for larger faces e.g. on the tetrahedron.
 
-In general, the gnomonic projection is defined as:
-\begin{itemize}
-\item To sphere: $\hat{\mathbf v} = \frac{\mathbf p}{\|\mathbf p\|}$
-\item From sphere: $\mathbf p = \frac{r}
-  {\hat{\mathbf n} \cdot \hat{\mathbf v}}\hat{\mathbf v}$
-\end{itemize}
-
-where $\mathbf p$ is a point on a plane given in Hessian normal
-form by $\hat{\mathbf n} \cdot \mathbf p = r$. Projection from Euclidean
+Projection from Euclidean
 space to the sphere is literally just normalizing the vector. For triangles:
 \begin{equation}
    \mathbf v^* =
@@ -388,7 +475,7 @@ For quadrilaterals:
  \end{equation}
 where $\beta_i$ are (planar) barycentric coordinates and $x,y$ are
 $xy$ coordinates. The factor of $1/4$ is omitted for the quadrilateral
-form because it's going to be normalized anyways.
+form because the vector is going to be normalized anyways.
 
 The triangular case can be thought of in terms of generalized
 barycentric coordinates. If the generalized coordinates are
@@ -589,7 +676,210 @@ parallel projections. Choose a constant $k$, typically between 0 and 1, then:
 $p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
 measurement of the mapping, we can do a 1-variable optimization on $k$.
 
-%http://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html
+\section{Mappings between regular Euclidean polygons and disks}
+Mappings between squares
+and disks are well-represented in the literature, but mappings between
+triangles and disks have been neglected.
+\cite{fong15}\cite{fong16}\cite{fong18}\cite{lambers}
+
+It will be useful to express some formula in terms of complex numbers in
+$\mathbb{C}$, and some in terms of a 2-dimensional vector in $\mathbb{R}^2$:
+that is, a complex number $z = x + i y$ is equivalent to a vector
+$z = \left<x, y \right>$.
+
+$z_\circ$ such that $|z_\circ| \le 1$
+$z_\Box = x + i y$ where $x$ and $y$ are in $[-1,1]$
+$z_\Diamond$
+$z_\rhd$
+
+We will use a square with vertices
+\begin{equation}
+  \mathbf{v}_1 = \frac{[-1,-1]}{\sqrt 2}, \,
+  \mathbf{v}_2 = \frac{[1,-1]}{\sqrt 2}, \,
+  \mathbf{v}_3 = \frac{[1,1]}{\sqrt 2}, \,
+  \mathbf{v}_4 = \frac{[-1,1]}{\sqrt 2},
+\end{equation}
+and a triangle with vertices
+\begin{equation}
+  \mathbf{v}_1 = \left[1, 0\right], \,
+  \mathbf{v}_2 = \left[-\frac{1}{2}, \frac{\sqrt{3}}{2}\right], \,
+  \mathbf{v}_3 = \left[-\frac{1}{2}, -\frac{\sqrt{3}}{2}\right].
+\end{equation}
+$[u, v]$ designates the point on the disk.
+
+\subsection{Conformal homomorphisms}
+\begin{equation}
+f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
+\end{equation}
+
+Triangle:
+\begin{equation}\begin{split}
+  z_h &= -i \sqrt{3} \frac{z_{uv}+1}{z_{uv}-1} \\
+  z_{xy} &= -i
+  \frac{\sqrt{3}}{\sqrt{\pi}}
+  \frac{ \Gamma\left({5/6}\right) }
+  { \Gamma\left({1/3}\right) }
+  z_h\, {}_2 F_1 \left(1/2,2/3;3/2;z_h^2\right)
+  -\frac{1}{2}
+\end{split}\end{equation}
+This is rotated, translated, scaled, and simplified from the formula in
+\cite{mathews}. A closed-form inverse is not known.
+
+Quadrilateral:\cite{fong16}\cite{lambers}
+\begin{equation}\begin{split}
+  z_{uv} &= \frac{1-i}{\sqrt{2}} \mathrm{cn} \left(k \left(1-z_{xy} \frac{1+i}{2}\right)\,|\,\frac{1}{2}\right)\\
+  k &= K \left(\frac{1}{2}\right)
+\end{split}\end{equation}
+
+
+
+where
+\begin{equation}
+  F(\phi \,|\, m) = \int_0^\phi \frac{d\theta}{\sqrt{1-m \sin^2 \theta}}
+\end{equation}
+is the incomplete elliptic integral of the first kind in terms of the parameter
+$m$, $K(m) = F(\frac{\pi}{2} \,|\, m)$ is the complete elliptic integral
+of the first kind, and the Jacobi elliptic function $\mathrm{cn}(u | m)$
+is such that $\mathrm{cn} \left(F(\phi \,|\, m) | m \right) = \cos \phi$.
+
+(discrete conformal approximations)
+
+\subsection{Non-diffeomorphic homeomorphisms}
+
+\begin{figure}[!htbp]
+\begin{tikzpicture}
+\draw (0, 0.866) -- (0.5, 0) -- (1.5, 0) -- (0, 0.866);
+\draw[fill] (0, 0.866) circle [radius=0.05];
+\draw[fill] (0.5, 0) circle [radius=0.05];
+\draw[fill] (1.5, 0) circle [radius=0.05];
+
+\draw [<->] (2, 0.5) -- (2.5, 0.5);
+\draw (2.25, 0.5) node[anchor=south] {A};
+
+\draw (3, 1) -- (3, 0) -- (4, 0) -- (3, 1);
+\draw[fill] (3, 1) circle [radius=0.05];
+\draw[fill] (3, 0) circle [radius=0.05];
+\draw[fill] (4, 0) circle [radius=0.05];
+
+\draw [<->] (4.5, 0.5) -- (5, 0.5);
+\draw (4.75, 0.5) node[anchor=south] {B};
+
+\draw (5.5, 1) -- (5.5, 0) --
+(6.5, 0) arc [radius=1, start angle=0, end angle= 90];
+\draw[fill] (5.5, 1) circle [radius=0.05];
+\draw[fill] (5.5, 0) circle [radius=0.05];
+\draw[fill] (6.5, 0) circle [radius=0.05];
+
+\draw [<->] (7, 0.5) -- (7.5, 0.5);
+\draw (7.25, 0.5) node[anchor=south] {C};
+
+\draw (8, 0.866) -- (8.5, 0) --
+(9.5, 0) arc [radius=1, start angle=0, end angle= 120];
+\draw[fill] (8, 0.866) circle [radius=0.05];
+\draw[fill] (8.5, 0) circle [radius=0.05];
+\draw[fill] (9.5, 0) circle [radius=0.05];
+
+\end{tikzpicture}
+
+\caption{A series of mappings.}
+\label{fig:multismooth}
+\end{figure}
+
+\begin{equation}
+  M_A = \begin{bmatrix}
+  1 & \cos \phi \\
+  0 & \sin \phi  \end{bmatrix}, \quad
+  M_A^{-1} = \frac{1}{\sin \phi}\begin{bmatrix}
+  \sin \phi & -\cos \phi \\
+  0 & 1 \end{bmatrix}
+\end{equation}
+\subsubsection{Radial stretching}
+Consider the disk in polar coordinates. These mappings only change the radius
+$r$ by a multiple, and leave $\theta$ the same. They are not smooth. We give
+only the triangular and square mappings here, but radial stretching is
+extensible to any polygon. The square mapping is given in \cite{fong15} as:
+\begin{equation}
+  \left<u, v \right> = \frac{\max(|x|,|y|)}{\sqrt{x^2+y^2}} \left<x,y\right>
+\end{equation}
+The triangular mapping is somewhat easier to express in polar form:
+\begin{equation}\begin{split}
+  r &= 1-3 \min( \beta_i ) \\
+  \theta &= \arctan\left(\sqrt{3}(\beta_2-\beta_3),
+  3\beta_1 - 1 \right)
+\end{split}\end{equation}
+which can be converted back into Cartesian coordinates if needed.
+
+\subsubsection{Equal-area}
+Quadrilateral:\cite{shirley}
+\begin{equation}
+\left<u, v \right> = \begin{cases}
+\left<x \cos \left(\frac{\pi}{4} \frac{y}{x} \right),
+x \sin \left(\frac{\pi}{4} \frac{y}{x} \right) \right> & |x| \ge |y| \\
+\left<y \sin \left(\frac{\pi}{4} \frac{x}{y} \right),
+y \cos \left(\frac{\pi}{4} \frac{x}{y} \right) \right> & |x| \le |y|
+\end{cases}
+\end{equation}
+
+Triangular:
+\begin{equation}\begin{split}
+ u &= f_i \cos \left(\frac{\pi}{3}
+ \left(\frac{g_i}{f_i} +k_i\right)\right) \\
+ v & = f_i \sin \left(\frac{\pi}{3}
+\left(\frac{g_i}{f_i} +k_i\right)\right)
+\end{split}\end{equation}
+where $i$ is such that $\beta_i = \min \beta_j$,  $f_i = 3 \beta_i - 1$,
+$g_i = \beta_{i+1} - \beta_{i-1}$, and $k_i = 0$ if $i=1$,
+$= 2$ if $i=2$, and $= -2$ if $i=3$.
+
+\subsection{Non-conformal diffeomorphisms}
+\subsubsection{Elliptical}
+
+\subsubsection{Squircle}
+
+\subsubsection{Naive Slerp}
+
+Quadrilateral:
+\begin{equation}\begin{split}
+u &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
+\cos \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
+- \sqrt{2-\sqrt 2} \cos \left( \frac{\pi}{8} x \right) \sin
+\left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right), \\
+v &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \cos \left( \frac{\pi}{8} x \right)
+\sin \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
+- \sqrt{2-\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
+\cos \left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right)
+\end{split}\end{equation}
+2nd Quadrilateral:
+\begin{equation}\begin{split}
+u &= \sqrt 2
+\sin \left(\frac{\pi}{4}x\right) \cos \left(\frac{\pi}{4}y\right),\\
+v &= \sqrt 2 \cos \left(\frac{\pi}{4}x\right) \sin \left(\frac{\pi}{4}y\right)
+\end{split}\end{equation}
+Note that the 2nd Quadrilateral Naive Slerp map preserves diagonal lines.
+
+Triangular:
+\begin{equation}\begin{split}
+u& =  \frac{1}{\sqrt{3}} \left(2 \sin\left(\frac{2\pi}{3} \beta_1 \right)
+- \sin\left(\frac{2\pi}{3} \beta_2 \right)
+- \sin\left(\frac{2\pi}{3} \beta_3 \right) \right)\\
+v& = \sin\left(\frac{2\pi}{3} \beta_2 \right)
+- \sin\left(\frac{2\pi}{3} \beta_3 \right)
+\end{split}
+\end{equation}
+
+\section{Mappings between other particular Euclidean and spherical polygons}
+
+One mapping between the filled cube $[-1,1]^3$ and the filled sphere
+$\mathbf{v} \le 1$ is given by
+\cite{nowell}
+\begin{equation}
+u = x \sqrt{1 - \frac{y^2}{2}-\frac{z^2}{2}+\frac{y^2 z^2}{3}}
+v = y \sqrt{1 - \frac{z^2}{2}-\frac{x^2}{2}+\frac{z^2 x^2}{3}}
+w = z \sqrt{1 - \frac{x^2}{2}-\frac{y^2}{2}+\frac{x^2 y^2}{3}}
+\end{equation}
+This can be considered a map between a square face of the cube and a spherical
+square of area $\frac{2 \pi}{3}$ if one of the $x,y,z$ coordinates is held
+constant at $\pm 1$.
 
 \section{Applications}
 \subsection{Cartographic use}
