@@ -432,3 +432,7 @@ def spherical_bearing(origin, destination, pole=np.array([0, 0, 1])):
     cos_theta = np.sum(c_1 * c_2, axis=-1)
     sin_theta = triple_product(origin, destination, pole)
     return np.arctan2(sin_theta, cos_theta)
+
+def sqrt(x):
+    """Real sqrt clipped to 0 for negative values"""
+    return np.where(x < 0, 0, np.sqrt(x))

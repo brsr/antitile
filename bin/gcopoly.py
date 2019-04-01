@@ -8,7 +8,7 @@ import warnings
 from sys import stdin
 from antitile import gcopoly, off, tiling, projection
 
-DESCRIPTION = """Similar grid subdivision: subdivide a tiling or
+DESCRIPTION = """Goldberg-Coxeter operation: subdivide a tiling or
 polyhedron with a grid of similar triangles or squares."""
 EPILOG = """To use on a non-spherical polyhedron or tiling,
 specify -n -p=flat"""
@@ -16,32 +16,15 @@ FILENAME = """Input file. Reads from stdin if not given. Faces should be
 oriented counterclockwise (even for Class I and II)."""
 FREQ_A = """First breakdown frequency. Default is 2."""
 FREQ_B = """Second breakdown frequency. Default is 0."""
-PROJ = """Projection family. Default is flat. disk is only valid on dihedra."""
-#    May be:
-#        flat: Flat subdivision of each face (Method 1 in geodesic dome jargon)
-#        slerp: Spherical linear interpolation (or related method)
-#        areal: Areal coordinates on the sphere (triangular faces only)
-#        gc: Intersection of great circles (Method 2 in geodesic dome jargon)
-#        gcv: Minor variation of gc
+PROJ = """Mapping family to use. Default is (gn)omonic. The mapping for
+triangles and quadrilaterals can be specified separately as a comma-separated
+pair: -m ns, n2. """
 ADJ = ("""Projection constant. May be a float or a string from the list
 below. If a string is given, it will optimize k based on the specified
-measurement of the polyhedron. Ignored unless -p=""" +
+measurement of the polyhedron. Ignored unless -m=""" +
        ', '.join(projection.PARALLEL) + ". Default is 1. String values can be "
        + ', '.join(n for n in gcopoly.MEASURES))
-#        energy: Minimizes the Thompson energy of the points.
-#        fill: Maximizes the fill ratio of the polyhedron wrt the unit sphere.
-#        edges: Minimizes the difference in edge length.
-#        aspect: Minimizes the aspect ratio of euclidean triangles.
-#        faces: Minimizes the difference in area between faces.
-#        angle: Minimizes the difference in central angle between points
-#            sharing edges. (On a unit sphere, same as the spherical distance.)
-#        angle_aspect: Minimizes the aspect ratio of spherical triangles.
-#        solid_angle: Minimizes the difference in solid angle between faces.
-TWEAK = """Makes a tweak to certian methods. For methods that use the
-projection constant k, uses approximate parallels instead of exact. For
-triangular gc, changes weights in the vertex calculation. May produce a
-(slightly) different vertex positioning, and (very slightly) reduce
-runtime."""
+TWEAK = """Makes a tweak to certian methods: see docs for details."""
 FACTOR = """Factors the frequency and performs repeated subdivision using
 those factors. Smaller subdivisions (by norm) are applied first. (If the
 factors are powers of (2,0), this is Method 3 in geodesic dome parlance.)"""
@@ -68,7 +51,7 @@ def main():
     parser.add_argument("-a", help=FREQ_A, default=2, type=posint)
     parser.add_argument("-b", help=FREQ_B, default=0,
                         type=nonnegativeint)
-    parser.add_argument("-p", '--projection', default='flat', help=PROJ,
+    parser.add_argument("-m", '--mapping', default='flat', help=PROJ,
                         choices=projection.PROJECTIONS)
     parser.add_argument("-n", "--no_normalize", action="store_true",
                         help="Don't normalize vertices onto the unit sphere")
