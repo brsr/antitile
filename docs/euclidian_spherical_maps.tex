@@ -3,13 +3,18 @@
 \oddsidemargin=0in \evensidemargin=0in
 \textwidth=6.6in \textheight=8.7in
 
-\title{Some homeomorphisms between Euclidean and spherical polygons}
+\title{Differentiable mappings from Euclidean to spherical polygons}
 \author{B R S Recht}
-\date{December 2018}
+\date{May 2019}
 
 \begin{document}
 
 \maketitle
+
+-map projections
+-geodesic domes
+-dymaxion map
+-square-circle maps
 
 Yadda yadda\cite{kahn}
 
@@ -21,19 +26,26 @@ construction on a computer can be a pain; analytic specifications are more
 amenable to programming idioms.
 
 \section{Definitions}
+Let $x,y$ be coordinates in $\mathbb{R}^2$ (equivalently, $z = x + i y$ in
+$\mathbb{C}$), and $u,v,w$ be coordinates in $\mathbb{R}^3$.
+If a point in $\mathbb{R}^3$ is on the unit sphere,
+then its coordinates satisfy $u^2 + v^2 + w^2 = 1$.
+
 Unless otherwise specified, the vertices of any given polygon are ordered in
 countclockwise order.
 
 \subsection{Spherical geometry}
 There are a number of ways to numerically specify points on a sphere. By far
 the most common is by latitude and longitude, which appear on every modern map
-of the Earth and probably some other planets. Latitude and longitude are
+of the Earth and some other planets. Latitude and longitude are
 familiar and convenient, but performing extended geometry calculations using
-latitude and longitude is a complicated task.
+latitude and longitude is often complicated.
 
 Doing spherical geometry using a 3-component unit vector is more convenient
 in a number of ways: the equations are often simpler, and there are no
-singularities at the poles. A unit sphere can be defined as the set of all unit
+singularities at the poles. We'll also find that calculations using vectors
+often make clear symmetries that would be hidden by other forms. A unit sphere
+can be defined as the set of all unit
 vectors in 3-space; i.e., vectors $\mathbf v = [v_x, v_y, v_z]$ such that the
 vector norm $\|\mathbf v \|=1$. Unit vectors are often denoted using a hat:
 $\hat{\mathbf v}$. We'll often find ourselves normalizing vectors,
@@ -285,12 +297,8 @@ generalized barycentric coordinates are, but some formulas can be expressed like
 where $\alpha_i$ are not necessarily unique.
 
 \subsection{Mappings between the hemisphere and the disk}
-Let $x,y$ be coordinates in $\mathbb{R}^2$ (equivalently, $z = x + i y$ in
-$\mathbb{C}$), and $u,v,w$ be coordinates in $\mathbb{R}^3$.
-If a point in $\mathbb{R}^3$ is on the unit sphere,
-then its coordinates satisfy $u^2 + v^2 + w^2 = 1$.
 
-For simplicity, we'll \cite{snyder}
+For simplicity, we'll use azimuthal maps\cite{snyder}
 
 \subsubsection{Azimuthal equal-area}
 Preserves areas
@@ -413,15 +421,17 @@ triangles seem to be the most investigated cases in the literature, but here the
 other two cases are of interest.
 
 The Schwarz triangle map maps the boundary of the half-plane (i.e. $\mathbb{R}$)
-to the boundary of the triangle. The vertices are the points. $z=0$, $1$, and
-$\infty$ on that line. The map maps $z=0$ to $0$ and $z=1$ to the value $g$:
-\begin{equation}
-  g = \frac{\Gamma(c-a)\Gamma(c-b)\Gamma(2-c)}{\Gamma(1-a)\Gamma(1-b)\Gamma(c)}
-\end{equation}.
+to the boundary of the triangle. The vertices are the points $z=0$, $1$, and
+$\infty$ on that line. The map takes $z=0$ to $0$, $z=1$ to $\phi(1) =
+\frac{\Gamma(c-a) \Gamma(c-b) \Gamma(2-c)}{\Gamma(1-a) \Gamma(1-b) \Gamma(c)}$,
+and $z=\infty$ to $\phi(\infty) = \exp\left(i \pi \alpha \right)
+\frac{\Gamma(b) \Gamma(c-a) \Gamma(2-c)}{\Gamma(c) \Gamma(b-c+1) \Gamma(1-a)}$
+unless $b=0$ (the planar case), then $\phi(\infty) = \exp\left(i \pi \alpha \right)
+\frac{\Gamma(a) \Gamma(2-c)}{\Gamma(a-c+1)}$
 
 Denote the stereographic map from the plane to the sphere as $S(z)$. Then a
 conformal mapping between the upper half-plane and a spherical triangle is
-given by $S\left(\phi(z)\frac{h}{g}\right)$, where $h$ is a scaling factor
+given by $S\left(\phi(z)\frac{h}{\phi(1)}\right)$, where $h$ is a scaling factor
 given by
 \begin{equation}
   h = \sqrt{ -\frac{\cos \left(\pi (\alpha+\beta)\right)
@@ -436,12 +446,16 @@ half-plane. This is also expressed with $\phi(z)$.
 \begin{equation}
   S\left(\phi_{\alpha,\beta,\gamma}
   \left(\phi_{\alpha^*,\beta^*,\gamma^*}^{-1}(z)\right)
-  \frac{h_{\alpha,\beta,\gamma}}{g_{\alpha,\beta,\gamma}}\right)
+  \frac{h_{\alpha,\beta,\gamma}}{\phi(1)_{\alpha,\beta,\gamma}}\right)
 \end{equation}
 where $\alpha,\beta,\gamma$ denotes the angles of the spherical triangle (over
-$\pi$), and $\alpha^*,\beta^*,\gamma^*$ denotes the angles of the Euclidean
+$\pi$), and $\alpha^*, \beta^*, \gamma^*$ denotes the angles of the Euclidean
 triangle. (One choice to relate the two sets of angles is $\alpha^* =
-\frac{\alpha}{\alpha+\beta+\gamma}$ etc.)
+\frac{\alpha}{\alpha+\beta+\gamma}$ etc.) The spherical triangle can be
+rotated to the desired position on the sphere with an appropriate Mobius
+transformation or rotation matrix. (Numerically, it may be helpful to use
+both to avoid the point at infinity.)
+
 No closed-form inverse $\phi^{-1}(z)$ is known to the author, even though in the
 Euclidean case $b=0$ and the denominator of $\phi(z)$ is 1. The function has
 branch cuts on $(-\infty,0]$ and $[1, \infty)$, and points are transformed to
@@ -645,7 +659,7 @@ or
 s_1 & = \sin \left(w\frac{1-x}{2}\right)\sin \left(w\frac{1-y}{2}\right) \\
 s_2 & = \sin \left(w\frac{1+x}{2}\right)\sin \left(w\frac{1-y}{2}\right) \\
 s_3 & = \sin \left(w\frac{1+x}{2}\right)\sin \left(w\frac{1+y}{2}\right) \\
-s_4 & = \sin \left(w\frac{1-x}{2}\right)\sin \left(w\frac{1+y}{2}\right) \\
+s_4 & = \sin \left(w\frac{1-x}{2}\right)\sin \left(w\frac{1+y}{2}\right)
 \end{split}\end{equation}
 
 \subsection{Projection of $\mathbf v^*$}
@@ -676,210 +690,91 @@ parallel projections. Choose a constant $k$, typically between 0 and 1, then:
 $p$ may be replaced by $\widetilde{p}$. If our goal is to optimize a
 measurement of the mapping, we can do a 1-variable optimization on $k$.
 
-\section{Mappings between regular Euclidean polygons and disks}
-Mappings between squares
-and disks are well-represented in the literature, but mappings between
-triangles and disks have been neglected.
-\cite{fong15}\cite{fong16}\cite{fong18}\cite{lambers}
+\section{Mappings between Euclidean and particular spherical rectangles}
 
-It will be useful to express some formula in terms of complex numbers in
-$\mathbb{C}$, and some in terms of a 2-dimensional vector in $\mathbb{R}^2$:
-that is, a complex number $z = x + i y$ is equivalent to a vector
-$z = \left<x, y \right>$.
-
-$z_\circ$ such that $|z_\circ| \le 1$
-$z_\Box = x + i y$ where $x$ and $y$ are in $[-1,1]$
-$z_\Diamond$
-$z_\rhd$
-
-We will use a square with vertices
-\begin{equation}
-  \mathbf{v}_1 = \frac{[-1,-1]}{\sqrt 2}, \,
-  \mathbf{v}_2 = \frac{[1,-1]}{\sqrt 2}, \,
-  \mathbf{v}_3 = \frac{[1,1]}{\sqrt 2}, \,
-  \mathbf{v}_4 = \frac{[-1,1]}{\sqrt 2},
-\end{equation}
-and a triangle with vertices
-\begin{equation}
-  \mathbf{v}_1 = \left[1, 0\right], \,
-  \mathbf{v}_2 = \left[-\frac{1}{2}, \frac{\sqrt{3}}{2}\right], \,
-  \mathbf{v}_3 = \left[-\frac{1}{2}, -\frac{\sqrt{3}}{2}\right].
-\end{equation}
-$[u, v]$ designates the point on the disk.
-
-\subsection{Conformal homomorphisms}
-\begin{equation}
-f(z) = \int_0^z \prod_{k=1}^n (\zeta - z_k)^{\alpha_k-1} d\zeta
-\end{equation}
-
-Triangle:
-\begin{equation}\begin{split}
-  z_h &= -i \sqrt{3} \frac{z_{uv}+1}{z_{uv}-1} \\
-  z_{xy} &= -i
-  \frac{\sqrt{3}}{\sqrt{\pi}}
-  \frac{ \Gamma\left({5/6}\right) }
-  { \Gamma\left({1/3}\right) }
-  z_h\, {}_2 F_1 \left(1/2,2/3;3/2;z_h^2\right)
-  -\frac{1}{2}
-\end{split}\end{equation}
-This is rotated, translated, scaled, and simplified from the formula in
-\cite{mathews}. A closed-form inverse is not known.
-
-Quadrilateral:\cite{fong16}\cite{lambers}
-\begin{equation}\begin{split}
-  z_{uv} &= \frac{1-i}{\sqrt{2}} \mathrm{cn} \left(k \left(1-z_{xy} \frac{1+i}{2}\right)\,|\,\frac{1}{2}\right)\\
-  k &= K \left(\frac{1}{2}\right)
-\end{split}\end{equation}
-
-
-
-where
-\begin{equation}
-  F(\phi \,|\, m) = \int_0^\phi \frac{d\theta}{\sqrt{1-m \sin^2 \theta}}
-\end{equation}
-is the incomplete elliptic integral of the first kind in terms of the parameter
-$m$, $K(m) = F(\frac{\pi}{2} \,|\, m)$ is the complete elliptic integral
-of the first kind, and the Jacobi elliptic function $\mathrm{cn}(u | m)$
-is such that $\mathrm{cn} \left(F(\phi \,|\, m) | m \right) = \cos \phi$.
-
-(discrete conformal approximations)
-
-\subsection{Non-diffeomorphic homeomorphisms}
-
-\begin{figure}[!htbp]
-\begin{tikzpicture}
-\draw (0, 0.866) -- (0.5, 0) -- (1.5, 0) -- (0, 0.866);
-\draw[fill] (0, 0.866) circle [radius=0.05];
-\draw[fill] (0.5, 0) circle [radius=0.05];
-\draw[fill] (1.5, 0) circle [radius=0.05];
-
-\draw [<->] (2, 0.5) -- (2.5, 0.5);
-\draw (2.25, 0.5) node[anchor=south] {A};
-
-\draw (3, 1) -- (3, 0) -- (4, 0) -- (3, 1);
-\draw[fill] (3, 1) circle [radius=0.05];
-\draw[fill] (3, 0) circle [radius=0.05];
-\draw[fill] (4, 0) circle [radius=0.05];
-
-\draw [<->] (4.5, 0.5) -- (5, 0.5);
-\draw (4.75, 0.5) node[anchor=south] {B};
-
-\draw (5.5, 1) -- (5.5, 0) --
-(6.5, 0) arc [radius=1, start angle=0, end angle= 90];
-\draw[fill] (5.5, 1) circle [radius=0.05];
-\draw[fill] (5.5, 0) circle [radius=0.05];
-\draw[fill] (6.5, 0) circle [radius=0.05];
-
-\draw [<->] (7, 0.5) -- (7.5, 0.5);
-\draw (7.25, 0.5) node[anchor=south] {C};
-
-\draw (8, 0.866) -- (8.5, 0) --
-(9.5, 0) arc [radius=1, start angle=0, end angle= 120];
-\draw[fill] (8, 0.866) circle [radius=0.05];
-\draw[fill] (8.5, 0) circle [radius=0.05];
-\draw[fill] (9.5, 0) circle [radius=0.05];
-
-\end{tikzpicture}
-
-\caption{A series of mappings.}
-\label{fig:multismooth}
-\end{figure}
-
-\begin{equation}
-  M_A = \begin{bmatrix}
-  1 & \cos \phi \\
-  0 & \sin \phi  \end{bmatrix}, \quad
-  M_A^{-1} = \frac{1}{\sin \phi}\begin{bmatrix}
-  \sin \phi & -\cos \phi \\
-  0 & 1 \end{bmatrix}
-\end{equation}
-\subsubsection{Radial stretching}
-Consider the disk in polar coordinates. These mappings only change the radius
-$r$ by a multiple, and leave $\theta$ the same. They are not smooth. We give
-only the triangular and square mappings here, but radial stretching is
-extensible to any polygon. The square mapping is given in \cite{fong15} as:
-\begin{equation}
-  \left<u, v \right> = \frac{\max(|x|,|y|)}{\sqrt{x^2+y^2}} \left<x,y\right>
-\end{equation}
-The triangular mapping is somewhat easier to express in polar form:
-\begin{equation}\begin{split}
-  r &= 1-3 \min( \beta_i ) \\
-  \theta &= \arctan\left(\sqrt{3}(\beta_2-\beta_3),
-  3\beta_1 - 1 \right)
-\end{split}\end{equation}
-which can be converted back into Cartesian coordinates if needed.
-
-\subsubsection{Equal-area}
-Quadrilateral:\cite{shirley}
-\begin{equation}
-\left<u, v \right> = \begin{cases}
-\left<x \cos \left(\frac{\pi}{4} \frac{y}{x} \right),
-x \sin \left(\frac{\pi}{4} \frac{y}{x} \right) \right> & |x| \ge |y| \\
-\left<y \sin \left(\frac{\pi}{4} \frac{x}{y} \right),
-y \cos \left(\frac{\pi}{4} \frac{x}{y} \right) \right> & |x| \le |y|
-\end{cases}
-\end{equation}
-
-Triangular:
-\begin{equation}\begin{split}
- u &= f_i \cos \left(\frac{\pi}{3}
- \left(\frac{g_i}{f_i} +k_i\right)\right) \\
- v & = f_i \sin \left(\frac{\pi}{3}
-\left(\frac{g_i}{f_i} +k_i\right)\right)
-\end{split}\end{equation}
-where $i$ is such that $\beta_i = \min \beta_j$,  $f_i = 3 \beta_i - 1$,
-$g_i = \beta_{i+1} - \beta_{i-1}$, and $k_i = 0$ if $i=1$,
-$= 2$ if $i=2$, and $= -2$ if $i=3$.
-
-\subsection{Non-conformal diffeomorphisms}
-\subsubsection{Elliptical}
-
-\subsubsection{Squircle}
-
-\subsubsection{Naive Slerp}
-
-Quadrilateral:
-\begin{equation}\begin{split}
-u &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
-\cos \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
-- \sqrt{2-\sqrt 2} \cos \left( \frac{\pi}{8} x \right) \sin
-\left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right), \\
-v &= \sqrt 2 \left(\sqrt{2+\sqrt 2} \cos \left( \frac{\pi}{8} x \right)
-\sin \left( \frac{\pi}{8} y \right) \cos \left( \frac{\pi}{8} xy \right)
-- \sqrt{2-\sqrt 2} \sin \left( \frac{\pi}{8} x \right)
-\cos \left( \frac{\pi}{8} y \right) \sin \left( \frac{\pi}{8} xy \right)\right)
-\end{split}\end{equation}
-2nd Quadrilateral:
-\begin{equation}\begin{split}
-u &= \sqrt 2
-\sin \left(\frac{\pi}{4}x\right) \cos \left(\frac{\pi}{4}y\right),\\
-v &= \sqrt 2 \cos \left(\frac{\pi}{4}x\right) \sin \left(\frac{\pi}{4}y\right)
-\end{split}\end{equation}
-Note that the 2nd Quadrilateral Naive Slerp map preserves diagonal lines.
-
-Triangular:
-\begin{equation}\begin{split}
-u& =  \frac{1}{\sqrt{3}} \left(2 \sin\left(\frac{2\pi}{3} \beta_1 \right)
-- \sin\left(\frac{2\pi}{3} \beta_2 \right)
-- \sin\left(\frac{2\pi}{3} \beta_3 \right) \right)\\
-v& = \sin\left(\frac{2\pi}{3} \beta_2 \right)
-- \sin\left(\frac{2\pi}{3} \beta_3 \right)
-\end{split}
-\end{equation}
-
-\section{Mappings between other particular Euclidean and spherical polygons}
-
+\subsection{Nowell's cube mapping}
 One mapping between the filled cube $[-1,1]^3$ and the filled sphere
 $\mathbf{v} \le 1$ is given by
-\cite{nowell}
-\begin{equation}
-u = x \sqrt{1 - \frac{y^2}{2}-\frac{z^2}{2}+\frac{y^2 z^2}{3}}
-v = y \sqrt{1 - \frac{z^2}{2}-\frac{x^2}{2}+\frac{z^2 x^2}{3}}
-w = z \sqrt{1 - \frac{x^2}{2}-\frac{y^2}{2}+\frac{x^2 y^2}{3}}
-\end{equation}
+\cite{nowellcu}
+\begin{equation}\begin{split}
+u &= x \sqrt{1 - \frac{y^2}{2}-\frac{z^2}{2}+\frac{y^2 z^2}{3}} \\
+v &= y \sqrt{1 - \frac{z^2}{2}-\frac{x^2}{2}+\frac{z^2 x^2}{3}} \\
+w &= z \sqrt{1 - \frac{x^2}{2}-\frac{y^2}{2}+\frac{x^2 y^2}{3}}
+\end{split}\end{equation}
 This can be considered a map between a square face of the cube and a spherical
 square of area $\frac{2 \pi}{3}$ if one of the $x,y,z$ coordinates is held
 constant at $\pm 1$.
+
+\subsection{Naive Slerp to a spherical rectangle}
+Let the target rectangle be defined by the points $(-a,-b,c), (a,-b,c), (a,b,c),
+(-a,b,c)$ where $a, b, c$ are in $[0,1]$ and $a^2 + b^2 + c^2 = 1$. The
+spherical center of this rectangle, and the face normal, is $(0,0,1)$. The naive
+slerp method from the standard square to this rectangle is expressible as so:
+\begin{equation}
+  u^* &= \frac{\sin(\frac{w_x}{2}x) \cos(\frac{w_y}{2}y) }
+    {\sqrt{1-b^2}}\\
+  v^* &= \frac{\cos(\frac{w_x}{2}x) \sin(\frac{w_y}{2}y) }
+    {\sqrt{1-a^2}}\\
+  w^* &=c \frac{\cos(\frac{w_x}{2}x) \cos(\frac{w_y}{2}y) }
+    {\sqrt{1-a^2}\sqrt{1-b^2}}
+\end{equation}
+where $cos(w_x) = 1 - 2 a^2$ and $cos(w_y) = 1 - 2 b^2$.
+
+In the case when $c=0$,
+and the spherical rectangle takes up an entire hemisphere, the formula further
+reduces to:
+\begin{equation}
+  u^* &= \frac{\sin(\frac{w_x}{2}x) \cos(\frac{w_y}{2}y) }
+    {a}\\
+  v^* &= \frac{\cos(\frac{w_x}{2}x) \sin(\frac{w_y}{2}y) }
+    {b}\\
+  w^* &=0
+\end{equation}
+
+In the limit where $c=0$ and $b = 0$,
+\begin{equation}
+  u^* &= \sin(\frac{\pi}{2}x) \\
+  v^* &= y \cos(\frac{\pi}{2}x) \\
+  w^* &= 0
+\end{equation}
+
+\subsection{Elliptical mapping to a spherical rectangle}
+$\sin(k x)$ may be approximated as $\sin(k)x$, where the two expressions are
+equal at $x=-1,0,1$. Similarly, $\cos(k x)$ may be approximated as
+$\sqrt{1 - \sin^2(k) x^2}$. This approximation was applied in \cite{reynolds} to
+produce an approximate equal-area mapping, as it maintains the boundary of the
+shape where $x=\pm1$ or $y=\pm1$. Applying this approximation to the equation
+for naive slerp on a spherical rectangle yields:
+
+\begin{equation}
+  u^* &= ax \frac{\sqrt{1-b^2 y^2} }
+    {\sqrt{1-b^2}}\\
+  v^* &= by \frac{\sqrt{1-a^2 x^2} }
+    {\sqrt{1-a^2}}\\
+  w^* &=c \frac{\sqrt{1-a^2 x^2}\sqrt{1-b^2 y^2} }
+    {\sqrt{1-a^2}\sqrt{1-b^2}}
+\end{equation}
+
+In the case when $c=0$, and the spherical rectangle takes up an entire
+hemisphere, the formula reduces to:
+\begin{equation}
+  u^* &= x \sqrt{1-b^2 y^2} \\
+  v^* &= y \sqrt{1-a^2 x^2} \\
+  w^* &=0
+\end{equation}
+
+When $a=b=\frac{1}{\sqrt{2}}$, this is the elliptical mapping from the square
+to the disk.\cite{nowellsq}\cite{fong17} Furthermore, when $c=b=0$,
+\begin{equation}
+  u^* &= x  \\
+  v^* &= y \sqrt{1 - x^2} \\
+  w^* &=0
+\end{equation}
+which is the squelch mapping from the square to the disk in \cite{fong17}.
+
+\section{Qualities of mappings}
+Jacobians, etc.
+Tissot indicatrices?
 
 \section{Applications}
 \subsection{Cartographic use}

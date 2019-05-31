@@ -35,7 +35,7 @@ import numpy as np
 from numpy.linalg import norm
 from scipy.special import hyp2f1, gamma, ellipj, ellipk, ellipkinc
 from scipy.optimize import minimize
-import xmath
+from . import xmath
 
 #from . import xmath, breakdown
 
@@ -61,8 +61,8 @@ def q2r(z, base):
     defined by base.
     """
     a, b, c, d = base[0], base[1], base[2], base[3]
-    x = z.real
-    y = z.imag
+    x = z.real[:, np.newaxis]
+    y = z.imag[:, np.newaxis]
     return ((1-x)*(1-y)*a + (1+x)*(1-y)*b + (1+x)*(1+y)*c + (1-x)*(1+y)*d)/4
 
 def r2s_normalize(pts, axis=-1, eps=0):
@@ -74,23 +74,23 @@ def r2s_normalize(pts, axis=-1, eps=0):
         eps: If the norm of the vector is below or equal to eps, it is
             considered to be zero. By default, zero.
     """
-    n = norm(vectors, axis=axis, keepdims=True)
-    return np.where(n <= eps, 0, vectors / n)
+    n = norm(pts, axis=axis, keepdims=True)
+    return np.where(n <= eps, 0, pts / n)
 
 def r2s_parallel_exact(pts, normal):
-    """Projects points exactly onto the sphere parallel to the normal vector.
+    """Projects points exactly onto the unit sphere parallel to the normal vector.
     Args:
         pts: Points to project
         normal: Normal vector
     """
     vdotc = np.sum(pts * normal, axis=-1)
     vdotv = norm(pts, axis=-1)**2
-    p = -vdotc + np.sqrt(np.fmax(1 + vdotc**2 - vdotv, 0))
+    p = -vdotc + xmath.sqrt(1 + vdotc**2 - vdotv)
     return p[..., np.newaxis] * normal
 
 
 def r2s_parallel_approx(pts, normal):
-    """Approximately projects points onto the sphere parallel to the
+    """Approximately projects points onto the unit sphere parallel to the
         normal vector.
     Args:
         pts: Points to project
@@ -100,7 +100,7 @@ def r2s_parallel_approx(pts, normal):
     return q[..., np.newaxis] * normal
 
 def r2s_parallel(pts, normal, exact=True):
-    """Projects points onto the sphere parallel to the normal vector.
+    """Projects points onto the unit sphere parallel to the normal vector.
     Args:
         pts: Points to project
         normal: Normal vector
@@ -112,7 +112,9 @@ def r2s_parallel(pts, normal, exact=True):
     else:
         return r2s_parallel_approx(pts, normal)
 
-#Mappings from the sphere to the plane (map projections)
+#Mappings from the sphere to the plane (map projections). Except for gnomonic,
+#these all are scaled to map the equator to the unit circle.
+
 def c2s_stereographic(z):
     """
     Stereographic projection from the plane to the sphere.
@@ -189,10 +191,11 @@ def s2d_ea(sph, scale=1):
     w = sph[..., 2]
     return scale*(u + 1j*v)/xmath.sqrt(1+w)
 
-def d2s_equidistant(z):
+def d2s_equidistant(z, scale=1/2):
     """Converts coordinates on the disk to spherical coordinates, using
     the azimuthal equal-distance projection.
     """
+    z = z*scale
     az = abs(z)
     factor = np.where(az>0, np.sin(az*np.pi)/az,np.pi)
     u = factor*z.real
@@ -200,14 +203,14 @@ def d2s_equidistant(z):
     w = np.cos(az*np.pi)
     return np.stack([u,v,w], axis=-1)
 
-def s2d_equidistant(sph):
+def s2d_equidistant(sph, scale=2):
     """Converts coordinates on the unit sphere to the disk, using
     the azimuthal equal-distance projection.
     """
     u = sph[..., 0]
     v = sph[..., 1]
     w = sph[..., 2]
-    return (u + 1j*v)/(np.pi*xmath.sqrt(1-w**2))*np.arccos(w)
+    return scale*(u + 1j*v)/(np.pi*xmath.sqrt(1-w**2))*np.arccos(w)
 
 #Disk - polygon mappings
 #Conformal
@@ -259,7 +262,7 @@ def d2t_conformal(z):
     return result
 
 def t2d_conformal(z):
-    """Conformal map from the standard square to the unit disk. Note that this
+    """Conformal map from the standard triangle to the unit disk. Note that this
     function numerically inverts d2t_conformal() and may be slow.
     """
     conf_tridisk = z.copy()
@@ -271,6 +274,11 @@ def t2d_conformal(z):
         res = minimize(objective, x0=xy, method='Nelder-Mead')
         conf_tridisk[i] = res.x.view(dtype=np.complex128)
     return conf_tridisk
+
+def b2d_conformal(bary, base=np.exp(2j/3*np.arange(3))):
+    """Wrapper for t2d_conformal to put it in terms of barycentric coordinates.
+    """
+    return t2d_conformal(b2r(bary,base))
 
 #Radial stretch
 def q2d_radial(z):
@@ -287,9 +295,10 @@ def d2q_radial(z):
 
 def b2d_radial(bary):
     """Radial stretch, triangle (barycentric) to disk"""
-    tri = b2r(bary)
+    base = np.exp(2j/3*np.pi*np.arange(3))
+    tri = b2r(bary, base)
     c = np.angle(tri)
-    r = 1 - 3*np.min(bary, axis=0)
+    r = 1 - 3*np.min(bary, axis=-1)
     return r * np.exp(1j*c)
 
 def d2t_radial(z):
@@ -321,9 +330,12 @@ def d2q_equalarea(z):
 
 def b2d_equalarea(bary):
     """Equal area, triangle (barycentric) to disk"""
-    eatri0 = (3*bary[0]-1)*np.exp(1j*np.pi/3 * (bary[1] - bary[2])/(3*bary[0]-1))
-    eatri1 = (3*bary[1]-1)*np.exp(1j*np.pi/3 * ((bary[2] - bary[0])/(3*bary[1]-1) + 2) )
-    eatri2 = (3*bary[2]-1)*np.exp(1j*np.pi/3 * ((bary[0] - bary[1])/(3*bary[2]-1) - 2) )
+    a = bary[..., 0]
+    b = bary[..., 1]
+    c = bary[..., 2]
+    eatri0 = (3*a-1)*np.exp(1j*np.pi/3 * (b - c)/(3*a-1))
+    eatri1 = (3*b-1)*np.exp(1j*np.pi/3 * ((c - a)/(3*b-1) + 2) )
+    eatri2 = (3*c-1)*np.exp(1j*np.pi/3 * ((a - b)/(3*c-1) - 2) )
 
     mb = np.min(bary, axis=0)
 
@@ -374,9 +386,12 @@ def d2q_aea(z):
 
 def b2d_aea(bary):
     """Approximate equal-area, triangle (barycentric) to disk"""
-    aeatri0 = (3*bary[0]-1)*np.sqrt(1- ((bary[1] - bary[2])/(3*bary[0]-1))**2*3/4) + 1j*np.sqrt(3)/2*(bary[1] - bary[2])
-    aeatri1 = (3*bary[1]-1)*np.sqrt(1- ((bary[2] - bary[0])/(3*bary[1]-1))**2*3/4) + 1j*np.sqrt(3)/2*(bary[2] - bary[0])
-    aeatri2 = (3*bary[2]-1)*np.sqrt(1- ((bary[0] - bary[1])/(3*bary[2]-1))**2*3/4) + 1j*np.sqrt(3)/2*(bary[0] - bary[1])
+    a = bary[..., 0]
+    b = bary[..., 1]
+    c = bary[..., 2]
+    aeatri0 = (3*a-1)*np.sqrt(1- ((b - c)/(3*a-1))**2*3/4) + 1j*np.sqrt(3)/2*(b - c)
+    aeatri1 = (3*b-1)*np.sqrt(1- ((c - a)/(3*b-1))**2*3/4) + 1j*np.sqrt(3)/2*(c - a)
+    aeatri2 = (3*c-1)*np.sqrt(1- ((a - b)/(3*c-1))**2*3/4) + 1j*np.sqrt(3)/2*(a - b)
 
     mb = np.min(bary, axis=0)
 
@@ -444,11 +459,14 @@ def d2t_squircle(z, eps=1E-6):
     sr_tri[index] = z[index]/np.sqrt(3)
     return sr_tri
 
+def b2d_squircle(bary, base=np.exp(2j/3*np.arange(3))):
+    """Wrapper for t2d_squircle(z) to put it in terms of barycentric coordinates.
+    """
+    return t2d_squircle(b2r(bary,base))
 
 #elliptic
 def q2d_el(z):
     """Elliptic, square to disk"""
-    #TODO rectangular?
     x = z.real
     y = z.imag
     return x*np.sqrt(1-y**2/2) + 1j*y*np.sqrt(1-x**2/2)
@@ -460,6 +478,47 @@ def d2q_el(z):
     t = u**2 - v**2
     return ((np.sqrt(2+t+2*np.sqrt(2)*u) - np.sqrt(2+t-2*np.sqrt(2)*u))
             +1j*(np.sqrt(2-t+2*np.sqrt(2)*v) -np.sqrt(2-t-2*np.sqrt(2)*v)))/2
+
+#naive slerp
+def q2d_naive_slerp(z):
+    """Naive Slerp, Square to disk"""
+    x = z.real
+    y = z.imag
+    return np.sqrt(2)*(np.sin(np.pi/4*x)*np.cos(np.pi/4*y) +
+                        1j*np.cos(np.pi/4*x)*np.sin(np.pi/4*y))
+
+def d2q_naive_slerp(z):
+    """Naive Slerp, disk to square"""
+    us = z.real**2
+    vs = z.imag**2
+    m = vs - us
+    k = sqrt_safe((m+2)**2 - 8 * vs)
+    return (np.sign(z.real)*np.arccos(sqrt_safe(2+m+k)/2)
+            + 1j*np.sign(z.imag)*np.arccos(sqrt_safe(2-m+k)/2) )*4/np.pi
+
+def b2d_naive_slerp(bary):
+    """Naive slerp, triangle (barycentric) to disk"""
+    a = bary[..., 0]
+    b = bary[..., 1]
+    c = bary[..., 2]
+    #or tri_pts @ np.sin(2*np.pi/3*bary) * 2 / np.sqrt(3)
+    return ( (2*np.sin(np.pi*2/3*a)-np.sin(np.pi*2/3*b)-
+                np.sin(np.pi*2/3*c))/np.sqrt(3)
+               + 1j*(np.sin(np.pi*2/3*b)-np.sin(np.pi*2/3*c)) )
+
+def q2d_naive_slerp_2(z):
+    """Naive slerp 2, square to disk"""
+    x = z.real
+    y = z.imag
+    return np.sqrt(2)*(
+        +np.sqrt(2+np.sqrt(2))*np.sin(np.pi/8*x)*np.cos(np.pi/8*y)*
+            np.cos(np.pi/8*x*y)
+        -np.sqrt(2-np.sqrt(2))*np.cos(np.pi/8*x)*np.sin(np.pi/8*y)*
+            np.sin(np.pi/8*x*y)
+        +1j*np.sqrt(2+np.sqrt(2))*np.cos(np.pi/8*x)*np.sin(np.pi/8*y)*
+            np.cos(np.pi/8*x*y)
+        -1j*np.sqrt(2-np.sqrt(2))*np.sin(np.pi/8*x)*np.cos(np.pi/8*y)*
+            np.sin(np.pi/8*x*y))
 
 #Polygons to spherical polygons
 def _b2s_fix_corners(bary, base, result):
@@ -507,11 +566,6 @@ def b2s_areal(bary, base):
     area_i = bary * area
     base_iplus1 = np.roll(base, -1, axis=0)
     base_iplus2 = np.roll(base, 1, axis=0)
-    #FIXME whytf is this commented statement not equivalent to below?
-#    L = ((1 + np.cos(area_i))[:, np.newaxis]*
-#         np.cross(base_iplus1, base_iplus2) -
-#         np.sin(area_i)[:, np.newaxis]*
-#         (base_iplus1 + base_iplus2)).transpose((0,2,1))
     L0 = ((1 + np.cos(area_i[..., 0]))[..., np.newaxis]*
           np.cross(base[1], base[2]) -
           np.sin(area_i[..., 0])[..., np.newaxis]*
@@ -525,8 +579,13 @@ def b2s_areal(bary, base):
           np.sin(area_i[..., 2])[..., np.newaxis]*
           (base[0] + base[1]))
     L = np.stack([L0, L1, L2], axis=-2)
+    detL = np.linalg.det(L)
+    #to avoid errors when the matrix is singular
+    #only seems to happen on the corners when area = 2pi
+    L[detL == 0] = np.nan
     h = np.sin(area_i)*(1 + np.sum(base_iplus1*base_iplus2, axis=-1))
-    return np.linalg.solve(L, h)
+    result = np.linalg.solve(L, h)
+    return _b2s_fix_corners(bary, base, result)
 
 def s2b_areal(pts, triangle):
     """Given a triangle and pts within that triangle, returns the
@@ -610,7 +669,6 @@ def b2s_conformal(bary, base):
     triangle."""
     bends = xmath.spherical_bearing(base, np.roll(base,2,axis=0),
                                      np.roll(base,1,axis=0))/np.pi
-    #print(bends)
     alpha, gam, beta = bends
     bendsum = np.sum(bends, axis=0, keepdims=True)
     euc_bends = bends/bendsum
@@ -651,7 +709,6 @@ def q2s_conformal(z, base, eps=1E-6):
         pts_conf = b2s_conformal(bary_rt_tri, sph_tri_base)
         pts_conf[~index1] = np.nan
         results.append(pts_conf)
-    #print(angles)
     i1 = abs(angles[0] - angles[2]) < eps
     i2 = abs(angles[1] - angles[3]) < eps
     if i1 and not i2:
@@ -659,7 +716,7 @@ def q2s_conformal(z, base, eps=1E-6):
     elif not i1 and i2:
         results = [results[1], results[3]]
     elif not i1 and not i2:
-        print('not an appropriate quadrilateral for q2s_conformal, good luck')
+        print('#not an appropriate quadrilateral for q2s_conformal, good luck')
     return np.nanmedian(np.stack(results, axis=0), axis=0)
 
 #great circle
@@ -686,8 +743,8 @@ def b2r_greatcircle(bary, base, tweak=False):
     pts = _b2s_greatcircle_points(bary, base)
     if tweak:
         pts = xmath.normalize(pts)
-    result = pts.mean(axis=1)
-    return _b2s_fix_corners(bary, base, result)
+    result = pts.sum(axis=1)
+    return result#_b2s_fix_corners(bary, base, result)
 
 def q2r_greatcircle(z, base):
     """Transforms a square to a spherical quadrilateral using the method of
@@ -703,7 +760,7 @@ def q2r_greatcircle(z, base):
     g = xmath.slerp(d,c,x[:, np.newaxis])
     h = xmath.slerp(b,c,y[:, np.newaxis])
     k = xmath.slerp(a,d,y[:, np.newaxis])
-    return np.cross(np.cross(f, g), np.cross(h, k))
+    return np.cross(np.cross(f, g), np.cross(h, k))/4
 
 #double slerp
 def _doubleslerp_points(bary, base):
@@ -785,7 +842,6 @@ def b2r_naive_slerp(bary, base, pow=1):
     Naive slerp on a spherical triangle.
     """
     angles = _tri_naive_slerp_angles(bary, base, pow)[..., np.newaxis]
-    #print(bary.shape, angles.shape)
     b = np.sin(angles * bary) / np.sin(angles)
     result = b.dot(base)
     return _b2s_fix_corners(bary, base, result)
@@ -802,7 +858,6 @@ def _q_naive_slerp_angles(z, base, pow=1, eps=0):
     bx = angles[2]
     ay = angles[3]
     by = angles[1]
-    #print(ax, bx, ay, by)
     result1 = (ax*(1-y)**pow + bx*(1+y)**pow)/((1-y)**pow + (1+y)**pow)
     result2 = (ay*(1-x)**pow + by*(1+x)**pow)/((1-x)**pow + (1+x)**pow)
     return result1, result2
@@ -824,7 +879,8 @@ def q2r_naive_slerp(z, base, pow=1):
     d = scx * sy
     mat = (np.stack([a, b, c, d], axis=-1) /
         (np.sin(anglex)* np.sin(angley))[:, np.newaxis] )
-    return mat.dot(base)
+    result = mat.dot(base)
+    return _q2s_fix_corners(z, base, result)
 
 def _q_naive_slerp_2_angles(z, base, pow=1, eps=0):
     """Interpolates the angle factor together that it's equal to the
@@ -855,7 +911,81 @@ def q2r_naive_slerp_2(z, base, pow=1):
     c = (1+x)*(1+y)
     d = (1-x)*(1+y)
     mat = np.sin(np.stack([a, b, c, d], axis=-1)*angle/4) / np.sin(angle)
-    return _q2s_fix_corners(z, base, mat.dot(base))
+    result = mat.dot(base)
+    return _q2s_fix_corners(z, base, result)
+
+#
+def q2r_elliptical(z, base):
+    """An extension of the elliptical map.
+    """
+    #FIXME needs rotations
+    rot_base = base
+    a = rot_base[0,0]
+    b = rot_base[0,1]
+    c = rot_base[0,2]
+    x = z.real
+    y = z.imag
+    u = a * x * xmath.sqrt((1 - b**2*y**2)/(1-b**2))
+    v = b * y * xmath.sqrt((1 - a**2*x**2)/(1-a**2))
+    w = c * xmath.sqrt((1 - a**2*x**2)*(1 - b**2*y**2)/
+                            ((1-a**2)*(1-b**2)))
+    return np.stack([u,v,w], axis=-1)
+
+#one weird cube-sphere mapping (topologists hate it)
+def r2r_cube_sphere(pts):
+    """
+    Cube-to-sphere mapping, as per
+    http://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html
+    """
+    x = pts[..., 0]
+    y = pts[..., 1]
+    z = pts[..., 2]
+    xx = x*xmath.sqrt(1-y**2/2-z**2/2+y**2*z**2/3)
+    yy = y*xmath.sqrt(1-z**2/2-x**2/2+z**2*x**2/3)
+    zz = z*xmath.sqrt(1-x**2/2-y**2/2+x**2*y**2/3)
+    return np.stack([xx,yy,zz], axis=-1)
+
+_cube_face = np.array([[-1, -1, 1],
+                       [1,  -1, 1],
+                       [1,  1, 1],
+                       [-1, 1, 1]])
+
+def q2s_cube_sphere(xy, base=_cube_face):
+    pts = q2r(xy, base)
+    return r2r_cube_sphere(pts)
+
+def q2s_qsc(xy, base=None):
+    """
+    http://www.sai.msu.su/~megera/wiki/SphereCube
+    """
+    x = xy.real
+    y = xy.imag
+    #x >= y?
+    s_over_rx = np.sin(np.pi/12*(y/x))/(np.cos(np.pi/12*(y/x))-1/np.sqrt(2))
+    qx = 1 - x*x*(1-1/xmath.sqrt(2+(s_over_rx)**2))
+    rx = np.sign(x)*xmath.sqrt((1 - qx**2)/(1+(s_over_rx)**2))#
+    sx = np.sign(y)*xmath.sqrt(1 - qx**2 - rx**2)#
+    # x < y?
+    s_over_ry = np.sin(np.pi/12*(x/y))/(np.cos(np.pi/12*(x/y))-1/np.sqrt(2))
+    qy = 1 - y*y*(1-1/xmath.sqrt(2+(s_over_ry)**2))
+    sy = np.sign(y)*xmath.sqrt((1 - qy**2)/(1+(s_over_ry)**2))#
+    ry = np.sign(x)*xmath.sqrt(1 - qy**2 - sy**2)#
+    result = np.stack([np.where(abs(x) >= abs(y),rx,ry),
+                       np.where(abs(x) >= abs(y),sx,sy),
+                       np.where(abs(x) >= abs(y),qx,qy)], axis=-1)
+    result[xy == 0] = np.array([0,0,1])
+    return result
+
+def s2q_qsc(pts, base=None):
+    """
+    inverse of above
+    """
+    q = pts[..., 0]
+    r = pts[..., 1]
+    s = pts[..., 2]
+    x = np.sign(r)*xmath.sqrt((1-q)/(1-1/xmath.sqrt(2+(s/r)**2)))
+    y_over_x = (12/np.pi)*(np.arctan(s/r)- np.arcsin(s/xmath.sqrt(2*r*r+2*s*s)))
+    return x + y_over_x * x * 1j
 
 MAPPINGS_B2R = {
     'gn': lambda bary, base, tweak: b2r(bary, base),
@@ -886,4 +1016,15 @@ MAPPINGS_Q2D = {
     'ea': lambda z, base, tweak: q2d_equalarea(z),
     'rs': lambda z, base, tweak: q2d_radial(z)}
 
-PARALLEL = ['ns', 'ns2', 'sq', 'ae', 'ea', 'rs', 'el']#ar?
+MAPPINGS_B = {**MAPPINGS_B2D, **MAPPINGS_B2R}
+MAPPINGS_Q = {**MAPPINGS_Q2D, **MAPPINGS_Q2R}
+
+MAPPINGS_ALL = {**MAPPINGS_B, **MAPPINGS_Q}
+MAPPINGS_D2S = {
+    #'gn': c2s_gnomonic,
+    'st': c2s_stereographic,
+    'or': d2s_orthographic,
+    'ea': d2s_ea,
+    'ed': d2s_equidistant}
+
+PARALLEL = ['ns', 'ns2', 'sq', 'ae', 'ea', 'rs', 'el']
